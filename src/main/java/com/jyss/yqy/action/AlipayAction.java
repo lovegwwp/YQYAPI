@@ -249,9 +249,10 @@ public class AlipayAction {
 	// 预下单 --type 1=初级，2=中级，3=高级代理人',
 	@RequestMapping(value = "/b/alipay2", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> alipay2(@RequestParam int money,
+	public Map<String, Object> alipay2(@RequestParam int money,
 			@RequestParam int gmID) {
-		Map<String, String> m = new HashMap<String, String>();
+		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, String> mm = new HashMap<String, String>();
 		Map<String, Object> dlReMap = new HashMap<String, Object>();
 		// (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
 		// 需保证商户系统端不能重复，建议通过数据库sequence生成，
@@ -281,10 +282,6 @@ public class AlipayAction {
 
 		// (必填) 商户门店编号，通过门店号和商家后台可以配置精准到门店的折扣信息，详询支付宝技术支持
 		String storeId = "2088102172143232";// test_store_id"=2088802858369537
-
-		// 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)，详情请咨询支付宝技术支持
-		// ExtendParams extendParams = new ExtendParams();
-		// extendParams.setSysServiceProviderId("2088100200300400500");
 
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "120m";
@@ -318,41 +315,6 @@ public class AlipayAction {
 		}
 		Goods good = gList.get(0);
 
-		// 创建扫码支付请求builder，设置请求参数
-		// AlipayTradePrecreateRequestBuilder builder = new
-		// AlipayTradePrecreateRequestBuilder()
-		// .setSubject(subject)
-		// .setTotalAmount(totalAmount)
-		// .setOutTradeNo(outTradeNo)
-		// .setUndiscountableAmount(undiscountableAmount)
-		// .setSellerId(sellerId)
-		// .setBody(body)
-		// .setOperatorId(operatorId)
-		// .setStoreId(storeId)
-		// .setExtendParams(extendParams)
-		// .setTimeoutExpress(timeoutExpress)
-		// .setNotifyUrl(
-		// "http://192.168.0.26:8080/YQYAPI/orderNotify.action");//
-		// 支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
-		// // .setGoodsDetailList(goodsDetailList);
-		//
-		// AlipayF2FPrecreateResult result =
-		// tradeService.tradePrecreate(builder);
-		// switch (result.getTradeStatus()) {
-		// case SUCCESS:
-		// log.info("支付宝预下单成功: )");
-		//
-		// AlipayTradePrecreateResponse response = result.getResponse();
-		// dumpResponse(response);
-
-		// 需要修改为运行机器上的路径
-		// String filePath =
-		// String.format("/Users/sudo/Desktop/qr-%s.png",response.getOutTradeNo());
-		// log.info("filePath:" + filePath);
-		// ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
-
-		// 自我业务处理
-		// 生成订单，插入数据库
 		String gmr = "";
 
 		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
@@ -373,29 +335,8 @@ public class AlipayAction {
 			m.put("money", money + "");
 			return m;
 		}
-
-		// case FAILED:
-		// log.error("支付宝预下单失败!!!");
-		// m.put("status", "false");
-		// m.put("message", "下单失败！");
-		// m.put("outtradeno", "");
-		// break;
-		//
-		// case UNKNOWN:
-		// log.error("系统异常，预下单状态未知!!!");
-		// m.put("status", "false");
-		// m.put("message", "系统异常，下单失败！");
-		// m.put("outtradeno", "");
-		// break;
-		//
-		// default:
-		// log.error("不支持的交易状态，交易返回异常!!!");
-		// m.put("status", "false");
-		// m.put("message", "不支持的交易状态，交易返回异常!");
-		// m.put("outtradeno", "");
-		// break;
-		// }
-
+		m.put("code", "-3");
+		m.put("data", mm);
 		return m;
 	}
 
