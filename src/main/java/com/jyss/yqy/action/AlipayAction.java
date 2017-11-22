@@ -258,7 +258,7 @@ public class AlipayAction {
 		String outTradeNo = System.currentTimeMillis() / 1000 + "O" + gmID
 				+ "r" + (long) (Math.random() * 1000L);
 
-		// (必填) 订单标题，粗略描述用户的支付目的。如“xxx品牌xxx门店当面付扫码消费”
+		// (必填) 订单标题，粗略描述用户的支付目的。如“xx品牌xxx门店当面付扫码消费”
 		String subject = "代理人消费";
 
 		// (必填) 订单总金额，单位为元，不能超过1亿元
