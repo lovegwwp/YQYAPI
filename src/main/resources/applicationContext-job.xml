@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+   <bean id="schedule1" class="com.jyss.yqy.action.JobAction"></bean>
+   <bean id="schedule2" class="com.jyss.yqy.action.JobAction"></bean>
+   
+   <bean id="SpringQtzJobMethod1"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedule1" />
+		<property name="targetMethod" value="sendMessage"/>    <!-- 要执行的方法名  -->
+	</bean>
+	<bean id="SpringQtzJobMethod2"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedule2" />
+		<property name="targetMethod" value="sendMail"/>    <!-- 要执行的方法名  -->
+	</bean>
+	
+	
+	<!-- 每天0点执行任务 -->
+	<bean id="cronTriggerFactoryBean1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
+		<property name="jobDetail" ref="SpringQtzJobMethod1"></property>
+	<!-- 	<property name="cronExpression" value="0/5 * * * * ? "></property> -->
+		<property name="cronExpression" value="0 0 10 * * ? "></property>
+	</bean>
+	<bean id="cronTriggerFactoryBean2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
+		<property name="jobDetail" ref="SpringQtzJobMethod2"></property>
+		<property name="cronExpression" value="0 0 10 * * ? "></property>
+	</bean>
+	
+	
+	<bean id="SpringJobSchedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTriggerFactoryBean1" />
+				<ref bean="cronTriggerFactoryBean2" />
+			</list>
+		</property>
+	</bean>
+
+</beans>
+

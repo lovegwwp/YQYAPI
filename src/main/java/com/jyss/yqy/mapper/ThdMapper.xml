@@ -1,0 +1,83 @@
+
+<!--  <?xml version="1.0" encoding="UTF-8" ?>-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jyss.yqy.mapper.ThdMapper" > 
+
+    <resultMap type="com.jyss.yqy.entity.Thd" id="thdResultMap">   
+        <id property="id" column="id"  />
+        <result property="tel" column="tel"  />
+        <result property="name" column="name"  />
+        <result property="thName" column="th_name"  />
+        <result property="pics" column="pics"  />      
+        <result property="password" column="password"  />
+        <result property="salt" column="salt"  />
+        <result property="status" column="status"  />
+        <result property="createdAt" column="created_at"  />
+        <result property="lastLoginTime" column="last_login_time"  />
+        <result property="lastModifyTime" column="lastModifyTime"  />
+        <result property="cjsj" column="cjsj"  />
+        <result property="xgsj" column="xgsj"  />
+        <result property="dlsj" column="dlsj"  />
+        <result property="provinceId" column="province_id"  />
+        <result property="province" column="province"  />
+        <result property="cityId" column="city_id"  />
+        <result property="city" column="city"  />
+        <result property="areaId" column="area_id"  />
+        <result property="area" column="area"  />
+    </resultMap>    
+    
+    
+    <resultMap type="com.jyss.yqy.entity.ThOrders" id="spResultMap">   
+        <id property="id" column="id"  />      
+        <result property="name" column="name"  />
+        <result property="thName" column="th_name"  />
+        <result property="thId" column="th_id"  />      
+        <result property="orderSn" column="order_sn"  />
+        <result property="thr" column="thr"  />
+        <result property="status" column="status"  />
+        <result property="createdAt" column="created_at"  />
+        <result property="cjsj" column="cjsj"  />
+        <result property="tel" column="tel"  />
+        <result property="thSp" column="th_sp"  />
+        <result property="thNum" column="th_num"  />
+        <result property="thDw" column="th_dw"  />
+         <result property="price" column="price"  />
+    </resultMap>      
+    
+    
+    <select id="findThdByTel" parameterType="String" resultType="com.jyss.yqy.entity.Thd">
+        select * from p_thd 
+        <where>
+        	<if test="tel != null and tel != ''">and tel = #{tel} and status = 1</if>
+        </where>
+    </select>
+    
+    
+    <!--修改密码 --> 
+    <update id="updatePwd" parameterType="com.jyss.yqy.entity.Thd" >
+        update p_thd  
+        <set>
+        	<if test="password != null and password != ''">password = #{password}</if>
+        	<if test="salt != null and salt != ''">,salt = #{salt}</if>
+        </set>
+        where tel = #{tel} and  status = 1
+    </update>
+             
+    
+   <!--获取提货点个人提货详情  -->
+    <select id="getThdOrdersBy" resultMap="spResultMap">     
+	     select *  from p_thd_orders  				
+         <where> 
+              1 = 1
+			  <if test="thId != null and thId !=''"> and th_id = #{thId} </if> 		
+		 </where> 
+		 order by created_at desc 
+    </select>    
+    
+
+   
+ 
+
+</mapper>

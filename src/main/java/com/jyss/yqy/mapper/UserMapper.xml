@@ -1,0 +1,160 @@
+
+<!--  <?xml version="1.0" encoding="UTF-8" ?>-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jyss.yqy.mapper.UserMapper" > 
+    
+             
+    <resultMap type="com.jyss.yqy.entity.jsonEntity.UserBean" id="ubResultMap">   
+        <id property="id" column="id"  /> 
+        <result property="uuid" column="uuid"  />  
+        <result property="salt" column="salt"  />  
+        <result property="pwd" column="pwd"  />     
+        <result property="account" column="account"  />             
+        <result property="nick" column="nick"  />
+        <result property="status" column="status"  /><!--status1删除 1=正常2=禁用  -->        
+        <result property="avatar" column="avatar"  />
+        <result property="sex" column="sex"  /> 
+        <result property="age" column="age"  />
+        <result property="realName" column="real_name"  />
+        <result property="idCard" column="id_card"  />
+        <result property="isChuangke" column="is_chuangke"  /><!--is_chuangke0普通会员1代言人2初级代理人 3中级代理人4高级代理人  -->
+        <result property="isAuth" column="is_auth"  /><!--isAuth 1=已提交 2=审核通过3=审核不通过  -->
+        <result property="bCode" column="b_code"  /> 
+        <result property="token" column="token"  /> 
+        <result property="createdAt" column="created_at"  /> 
+        <result property="lastAccessTime" column="last_access_time"  />     
+    </resultMap>              
+             
+     <!-- B端 -->        
+     <!-- 登录查询相关用户 -->   
+     <!-- status  -1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过  statusAuth 0=审核中 1=通过 2=未通过 -->
+    <select id="getUserBy" resultMap="ubResultMap">           
+	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.is_auth,u.b_code,a.real_name,a.id_card 
+	    <!--   , m.token,m.created_at,m.last_access_time -->
+	           from u_user u 
+				  left join u_user_auth a on u.uuid = a.u_uuid	 	
+				 <!--  left join u_mobile_login m on u.uuid = m.u_uuid	 --> 			
+         <where> 
+              1 = 1
+              <if test="account != null and account !=''"> and u.account = #{account} </if> 	
+              <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
+			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
+			  <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>	
+		 </where> 
+    </select>    
+
+    <select id="getUserById" resultMap="ubResultMap">           
+	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.is_auth,u.b_code,a.real_name,a.id_card  
+	           from u_user u   left join u_user_auth a on u.uuid = a.u_uuid							
+         <where> 
+              1 = 1
+              <if test="id != null and id !=''"> and u.id = #{id} </if> 	
+              <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
+			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 				  
+		 </where> 
+    </select>  
+    
+   <!-- 用户注册 -->
+    <insert id="addUser" parameterType="com.jyss.yqy.entity.User" 
+        useGeneratedKeys="true" keyProperty="id">         
+		insert into u_user values(null,#{uuid},#{account},#{pwd},#{salt},'0','1',now(),'0','0','0','tjr','0','0',
+		'0','0','0','0','1','0',now(),'0','0',now(),'0','0',now(),'1','0','0','1','0','0','0','0','0','0',
+		'0','0','0','0','0','code','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+           
+    </insert>
+    
+    <!--生成推荐码 --> 
+    <update id="upBCode"  >
+        update u_user  set b_code = #{bCode} 
+             where id =#{id} 
+    </update>
+    
+   <select id="getUserCode" resultMap="ubResultMap">           
+	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.is_auth,u.b_code   
+	           from u_user u 						
+         <where> 
+              1 = 1
+              <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid} </if> 	
+              <if test="bCode != null and bCode !=''"> and u.b_code = #{bCode} </if> 				  		
+		 </where> 
+    </select>    
+    
+   <!-- 插入推广关系，确定上下级 -->
+    <insert id="addRecord" parameterType="com.jyss.yqy.entity.User" 
+        useGeneratedKeys="true" keyProperty="id">         
+		insert into u_user_r_record values(null,#{uuid},#{account},#{pwd},#{salt},'0','1',now(),'0','0')
+		
+           
+    </insert>
+    
+    
+    <!-- 登录表token -->
+     <!-- useGeneratedKeys="true" keyProperty="id" -->
+    <insert id="addLogin" >         
+		insert into u_mobile_login values(null,#{uuid},'0',#{token},now(),'0','0');          
+    </insert>
+    
+    <select id="getToken" resultMap="ubResultMap">           
+	      select * from  u_mobile_login		
+         <where> 
+              1 = 1
+              <if test="uuid != null and uuid !=''"> and uuid = #{uuid} </if> 	
+              <if test="token != null and token !=''"> and token = #{token} </if> 				  			
+		 </where> 
+		 order by created_at desc
+    </select>    
+    
+    <!--修改token --> 
+    <update id="upToken"  >
+        update u_mobile_login  set token = #{token} ,last_access_time = #{time} 
+             where uuid =#{uuid} 
+    </update>
+       
+    
+     <!--修改个人信息 --> 
+    <update id="upMyInfo" parameterType="com.jyss.yqy.entity.User" >
+        update u_user  set nick = #{nick}  ,  avatar = #{avatar}  ,last_modify_time = now()
+             where id =#{id} 
+    </update>
+
+   
+    <!--修改密码 --> 
+    <update id="upPwd" parameterType="String" >
+        update u_user  set pwd = #{pwd},salt = #{salt}  ,last_modify_time = now()  where id = #{id}
+    </update>
+    
+    <!--禁用用户 --> 
+    <update id="upThdStatus" parameterType="java.util.List" >
+        update p_thd  set status = #{status}  where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">   
+	        #{id}   
+	    </foreach>  
+    </update>
+    
+    <!-- 删除用户 -->
+     <delete id="deleteThds" parameterType="java.util.List">
+        delete from p_thd where id in 
+	    <foreach collection="ids" item="id" open="(" separator="," close=")">   
+	        #{id}   
+	    </foreach>  
+    </delete>
+    
+    <!-- 增加提货点用户 -->
+    <insert id="addThd" parameterType="com.jyss.yqy.entity.Thd" 
+        useGeneratedKeys="true" keyProperty="id"> 
+        insert into p_thd values(null,#{name},#{tel},#{password},#{salt},#{pics},now(),now(),now(),#{status},#{thName},#{provinceId},#{province},#{cityId},#{city},#{areaId},#{area})             
+    </insert>
+    
+     <!--修改用户 --> 
+    <update id="upThd" parameterType="com.jyss.yqy.entity.Thd" >
+        update p_thd  set name = #{name} , tel = #{tel} ,th_name = #{thName} ,province_id = #{provinceId} ,province = #{province} ,city_id = #{cityId} ,city = #{city}, 
+                      area_id = #{areaId} ,area = #{area} ,last_modify_time = now()
+             where id =#{id}
+    </update>
+    
+    
+    
+
+</mapper>

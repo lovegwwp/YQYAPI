@@ -1,0 +1,96 @@
+
+<!--  <?xml version="1.0" encoding="UTF-8" ?>-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jyss.yqy.mapper.XtclMapper" > 
+
+    <resultMap type="com.jyss.yqy.entity.Xtcl" id="clResultMap">   
+        <id property="id" column="id"  />
+        <result property="bz_type" column="bz_type"  />
+        <result property="bz_id" column="bz_id"  />
+        <result property="bz_value" column="bz_value"  />
+        <result property="bz_info" column="bz_info"  />
+        <result property="pid" column="pid"  />
+        <result property="status" column="status"  />
+
+    </resultMap>   
+     
+     
+   <resultMap type="com.jyss.yqy.entity.BaseConfig" id="bcResultMap">   
+        <id property="id" column="id"  />
+        <result property="content" column="content"  />
+        <result property="key" column="key"  />
+        <result property="title" column="title"  />
+       <!--  <result property="status" column="status"  /> -->
+
+    </resultMap>   
+     
+    <!-- 查询对应常量-->  
+    <select id="getCls" resultMap="clResultMap" >  
+        select * from p_xt_cl  where status =1 order by bz_type ,bz_id      
+    </select> 
+    
+    <select id="getClsBy" resultMap="clResultMap">  
+       <!--  select *, '&lt;a href="javascript:;" onclick="editFzWin()"&gt;编辑&lt;/a&gt;' as hrefStr from p_xt_cl  -->
+         select * from p_xt_cl 
+         <where> 
+              status = 1
+			  <if test="bz_type != null and bz_type !=''"> and bz_type  LIKE CONCAT('%',#{bz_type},'%') </if> 
+			  <if test="bz_value != null and bz_value !=''"> and  bz_value LIKE CONCAT('%',#{bz_value},'%')  </if> 
+		 </where> 
+		 order by bz_type ,bz_id
+    </select> 
+    
+     <select id="getClsValue" resultType="com.jyss.yqy.entity.Xtcl">  
+        select * from p_xt_cl 
+         <where> 
+              status = 1
+			  <if test="bz_type != null and bz_type !=''">and bz_type  LIKE CONCAT('%',#{bz_type},'%') </if> 
+			  <if test="bz_id != null and bz_id !=''"> and  bz_id = #{bz_id} </if> 
+		 </where> 
+		limit 0,1
+    </select> 
+    
+    <select id="getClsCombox" resultMap="clResultMap">  
+        select * from p_xt_area 
+         <where> 
+              1=1
+			  <if test="bz_type != null and bz_type !=''"> and bz_type  LIKE CONCAT('%',#{bz_type},'%') </if> 
+			  <if test="pid != null and pid !=''"> AND  pid = #{pid}  </if> 
+		 </where> 
+		  order by bz_id 
+    </select> 
+    
+     <insert id="addCl" parameterType="com.jyss.yqy.entity.Xtcl" 
+        useGeneratedKeys="true" keyProperty="id"> 
+        insert into p_xt_cl values(null,#{bz_type},#{bz_id},#{bz_value},#{bz_info},#{pid},#{status})  
+            
+    </insert>
+    
+    <update id="updateCl" parameterType="com.jyss.yqy.entity.Xtcl" >
+        update p_xt_cl
+           set bz_value = #{bz_value} 
+        where id=#{id}
+    </update>
+    
+    <delete id="deleteCl" parameterType="java.util.List">
+        delete from p_xt_cl where id in 
+	    <foreach collection="ids" item="id" open="(" separator="," close=")">   
+	        #{id}   
+	    </foreach>  
+    </delete>
+    
+    
+    
+    <!-- 系统基础配置表 -->
+    
+    <select id="getBcs" resultMap="bcResultMap" >  
+        select * from p_base_config b
+        <where> 
+              b.status = 1
+			  <if test="key != null and key !=''"> and b.key  LIKE CONCAT('%',#{key},'%') </if> 
+			  <if test="title != null and title !=''"> and  b.title LIKE CONCAT('%',#{title},'%')  </if> 
+		 </where>     
+    </select> 
+</mapper>
