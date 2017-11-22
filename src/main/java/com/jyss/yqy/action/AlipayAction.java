@@ -216,8 +216,10 @@ public class AlipayAction {
 				m.put("status", "true");
 				// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
 				m.put("message", "提交订单成功！");
-				m.put("outtradeno", outTradeNo);
-				m.put("money", money + "");
+				mm.put("outtradeno", outTradeNo);
+				mm.put("money", money + "");
+				m.put("code", "0");
+				m.put("data", mm);
 				return m;
 			}
 
@@ -225,24 +227,22 @@ public class AlipayAction {
 			log.error("支付宝预下单失败!!!");
 			m.put("status", "false");
 			m.put("message", "下单失败！");
-			m.put("outtradeno", "");
 			break;
 
 		case UNKNOWN:
 			log.error("系统异常，预下单状态未知!!!");
 			m.put("status", "false");
 			m.put("message", "系统异常，下单失败！");
-			m.put("outtradeno", "");
 			break;
 
 		default:
 			log.error("不支持的交易状态，交易返回异常!!!");
 			m.put("status", "false");
 			m.put("message", "不支持的交易状态，交易返回异常!");
-			m.put("outtradeno", "");
 			break;
 		}
-
+		m.put("code", "-3");
+		m.put("data", mm);
 		return m;
 	}
 
