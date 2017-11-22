@@ -42,5 +42,10 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3-javadoc.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3.jar"/>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
