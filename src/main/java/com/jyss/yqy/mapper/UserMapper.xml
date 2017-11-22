@@ -22,7 +22,9 @@
         <result property="isChuangke" column="is_chuangke"  /><!--is_chuangke0普通会员1代言人2初级代理人 3中级代理人4高级代理人  -->
         <result property="isAuth" column="is_auth"  /><!--isAuth 1=已提交 2=审核通过3=审核不通过  -->
         <result property="bCode" column="b_code"  /> 
-        <result property="token" column="token"  /> 
+        <result property="token" column="token"  />
+        <result property="payPwd" column="pay_pwd"  /> 
+        <result property="cashScore" column="cash_score"  /> 
         <result property="createdAt" column="created_at"  /> 
         <result property="lastAccessTime" column="last_access_time"  />     
     </resultMap>              
@@ -31,7 +33,7 @@
      <!-- 登录查询相关用户 -->   
      <!-- status  -1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过  statusAuth 0=审核中 1=通过 2=未通过 -->
     <select id="getUserBy" resultMap="ubResultMap">           
-	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.is_auth,u.b_code,a.real_name,a.id_card 
+	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,u.cash_score,u.is_auth,u.b_code,a.real_name,a.id_card 
 	    <!--   , m.token,m.created_at,m.last_access_time -->
 	           from u_user u 
 				  left join u_user_auth a on u.uuid = a.u_uuid	 	
@@ -46,7 +48,7 @@
     </select>    
 
     <select id="getUserById" resultMap="ubResultMap">           
-	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.is_auth,u.b_code,a.real_name,a.id_card  
+	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,u.is_auth,u.cash_score,u.b_code,a.real_name,a.id_card  
 	           from u_user u   left join u_user_auth a on u.uuid = a.u_uuid							
          <where> 
               1 = 1

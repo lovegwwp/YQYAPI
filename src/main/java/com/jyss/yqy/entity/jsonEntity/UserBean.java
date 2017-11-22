@@ -17,12 +17,30 @@ public class UserBean {
 	private int isAuth;// 1=已提交 2=审核通过3=审核不通过
 	private String bCode;// 推广码
 	private String token;//
+	private String payPwd;// 支付密码
+	private float cashScore;// 现金积分
 
 	// private Date createdAt;//
 	// private int lastAccessTime;//
 
+	public String getPayPwd() {
+		return payPwd;
+	}
+
+	public void setPayPwd(String payPwd) {
+		this.payPwd = payPwd;
+	}
+
 	public int getId() {
 		return id;
+	}
+
+	public float getCashScore() {
+		return cashScore;
+	}
+
+	public void setCashScore(float cashScore) {
+		this.cashScore = cashScore;
 	}
 
 	public String getToken() {

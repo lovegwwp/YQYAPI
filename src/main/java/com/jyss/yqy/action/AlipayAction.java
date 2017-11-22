@@ -93,9 +93,10 @@ public class AlipayAction {
 	// 预下单 --type 1=初级，2=中级，3=高级代理人',
 	@RequestMapping(value = "/b/alipay", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> alipay(@RequestParam int money,
+	public Map<String, Object> alipay(@RequestParam int money,
 			@RequestParam int gmID) {
-		Map<String, String> m = new HashMap<String, String>();
+		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, String> mm = new HashMap<String, String>();
 		Map<String, Object> dlReMap = new HashMap<String, Object>();
 		// (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
 		// 需保证商户系统端不能重复，建议通过数据库sequence生成，
@@ -132,16 +133,28 @@ public class AlipayAction {
 
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "120m";
-		// //// 验证当前用户是否合法///////////
+		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
+		mm.put("outtradeno", "");
+		mm.put("money", "");
+		mm.put("xjjf", "");
+		mm.put("zfCode", "");
+		// //// 验证当前用户是否合法///////code='-1=其他，0=无支付密码，1=有支付密码，'////
 		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
-			m.put("outtradeno", "");
-			m.put("money", "");
+			m.put("code", "-1");
+			m.put("data", mm);
 			return m;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getPwd() == null || ub.getPwd().equals("")) {
+			zfCode = "0";
+		} else {
+			zfCode = "1";
+		}
+		mm.put("zfCode", zfCode);
+		mm.put("xjjf", ub.getCashScore() + "");
 		// //// 商品明细列表，需填写购买商品详细信息，进行创建相应订单///////////
 		String hs = "10";
 		String jb = "1";
@@ -156,8 +169,8 @@ public class AlipayAction {
 		if (gList == null || gList.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "该商品信息错误！");
-			m.put("outtradeno", "");
-			m.put("money", "");
+			m.put("code", "-2");
+			m.put("data", mm);
 			return m;
 		}
 		Goods good = gList.get(0);
@@ -342,7 +355,7 @@ public class AlipayAction {
 		// 生成订单，插入数据库
 		String gmr = "";
 
-		if (ub.getRealName().isEmpty()) {
+		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
 			gmr = "XXX";
 		} else {
 			gmr = ub.getRealName();
