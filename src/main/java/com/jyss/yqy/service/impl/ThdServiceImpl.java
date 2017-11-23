@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alipay.api.internal.util.StringUtils;
 import com.jyss.yqy.entity.ThOrders;
@@ -15,6 +16,7 @@ import com.jyss.yqy.service.ThdService;
 import com.jyss.yqy.utils.PasswordUtil;
 
 @Service
+@Transactional
 public class ThdServiceImpl implements ThdService {
 	@Autowired
 	private ThdMapper thdMapper;
