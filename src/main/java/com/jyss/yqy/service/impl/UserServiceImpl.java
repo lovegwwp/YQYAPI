@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alipay.api.internal.util.StringUtils;
 import com.jyss.yqy.entity.User;
+import com.jyss.yqy.entity.UserAuth;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
+import com.jyss.yqy.mapper.UserAuthMapper;
 import com.jyss.yqy.mapper.UserMapper;
 import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.utils.CommTool;
@@ -23,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserMapper userMapper;
+	@Autowired
+	private UserAuthMapper userAuthMapper;
 
 	/**
 	 * 用户登陆 status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过
@@ -177,6 +182,16 @@ public class UserServiceImpl implements UserService {
 	public List<UserBean> getToken(String uuid, String token) {
 		// TODO Auto-generated method stub
 		return userMapper.getToken(uuid, token);
+	}
+
+	@Override
+	public int insertUserAuth(UserAuth userAuth) {
+		userAuth.setuUuid(CommTool.getUUID());
+		userAuth.setStatus(0);
+		userAuth.setCreatedAt(new Date());
+		
+		int idNum = userAuthMapper.insertUserAuth(userAuth);
+		return idNum;
 	}
 
 }

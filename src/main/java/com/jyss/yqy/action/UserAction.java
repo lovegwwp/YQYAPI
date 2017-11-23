@@ -1,5 +1,8 @@
 package com.jyss.yqy.action;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,13 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.ResponseEntity;
 import com.jyss.yqy.entity.User;
+import com.jyss.yqy.entity.UserAuth;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.filter.MySessionContext;
 import com.jyss.yqy.service.UserService;
@@ -272,5 +281,35 @@ public class UserAction {
 		return m;
 
 	}
+	
+	
+	@InitBinder
+    protected void init(HttpServletRequest request, ServletRequestDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
+	
+	
+	/**
+	 * 实名认证
+	 */
+	@RequestMapping("/authen")
+	@ResponseBody
+	public Map<String,String> saveUserAuth(UserAuth userAuth){
+		int idNum = userService.insertUserAuth(userAuth);
+		String val=idNum +""; 
+		Map<String,String> map = new HashMap<String,String>();
+		if(val != null && !"".equals(val)){
+			map.put("status", "true");
+			map.put("message", "信息已提交，请等待审核~");
+			return map;
+		}
+		map.put("status", "false");
+		map.put("message", "信息提交失败，请重新提交！");
+		return map;
+	}
+	
+	
 
 }

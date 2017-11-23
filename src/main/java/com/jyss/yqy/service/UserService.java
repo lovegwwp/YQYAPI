@@ -1,11 +1,13 @@
 package com.jyss.yqy.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.User;
+import com.jyss.yqy.entity.UserAuth;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 
 public interface UserService {
@@ -84,5 +86,9 @@ public interface UserService {
 	 */
 	List<UserBean> getToken(@Param("uuid") String uuid,
 			@Param("token") String token);
+	
+	
+	//添加实名用户信息
+	int insertUserAuth(UserAuth userAuth);
 
 }

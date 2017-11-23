@@ -5,103 +5,30 @@
 
 <mapper namespace="com.jyss.yqy.mapper.UserAuthMapper" > 
     
-             
     <resultMap type="com.jyss.yqy.entity.UserAuth" id="uaResultMap">   
-        <id property="id" column="id"  /> 
-        <result property="orderSn" column="order_sn"  />     
-        <result property="gmId" column="gm_id"  />             
-        <result property="gmr" column="gmr"  />
-        <result property="tel" column="tel"  />        
-        <result property="cjsj" column="cjsj"  />
-        <result property="gmSp" column="gm_sp"  /> 
-        <result property="pics" column="pics"  />
-        <result property="gmNum" column="gm_num"  />
-        <result property="gmDw" column="gm_dw"  />
-        <result property="price" column="price"  />
-        <result property="type" column="type"  />
-        <result property="status" column="status"  />
-        <result property="createdAt" column="created_at"  />
-        <result property="lastModifyTime" column="last_modify_time"  />
-    </resultMap>              
-             
-     <!-- B端商品订单 -->        
-     <!-- 查询b端商品 -->   
-    <select id="getOrdersBy" resultMap="uaResultMap">   
-         <!--  DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s' ) cjsj    LIKE CONCAT('%',#{name},'%')  -->
-	     select *  from p_orders_b  				
-         <where> 
-              1 = 1
-              <if test="status != null and status !=''"> and status = #{status} </if> 	
-			  <if test="orderSn != null and orderSn !=''"> and order_sn = #{orderSn} </if>
-			  <if test="gmId != null and gmId !=''"> and gm_id = #{gmId} </if> 		
-		 </where> 
-		 order by status ,created_at desc
-    </select>    
-
-   <!-- 增加购买商品支付成功或者失败的订单记录 -->
-    <insert id="addOrder" parameterType="com.jyss.yqy.entity.OrdersB" 
-        useGeneratedKeys="true" keyProperty="id"> 
-        insert into p_orders_b values(null,#{orderSn},#{gmId},#{gmr},#{tel},#{pics},#{gmSp},#{price},#{gmNum},#{gmDw},#{status},#{type},now(),now())             
-    </insert>
+        <id property="id" column="id" jdbcType="INTEGER" /> 
+        <result property="uUuid" column="u_uuid" jdbcType="VARCHAR" />     
+        <result property="realName" column="real_name" jdbcType="VARCHAR" />             
+        <result property="email" column="email" jdbcType="VARCHAR" />
+        <result property="idCard" column="id_card" jdbcType="VARCHAR" />        
+        <result property="status" column="status" jdbcType="INTEGER" />
+        <result property="cardPicture1" column="card_picture_1"  jdbcType="VARCHAR"/> 
+        <result property="cardPicture2" column="card_picture_2" jdbcType="VARCHAR" />
+        <result property="cardPicture3" column="card_picture_3" jdbcType="VARCHAR" />
+        <result property="validityDate" column="validity_date"  jdbcType="TIMESTAMP"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP" />
+    </resultMap>       
     
-     <!--修改订单状态 --> 
-    <update id="upOrderStatus"  >
-        update p_orders_b  set status = #{status}  ,last_modify_time = now()
-             where order_sn =#{orderSn} and status = #{statusBefore}
-    </update>
-    
-     <!-- 删除订单-->
-     <delete id="delOrder" >
-        delete from p_orders_b  where order_sn =#{orderSn}	    
-    </delete>
-    
-    
+    <!-- 添加实名用户信息 -->
+    <insert id="insertUserAuth" parameterType="com.jyss.yqy.entity.UserAuth" useGeneratedKeys="true" keyProperty="id">
+    	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+    	insert into u_user_auth (id,u_uuid,real_name,email,id_card,status,card_picture_1,card_picture_2,card_picture_3,validity_date,created_at) 
+    	values(null,#{uUuid},#{realName},#{email},#{idCard},#{status},#{cardPicture1},#{cardPicture2},
+    	#{cardPicture3},#{validityDate},#{createdAt})
+    </insert>       
    
-    <!--修改密码 --> 
-    <update id="upHtpassword" parameterType="String" >
-        update p_thd  set password = #{password},salt = #{salt}   where name = #{name} and  status = 1
-    </update>
-    
-    <!--禁用用户 --> 
-    <update id="upThdStatus" parameterType="java.util.List" >
-        update p_thd  set status = #{status}  where id in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">   
-	        #{id}   
-	    </foreach>  
-    </update>
-    
-    <!-- 删除用户 -->
-     <delete id="deleteThds" parameterType="java.util.List">
-        delete from p_thd where id in 
-	    <foreach collection="ids" item="id" open="(" separator="," close=")">   
-	        #{id}   
-	    </foreach>  
-    </delete>
-    
-    <!-- 增加提货点用户 -->
-    <insert id="addThd" parameterType="com.jyss.yqy.entity.Thd" 
-        useGeneratedKeys="true" keyProperty="id"> 
-        insert into p_thd values(null,#{name},#{tel},#{password},#{salt},#{pics},now(),now(),now(),#{status},#{thName},#{provinceId},#{province},#{cityId},#{city},#{areaId},#{area})             
-    </insert>
-    
-     <!--修改用户 --> 
-    <update id="upThd" parameterType="com.jyss.yqy.entity.Thd" >
-        update p_thd  set name = #{name} , tel = #{tel} ,th_name = #{thName} ,province_id = #{provinceId} ,province = #{province} ,city_id = #{cityId} ,city = #{city}, 
-                      area_id = #{areaId} ,area = #{area} ,last_modify_time = now()
-             where id =#{id}
-    </update>
-    
-    <!--提货点商品详情-->
-     <select id="getThSpBy" resultMap="uaResultMap">     
-	    select o.*,DATE_FORMAT(o.created_at, '%Y-%m-%d %H:%i:%s' ) cjsj,t.name,t.th_name from p_thd_orders o
-			left join p_thd t
-			on o.th_id = t.id				
-         <where> 
-              1 = 1
-			  <if test="name != null and name !=''"> and t.th_name   LIKE CONCAT('%',#{name},'%') </if> 		
-		 </where> 
-		order by o.created_at desc
-    </select>    
     
 
 </mapper>

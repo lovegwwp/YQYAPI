@@ -1,18 +1,22 @@
 package com.jyss.yqy.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserAuth {
+import org.springframework.format.annotation.DateTimeFormat;
+
+public class UserAuth implements Serializable{
 	private int id;
 	private String uUuid;
 	private String realName;// 真实姓名
 	private String email;// 邮箱
 	private String idCard;// 身份证
-	private String status;// -1删除 2禁用 1正常
+	private int status;// 0=审核中 1=通过 2=未通过
 	private String cardPicture1;// 身份份正图片
 	private String cardPicture2;// 身份份正图片
 	private String cardPicture3;// 身份份正图片
-	private Date validityDate;// 审核日期
+	//@DateTimeFormat(pattern="yyyy-MM-dd")  
+	private Date validityDate;// 身份证有效日期
 	private Date createdAt;
 
 	public int getId() {
@@ -55,12 +59,12 @@ public class UserAuth {
 		this.idCard = idCard;
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatus(int i) {
+		this.status = i;
 	}
 
 	public String getCardPicture1() {
