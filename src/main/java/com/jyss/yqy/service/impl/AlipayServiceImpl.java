@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
@@ -22,6 +24,8 @@ import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
 import com.jyss.yqy.entity.Cwzf;
 import com.jyss.yqy.utils.AlipayUtils;
 
+@Service
+@Transactional
 public class AlipayServiceImpl {
 	@Autowired
 	// private CwzfService cwService;
