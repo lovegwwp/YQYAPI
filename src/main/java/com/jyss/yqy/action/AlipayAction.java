@@ -91,7 +91,7 @@ public class AlipayAction {
 	}
 
 	// 预下单 --type 1=初级，2=中级，3=高级代理人',
-	@RequestMapping(value = "/b/alipay", method = RequestMethod.POST)
+	@RequestMapping(value = "/b/dlrOrder", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> alipay(@RequestParam int money,
 			@RequestParam int gmID) {
@@ -162,6 +162,13 @@ public class AlipayAction {
 		if (!dlReMap.isEmpty()) {
 			hs = (String) dlReMap.get("hs");
 			jb = (String) dlReMap.get("jb");
+			if (jb.equals("0")) {
+				m.put("status", "false");
+				m.put("message", "代理人消费金额错误！");
+				m.put("code", "-4");
+				m.put("data", mm);
+				return m;
+			}
 		}
 		// //所购买的商品信息==亚麻籽油
 		List<Goods> gList = new ArrayList<Goods>();
@@ -247,7 +254,7 @@ public class AlipayAction {
 	}
 
 	// 预下单 --type 1=初级，2=中级，3=高级代理人',
-	@RequestMapping(value = "/b/alipay2", method = RequestMethod.POST)
+	@RequestMapping(value = "/b/dlrOrder2", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> alipay2(@RequestParam int money,
 			@RequestParam int gmID) {
@@ -285,16 +292,29 @@ public class AlipayAction {
 
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "120m";
+		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
+		mm.put("outtradeno", "");
+		mm.put("money", "");
+		mm.put("xjjf", "");
+		mm.put("zfCode", "");
 		// //// 验证当前用户是否合法///////////
 		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
-			m.put("outtradeno", "");
-			m.put("money", "");
+			m.put("code", "-1");
+			m.put("data", mm);
 			return m;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getPwd() == null || ub.getPwd().equals("")
+				|| ub.getPwd().equals("0")) {
+			zfCode = "0";
+		} else {
+			zfCode = "1";
+		}
+		mm.put("zfCode", zfCode);
+		mm.put("xjjf", ub.getCashScore() + "");
 		// //// 商品明细列表，需填写购买商品详细信息，进行创建相应订单///////////
 		String hs = "10";
 		String jb = "1";
@@ -302,6 +322,13 @@ public class AlipayAction {
 		if (!dlReMap.isEmpty()) {
 			hs = (String) dlReMap.get("hs");
 			jb = (String) dlReMap.get("jb");
+			if (jb.equals("0")) {
+				m.put("status", "false");
+				m.put("message", "代理人消费金额错误！");
+				m.put("code", "-4");
+				m.put("data", mm);
+				return m;
+			}
 		}
 		// //所购买的商品信息==亚麻籽油
 		List<Goods> gList = new ArrayList<Goods>();
@@ -309,8 +336,8 @@ public class AlipayAction {
 		if (gList == null || gList.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "该商品信息错误！");
-			m.put("outtradeno", "");
-			m.put("money", "");
+			m.put("code", "-2");
+			m.put("data", mm);
 			return m;
 		}
 		Goods good = gList.get(0);
@@ -331,8 +358,10 @@ public class AlipayAction {
 			m.put("status", "true");
 			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
 			m.put("message", "提交订单成功！");
-			m.put("outtradeno", outTradeNo);
-			m.put("money", money + "");
+			mm.put("outtradeno", outTradeNo);
+			mm.put("money", money + "");
+			m.put("code", "0");
+			m.put("data", mm);
 			return m;
 		}
 		m.put("code", "-3");
@@ -350,6 +379,11 @@ public class AlipayAction {
 		fylist = clService.getClsBy("dyf_type", money + "");
 		if (fylist != null && fylist.size() == 1) {
 			jb = fylist.get(0).getBz_id();
+		} else {
+			// ///查不到对应充值等级
+			mm.put("jb", "0");
+			mm.put("hs", "0");
+			return mm;
 		}
 		mm.put("jb", jb);
 		// //查询级别对应的亚麻籽油盒数
