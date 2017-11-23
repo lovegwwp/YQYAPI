@@ -9,21 +9,16 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alipay.api.AlipayResponse;
-import com.alipay.api.domain.TradeFundBill;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
-import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.ExtendParams;
 import com.alipay.demo.trade.model.builder.AlipayTradePrecreateRequestBuilder;
-import com.alipay.demo.trade.model.builder.AlipayTradeQueryRequestBuilder;
 import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
-import com.alipay.demo.trade.model.result.AlipayF2FQueryResult;
 import com.alipay.demo.trade.service.AlipayMonitorService;
 import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
-import com.alipay.demo.trade.utils.Utils;
 import com.jyss.yqy.entity.Cwzf;
 import com.jyss.yqy.utils.AlipayUtils;
 
@@ -179,45 +174,6 @@ public class AlipayServiceImpl {
 		}
 
 		return map;
-	}
-
-	// 测试当面付2.0查询订单
-	public void test_trade_query() {
-		// (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
-		String outTradeNo = "tradepay14817938139942440181";
-
-		// 创建查询请求builder，设置请求参数
-		AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
-				.setOutTradeNo(outTradeNo);
-
-		AlipayF2FQueryResult result = tradeService.queryTradeResult(builder);
-		switch (result.getTradeStatus()) {
-		case SUCCESS:
-			log.info("查询返回该订单支付成功: )");
-
-			AlipayTradeQueryResponse response = result.getResponse();
-			dumpResponse(response);
-
-			log.info(response.getTradeStatus());
-			if (Utils.isListNotEmpty(response.getFundBillList())) {
-				for (TradeFundBill bill : response.getFundBillList()) {
-					log.info(bill.getFundChannel() + ":" + bill.getAmount());
-				}
-			}
-			break;
-
-		case FAILED:
-			log.error("查询返回该订单支付失败或被关闭!!!");
-			break;
-
-		case UNKNOWN:
-			log.error("系统异常，订单支付状态未知!!!");
-			break;
-
-		default:
-			log.error("不支持的交易状态，交易返回异常!!!");
-			break;
-		}
 	}
 
 	// 简单打印应答
