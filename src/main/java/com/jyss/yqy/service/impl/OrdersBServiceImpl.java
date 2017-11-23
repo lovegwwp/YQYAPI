@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
@@ -11,6 +12,7 @@ import com.jyss.yqy.mapper.OrdersBMapper;
 import com.jyss.yqy.service.OrdersBService;
 
 @Service
+@Transactional
 public class OrdersBServiceImpl implements OrdersBService {
 
 	@Autowired

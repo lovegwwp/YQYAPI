@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jyss.yqy.mapper.JBonusGljMapper" >
+  <resultMap id="BaseResultMap" type="com.jyss.yqy.entity.JBonusGlj" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="u_id" property="uId" jdbcType="INTEGER" />
+    <result column="u_name" property="uName" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="parent_money" property="parentMoney" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, u_id, u_name, parent_id, parent_money, status, created
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jyss.yqy.entity.JBonusGljExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from j_bonus_glj
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from j_bonus_glj
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from j_bonus_glj
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jyss.yqy.entity.JBonusGljExample" >
+    delete from j_bonus_glj
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jyss.yqy.entity.JBonusGlj" >
+    insert into j_bonus_glj (id, u_id, u_name, 
+      parent_id, parent_money, status, 
+      created)
+    values (#{id,jdbcType=INTEGER}, #{uId,jdbcType=INTEGER}, #{uName,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=INTEGER}, #{parentMoney,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, 
+      #{created,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jyss.yqy.entity.JBonusGlj" >
+    insert into j_bonus_glj
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="uId != null" >
+        u_id,
+      </if>
+      <if test="uName != null" >
+        u_name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="parentMoney != null" >
+        parent_money,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="created != null" >
+        created,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uId != null" >
+        #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="uName != null" >
+        #{uName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="parentMoney != null" >
+        #{parentMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="created != null" >
+        #{created,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jyss.yqy.entity.JBonusGljExample" resultType="java.lang.Integer" >
+    select count(*) from j_bonus_glj
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update j_bonus_glj
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.uId != null" >
+        u_id = #{record.uId,jdbcType=INTEGER},
+      </if>
+      <if test="record.uName != null" >
+        u_name = #{record.uName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentMoney != null" >
+        parent_money = #{record.parentMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.created != null" >
+        created = #{record.created,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update j_bonus_glj
+    set id = #{record.id,jdbcType=INTEGER},
+      u_id = #{record.uId,jdbcType=INTEGER},
+      u_name = #{record.uName,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=INTEGER},
+      parent_money = #{record.parentMoney,jdbcType=DOUBLE},
+      status = #{record.status,jdbcType=INTEGER},
+      created = #{record.created,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jyss.yqy.entity.JBonusGlj" >
+    update j_bonus_glj
+    <set >
+      <if test="uId != null" >
+        u_id = #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="uName != null" >
+        u_name = #{uName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="parentMoney != null" >
+        parent_money = #{parentMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="created != null" >
+        created = #{created,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jyss.yqy.entity.JBonusGlj" >
+    update j_bonus_glj
+    set u_id = #{uId,jdbcType=INTEGER},
+      u_name = #{uName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      parent_money = #{parentMoney,jdbcType=DOUBLE},
+      status = #{status,jdbcType=INTEGER},
+      created = #{created,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+	<!-- 查询今天的收益 -->
+	<select id="selectEarnings" parameterType="int" resultType="double">
+		SELECT
+			IFNULL(SUM(parent_money),0.0)
+		FROM
+			j_bonus_glj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			AND `status` = 1
+			AND to_days(created) = to_days(now())
+		</where>
+	</select>
+ 
+ 	<!-- 查询总收益 -->
+	<select id="selectTotal" parameterType="int" resultType="double">
+		SELECT
+			IFNULL(SUM(parent_money),0.0)
+		FROM
+			j_bonus_glj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			AND `status` = 1
+		</where>
+	</select>
+
+	<!-- 查询本周列表 -->
+	<select id="selectJBonusGljWek" parameterType="int" resultMap="BaseResultMap">
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		FROM
+		j_bonus_glj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			AND `status` = 1 
+			AND YEARWEEK(date_format(created,'%Y-%m-%d')) = YEARWEEK(now())
+		</where>
+		ORDER BY  created DESC
+	</select>
+	
+	<!-- 按两个日期查询 -->
+	<select id="selectJBonusGljByDay" parameterType="com.jyss.yqy.entity.JBonusGlj" resultMap="BaseResultMap">
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		FROM
+		j_bonus_glj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			<if test="beginTime != null and beginTime != ''">
+				and date_format(created, '%Y-%m-%d') &gt;= #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date_format(created, '%Y-%m-%d') &lt;= #{endTime}
+			</if>
+			AND `status` = 1 
+		</where>
+		ORDER BY  created DESC
+	</select>
+	
+	<!-- 按月查询 -->
+	<select id="selectJBonusGljByMonth" parameterType="com.jyss.yqy.entity.JBonusGlj"  resultMap="BaseResultMap">
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		FROM
+		j_bonus_glj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			<if test="month != null and month != ''">
+				and date_format(created, '%Y-%m') = #{month}
+			</if>
+			AND `status` = 1 
+		</where>
+		ORDER BY  created DESC
+	</select>
+  
+  
+</mapper>

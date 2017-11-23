@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jyss.yqy.entity.BaseConfig;
 import com.jyss.yqy.entity.Xtcl;
@@ -11,6 +12,7 @@ import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.XtclService;
 
 @Service
+@Transactional
 public class XtclServiceImpl implements XtclService {
 
 	@Autowired

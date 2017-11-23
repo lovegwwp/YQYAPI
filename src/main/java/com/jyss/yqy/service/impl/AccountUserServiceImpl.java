@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jyss.yqy.entity.AccountUser;
 import com.jyss.yqy.mapper.AccountUserMapper;
@@ -13,6 +14,7 @@ import com.jyss.yqy.utils.CommTool;
 import com.jyss.yqy.utils.PasswordUtil;
 
 @Service
+@Transactional
 public class AccountUserServiceImpl implements AccountUserService {
 	@Autowired
 	private AccountUserMapper auMapper;
