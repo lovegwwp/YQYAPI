@@ -45,9 +45,9 @@ public class ThdAction {
 	 */
 	@RequestMapping("/sendCode")
 	@ResponseBody
-	public Map sendCode(@RequestParam("tel") String tel,
+	public Map<String,String> sendCode(@RequestParam("tel") String tel,
 			HttpServletRequest request) {
-		Map map = new HashMap();
+		Map<String,String> map = new HashMap<String,String>();
 		if (tel != null && !"".equals(tel)) {
 			List<Thd> list = thdService.findThdByTel(tel);
 			if (list != null && list.size() > 0) {

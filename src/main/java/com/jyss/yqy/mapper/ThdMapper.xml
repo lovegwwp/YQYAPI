@@ -47,7 +47,7 @@
     </resultMap>      
     
     
-    <select id="findThdByTel" parameterType="String" resultType="com.jyss.yqy.entity.Thd">
+    <select id="findThdByTel" parameterType="String" resultMap="thdResultMap">
         select * from p_thd 
         <where>
         	<if test="tel != null and tel != ''">and tel = #{tel} and status = 1</if>
@@ -76,8 +76,6 @@
 		 order by created_at desc 
     </select>    
     
-
-   
  
 
 </mapper>
