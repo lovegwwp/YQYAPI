@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.ResponseEntity;
+import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.User;
 import com.jyss.yqy.entity.UserAuth;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.filter.MySessionContext;
+import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.utils.CommTool;
 import com.jyss.yqy.utils.HttpClientUtil;
@@ -36,6 +38,8 @@ import com.jyss.yqy.utils.PasswordUtil;
 public class UserAction {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private UMobileLoginService uMobileLoginService;
 
 	/**
 	 * 用户登陆
@@ -296,18 +300,39 @@ public class UserAction {
 	 */
 	@RequestMapping("/authen")
 	@ResponseBody
-	public Map<String,String> saveUserAuth(UserAuth userAuth){
-		int idNum = userService.insertUserAuth(userAuth);
-		String val=idNum +""; 
+	public Map<String,String> saveUserAuth(UserAuth userAuth,String token){
+		String uUuid = userAuth.getuUuid();
 		Map<String,String> map = new HashMap<String,String>();
-		if(val != null && !"".equals(val)){
-			map.put("status", "true");
-			map.put("message", "信息已提交，请等待审核~");
-			return map;
+		if(uUuid != null && !"".equals(uUuid)){
+			List<UMobileLogin> loginList = uMobileLoginService.getUMobileLoginByUid(uUuid);
+			if(loginList !=null && loginList.size()>0){
+				UMobileLogin uMobileLogin = loginList.get(0);
+				if(uMobileLogin.getToken().equals(token)){
+					int idNum = userService.insertUserAuth(userAuth);
+					String val=idNum +""; 
+					if(val != null && !"".equals(val)){
+						map.put("code", "0");
+						map.put("status", "true");
+						map.put("message", "信息已提交，请等待审核~");
+						return map;
+					}
+					map.put("code", "-1");
+					map.put("status", "false");
+					map.put("message", "提交失败，请重新提交");
+					return map;
+					
+				}
+				map.put("code", "-2");
+				map.put("status", "false");
+				map.put("message", "请重新登陆");
+				return map;
+			}
 		}
+		map.put("code", "-3");
 		map.put("status", "false");
-		map.put("message", "信息提交失败，请重新提交！");
+		map.put("message", "无此用户");
 		return map;
+		
 	}
 	
 	

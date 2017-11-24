@@ -186,7 +186,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int insertUserAuth(UserAuth userAuth) {
-		userAuth.setuUuid(CommTool.getUUID());
 		userAuth.setStatus(0);
 		userAuth.setCreatedAt(new Date());
 		
