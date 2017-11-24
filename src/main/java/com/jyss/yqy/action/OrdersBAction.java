@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.entity.Page;
 import com.jyss.yqy.entity.ResponseEntity;
 import com.jyss.yqy.service.OrdersBService;
 import com.jyss.yqy.utils.CommTool;
@@ -125,17 +128,16 @@ public class OrdersBAction {
 	// 查询个人订单
 	@RequestMapping("/getMyOrders")
 	@ResponseBody
-	public Map<String, List<OrdersB>> getMyOrders(
-			@RequestParam("gmId") String gmId) {
+	public Map<String, Object> getMyOrders(@RequestParam("gmId") String gmId,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit) {
 		// TODO Auto-generated method stub
-		Map<String, List<OrdersB>> m = new HashMap<String, List<OrdersB>>();
+		Map<String, Object> m = new HashMap<String, Object>();
 		List<OrdersB> obList = new ArrayList<OrdersB>();
-		if (gmId == null || gmId.equals("")) {
-			m.put("data", obList);
-			return m;
-		}
+		PageHelper.startPage(page, limit);// 分页语句
 		obList = obService.getOrdersBy("", "", gmId);
-		m.put("data", obList);
+		PageInfo<OrdersB> pageInfoOrder = new PageInfo<OrdersB>(obList);
+		m.put("data", new Page<OrdersB>(pageInfoOrder));
 		return m;
 
 	}
