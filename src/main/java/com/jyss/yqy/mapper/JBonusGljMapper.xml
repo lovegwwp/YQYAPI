@@ -245,7 +245,7 @@
 	<!-- 查询今天的收益 -->
 	<select id="selectEarnings" parameterType="int" resultType="double">
 		SELECT
-			IFNULL(SUM(parent_money),0.0)
+			IFNULL(SUM(parent_money),0.00)
 		FROM
 			j_bonus_glj
 		<where>
@@ -260,7 +260,8 @@
  	<!-- 查询总收益 -->
 	<select id="selectTotal" parameterType="int" resultType="double">
 		SELECT
-			IFNULL(SUM(parent_money),0.0)
+			IFNULL(SUM(parent_money),0.00)     
+			
 		FROM
 			j_bonus_glj
 		<where>

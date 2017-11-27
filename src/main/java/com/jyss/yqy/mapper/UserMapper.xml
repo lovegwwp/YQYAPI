@@ -83,6 +83,41 @@
 		 </where> 
     </select>    
     
+    <!-- 通过推荐码查询推荐人信息 -->
+    <select id="getUserByBCode" resultMap="ubResultMap">           
+	      select id,uuid,real_name,is_chuangke   from u_user 						
+         <where> 
+              1 = 1
+              <if test="bCode != null and bCode !=''"> and b_code = #{bCode} 
+              and status = 1 and is_auth = 2
+              </if> 			  		
+		 </where> 
+    </select> 
+    
+    <!-- 通过用户的uuid查询用户 -->
+    <select id="getUserByUuid" resultMap="ubResultMap">           
+	      select id,real_name,is_chuangke,is_auth  from u_user 						
+         <where> 
+              1 = 1
+              <if test="uuid != null and uuid !=''"> and uuid = #{uuid}  
+              and status = 1 
+              </if> 			  		
+		 </where> 
+    </select> 
+    
+    <!-- 通过用户的id查询用户 -->
+    <select id="getUserNameById" resultMap="ubResultMap">           
+	      select real_name,is_chuangke,is_auth  from u_user 						
+         <where> 
+              1 = 1
+              <if test="id != null and id !=''"> and id = #{id}  
+              and status = 1 
+              </if> 			  		
+		 </where> 
+    </select> 
+    
+    
+    
    <!-- 插入推广关系，确定上下级 -->
     <insert id="addRecord" parameterType="com.jyss.yqy.entity.User" 
         useGeneratedKeys="true" keyProperty="id">         

@@ -78,5 +78,21 @@ public interface UserMapper {
 	 */
 	List<UserBean> getToken(@Param("uuid") String uuid,
 			@Param("token") String token);
+	
+	
+	/**
+	 * 通过推荐码查询推荐人信息
+	 */
+	List<UserBean> getUserByBCode(@Param("bCode")String bCode);
+	
+	/**
+	 * 通过用户的uuid查询用户
+	 */
+	List<UserBean> getUserByUuid(@Param("uuid")String uuid);
+	
+	/**
+	 * 通过用户的id查询用户
+	 */
+	List<UserBean> getUserNameById(@Param("id")int id);
 
 }

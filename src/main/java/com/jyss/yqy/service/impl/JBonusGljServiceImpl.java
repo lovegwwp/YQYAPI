@@ -1,12 +1,13 @@
 package com.jyss.yqy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alipay.api.internal.util.StringUtils;
+import com.jyss.yqy.entity.JBonusFdj;
 import com.jyss.yqy.entity.JBonusGlj;
 import com.jyss.yqy.entity.JBonusGljExample;
 import com.jyss.yqy.entity.JBonusGljExample.Criteria;
@@ -47,15 +48,17 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 				return jBonusGljResult;
 			}
 			//本周无记录
+			List<JBonusGlj> list2 = new ArrayList<JBonusGlj>();
 			jBonusGljResult.setEarnings(earnings);
 			jBonusGljResult.setTotal(total);
-			jBonusGljResult.setList(null);
+			jBonusGljResult.setList(list2);
 			return jBonusGljResult;
 		}
 		//若无下级代理人
+		List<JBonusGlj> list1 = new ArrayList<JBonusGlj>();
 		jBonusGljResult.setEarnings(0.0);
 		jBonusGljResult.setTotal(0.0);
-		jBonusGljResult.setList(null);
+		jBonusGljResult.setList(list1);
 		return jBonusGljResult;
 	}
 

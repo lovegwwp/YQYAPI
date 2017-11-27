@@ -1,6 +1,8 @@
 package com.jyss.yqy.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,9 +29,21 @@ public class JBonusFdjAction {
 	
 	@RequestMapping("/showFdj")
 	@ResponseBody
-	public JBonusFdjResult getJBonusFdj(int uId){
+	public Map<String, Object> getJBonusFdj(int uId){
+		Map<String, Object> map = new HashMap<String,Object>();
 		JBonusFdjResult result = jBonusFdjService.getJBonusFdj(uId);
-		return result;
+		if(result != null){
+			map.put("status", "true");
+			map.put("code", "0");
+			map.put("message", "查询成功！");
+			map.put("data", result);
+			return map;
+		}
+		map.put("status", "false");
+		map.put("code", "-1");
+		map.put("message", "查询失败，请稍后再试！");
+		map.put("data", "");
+		return map;
 	}
 	
 	/**
@@ -37,9 +51,14 @@ public class JBonusFdjAction {
 	 */
 	@RequestMapping("/showFdjByDay")
 	@ResponseBody
-	public List<JBonusFdj> selectFdjByDay(int uId,String beginTime,String endTime){
+	public Map<String, Object> selectFdjByDay(int uId,String beginTime,String endTime){
+		Map<String, Object> map = new HashMap<String,Object>();
 		List<JBonusFdj> jBonusListByDay = jBonusFdjService.selectJBonusFdjByDay(uId, beginTime, endTime);
-	return jBonusListByDay;
+		map.put("status", "true");
+		map.put("code", "0");
+		map.put("message", "查询成功！");
+		map.put("data", jBonusListByDay);
+		return map;
 		
 	}
 	
@@ -49,9 +68,14 @@ public class JBonusFdjAction {
 	 */
 	@RequestMapping("/showFdjByMonth")
 	@ResponseBody
-	public List<JBonusFdj> selectFdjByMonth(int uId,String month){
+	public Map<String, Object> selectFdjByMonth(int uId,String month){
+		Map<String, Object> map = new HashMap<String,Object>();
 		List<JBonusFdj> jBonusListByMonth = jBonusFdjService.selectJBonusFdjByMonth(uId, month);
-		return jBonusListByMonth;
+		map.put("status", "true");
+		map.put("code", "0");
+		map.put("message", "查询成功！");
+		map.put("data", jBonusListByMonth);
+		return map;
 		
 	}
 

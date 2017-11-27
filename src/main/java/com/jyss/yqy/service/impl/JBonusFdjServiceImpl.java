@@ -1,5 +1,6 @@
 package com.jyss.yqy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +48,17 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 				JBonusFdjResult.setData(list);
 				return JBonusFdjResult;
 			}
+			List<JBonusFdj> list2 = new ArrayList<JBonusFdj>();
 			JBonusFdjResult.setEarnings(earnings);
 			JBonusFdjResult.setTotal(total);
-			JBonusFdjResult.setData(null);
+			JBonusFdjResult.setData(list2);
 			return JBonusFdjResult;
 		}
 		//若无下级代理人
+		List<JBonusFdj> list1 = new ArrayList<JBonusFdj>();
 		JBonusFdjResult.setEarnings(0.0);
 		JBonusFdjResult.setTotal(0.0);
-		JBonusFdjResult.setData(null);
+		JBonusFdjResult.setData(list1);
 		return JBonusFdjResult;
 	}
 
