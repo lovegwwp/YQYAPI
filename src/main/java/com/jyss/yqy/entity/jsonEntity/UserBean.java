@@ -19,6 +19,13 @@ public class UserBean {
 	private String token;//
 	private String payPwd;// 支付密码
 	private float cashScore;// 现金积分
+	private float shoppingScore;// 购物积分
+	private String provinceId;//
+	private String province;//
+	private String cityId;//
+	private String city;//
+	private String areaId;//
+	private String area;//
 
 	// private Date createdAt;//
 	// private int lastAccessTime;//
@@ -29,6 +36,62 @@ public class UserBean {
 
 	public void setPayPwd(String payPwd) {
 		this.payPwd = payPwd;
+	}
+
+	public float getShoppingScore() {
+		return shoppingScore;
+	}
+
+	public void setShoppingScore(float shoppingScore) {
+		this.shoppingScore = shoppingScore;
+	}
+
+	public String getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(String provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(String areaId) {
+		this.areaId = areaId;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
 	}
 
 	public int getId() {

@@ -17,14 +17,21 @@
         <result property="avatar" column="avatar"  />
         <result property="sex" column="sex"  /> 
         <result property="age" column="age"  />
-        <result property="realName" column="real_name"  />
         <result property="idCard" column="id_card"  />
+        <result property="realName" column="real_name"  />
+        <result property="provinceId" column="province_id"  />
+        <result property="province" column="province"/>
+        <result property="cityId" column="city_id"  />
+        <result property="city" column="city"/>
+        <result property="areaId" column="area_id"  />
+        <result property="area" column="area"/>
         <result property="isChuangke" column="is_chuangke"  /><!--is_chuangke0普通会员1代言人2初级代理人 3中级代理人4高级代理人  -->
         <result property="isAuth" column="is_auth"  /><!--isAuth 1=已提交 2=审核通过3=审核不通过  -->
         <result property="bCode" column="b_code"  /> 
         <result property="token" column="token"  />
         <result property="payPwd" column="pay_pwd"  /> 
         <result property="cashScore" column="cash_score"  /> 
+        <result property="shoppingScore" column="shopping_score"  /> 
         <result property="createdAt" column="created_at"  /> 
         <result property="lastAccessTime" column="last_access_time"  />     
     </resultMap>              
@@ -45,7 +52,39 @@
 			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
 			  <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>	
 		 </where> 
-    </select>    
+    </select>  
+    
+    <!--查询个人信息  -->
+    <select id="getUserInfo" resultMap="ubResultMap">           
+	      select u.id,u.uuid,u.nick,u.account,u.status,u.avatar,u.is_chuangke,u.cash_score,u.shopping_score,u.is_auth,u.b_code,
+	         u.province_id,u.province, u.city_id,u.city,u.area_id,u.area,a.real_name,a.id_card 
+	           from u_user u 
+				  left join u_user_auth a on u.uuid = a.u_uuid	 						
+         <where> 
+              1 = 1
+              <if test="account != null and account !=''"> and u.account = #{account} </if> 
+              <if test="status != null and status !=''"> and u.uuid = #{uuid} </if> 
+              <if test="status != null and status !=''"> and u.id = #{id} </if> 	
+              <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
+			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
+			  <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>	
+		 </where> 
+    </select> 
+    
+   <!--修改个人信息 --> 
+    <update id="upUserMyInfo"  >
+        update u_user  set nick = #{nick} , province_id = #{provinceId} , province = #{province} ,
+        city_id = #{cityId} , city = #{city} ,area_id = #{areaId} , area = #{area},last_modify_time= now() 
+             where uuid =#{uuid} 
+    </update>
+     
+      
+    <!--修改支付密码 --> 
+    <update id="upPayPwd"  >
+        update u_user  set pay_pwd = #{payPwd} ,last_modify_time=now()
+             where uuid =#{uuid} 
+    </update>
+    
 
     <select id="getUserById" resultMap="ubResultMap">           
 	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,u.is_auth,u.cash_score,u.b_code,a.real_name,a.id_card  
@@ -155,7 +194,7 @@
     
      <!--修改个人信息 --> 
     <update id="upMyInfo" parameterType="com.jyss.yqy.entity.User" >
-        update u_user  set nick = #{nick}  ,  avatar = #{avatar}  ,last_modify_time = now()
+        update u_user    avatar = #{avatar}  ,last_modify_time = now()
              where id =#{id} 
     </update>
 

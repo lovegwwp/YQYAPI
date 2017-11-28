@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,7 +187,7 @@ public class UserServiceImpl implements UserService {
 	public int insertUserAuth(UserAuth userAuth) {
 		userAuth.setStatus(0);
 		userAuth.setCreatedAt(new Date());
-		
+
 		int idNum = userAuthMapper.insertUserAuth(userAuth);
 		return idNum;
 	}
@@ -197,6 +196,29 @@ public class UserServiceImpl implements UserService {
 	public List<UserBean> getUserByUuid(String uuid) {
 		// TODO Auto-generated method stub
 		return userMapper.getUserByUuid(uuid);
+	}
+
+	@Override
+	public int upUserMyInfo(String uuid, String nick, String province,
+			String provinceId, String cityId, String city, String areaId,
+			String area) {
+		// TODO Auto-generated method stub
+		return userMapper.upUserMyInfo(uuid, nick, province, provinceId,
+				cityId, city, areaId, area);
+	}
+
+	@Override
+	public int upPayPwd(String uuid, String payPwd) {
+		// TODO Auto-generated method stub
+		return userMapper.upPayPwd(uuid, payPwd);
+	}
+
+	@Override
+	public List<UserBean> getUserInfo(String account, String uuid, String id,
+			String status, String isAuth, String statusAuth) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserInfo(account, uuid, id, status, isAuth,
+				statusAuth);
 	}
 
 }

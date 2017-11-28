@@ -1,6 +1,7 @@
 package com.jyss.yqy.action;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -260,6 +261,150 @@ public class UserAction {
 		}
 		return new ResponseEntity("false", "修改失败！");
 
+	}
+
+	/**
+	 * 修改密码==支付密码
+	 */
+	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
+	@RequestMapping("/upPayPwd")
+	@ResponseBody
+	public Map<String, Object> upPayPwd(@RequestParam("oldPwd") String oldPwd,
+			@RequestParam("token") String token,
+			@RequestParam("password") String password) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
+		if (loginList == null || loginList.size() == 0) {
+			map.put("status", "false");
+			map.put("message", "请重新登录");
+			map.put("code", "-1");
+			return map;
+		}
+		// /获取最新token ===uuid
+		UMobileLogin uMobileLogin = loginList.get(0);
+		String uuuid = uMobileLogin.getuUuid();
+		List<UserBean> ulist = userService.getUserInfo("", uuuid, "", "1", "2",
+				"1");
+		if (ulist == null || ulist.size() != 1) {
+			map.put("status", "false");
+			map.put("message", "用户信息错误");
+			map.put("code", "-2");
+			return map;
+		}
+		// /用户个人信息
+		UserBean ub = ulist.get(0);
+		int count = 0;
+		if (ub.getPayPwd().equals(PasswordUtil.generatePayPwd(oldPwd))) {
+			count = userService.upPayPwd(uuuid,
+					PasswordUtil.generatePayPwd(password));
+		} else {
+			map.put("status", "false");
+			map.put("message", "原密码错误！");
+			map.put("code", "-3");
+			return map;
+		}
+
+		if (count == 1) {
+			map.put("status", "true");
+			map.put("message", "修改成功！");
+			map.put("code", "0");
+			return map;
+		}
+		map.put("status", "fasle");
+		map.put("message", "修改失败！");
+		map.put("code", "-4");
+		return map;
+
+	}
+
+	/**
+	 * 设置密码==支付密码
+	 */
+	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
+	@RequestMapping("/szPayPwd")
+	@ResponseBody
+	public Map<String, Object> szPayPwd(@RequestParam("token") String token,
+			@RequestParam("password") String password) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
+		if (loginList == null || loginList.size() == 0) {
+			map.put("status", "false");
+			map.put("message", "请重新登录");
+			map.put("code", "-1");
+			return map;
+		}
+		// /获取最新token ===uuid
+		UMobileLogin uMobileLogin = loginList.get(0);
+		String uuuid = uMobileLogin.getuUuid();
+		String pwd = PasswordUtil.generatePayPwd(password);// 新密码加密直接md5
+		int count = userService.upPayPwd(uuuid, pwd);
+		if (count == 1) {
+			map.put("status", "true");
+			map.put("message", "设置成功！");
+			map.put("code", "0");
+			return map;
+		}
+		map.put("status", "fasle");
+		map.put("message", "设置成功！");
+		map.put("code", "-2");
+		return map;
+
+	}
+
+	/**
+	 * 头像修改
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
+	@RequestMapping("/upAvatar")
+	@ResponseBody
+	public Map<String, String> updateAvatar(
+			@RequestParam("token") String token,
+			@RequestParam("token") String picture, HttpServletRequest request,
+			HttpServletResponse response) throws UnsupportedEncodingException {
+		Map<String, String> map = new HashMap<String, String>();
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
+		if (loginList != null && loginList.size() > 0) {
+			UMobileLogin uMobileLogin = loginList.get(0);
+			List<UserBean> list = userService.getUserByUuid(uMobileLogin
+					.getuUuid());
+			if (list != null && list.size() > 0) {
+				UserBean userBean = list.get(0);
+				User user = new User();
+				user.setId(userBean.getId());
+				// Base64.decode(photo);
+				request.setCharacterEncoding("utf-8");
+				response.setCharacterEncoding("utf-8");
+				response.setContentType("text/html");
+				String filePath = request.getSession().getServletContext()
+						.getRealPath("/");
+				int index = filePath.indexOf("YQYAPI");
+				filePath = filePath.substring(0, index) + "uploadPic"
+						+ File.separator;
+				boolean isOk = false;
+				filePath = filePath + uMobileLogin.getuUuid() + ".png";
+				isOk = Base64Image.GenerateImage(picture, filePath);
+				if (isOk) {
+					user.setAvatar(filePath.substring(filePath
+							.indexOf("uploadPic")));
+				}
+				userService.upMyInfo(user);
+				map.put("code", "0");
+				map.put("status", "true");
+				map.put("message", "头像修改成功");
+				map.put("data", "");
+				return map;
+			}
+
+		}
+		map.put("code", "-2");
+		map.put("status", "false");
+		map.put("message", "请重新登陆");
+		map.put("data", "");
+		return map;
 	}
 
 	/**

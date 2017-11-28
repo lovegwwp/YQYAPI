@@ -16,6 +16,12 @@ public class PasswordUtil {
 		return password;
 	}
 
+	public static String generatePayPwd(String password) {
+		// String pKey = "#" + "pUk3NYQ!YeG&G&N#U89qt7QXc7Az6ky%" + "#";
+		password = md5Hex(password);
+		return password;
+	}
+
 	/**
 	 * 校验密码是否正确
 	 */

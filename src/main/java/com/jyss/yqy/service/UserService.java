@@ -1,6 +1,5 @@
 package com.jyss.yqy.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +31,43 @@ public interface UserService {
 	 */
 	public Map<String, Object> login(@Param("account") String account,
 			@Param("password") String password);
+
+	/**
+	 * 修改个人信息
+	 * 
+	 * @param user
+	 * @return
+	 */
+	int upUserMyInfo(@Param("uuid") String uuid, @Param("nick") String nick,
+			@Param("province") String province,
+			@Param("provinceId") String provinceId,
+			@Param("cityId") String cityId, @Param("city") String city,
+			@Param("areaId") String areaId, @Param("area") String area);
+
+	/**
+	 * 修改个人支付密码
+	 * 
+	 * @param user
+	 * @return
+	 */
+	int upPayPwd(@Param("uuid") String uuid, @Param("payPwd") String payPwd);
+
+	/**
+	 * 查询个人信息
+	 * 
+	 * @param account
+	 * @param uuid
+	 * @param id
+	 * @param status
+	 * @param isAuth
+	 * @param statusAuth
+	 * @return
+	 */
+
+	List<UserBean> getUserInfo(@Param("account") String account,
+			@Param("uuid") String uuid, @Param("id") String id,
+			@Param("status") String status, @Param("isAuth") String isAuth,
+			@Param("statusAuth") String statusAuth);
 
 	/**
 	 * 新增用户
@@ -86,15 +122,13 @@ public interface UserService {
 	 */
 	List<UserBean> getToken(@Param("uuid") String uuid,
 			@Param("token") String token);
-	
-	
-	//添加实名用户信息
+
+	// 添加实名用户信息
 	int insertUserAuth(UserAuth userAuth);
-	
-	
+
 	/**
 	 * 通过用户的uuid查询用户
 	 */
-	List<UserBean> getUserByUuid(@Param("uuid")String uuid);
+	List<UserBean> getUserByUuid(@Param("uuid") String uuid);
 
 }
