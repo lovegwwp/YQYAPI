@@ -45,8 +45,6 @@ import com.jyss.yqy.service.XtclService;
 @Controller
 public class AlipayAction {
 
-	@Autowired
-	// private CwzfService cwService;
 	private static Log log = LogFactory.getLog(AlipayAction.class);
 
 	@Autowired

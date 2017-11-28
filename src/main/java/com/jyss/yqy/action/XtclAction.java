@@ -80,6 +80,7 @@ public class XtclAction {
 	}
 
 	// //////////////b端代理人////////////////////
+	// 注册信息
 	@RequestMapping("/b/getSignInfo")
 	@ResponseBody
 	public Map<String, Object> getBcs() {
@@ -91,6 +92,37 @@ public class XtclAction {
 			return m;
 		}
 		m.put("data", "");
+		return m;
+	}
+
+	// 代理说明
+	@RequestMapping("/b/getDlSmInfo")
+	@ResponseBody
+	public Map<String, Object> getDlSmInfo() {
+		// TODO Auto-generated method stub
+		Map<String, Object> m = new HashMap<String, Object>();
+		List<BaseConfig> bcList = clService.getBcs("config.dljb.b", "");
+		if (bcList != null && bcList.size() > 0) {
+			m.put("data", bcList.get(0));
+			return m;
+		}
+		m.put("data", "");
+		return m;
+	}
+
+	// 常见问题
+	@RequestMapping("/b/getIssueInfo")
+	@ResponseBody
+	public Map<String, Object> getIssueInfo(
+			// public Page<BaseConfig> getIssueInfo(
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit) {
+		// TODO Auto-generated method stub
+		Map<String, Object> m = new HashMap<String, Object>();
+		PageHelper.startPage(page, limit);// 分页语句
+		List<BaseConfig> bcList = clService.getBcs("config.issue.b", "");
+		PageInfo<BaseConfig> pageInfoBy = new PageInfo<BaseConfig>(bcList);
+		m.put("data", new Page<BaseConfig>(pageInfoBy));
 		return m;
 	}
 
