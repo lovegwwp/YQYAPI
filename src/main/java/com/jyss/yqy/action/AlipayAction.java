@@ -139,6 +139,7 @@ public class AlipayAction {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", "");
+		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////code='-1=其他，0=无支付密码，1=有支付密码，'////
 		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
@@ -298,8 +299,9 @@ public class AlipayAction {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", "");
+		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////////
-		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "2");
+		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
@@ -371,7 +373,7 @@ public class AlipayAction {
 	}
 
 	// 预下单 --购买亚麻籽油',
-	@RequestMapping(value = "/b/dlrOrder2", method = RequestMethod.POST)
+	@RequestMapping(value = "/b/ymzOrder2", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> addOrder(@RequestParam("myJson") String myJson) {
 		Map<String, Object> m = new HashMap<String, Object>();
@@ -382,6 +384,7 @@ public class AlipayAction {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", zfCode);
+		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //解析json
 		if (myJson == null || myJson.equals("")) {
 			m.put("status", "false");
