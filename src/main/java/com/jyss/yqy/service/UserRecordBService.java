@@ -10,5 +10,7 @@ import com.jyss.yqy.entity.jsonEntity.UserBean;
 public interface UserRecordBService {
 	
 	Map<String,String> insertUserRecordB(String uuid,String bCode);
+	
+	Map<String,String> insertJBonusFdj();
 
 }

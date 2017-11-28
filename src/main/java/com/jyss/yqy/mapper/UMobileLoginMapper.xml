@@ -240,4 +240,18 @@
       push_info = #{pushInfo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  
+  <!-- 根据token查询用户 -->
+  <select id="findUserByToken" parameterType="String" resultMap="BaseResultMap">
+  		select * from u_mobile_login 
+  		<where>
+  			<if test="token != null and token != ''">and token = #{token}</if>
+  		</where>
+  		order by created_at desc
+  </select>
+  
+  
+  
+  
 </mapper>

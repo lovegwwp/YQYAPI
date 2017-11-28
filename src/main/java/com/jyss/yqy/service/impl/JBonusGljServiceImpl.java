@@ -64,17 +64,26 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 
 
 	@Override
-	public List<JBonusGlj> selectJBonusGljByDay(int uId, String beginTime,
-			String endTime) {
-		List<JBonusGlj> jBonusGljByDay = jBonusGljMapper.selectJBonusGljByDay(uId, beginTime, endTime);
-		return jBonusGljByDay;
+	public JBonusGljResult selectJBonusGljByDay(int uId, String beginTime,String endTime) {
+		JBonusGljResult jBonusGljResult = new JBonusGljResult();
+		double totalByDay = jBonusGljMapper.selectGljTotalByDay(uId, beginTime, endTime);
+		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByDay(uId, beginTime, endTime);
+		jBonusGljResult.setEarnings(null);
+		jBonusGljResult.setTotal(totalByDay);
+		jBonusGljResult.setList(list);
+		return jBonusGljResult;
 	}
 
 
 	@Override
-	public List<JBonusGlj> selectJBonusGljByMonth(int uId, String month) {
-		List<JBonusGlj> jBonusGljByMonth = jBonusGljMapper.selectJBonusGljByMonth(uId, month);
-		return jBonusGljByMonth;
+	public JBonusGljResult selectJBonusGljByMonth(int uId, String month) {
+		JBonusGljResult jBonusGljResult = new JBonusGljResult();
+		double totalByMonth = jBonusGljMapper.selectGljTotalByMonth(uId, month);
+		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByMonth(uId, month);
+		jBonusGljResult.setEarnings(null);
+		jBonusGljResult.setTotal(totalByMonth);
+		jBonusGljResult.setList(list);
+		return jBonusGljResult;
 	}
 	
 	

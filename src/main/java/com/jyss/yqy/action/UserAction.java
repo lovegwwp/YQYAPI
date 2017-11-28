@@ -301,36 +301,30 @@ public class UserAction {
 	@RequestMapping("/authen")
 	@ResponseBody
 	public Map<String,String> saveUserAuth(UserAuth userAuth,String token){
-		String uUuid = userAuth.getuUuid();
 		Map<String,String> map = new HashMap<String,String>();
-		if(uUuid != null && !"".equals(uUuid)){
-			List<UMobileLogin> loginList = uMobileLoginService.getUMobileLoginByUid(uUuid);
-			if(loginList !=null && loginList.size()>0){
-				UMobileLogin uMobileLogin = loginList.get(0);
-				if(uMobileLogin.getToken().equals(token)){
-					int idNum = userService.insertUserAuth(userAuth);
-					String val=idNum +""; 
-					if(val != null && !"".equals(val)){
-						map.put("code", "0");
-						map.put("status", "true");
-						map.put("message", "信息已提交，请等待审核~");
-						return map;
-					}
-					map.put("code", "-1");
-					map.put("status", "false");
-					map.put("message", "提交失败，请重新提交");
-					return map;
-					
-				}
-				map.put("code", "-2");
-				map.put("status", "false");
-				map.put("message", "请重新登陆");
+		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
+		if(loginList !=null && loginList.size()>0){
+			UMobileLogin uMobileLogin = loginList.get(0);
+			userAuth.setuUuid(uMobileLogin.getuUuid());
+			int idNum = userService.insertUserAuth(userAuth);
+			String val=idNum +""; 
+			if(val != null && !"".equals(val)){
+				map.put("code", "0");
+				map.put("status", "true");
+				map.put("message", "信息已提交，请等待审核~");
+				map.put("data", "");
 				return map;
 			}
+			map.put("code", "-1");
+			map.put("status", "false");
+			map.put("message", "提交失败，请重新提交");
+			map.put("data", "");
+			return map;
 		}
-		map.put("code", "-3");
+		map.put("code", "-2");
 		map.put("status", "false");
-		map.put("message", "无此用户");
+		map.put("message", "请重新登陆");
+		map.put("data", "");
 		return map;
 		
 	}
