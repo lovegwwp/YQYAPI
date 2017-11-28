@@ -307,9 +307,46 @@
 		ORDER BY  created DESC
 	</select>
 	
+	<!-- 按两个日期查询总收益 -->
+	<select id="selectGljTotalByDay" parameterType="com.jyss.yqy.entity.JBonusGlj" resultType="double">
+		SELECT IFNULL(SUM(parent_money),0.00)
+		FROM
+		j_bonus_glj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			<if test="beginTime != null and beginTime != ''">
+				and date_format(created, '%Y-%m-%d') &gt;= #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date_format(created, '%Y-%m-%d') &lt;= #{endTime}
+			</if>
+			AND `status` = 1 
+		</where>
+		ORDER BY  created DESC
+	</select>
+	
 	<!-- 按月查询 -->
 	<select id="selectJBonusGljByMonth" parameterType="com.jyss.yqy.entity.JBonusGlj"  resultMap="BaseResultMap">
 		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		FROM
+		j_bonus_glj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			<if test="month != null and month != ''">
+				and date_format(created, '%Y-%m') = #{month}
+			</if>
+			AND `status` = 1 
+		</where>
+		ORDER BY  created DESC
+	</select>
+	
+	<!-- 按月查询总收益 -->
+	<select id="selectGljTotalByMonth" parameterType="com.jyss.yqy.entity.JBonusGlj"  resultType="double">
+		SELECT IFNULL(SUM(parent_money),0.00)
 		FROM
 		j_bonus_glj
 		<where>

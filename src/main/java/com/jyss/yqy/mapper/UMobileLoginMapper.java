@@ -27,4 +27,7 @@ public interface UMobileLoginMapper {
     int updateByPrimaryKeySelective(UMobileLogin record);
 
     int updateByPrimaryKey(UMobileLogin record);
+    
+    //根据token查询用户
+    List<UMobileLogin> findUserByToken(@Param("token") String token);
 }

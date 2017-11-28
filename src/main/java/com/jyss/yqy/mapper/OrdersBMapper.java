@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.entity.UserTotalAmount;
 
 public interface OrdersBMapper {
 
@@ -53,5 +54,9 @@ public interface OrdersBMapper {
 	 * @return
 	 */
 	int delOrder(@Param("orderSn") String orderSn);
+	
+	
+	//查询已完成的订单
+	List<UserTotalAmount> getSuccessOrder();
 
 }

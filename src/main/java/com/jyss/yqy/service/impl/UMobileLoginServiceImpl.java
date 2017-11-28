@@ -20,13 +20,19 @@ public class UMobileLoginServiceImpl implements UMobileLoginService{
 	@Autowired
 	private UMobileLoginMapper uMobileLoginMapper;
 
-	@Override
+	/*@Override
 	public List<UMobileLogin> getUMobileLoginByUid(String uUuid) {
 		UMobileLoginExample example = new UMobileLoginExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUUuidEqualTo(uUuid);
 		List<UMobileLogin> list = uMobileLoginMapper.selectByExample(example);
 		return list;
+	}*/
+
+	@Override
+	public List<UMobileLogin> findUserByToken(String token) {
+		List<UMobileLogin> loginList = uMobileLoginMapper.findUserByToken(token);
+		return loginList;
 	}
 	
 	

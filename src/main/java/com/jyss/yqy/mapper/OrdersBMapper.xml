@@ -34,7 +34,12 @@
         <result property="desc" column="desc"  />
         <result property="price" column="price"  /> 
         <result property="oldPrice" column="old_price"  /> 
-    </resultMap>              
+    </resultMap>        
+    
+    <resultMap type="com.jyss.yqy.entity.UserTotalAmount" id="utaResultMap">   
+        <result property="id" column="id"  />     
+        <result property="amount" column="amount"  />             
+    </resultMap>       
      
     <!-- B端商品详情 type==4-->  
      <select id="getGoods" resultMap="gResultMap">          
@@ -125,5 +130,12 @@
 		order by o.created_at desc
     </select>    
     
+    
+    <!-- 查询已完成的订单 -->
+    <select id="getSuccessOrder" resultMap="utaResultMap">
+    	select CONVERT(gm_id,SIGNED) as id,SUM(price*gm_num) as amount  from p_orders_b where status = 2 and type =1 GROUP BY gm_id
+    	
+    </select>
+   
 
 </mapper>

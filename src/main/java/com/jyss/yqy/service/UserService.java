@@ -90,5 +90,11 @@ public interface UserService {
 	
 	//添加实名用户信息
 	int insertUserAuth(UserAuth userAuth);
+	
+	
+	/**
+	 * 通过用户的uuid查询用户
+	 */
+	List<UserBean> getUserByUuid(@Param("uuid")String uuid);
 
 }

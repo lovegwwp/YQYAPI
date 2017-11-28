@@ -193,4 +193,10 @@ public class UserServiceImpl implements UserService {
 		return idNum;
 	}
 
+	@Override
+	public List<UserBean> getUserByUuid(String uuid) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByUuid(uuid);
+	}
+
 }

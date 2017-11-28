@@ -1,5 +1,6 @@
 package com.jyss.yqy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.entity.UserTotalAmount;
 import com.jyss.yqy.mapper.OrdersBMapper;
 import com.jyss.yqy.service.OrdersBService;
 
@@ -48,5 +50,7 @@ public class OrdersBServiceImpl implements OrdersBService {
 		// TODO Auto-generated method stub
 		return obMapper.getGoods(type);
 	}
+
+	
 
 }

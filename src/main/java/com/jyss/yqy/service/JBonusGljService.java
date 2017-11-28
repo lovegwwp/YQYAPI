@@ -12,8 +12,8 @@ public interface JBonusGljService {
 	
 	public JBonusGljResult getJBonusGlj(@Param("uId") int uId);
 	
-    public List<JBonusGlj> selectJBonusGljByDay(@Param("uId") int uId, @Param("beginTime")String beginTime,@Param("endTime")String endTime);
+    public JBonusGljResult selectJBonusGljByDay(@Param("uId") int uId, @Param("beginTime")String beginTime,@Param("endTime")String endTime);
     
-    public List<JBonusGlj> selectJBonusGljByMonth(@Param("uId") int uId, @Param("month")String month);
+    public JBonusGljResult selectJBonusGljByMonth(@Param("uId") int uId, @Param("month")String month);
 
 }

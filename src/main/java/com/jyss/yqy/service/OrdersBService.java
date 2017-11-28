@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.entity.UserTotalAmount;
 
 public interface OrdersBService {
 
@@ -53,5 +54,7 @@ public interface OrdersBService {
 	 * @return
 	 */
 	int delOrder(@Param("orderSn") String orderSn);
+	
+	
 
 }
