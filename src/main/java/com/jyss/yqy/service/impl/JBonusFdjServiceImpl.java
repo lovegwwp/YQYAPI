@@ -34,7 +34,7 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 		criteria.andStatusEqualTo(1);
 		List<JBonusFdj> parentList = jBonusFdjMapper.selectByExample(example);
 		
-		JBonusFdjResult JBonusFdjResult = new JBonusFdjResult();
+		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
 		//若有下级代理人
 		if(parentList != null && parentList.size()>0){
 			
@@ -42,39 +42,48 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 			double total = jBonusFdjMapper.selectTotal(uId);
 			List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjWek(uId);
 			
-			if(list != null && list.size()>0){
+			/*if(list != null && list.size()>0){
 				JBonusFdjResult.setEarnings(earnings);
 				JBonusFdjResult.setTotal(total);
 				JBonusFdjResult.setData(list);
 				return JBonusFdjResult;
-			}
-			List<JBonusFdj> list2 = new ArrayList<JBonusFdj>();
-			JBonusFdjResult.setEarnings(earnings);
-			JBonusFdjResult.setTotal(total);
-			JBonusFdjResult.setData(list2);
-			return JBonusFdjResult;
+			}*/
+			//List<JBonusFdj> list2 = new ArrayList<JBonusFdj>();
+			jBonusFdjResult.setEarnings(earnings);
+			jBonusFdjResult.setTotal(total);
+			jBonusFdjResult.setData(list);
+			return jBonusFdjResult;
 		}
 		//若无下级代理人
 		List<JBonusFdj> list1 = new ArrayList<JBonusFdj>();
-		JBonusFdjResult.setEarnings(0.0);
-		JBonusFdjResult.setTotal(0.0);
-		JBonusFdjResult.setData(list1);
-		return JBonusFdjResult;
+		jBonusFdjResult.setEarnings(0.0);
+		jBonusFdjResult.setTotal(0.0);
+		jBonusFdjResult.setData(list1);
+		return jBonusFdjResult;
 	}
 
 
 	@Override
-	public List<JBonusFdj> selectJBonusFdjByDay(int uId, String beginTime,
-			String endTime) {
-		List<JBonusFdj> JBonusFdjByDay = jBonusFdjMapper.selectJBonusFdjByDay(uId, beginTime, endTime);
-		return JBonusFdjByDay;
+	public JBonusFdjResult selectJBonusFdjByDay(int uId, String beginTime,String endTime) {
+		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
+		double totalByDay = jBonusFdjMapper.selectFdjTotalByDay(uId, beginTime, endTime);
+		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjByDay(uId, beginTime, endTime);
+		jBonusFdjResult.setEarnings(null);
+		jBonusFdjResult.setTotal(totalByDay);
+		jBonusFdjResult.setData(list);
+		return jBonusFdjResult;
 	}
 
 
 	@Override
-	public List<JBonusFdj> selectJBonusFdjByMonth(int uId, String month) {
-		List<JBonusFdj> JBonusFdjByMonth = jBonusFdjMapper.selectJBonusFdjByMonth(uId, month);
-		return JBonusFdjByMonth;
+	public JBonusFdjResult selectJBonusFdjByMonth(int uId, String month) {
+		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
+		double totalByMonth = jBonusFdjMapper.selectFdjTotalByMonth(uId, month);
+		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjByMonth(uId, month);
+		jBonusFdjResult.setEarnings(null);
+		jBonusFdjResult.setTotal(totalByMonth);
+		jBonusFdjResult.setData(list);
+		return jBonusFdjResult;
 	}
 	
 	

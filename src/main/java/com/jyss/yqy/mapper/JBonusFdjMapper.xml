@@ -260,7 +260,7 @@
   <!-- 查询今天的收益 -->
 	<select id="selectEarnings" parameterType="int" resultType="double">
 		SELECT
-			IFNULL(SUM(parent_money),0.0)
+			IFNULL(SUM(parent_money),0.00)
 		FROM
 			j_bonus_fdj
 		<where>
@@ -275,7 +275,7 @@
  	<!-- 查询总收益 -->
 	<select id="selectTotal" parameterType="int" resultType="double">
 		SELECT
-			IFNULL(SUM(parent_money),0.0)
+			IFNULL(SUM(parent_money),0.00)
 		FROM
 			j_bonus_fdj
 		<where>
@@ -321,9 +321,46 @@
 		ORDER BY  created DESC
 	</select>
 	
+	<!-- 按两个日期查询总收益 -->
+	<select id="selectFdjTotalByDay"  resultType="double">
+		SELECT IFNULL(SUM(parent_money),0.00)
+		FROM
+		j_bonus_fdj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			<if test="beginTime != null and beginTime != ''">
+				and date_format(created, '%Y-%m-%d') &gt;= #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date_format(created, '%Y-%m-%d') &lt;= #{endTime}
+			</if>
+			AND `status` = 1 
+		</where>
+		ORDER BY  created DESC
+	</select>
+	
 	<!-- 按月查询 -->
 	<select id="selectJBonusFdjByMonth"  resultMap="BaseResultMap">
 		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		FROM
+		j_bonus_fdj
+		<where>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			<if test="month != null and month != ''">
+				and date_format(created, '%Y-%m') = #{month}
+			</if>
+			AND `status` = 1 
+		</where>
+		ORDER BY  created DESC
+	</select>
+	
+	<!-- 按月查询总收益 -->
+	<select id="selectFdjTotalByMonth"  resultType="double">
+		SELECT IFNULL(SUM(parent_money),0.00)
 		FROM
 		j_bonus_fdj
 		<where>

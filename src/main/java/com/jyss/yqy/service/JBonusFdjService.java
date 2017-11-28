@@ -14,8 +14,8 @@ public interface JBonusFdjService {
 	
 	public JBonusFdjResult getJBonusFdj(@Param("uId") int uId);
 	
-    public List<JBonusFdj> selectJBonusFdjByDay(@Param("uId") int uId, @Param("beginTime")String beginTime,@Param("endTime")String endTime);
+    public JBonusFdjResult selectJBonusFdjByDay(@Param("uId") int uId, @Param("beginTime")String beginTime,@Param("endTime")String endTime);
     
-    public List<JBonusFdj> selectJBonusFdjByMonth(@Param("uId") int uId, @Param("month")String month);
+    public JBonusFdjResult selectJBonusFdjByMonth(@Param("uId") int uId, @Param("month")String month);
 
 }

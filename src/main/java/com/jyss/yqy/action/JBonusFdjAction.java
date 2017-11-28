@@ -84,16 +84,23 @@ public class JBonusFdjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				List<JBonusFdj> jBonusListByDay = jBonusFdjService.selectJBonusFdjByDay(userBean.getId(), beginTime, endTime);
-				map.put("status", "true");
-				map.put("code", "0");
-				map.put("message", "查询成功！");
-				map.put("data", jBonusListByDay);
+				JBonusFdjResult result = jBonusFdjService.selectJBonusFdjByDay(userBean.getId(), beginTime, endTime);
+				if(result != null){
+					map.put("status", "true");
+					map.put("code", "0");
+					map.put("message", "查询成功！");
+					map.put("data", result);
+					return map;
+				}
+				map.put("status", "false");
+				map.put("code", "-1");
+				map.put("message", "查询失败，请稍后再试！");
+				map.put("data", "");
 				return map;
 			}
 		}
-		map.put("code", "-2");
 		map.put("status", "false");
+		map.put("code", "-2");
 		map.put("message", "请重新登陆！");
 		map.put("data", "");
 		return map;
@@ -115,16 +122,23 @@ public class JBonusFdjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				List<JBonusFdj> jBonusListByMonth = jBonusFdjService.selectJBonusFdjByMonth(userBean.getId(), month);
-				map.put("status", "true");
-				map.put("code", "0");
-				map.put("message", "查询成功！");
-				map.put("data", jBonusListByMonth);
+				JBonusFdjResult result = jBonusFdjService.selectJBonusFdjByMonth(userBean.getId(), month);
+				if(result != null){
+					map.put("status", "true");
+					map.put("code", "0");
+					map.put("message", "查询成功！");
+					map.put("data", result);
+					return map;
+				}
+				map.put("status", "false");
+				map.put("code", "-1");
+				map.put("message", "查询失败，请稍后再试！");
+				map.put("data", "");
 				return map;
 			}
 		}
-		map.put("code", "-2");
 		map.put("status", "false");
+		map.put("code", "-2");
 		map.put("message", "请重新登陆！");
 		map.put("data", "");
 		return map;
