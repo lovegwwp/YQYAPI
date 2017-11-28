@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ZfPayAction {
 	// type///// 支付方式：1=支付宝，2=微信，3=现金支付
-	@RequestMapping(value = "/b/dlrOrder", method = RequestMethod.POST)
+	@RequestMapping(value = "/b/dlrOrder3", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> dlrOrder(@RequestParam int money,
 			@RequestParam String type, @RequestParam int gmID) {
@@ -21,7 +21,7 @@ public class ZfPayAction {
 
 	}
 
-	@RequestMapping(value = "/b/ymzOrder", method = RequestMethod.POST)
+	@RequestMapping(value = "/b/ymzOrder3", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> ymzOrder(@RequestParam int money,
 			@RequestParam String type, @RequestParam String token,
