@@ -42,6 +42,12 @@ public interface JBonusFdjMapper {
     //按日查询
     List<JBonusFdj> selectJBonusFdjByDay(@Param("parentId")int parentId, @Param("beginTime")String beginTime,@Param("endTime")String endTime);
     
+    //按日查询总收益
+    double selectFdjTotalByDay(@Param("parentId")int parentId, @Param("beginTime")String beginTime,@Param("endTime")String endTime);
+    
     //按月查询
     List<JBonusFdj> selectJBonusFdjByMonth(@Param("parentId")int parentId, @Param("month")String month);
+    
+    //按月查询总收益
+    double selectFdjTotalByMonth(@Param("parentId")int parentId, @Param("month")String month);
 }

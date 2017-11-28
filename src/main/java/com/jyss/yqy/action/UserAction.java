@@ -1,5 +1,7 @@
 package com.jyss.yqy.action;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.filter.MySessionContext;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserService;
+import com.jyss.yqy.utils.Base64Image;
 import com.jyss.yqy.utils.CommTool;
 import com.jyss.yqy.utils.HttpClientUtil;
 import com.jyss.yqy.utils.PasswordUtil;
@@ -300,12 +304,45 @@ public class UserAction {
 	 */
 	@RequestMapping("/authen")
 	@ResponseBody
-	public Map<String,String> saveUserAuth(UserAuth userAuth,String token){
+	public Map<String,String> saveUserAuth(UserAuth userAuth,String token,HttpServletRequest request,HttpServletResponse response) throws Exception{
 		Map<String,String> map = new HashMap<String,String>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
 			UMobileLogin uMobileLogin = loginList.get(0);
-			userAuth.setuUuid(uMobileLogin.getuUuid());
+			String uuid = uMobileLogin.getuUuid();
+			userAuth.setuUuid(uuid);
+			
+			// Base64.decode(photo);
+			request.setCharacterEncoding("utf-8");
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("text/html");
+			String photo1 = userAuth.getCardPicture1();
+			String photo2 = userAuth.getCardPicture2();
+			String photo3 = userAuth.getCardPicture3();
+			Map<String, Object> mrMap = new HashMap<String, Object>();
+			String filePath = request.getSession().getServletContext().getRealPath("/");
+			int index = filePath.indexOf("YQYAPI");
+			//boolean isOk = false;
+			filePath = filePath.substring(0, index) + "uploadPic" + File.separator;
+			boolean isOk1 = false;
+			boolean isOk2 = false;
+			boolean isOk3 = false;
+			String filePath1 = filePath + uuid + "1.png";
+			String filePath2 = filePath + uuid + "2.png";
+			String filePath3 = filePath + uuid + "3.png";
+			isOk1 = Base64Image.GenerateImage(photo1, filePath1);
+			if(isOk1){
+				userAuth.setCardPicture1(filePath1);
+			}
+			isOk2 = Base64Image.GenerateImage(photo2, filePath2);
+			if(isOk2){
+				userAuth.setCardPicture1(filePath1);
+			}
+			isOk3 = Base64Image.GenerateImage(photo3, filePath3);
+			if(isOk3){
+				userAuth.setCardPicture1(filePath1);
+			}
+				
 			int idNum = userService.insertUserAuth(userAuth);
 			String val=idNum +""; 
 			if(val != null && !"".equals(val)){
@@ -328,6 +365,9 @@ public class UserAction {
 		return map;
 		
 	}
+	
+	
+
 	
 	
 
