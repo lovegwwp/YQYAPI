@@ -51,14 +51,14 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 			//List<JBonusGlj> list2 = new ArrayList<JBonusGlj>();
 			jBonusGljResult.setEarnings(earnings);
 			jBonusGljResult.setTotal(total);
-			jBonusGljResult.setList(list);
+			jBonusGljResult.setData(list);
 			return jBonusGljResult;
 		}
 		//若无下级代理人
 		List<JBonusGlj> list1 = new ArrayList<JBonusGlj>();
 		jBonusGljResult.setEarnings(0.0);
 		jBonusGljResult.setTotal(0.0);
-		jBonusGljResult.setList(list1);
+		jBonusGljResult.setData(list1);
 		return jBonusGljResult;
 	}
 
@@ -70,7 +70,7 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByDay(uId, beginTime, endTime);
 		jBonusGljResult.setEarnings(null);
 		jBonusGljResult.setTotal(totalByDay);
-		jBonusGljResult.setList(list);
+		jBonusGljResult.setData(list);
 		return jBonusGljResult;
 	}
 
@@ -82,7 +82,7 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByMonth(uId, month);
 		jBonusGljResult.setEarnings(null);
 		jBonusGljResult.setTotal(totalByMonth);
-		jBonusGljResult.setList(list);
+		jBonusGljResult.setData(list);
 		return jBonusGljResult;
 	}
 	

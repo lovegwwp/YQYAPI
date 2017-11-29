@@ -133,7 +133,9 @@
     
     <!-- 查询已完成的订单 -->
     <select id="getSuccessOrder" resultMap="utaResultMap">
-    	select CONVERT(gm_id,SIGNED) as id,SUM(price*gm_num) as amount  from p_orders_b where status = 2 and type =1 GROUP BY gm_id
+    	select CONVERT(gm_id,SIGNED) as id,SUM(price*gm_num) as amount  
+    	from p_orders_b 
+    	where status = 2 and type =1 and to_days(last_modify_time) = to_days(now()) GROUP BY gm_id
     	
     </select>
    
