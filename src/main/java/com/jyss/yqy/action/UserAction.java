@@ -515,8 +515,7 @@ public class UserAction {
 				String filePath = request.getSession().getServletContext()
 						.getRealPath("/");
 				int index = filePath.indexOf("YQYAPI");
-				filePath = filePath.substring(0, index) + "uploadPic"
-						+ File.separator;
+				filePath = filePath.substring(0, index) + "uploadPic" + "/";
 				boolean isOk = false;
 				filePath = filePath + uMobileLogin.getuUuid() + ".png";
 				isOk = Base64Image.GenerateImage(picture, filePath);
