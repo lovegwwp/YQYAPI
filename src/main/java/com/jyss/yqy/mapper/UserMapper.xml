@@ -194,7 +194,7 @@
     
      <!--修改个人信息 --> 
     <update id="upMyInfo" parameterType="com.jyss.yqy.entity.User" >
-        update u_user    avatar = #{avatar}  ,last_modify_time = now()
+        update u_user   set  avatar = #{avatar}  ,last_modify_time = now()
              where id =#{id} 
     </update>
 
