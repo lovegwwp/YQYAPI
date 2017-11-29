@@ -6,7 +6,7 @@ public class JBonusGljResult {
 	
 	private Double earnings;          //今日收益
 	private Double total;             //总收益金额
-	private List<JBonusGlj> list;     //管理奖列表
+	private List<JBonusGlj> data;     //管理奖列表
 	
 	
 	public Double getEarnings() {
@@ -21,11 +21,11 @@ public class JBonusGljResult {
 	public void setTotal(Double total) {
 		this.total = total;
 	}
-	public List<JBonusGlj> getList() {
-		return list;
+	public List<JBonusGlj> getData() {
+		return data;
 	}
-	public void setList(List<JBonusGlj> list) {
-		this.list = list;
+	public void setData(List<JBonusGlj> data) {
+		this.data = data;
 	}
 	
 	

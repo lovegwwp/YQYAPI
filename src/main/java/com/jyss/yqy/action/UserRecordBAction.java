@@ -27,7 +27,7 @@ public class UserRecordBAction {
 	private UMobileLoginService uMobileLoginService;
 	
 	/**
-	 * 绑定用户关系&给推荐人算管理奖
+	 * 绑定用户关系
 	 */
 	
 	@RequestMapping("/b/writeCode")
@@ -40,12 +40,15 @@ public class UserRecordBAction {
 			return map;
 		}
 		Map<String,String> map = new HashMap<String,String>();
-		map.put("code", "-4");
+		map.put("code", "-3");
 		map.put("status", "false");
 		map.put("message", "请重新登陆！");
 		map.put("data", "");
 		return map;
 	}
+	
+	
+	
 	
 	
 	/**
