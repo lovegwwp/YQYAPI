@@ -56,15 +56,15 @@
     
     <!--查询个人信息  -->
     <select id="getUserInfo" resultMap="ubResultMap">           
-	      select u.id,u.uuid,u.nick,u.account,u.status,u.avatar,u.is_chuangke,u.cash_score,u.shopping_score,u.is_auth,u.b_code,
+	      select u.id,u.uuid,u.nick,u.account,u.status,u.avatar,u.is_chuangke,u.cash_score,u.shopping_score,u.is_auth,u.b_code,u.pay_pwd,
 	         u.province_id,u.province, u.city_id,u.city,u.area_id,u.area,a.real_name,a.id_card 
 	           from u_user u 
 				  left join u_user_auth a on u.uuid = a.u_uuid	 						
          <where> 
               1 = 1
               <if test="account != null and account !=''"> and u.account = #{account} </if> 
-              <if test="status != null and status !=''"> and u.uuid = #{uuid} </if> 
-              <if test="status != null and status !=''"> and u.id = #{id} </if> 	
+              <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid} </if> 
+              <if test="id != null and id !=''"> and u.id = #{id} </if> 	
               <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
 			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
 			  <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>	

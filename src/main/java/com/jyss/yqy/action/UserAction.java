@@ -267,7 +267,7 @@ public class UserAction {
 	 * 获取个人信息
 	 */
 	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
-	@RequestMapping("/getMyInfo")
+	@RequestMapping("/getMyUserInfo")
 	@ResponseBody
 	public Map<String, Object> getMyInfo(@RequestParam("token") String token) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -306,7 +306,7 @@ public class UserAction {
 	 * 修改个人信息
 	 */
 	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
-	@RequestMapping("/getMyInfo")
+	@RequestMapping("/upMyUserInfo")
 	@ResponseBody
 	public Map<String, Object> upMyInfo(@RequestParam("token") String token,
 			@RequestParam("nick") String nick,
@@ -353,6 +353,12 @@ public class UserAction {
 			@RequestParam("token") String token,
 			@RequestParam("password") String password) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		if (password.equals("") || password.length() != 6) {
+			map.put("status", "false");
+			map.put("message", "密码不足6位！");
+			map.put("code", "-5");
+			return map;
+		}
 		List<UMobileLogin> loginList = uMobileLoginService
 				.findUserByToken(token);
 		if (loginList == null || loginList.size() == 0) {
@@ -375,6 +381,12 @@ public class UserAction {
 		// /用户个人信息
 		UserBean ub = ulist.get(0);
 		int count = 0;
+		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")) {
+			map.put("status", "false");
+			map.put("message", "原密码错误！");
+			map.put("code", "-3");
+			return map;
+		}
 		if (ub.getPayPwd().equals(PasswordUtil.generatePayPwd(oldPwd))) {
 			count = userService.upPayPwd(uuuid,
 					PasswordUtil.generatePayPwd(password));
@@ -407,6 +419,12 @@ public class UserAction {
 	public Map<String, Object> szPayPwd(@RequestParam("token") String token,
 			@RequestParam("password") String password) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		if (password.equals("") || password.length() != 6) {
+			map.put("status", "false");
+			map.put("message", "密码不足6位！");
+			map.put("code", "-3");
+			return map;
+		}
 		List<UMobileLogin> loginList = uMobileLoginService
 				.findUserByToken(token);
 		if (loginList == null || loginList.size() == 0) {
@@ -427,7 +445,7 @@ public class UserAction {
 			return map;
 		}
 		map.put("status", "fasle");
-		map.put("message", "设置成功！");
+		map.put("message", "设置失败！");
 		map.put("code", "-2");
 		return map;
 
@@ -442,8 +460,9 @@ public class UserAction {
 	@ResponseBody
 	public Map<String, String> updateAvatar(
 			@RequestParam("token") String token,
-			@RequestParam("token") String picture, HttpServletRequest request,
-			HttpServletResponse response) throws UnsupportedEncodingException {
+			@RequestParam("picture") String picture,
+			HttpServletRequest request, HttpServletResponse response)
+			throws UnsupportedEncodingException {
 		Map<String, String> map = new HashMap<String, String>();
 		List<UMobileLogin> loginList = uMobileLoginService
 				.findUserByToken(token);
