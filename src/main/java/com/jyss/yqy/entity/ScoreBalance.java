@@ -12,9 +12,18 @@ public class ScoreBalance {
 	private float score;// 积分数额
 	private float jyScore;// 结余数额
 	private Date createdAt;
+	private String title;// 用户uuid
 
 	public int getId() {
 		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public void setId(int id) {

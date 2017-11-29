@@ -15,25 +15,33 @@
         <result property="score" column="score"  />
         <result property="jyScore" column="jy_score"  />
         <result property="createdAt" column="created_at"  />
+        <result property="title" column="title"  />
 
     </resultMap>           
      
     <!--购物积分=查询--> 
     <select id="getShoppingScoreBalance" resultMap="sblResultMap" >  
-        select * from u_shopping_score_balance 
+        select t.* from (select u.*,c.bz_value as title from u_shopping_score_balance u 
+                           left join p_xt_cl c 
+                           on u.category = c.bz_id 
+                           where c.bz_type='category_type') t
             <where> 
                  1 = 1
-			   <if test="uUuid != null and uUuid !=''"> and u_uuid = #{uUuid} </if>  
+			   <if test="uUuid != null and uUuid !=''"> and t.u_uuid = #{uUuid} </if>  
 			</where>  
 			order by created_at desc 
     </select> 
     
    <!--现金积分=查询--> 
     <select id="getCashScoreBalance" resultMap="sblResultMap" >  
-        select * from u_cash_score_balance 
+        <!-- select * from u_cash_score_balance  -->
+         select m.* from (select u.*,c.bz_value as title from u_cash_score_balance u 
+                           left join p_xt_cl c 
+                           on u.category = c.bz_id 
+                           where c.bz_type='category_type') m
             <where> 
                  1 = 1
-			   <if test="uUuid != null and uUuid !=''"> and u_uuid = #{uUuid} </if>  
+			   <if test="uUuid != null and uUuid !=''"> and m.u_uuid = #{uUuid} </if>  
 			</where>   
 			order by created_at desc
     </select> 
