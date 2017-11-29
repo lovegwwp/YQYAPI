@@ -516,6 +516,8 @@ public class UserAction {
 						.getRealPath("/");
 				int index = filePath.indexOf("YQYAPI");
 				filePath = filePath.substring(0, index) + "uploadPic" + "/";
+				File file = new File(filePath);
+				CommTool.judeDirExists(file);
 				boolean isOk = false;
 				filePath = filePath + uMobileLogin.getuUuid() + ".png";
 				isOk = Base64Image.GenerateImage(picture, filePath);
@@ -600,8 +602,9 @@ public class UserAction {
 					.getRealPath("/");
 			int index = filePath.indexOf("YQYAPI");
 			// boolean isOk = false;
-			filePath = filePath.substring(0, index) + "uploadPic"
-					+ File.separator;
+			filePath = filePath.substring(0, index) + "uploadAuthPic" + "/";
+			File f = new File(filePath);
+			CommTool.judeDirExists(f);
 			boolean isOk1 = false;
 			boolean isOk2 = false;
 			boolean isOk3 = false;
