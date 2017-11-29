@@ -4,13 +4,13 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-   <bean id="schedule1" class="com.jyss.yqy.action.JobAction"></bean>
+   <bean id="schedule1" class="com.jyss.yqy.action.UserRecordBAction"></bean>
    <bean id="schedule2" class="com.jyss.yqy.action.JobAction"></bean>
    
    <bean id="SpringQtzJobMethod1"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule1" />
-		<property name="targetMethod" value="sendMessage"/>    <!-- 要执行的方法名  -->
+		<property name="targetMethod" value="insertJBonusFdj"/>    <!-- 计算辅导奖  -->
 	</bean>
 	<bean id="SpringQtzJobMethod2"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -19,11 +19,11 @@
 	</bean>
 	
 	
-	<!-- 每天0点执行任务 -->
+	<!-- 每天定时执行任务 -->
 	<bean id="cronTriggerFactoryBean1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod1"></property>
 	<!-- 	<property name="cronExpression" value="0/5 * * * * ? "></property> -->
-		<property name="cronExpression" value="0 0 10 * * ? "></property>
+		<property name="cronExpression" value="0 30 23 * * ?"></property>     <!-- 每天23:30执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod2"></property>

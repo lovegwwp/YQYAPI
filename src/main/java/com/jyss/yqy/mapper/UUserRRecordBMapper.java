@@ -27,4 +27,6 @@ public interface UUserRRecordBMapper {
     int updateByPrimaryKeySelective(UUserRRecordB record);
 
     int updateByPrimaryKey(UUserRRecordB record);
+    
+    int updateByUid(@Param("uId")int uId,@Param("status") int status);
 }
