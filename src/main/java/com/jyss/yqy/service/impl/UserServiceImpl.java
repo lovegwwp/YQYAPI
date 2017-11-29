@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
 			return m;
 		}
 		// ///密码
-		String token = token = CommTool.getUUID();
 		UserBean ub = list.get(0);
+		String token = CommTool.getUUID();
 		ub.setToken(token);
 		if (!PasswordUtil.generate(password, ub.getSalt()).equals(ub.getPwd())) {
 			m.put("status", "false");
@@ -219,6 +219,12 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userMapper.getUserInfo(account, uuid, id, status, isAuth,
 				statusAuth);
+	}
+
+	@Override
+	public int loginOut(String uuid, String token) {
+		// TODO Auto-generated method stub
+		return userMapper.addLogin(uuid, token);
 	}
 
 }

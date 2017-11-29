@@ -56,6 +56,39 @@ public class UserAction {
 	}
 
 	/**
+	 * 用户退出
+	 */
+	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
+	@RequestMapping("/loginOut")
+	@ResponseBody
+	public Map<String, Object> loginOut(@RequestParam("token") String token) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
+		if (loginList == null || loginList.size() == 0) {
+			map.put("status", "false");
+			map.put("message", "身份过期！");
+			map.put("code", "-1");
+			return map;
+		}
+		// /获取最新token ===uuid
+		UMobileLogin uMobileLogin = loginList.get(0);
+		String uuuid = uMobileLogin.getuUuid();
+		String newToken = CommTool.getUUID();
+		int count = userService.loginOut(uuuid, newToken);
+		if (count == 1) {
+			map.put("status", "true");
+			map.put("message", "退出成功！");
+			map.put("code", "0");
+			return map;
+		}
+		map.put("status", "false");
+		map.put("message", "退出失败！");
+		map.put("code", "-2");
+		return map;
+	}
+
+	/**
 	 * 发送验证码 bz =1 注册 bz=2忘记密码
 	 */
 	@RequestMapping("/sendCode")

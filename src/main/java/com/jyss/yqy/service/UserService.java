@@ -33,6 +33,11 @@ public interface UserService {
 			@Param("password") String password);
 
 	/**
+	 * 用户退出
+	 */
+	public int loginOut(@Param("uuid") String uuid, @Param("token") String token);
+
+	/**
 	 * 修改个人信息
 	 * 
 	 * @param user
