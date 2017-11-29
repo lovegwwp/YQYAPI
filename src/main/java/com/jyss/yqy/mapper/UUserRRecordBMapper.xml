@@ -228,4 +228,12 @@
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  <update id="updateByUid" parameterType="com.jyss.yqy.entity.UUserRRecordB">
+  	update u_user_r_record_b
+    set  status = #{status,jdbcType=INTEGER}
+    where u_id = #{uId,jdbcType=INTEGER}
+  </update>
+  
 </mapper>
