@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jyss.yqy.entity.BaseArea;
 import com.jyss.yqy.entity.BaseConfig;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.mapper.XtclMapper;
@@ -71,6 +72,17 @@ public class XtclServiceImpl implements XtclService {
 	public List<BaseConfig> getBcs(String key, String title) {
 		// TODO Auto-generated method stub
 		return xtclMapper.getBcs(key, title);
+	}
+
+	/**
+	 * 系统基础地域表
+	 * 
+	 * @return
+	 */
+	@Override
+	public List<BaseArea> getBaseAreas(String status, String area) {
+		// TODO Auto-generated method stub
+		return xtclMapper.getBaseAreas(status, area);
 	}
 
 }

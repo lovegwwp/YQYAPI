@@ -25,6 +25,12 @@
        <!--  <result property="status" column="status"  /> -->
 
     </resultMap>   
+    
+    <resultMap type="com.jyss.yqy.entity.BaseArea" id="baResultMap">   
+        <id property="id" column="id"  />
+        <result property="name" column="name"  />
+        <result property="fid" column="fid"  />      
+    </resultMap>  
      
     <!-- 查询对应常量-->  
     <select id="getCls" resultMap="clResultMap" >  
@@ -93,4 +99,16 @@
 			  <if test="title != null and title !=''"> and  b.title LIKE CONCAT('%',#{title},'%')  </if> 
 		 </where>     
     </select> 
+    
+     <!-- 系统基础地域表 ==area=2省份 3城市 4区域==-->   
+    <select id="getBaseAreas" resultMap="baResultMap" >  
+        select id,name,fid from p_base_area a
+        <where> 
+              1 = 1
+			  <if test="status != null and status !=''"> and a.status  = #{status} </if> 
+			  <if test="area != null and area !=''"> and  a.area =#{area}  </if> 
+		 </where>   
+		 order by id  
+    </select> 
+    
 </mapper>

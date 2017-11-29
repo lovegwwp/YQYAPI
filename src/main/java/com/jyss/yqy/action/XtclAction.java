@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jyss.yqy.entity.BaseArea;
 import com.jyss.yqy.entity.BaseConfig;
 import com.jyss.yqy.entity.Page;
 import com.jyss.yqy.entity.ResponseEntity;
@@ -190,4 +191,23 @@ public class XtclAction {
 		mm.put("info", info);
 		return mm;
 	}
+
+	// //系统地域维护表==area=2省份 3城市 4区域
+	// 注册信息
+	@RequestMapping("/b/getAreaInfo")
+	@ResponseBody
+	public Map<String, Object> getAreaInfo() {
+		// TODO Auto-generated method stub
+		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, Object> mm = new HashMap<String, Object>();
+		List<BaseArea> proList = clService.getBaseAreas("", "2");
+		mm.put("province", proList);
+		List<BaseArea> cityList = clService.getBaseAreas("", "3");
+		mm.put("city", cityList);
+		List<BaseArea> areaList = clService.getBaseAreas("", "4");
+		mm.put("area", areaList);
+		m.put("data", mm);
+		return m;
+	}
+
 }

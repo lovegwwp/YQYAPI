@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.jyss.yqy.entity.BaseArea;
 import com.jyss.yqy.entity.BaseConfig;
 import com.jyss.yqy.entity.Xtcl;
 
@@ -77,5 +78,13 @@ public interface XtclMapper {
 	 */
 	List<BaseConfig> getBcs(@Param("key") String key,
 			@Param("title") String title);
+
+	/**
+	 * 系统基础地域表
+	 * 
+	 * @return
+	 */
+	List<BaseArea> getBaseAreas(@Param("status") String status,
+			@Param("area") String area);
 
 }
