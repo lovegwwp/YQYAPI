@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jyss.yqy.constant.Constant;
 import com.jyss.yqy.entity.ResponseEntity;
 import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.User;
@@ -328,7 +329,7 @@ public class UserAction {
 		// /用户个人信息
 		UserBean ub = ulist.get(0);
 		ub.setToken(token);
-		ub.setAvatar("http://192.168.0.26:8080/" + ub.getAvatar());
+		ub.setAvatar(Constant.httpUrl + ub.getAvatar());
 		map.put("status", "true");
 		map.put("message", "zai载入信息成功！");
 		map.put("code", "0");

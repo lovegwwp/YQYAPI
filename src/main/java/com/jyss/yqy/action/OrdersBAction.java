@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jyss.yqy.constant.Constant;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.Page;
@@ -41,8 +42,7 @@ public class OrdersBAction {
 			return m;
 		}
 		for (Goods goods : gList) {
-			goods.setPics("http://shop.chuangke.cohcreate.com/"
-					+ goods.getPics());
+			goods.setPics(Constant.httpGoodUrl + goods.getPics());
 		}
 		m.put("data", gList);
 		return m;

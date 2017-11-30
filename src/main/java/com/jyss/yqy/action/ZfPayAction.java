@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.UMobileLogin;
+import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.AlipayService;
 import com.jyss.yqy.service.UMobileLoginService;
+import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.utils.CommTool;
 
 @Controller
@@ -26,6 +28,8 @@ public class ZfPayAction {
 	private AlipayService aliService;
 	@Autowired
 	private UMobileLoginService uMobileLoginService;
+	@Autowired
+	private UserService userService;
 
 	// type///// 支付方式：1=支付宝，2=微信，3=现金支付
 	@RequestMapping(value = "/b/dlrOrderPay", method = RequestMethod.POST)
@@ -52,7 +56,18 @@ public class ZfPayAction {
 		}
 		// /获取最新token ===uuid
 		UMobileLogin uMobileLogin = loginList.get(0);
-		int gmID = uMobileLogin.getId().intValue();
+		String uuid = uMobileLogin.getsUuid();
+		List<UserBean> ubList = userService.getUserByUuid(uuid);
+		if (ubList == null || ubList.size() == 0) {
+			map.put("status", "false");
+			map.put("message", "用户信息错误！");
+			map.put("code", "-2");
+			map.put("data", "");
+			return map;
+		}
+
+		UserBean ub = ubList.get(0);
+		int gmID = ub.getId();
 		// ///判断支付方式=== 走不同支付
 		if (type.equals("1")) {
 			map = aliService.addDlrOrder2(filePath, money, gmID);
