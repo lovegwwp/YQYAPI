@@ -23,6 +23,7 @@ public class OrdersB {
 	private Date createdAt;// 创建时间
 	private Date lastModifyTime;// 最新修改时间
 	private String dljb;// 1=初级代理，2=高级代理，3=高级代理，0=不标识状态
+	private String cjsj;// /格式化创建时间
 
 	public String getDljb() {
 		return dljb;
@@ -30,6 +31,14 @@ public class OrdersB {
 
 	public void setDljb(String dljb) {
 		this.dljb = dljb;
+	}
+
+	public String getCjsj() {
+		return cjsj;
+	}
+
+	public void setCjsj(String cjsj) {
+		this.cjsj = cjsj;
 	}
 
 	public float getTotal() {

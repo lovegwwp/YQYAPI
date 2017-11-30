@@ -16,12 +16,13 @@
         <result property="jyScore" column="jy_score"  />
         <result property="createdAt" column="created_at"  />
         <result property="title" column="title"  />
+        <result property="cjsj" column="cjsj"  />
 
     </resultMap>           
      
     <!--购物积分=查询--> 
     <select id="getShoppingScoreBalance" resultMap="sblResultMap" >  
-        select t.* from (select u.*,c.bz_value as title from u_shopping_score_balance u 
+        select t.*,DATE_FORMAT(t.created_at, '%Y-%m-%d %H:%i' )  cjsj from (select u.*,c.bz_value as title from u_shopping_score_balance u 
                            left join p_xt_cl c 
                            on u.category = c.bz_id 
                            where c.bz_type='category_type') t
@@ -35,7 +36,7 @@
    <!--现金积分=查询--> 
     <select id="getCashScoreBalance" resultMap="sblResultMap" >  
         <!-- select * from u_cash_score_balance  -->
-         select m.* from (select u.*,c.bz_value as title from u_cash_score_balance u 
+         select m.*, DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' )  cjsj  from (select u.*,c.bz_value as title from u_cash_score_balance u 
                            left join p_xt_cl c 
                            on u.category = c.bz_id 
                            where c.bz_type='category_type') m

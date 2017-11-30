@@ -27,6 +27,7 @@
         <result property="status" column="status"  />
         <result property="createdAt" column="created_at"  />
         <result property="lastModifyTime" column="last_modify_time"  />
+        <result property="cjsj" column="cjsj"  />
     </resultMap>    
     
     
@@ -69,7 +70,7 @@
      <!-- 查询b端商品 -->   
     <select id="getOrdersBy" resultMap="obResultMap">   
          <!--  DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s' ) cjsj    LIKE CONCAT('%',#{name},'%')  -->
-	     select *  from p_orders_b  				
+	     select * ,DATE_FORMAT(created_at, '%Y-%m-%d %H:%i' )  cjsj  from p_orders_b  				
          <where> 
               1 = 1
               <if test="status != null and status !=''"> and status = #{status} </if> 	

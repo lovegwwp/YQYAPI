@@ -136,6 +136,12 @@ public class OrdersBAction {
 		List<OrdersB> obList = new ArrayList<OrdersB>();
 		PageHelper.startPage(page, limit);// 分页语句
 		obList = obService.getOrdersBy("", "", gmId);
+		// ///图片路径拼接
+		if (obList != null && obList.size() != 0) {
+			for (OrdersB ordersB : obList) {
+				ordersB.setCode(Constant.httpUrl + ordersB.getCode());
+			}
+		}
 		PageInfo<OrdersB> pageInfoOrder = new PageInfo<OrdersB>(obList);
 		m.put("data", new Page<OrdersB>(pageInfoOrder));
 		return m;
