@@ -211,12 +211,13 @@ public class AlipayAction {
 			// String.format("/Users/sudo/Desktop/qr-%s.png",response.getOutTradeNo());
 			// log.info("filePath:" + filePath);
 			// ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
-
+			int pv = 0;
 			// 自我业务处理
 			// 生成订单，插入数据库
 			OrdersB ob = new OrdersB(outTradeNo, gmID + "", ub.getRealName(),
 					ub.getAccount(), good.getName(), good.getPics(), hs, "盒",
-					"-1", "1", good.getPrice(), jb);
+					"-1", "1", good.getPrice(), money, pv, jb, "code", "zfId",
+					1);
 			int count = 0;
 			count = obService.addOrder(ob);
 			if (count == 1) {
@@ -344,7 +345,7 @@ public class AlipayAction {
 		Goods good = gList.get(0);
 
 		String gmr = "";
-
+		int pv = 0;
 		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
 			gmr = "XXX";
 		} else {
@@ -352,7 +353,7 @@ public class AlipayAction {
 		}
 		OrdersB ob = new OrdersB(outTradeNo, gmID + "", gmr, ub.getAccount(),
 				good.getName(), good.getPics(), hs, "盒", "-1", "1",
-				good.getPrice(), jb);
+				good.getPrice(), money, pv, jb, "code", "zfId", 1);
 		int count = 0;
 		count = obService.addOrder(ob);
 		if (count == 1) {
@@ -494,7 +495,7 @@ public class AlipayAction {
 		}
 
 		String gmr = "";
-
+		int pv = 0;
 		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
 			gmr = "XXX";
 		} else {
@@ -502,7 +503,7 @@ public class AlipayAction {
 		}
 		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
 				ub.getAccount(), good.getName(), good.getPics(), gmNum, "盒",
-				"-1", "1", price, ub.getIsChuangke() + "");
+				"-1", "1", good.getPrice(), money, pv, "", "code", "zfId", 1);
 		int count = 0;
 		count = obService.addOrder(orderb);
 		if (count == 1) {

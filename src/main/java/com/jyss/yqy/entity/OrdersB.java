@@ -190,7 +190,8 @@ public class OrdersB {
 
 	public OrdersB(String orderSn, String gmId, String gmr, String tel,
 			String gmSp, String pics, String gmNum, String gmDw, String status,
-			String type, float price, String dljb) {
+			String type, float price, float total, int pv, String dljb,
+			String code, String zfId, int zfType) {
 		super();
 		this.orderSn = orderSn;
 		this.gmId = gmId;
@@ -198,10 +199,15 @@ public class OrdersB {
 		this.tel = tel;
 		this.gmSp = gmSp;
 		this.pics = pics;
+		this.code = code;
+		this.total = total;
+		this.pv = pv;
 		this.gmNum = gmNum;
 		this.gmDw = gmDw;
 		this.status = status;
 		this.type = type;
+		this.zfType = zfType;
+		this.zfId = zfId;
 		this.price = price;
 		this.dljb = dljb;
 

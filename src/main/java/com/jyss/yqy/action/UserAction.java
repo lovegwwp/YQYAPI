@@ -327,6 +327,7 @@ public class UserAction {
 		}
 		// /用户个人信息
 		UserBean ub = ulist.get(0);
+		ub.setToken(token);
 		ub.setAvatar("http://192.168.0.26:8080/" + ub.getAvatar());
 		map.put("status", "true");
 		map.put("message", "zai载入信息成功！");

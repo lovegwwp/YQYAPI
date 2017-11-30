@@ -13,10 +13,18 @@ public interface OrdersBMapper {
 	/**
 	 * 获取B端商品=亚麻籽油
 	 * 
-	 * @param username
+	 * @param type
 	 * @return
 	 */
 	List<Goods> getGoods(@Param("type") String type);
+
+	/**
+	 * 获取B端商品=亚麻籽油
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Goods getGoodsByid(@Param("id") String id);
 
 	/**
 	 * 获取B端订单信息
@@ -54,9 +62,8 @@ public interface OrdersBMapper {
 	 * @return
 	 */
 	int delOrder(@Param("orderSn") String orderSn);
-	
-	
-	//查询已完成的订单
+
+	// 查询已完成的订单
 	List<UserTotalAmount> getSuccessOrder();
 
 }

@@ -53,8 +53,17 @@
               1 = 1
               <if test="type != null and type !=''"> and type = #{type} </if> 				
 		 </where> 
-    </select>    
+    </select> 
        
+   <select id="getGoodsByid" resultMap="gResultMap">          
+	     select g.id,g.name,g.pics,g.spec,g.stock,g.desc,g.price,g.old_price  from s_good g 				
+         <where> 
+              1 = 1
+              <if test="id != null and id !=''"> and id = #{id} </if> 				
+		 </where> 
+		 limit 1
+    </select>    
+         
                
      <!-- B端商品订单 -->        
      <!-- 查询b端商品 -->   
