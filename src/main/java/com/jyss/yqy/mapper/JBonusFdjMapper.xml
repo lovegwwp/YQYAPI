@@ -288,7 +288,7 @@
 
 	<!-- 查询本周列表 -->
 	<select id="selectJBonusFdjWek" parameterType="int" resultMap="BaseResultMap">
-		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%Y-%m-%d' ) created
 		FROM
 		j_bonus_fdj
 		<where>
@@ -303,7 +303,7 @@
 	
 	<!-- 按两个日期查询 -->
 	<select id="selectJBonusFdjByDay"  resultMap="BaseResultMap">
-		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%Y-%m-%d' ) created
 		FROM
 		j_bonus_fdj
 		<where>
@@ -343,7 +343,7 @@
 	
 	<!-- 按月查询 -->
 	<select id="selectJBonusFdjByMonth"  resultMap="BaseResultMap">
-		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%Y-%m-%d' ) created
 		FROM
 		j_bonus_fdj
 		<where>

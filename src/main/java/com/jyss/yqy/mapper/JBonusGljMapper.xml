@@ -274,7 +274,7 @@
 
 	<!-- 查询本周列表 -->
 	<select id="selectJBonusGljWek" parameterType="int" resultMap="BaseResultMap">
-		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%Y-%m-%d %H:%i' ) created
 		FROM
 		j_bonus_glj
 		<where>
@@ -289,7 +289,7 @@
 	
 	<!-- 按两个日期查询 -->
 	<select id="selectJBonusGljByDay" parameterType="com.jyss.yqy.entity.JBonusGlj" resultMap="BaseResultMap">
-		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%Y-%m-%d %H:%i' ) created
 		FROM
 		j_bonus_glj
 		<where>
@@ -329,7 +329,7 @@
 	
 	<!-- 按月查询 -->
 	<select id="selectJBonusGljByMonth" parameterType="com.jyss.yqy.entity.JBonusGlj"  resultMap="BaseResultMap">
-		SELECT u_name,parent_money,DATE_FORMAT(created, '%m.%d %H:%i' ) created
+		SELECT u_name,parent_money,DATE_FORMAT(created, '%Y-%m-%d %H:%i' ) created
 		FROM
 		j_bonus_glj
 		<where>
