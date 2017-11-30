@@ -19,6 +19,11 @@
         <result property="gmDw" column="gm_dw"  />
         <result property="price" column="price"  />
         <result property="type" column="type"  />
+        <result property="zfType" column="zf_type"  /><!-- 支付方式：1=支付宝，2=微信，3=现金支付 -->
+        <result property="code" column="code"  />
+        <result property="total" column="total"  />
+        <result property="pv" column="pv"  />
+        <result property="zfId" column="zf_id"  />
         <result property="status" column="status"  />
         <result property="createdAt" column="created_at"  />
         <result property="lastModifyTime" column="last_modify_time"  />
@@ -68,7 +73,9 @@
    <!-- 增加购买商品支付成功或者失败的订单记录 -->
     <insert id="addOrder" parameterType="com.jyss.yqy.entity.OrdersB" 
         useGeneratedKeys="true" keyProperty="id"> 
-        insert into p_orders_b values(null,#{orderSn},#{gmId},#{gmr},#{tel},#{pics},#{gmSp},#{price},#{gmNum},#{gmDw},#{status},#{type},now(),now(),#{dljb})             
+        insert into p_orders_b 
+        values(null,#{orderSn},#{gmId},#{gmr},#{tel},#{pics},#{gmSp},#{price},#{gmNum},#{gmDw},
+               #{status},#{type},now(),now(),#{dljb},#{code},#{total},#{pv},#{zfId},#{zfType})             
     </insert>
     
      <!--修改订单状态 --> 

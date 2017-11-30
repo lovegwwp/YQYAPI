@@ -15,6 +15,11 @@ public class OrdersB {
 	private String status;// 订单状态-1未付款状态,1待提货状态，2已提货，订单完成
 	private String type;// 1B端商品，2非B端商品
 	private float price;// 价格
+	private float total;// 付钱总价
+	private int pv;// 价格对应PV值
+	private int zfType;// 支付方式：1=支付宝，2=微信，3=现金支付
+	private String zfId;// 支付平台对应订单号
+	private String code;// 订单提货码
 	private Date createdAt;// 创建时间
 	private Date lastModifyTime;// 最新修改时间
 	private String dljb;// 1=初级代理，2=高级代理，3=高级代理，0=不标识状态
@@ -25,6 +30,46 @@ public class OrdersB {
 
 	public void setDljb(String dljb) {
 		this.dljb = dljb;
+	}
+
+	public float getTotal() {
+		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
+	}
+
+	public int getPv() {
+		return pv;
+	}
+
+	public void setPv(int pv) {
+		this.pv = pv;
+	}
+
+	public int getZfType() {
+		return zfType;
+	}
+
+	public void setZfType(int zfType) {
+		this.zfType = zfType;
+	}
+
+	public String getZfId() {
+		return zfId;
+	}
+
+	public void setZfId(String zfId) {
+		this.zfId = zfId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public int getId() {

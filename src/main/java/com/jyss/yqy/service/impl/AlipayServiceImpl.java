@@ -39,21 +39,27 @@ import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
-import com.jyss.yqy.service.OrdersBService;
-import com.jyss.yqy.service.UserService;
-import com.jyss.yqy.service.XtclService;
+import com.jyss.yqy.mapper.OrdersBMapper;
+import com.jyss.yqy.mapper.UserMapper;
+import com.jyss.yqy.mapper.XtclMapper;
 
 @Service
 @Transactional
 public class AlipayServiceImpl {
 	private static Log log = LogFactory.getLog(AlipayServiceImpl.class);
-
+	//
+	// @Autowired
+	// private OrdersBService obService;
+	// @Autowired
+	// private XtclService clService;
+	// @Autowired
+	// private UserService userService;
 	@Autowired
-	private OrdersBService obService;
+	private OrdersBMapper obMapper;
 	@Autowired
-	private XtclService clService;
+	private XtclMapper clMapper;
 	@Autowired
-	private UserService userService;
+	private UserMapper userMapper;
 
 	// 支付宝当面付2.0服务
 	private static AlipayTradeService tradeService;
@@ -140,7 +146,7 @@ public class AlipayServiceImpl {
 		mm.put("zfCode", "");
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////code='-1=其他，0=无支付密码，1=有支付密码，'////
-		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "2");
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
@@ -173,7 +179,7 @@ public class AlipayServiceImpl {
 		}
 		// //所购买的商品信息==亚麻籽油
 		List<Goods> gList = new ArrayList<Goods>();
-		gList = obService.getGoods("4");
+		gList = obMapper.getGoods("4");
 		if (gList == null || gList.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "该商品信息错误！");
@@ -219,7 +225,7 @@ public class AlipayServiceImpl {
 					ub.getAccount(), good.getName(), good.getPics(), hs, "盒",
 					"-1", "1", good.getPrice(), jb);
 			int count = 0;
-			count = obService.addOrder(ob);
+			count = obMapper.addOrder(ob);
 			if (count == 1) {
 				m.put("status", "true");
 				// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
@@ -300,7 +306,7 @@ public class AlipayServiceImpl {
 		mm.put("zfCode", "");
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////////
-		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "");
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
@@ -334,7 +340,7 @@ public class AlipayServiceImpl {
 		}
 		// //所购买的商品信息==亚麻籽油
 		List<Goods> gList = new ArrayList<Goods>();
-		gList = obService.getGoods("4");
+		gList = obMapper.getGoods("4");
 		if (gList == null || gList.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "该商品信息错误！");
@@ -355,7 +361,7 @@ public class AlipayServiceImpl {
 				good.getName(), good.getPics(), hs, "盒", "-1", "1",
 				good.getPrice(), jb);
 		int count = 0;
-		count = obService.addOrder(ob);
+		count = obMapper.addOrder(ob);
 		if (count == 1) {
 			m.put("status", "true");
 			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
@@ -455,7 +461,7 @@ public class AlipayServiceImpl {
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "120m";
 		// //// 验证当前用户是否合法///////////
-		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "2");
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
@@ -476,7 +482,7 @@ public class AlipayServiceImpl {
 
 		// //所购买的商品信息==亚麻籽油
 		List<Goods> gList = new ArrayList<Goods>();
-		gList = obService.getGoods("4");
+		gList = obMapper.getGoods("4");
 		if (gList == null || gList.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "该商品信息错误！");
@@ -505,7 +511,7 @@ public class AlipayServiceImpl {
 				ub.getAccount(), good.getName(), good.getPics(), gmNum, "盒",
 				"-1", "1", price, ub.getIsChuangke() + "");
 		int count = 0;
-		count = obService.addOrder(orderb);
+		count = obMapper.addOrder(orderb);
 		if (count == 1) {
 			m.put("status", "true");
 			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
@@ -528,7 +534,7 @@ public class AlipayServiceImpl {
 		String jb = "1";
 		List<Xtcl> fylist = new ArrayList<Xtcl>();
 		// //查询充值人对应等级
-		fylist = clService.getClsBy("dyf_type", money + "");
+		fylist = clMapper.getClsBy("dyf_type", money + "");
 		if (fylist != null && fylist.size() == 1) {
 			jb = fylist.get(0).getBz_id();
 		} else {
@@ -546,7 +552,7 @@ public class AlipayServiceImpl {
 		} else if (jb.equals("3")) {
 			hsjbid = "6";
 		}
-		Xtcl dlhs = clService.getClsValue("dyjf_type", hsjbid);
+		Xtcl dlhs = clMapper.getClsValue("dyjf_type", hsjbid);
 		if (dlhs != null && !dlhs.getBz_value().equals("")) {
 			hs = dlhs.getBz_value();
 		}
