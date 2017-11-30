@@ -243,12 +243,27 @@
   
   
   <!-- 根据token查询用户 -->
-  <select id="findUserByToken" parameterType="String" resultMap="BaseResultMap">
+<!--   <select id="findUserByToken" parameterType="String" resultMap="BaseResultMap">
   		select * from u_mobile_login 
   		<where>
   			<if test="token != null and token != ''">and token = #{token}</if>
   		</where>
-  		order by created_at desc
+  		order by created_at desc  
+  		limit 1
+  </select> -->
+  
+  
+    
+  <!-- 根据token查询用户 -->
+  <select id="findUserByToken" parameterType="String" resultMap="BaseResultMap">
+  	select * from u_mobile_login where u_uuid in(
+         select u_uuid from u_mobile_login   
+	  		<where>
+	  			<if test="token != null and token != ''">and token = #{token}</if>
+	  		</where>
+  		  )
+  		order by created_at desc  
+  		limit 1
   </select>
   
   

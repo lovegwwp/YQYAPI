@@ -34,7 +34,6 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
-import com.jyss.yqy.action.AlipayAction;
 import com.jyss.yqy.entity.Cwzf;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
@@ -47,7 +46,7 @@ import com.jyss.yqy.service.XtclService;
 @Service
 @Transactional
 public class AlipayServiceImpl {
-	private static Log log = LogFactory.getLog(AlipayAction.class);
+	private static Log log = LogFactory.getLog(AlipayServiceImpl.class);
 
 	@Autowired
 	private OrdersBService obService;
