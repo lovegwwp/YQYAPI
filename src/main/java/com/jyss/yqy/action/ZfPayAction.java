@@ -127,9 +127,9 @@ public class ZfPayAction {
 		if (type.equals("1")) {
 			mmap = aliService.addYmzOrder2(filePath, gmID, num, spId);
 		} else if (type.equals("2")) {
-
+			mmap = wxService.ymzWxpay(filePath, gmID, num, spId);
 		} else if (type.equals("3")) {
-
+			mmap = wxService.ymzWxpay(filePath, gmID, num, spId);
 		} else {
 			mmap.put("status", "false");
 			mmap.put("message", "商品信息错误");

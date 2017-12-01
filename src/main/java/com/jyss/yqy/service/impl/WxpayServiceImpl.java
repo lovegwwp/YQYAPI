@@ -202,7 +202,7 @@ public class WxpayServiceImpl implements WxpayService {
 			}
 			OrdersB ob = new OrdersB(outTradeNo, gmID + "", gmr,
 					ub.getAccount(), good.getName(), good.getPics(), hs, "盒",
-					"-1", "1", good.getPrice(), money, pv, jb, code, "zfId", 1);
+					"-1", "1", good.getPrice(), money, pv, jb, code, "zfId", 2);
 			int count = 0;
 			count = obMapper.addOrder(ob);
 			// ///user表===isChuangke字段修改/////
@@ -245,11 +245,206 @@ public class WxpayServiceImpl implements WxpayService {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			mapRe.put("code", "-5");
+			mapRe.put("data", "");
 			mapRe.put("status", "false");
 			mapRe.put("message", "插入订单失败！");
 			e.printStackTrace();
 			return mapRe;
 		}
+		// TODO Auto-generated catch block
+		mapRe.put("code", "-5");
+		mapRe.put("data", "");
+		mapRe.put("status", "false");
+		mapRe.put("message", "初始化订单失败！");
+		return mapRe;
+	}
+
+	public Map<String, Object> ymzWxpay(String filePath, int gmID, int gmNum,
+			int spID) {
+		Map<String, Object> mapRe = new HashMap<String, Object>();
+		Map<String, Object> dlReMap = new HashMap<String, Object>();
+		HashMap<String, String> data = new HashMap<String, String>();
+		HashMap<String, String> payInfo = new HashMap<String, String>();
+		Map<String, Object> mm = new HashMap<String, Object>();
+		Map<String, String> mapResponse = new HashMap<String, String>();
+		String outTradeNo = System.currentTimeMillis() / 1000 + "O" + gmID
+				+ "r" + (long) (Math.random() * 1000L);
+
+		// 支付主题
+		String subject = "亚麻籽油消费";
+		// appid
+		// data.put("appid", subject);
+		// 商户id
+		// data.put("mch_id", subject);
+		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
+		mm.put("outtradeno", "");
+		mm.put("money", "");
+		mm.put("xjjf", "");
+		mm.put("zfCode", zfCode);
+		mm.put("zxingpng", "");// 订单二维码
+		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
+
+		Goods goods = null;
+		goods = obMapper.getGoodsByid(spID + "");
+		if (goods == null) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "商品信息错误！");
+			mapRe.put("code", "-3");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
+		float price = 0;
+		float money = 0;
+		try {
+			price = goods.getPrice();
+			money = (float) (gmNum * price);
+		} catch (Exception e) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "商品信息错误！");
+			mapRe.put("code", "-3");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
+
+		// 提交支付终端IP
+		data.put("spbill_create_ip", "121.40.29.64");
+
+		data.put("body", subject);
+		data.put("out_trade_no", outTradeNo);
+		data.put("device_info", "");
+		data.put("fee_type", "CNY");
+		// 单位为分
+		data.put("total_fee", money * 100 + "");
+		// data.put("total_fee", money + "");
+
+		data.put("notify_url",
+				"http://121.40.29.64:8081/SSM/pat/WXnotify.action");
+		// 支付方式 app支付
+		data.put("trade_type", "APP");
+		// 随机数
+		// CommTool.getNonceStr(30)
+		String nonceStr = WXPayUtil.generateNonceStr();
+		data.put("nonce_str", nonceStr);
+		System.out.println("动态随机字符" + WXPayUtil.generateNonceStr());
+		// 商品ID
+		// data.put("product_id", "12");
+		// //// 验证当前用户是否合法///////////
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "");
+		if (ublist == null || ublist.size() == 0) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "用户信息错误！");
+			mapRe.put("code", "-2");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
+		UserBean ub = ublist.get(0);
+		if (ub.getPwd() == null || ub.getPwd().equals("")
+				|| ub.getPwd().equals("0")) {
+			zfCode = "0";
+		} else {
+			zfCode = "1";
+		}
+		mm.put("zfCode", zfCode);
+		mm.put("xjjf", ub.getCashScore() + "");
+
+		// //// 商品明细列表，需填写购买商品详细信息，进行创建相应订单///////////
+		String jb = "0";
+		// //所购买的商品信息==亚麻籽油
+		int pv = 0;
+		String singlePV = "300";
+		// //查找对应PV
+		Xtcl dlpv = clMapper.getClsValue("pv_type", "1");
+		if (dlpv != null && !dlpv.getBz_value().equals("")) {
+			singlePV = dlpv.getBz_value();
+		}
+		try {
+			pv = Integer.parseInt(singlePV) * gmNum;
+		} catch (Exception e) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "商品信息错误！");
+			mapRe.put("code", "-3");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
+
+		// //////////////////////////////////////////////
+		// 签名
+		String sign = "";
+		try {
+			sign = WXPayUtil.generateSignature(data,
+					new WXPayConfigImpl().getKey());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		data.put("sign", sign);
+		// 生成订单
+		WXPayConfigImpl config;
+		WXPay wxPay;
+		try {
+			config = new WXPayConfigImpl();
+			wxPay = new WXPay(config);
+			// ///mapResponse = wxPay.unifiedOrder(data);// 下单
+			System.out.println(mapResponse.toString());
+			// 下单成功自我业务处理
+			// String returnCode = mapResponse.get("return_code");//
+			// SUCCESS,FAIL
+			// if ("SUCCESS".equals(returnCode)) {
+			// String resultCode = mapResponse.get("result_code");
+			// String wxpayId = mapResponse.get("prepay_id");
+			// if ("SUCCESS".equals(resultCode)) {
+
+			// //商品二维码
+			String outPutPath = filePath + outTradeNo + ".png";
+			String code = "orderCodePng/" + outTradeNo + ".png";
+			mm.put("zxingpng", Constant.httpUrl + code);// 订单二维码
+			// /生成二维码
+			ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
+			String gmr = "";
+
+			if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
+				gmr = "XXX";
+			} else {
+				gmr = ub.getRealName();
+			}
+			OrdersB ob = new OrdersB(outTradeNo, gmID + "", gmr,
+					ub.getAccount(), goods.getName(), goods.getPics(), gmNum
+							+ "", "盒", "-1", "1", goods.getPrice(), money, pv,
+					jb, code, "zfId", 2);
+			int count = 0;
+			count = obMapper.addOrder(ob);
+			if (count == 1) {
+				Date sjc = new Date();
+				payInfo.put("timestamp", sjc.getTime() / 1000 + "");
+				// data.put("prepay_id", wxpayId);
+				payInfo.put("noncestr", nonceStr);
+				payInfo.put("prepayid", "");
+				payInfo.put("sign", sign);
+				mm.put("payInfo", payInfo);
+				mm.put("outtradeno", "");
+				mm.put("money", money + "");
+				mapRe.put("status", "true");
+				// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
+				mapRe.put("message", "提交订单成功！");
+				mapRe.put("code", "0");
+				mapRe.put("data", mm);
+				return mapRe;
+			}
+			// }
+			// }
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			mapRe.put("status", "false");
+			mapRe.put("message", "插入订单失败！");
+			mapRe.put("code", "-4");
+			mapRe.put("data", "");
+			e.printStackTrace();
+			return mapRe;
+		}
+		mapRe.put("code", "-4");
+		mapRe.put("data", "");
 		mapRe.put("status", "false");
 		mapRe.put("message", "初始化订单失败！");
 		return mapRe;
