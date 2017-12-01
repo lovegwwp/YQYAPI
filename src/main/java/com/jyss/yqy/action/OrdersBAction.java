@@ -140,6 +140,8 @@ public class OrdersBAction {
 		if (obList != null && obList.size() != 0) {
 			for (OrdersB ordersB : obList) {
 				ordersB.setCode(Constant.httpUrl + ordersB.getCode());
+				ordersB.setPics(Constant.httpGoodUrl + ordersB.getPics());
+
 			}
 		}
 		PageInfo<OrdersB> pageInfoOrder = new PageInfo<OrdersB>(obList);

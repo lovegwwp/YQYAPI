@@ -33,6 +33,7 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
+import com.jyss.yqy.constant.Constant;
 import com.jyss.yqy.entity.Cwzf;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
@@ -96,7 +97,7 @@ public class AlipayServiceImpl implements AlipayService {
 		 * 否则使用代码中的默认设置
 		 */
 		monitorService = new AlipayMonitorServiceImpl.ClientBuilder()
-				.setGatewayUrl("http://mcloudmonitor.com/gateway.do")
+				.setGatewayUrl("https://openapi.alipay.com/gateway.do")
 				.setCharset("GBK").setFormat("json").build();
 	}
 
@@ -309,6 +310,7 @@ public class AlipayServiceImpl implements AlipayService {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", "");
+		mm.put("zxingpng", "");// 订单二维码
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////////
 		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "");
@@ -374,6 +376,7 @@ public class AlipayServiceImpl implements AlipayService {
 		// //商品二维码
 		String outPutPath = filePath + outTradeNo + ".png";
 		String code = "orderCodePng/" + outTradeNo + ".png";
+		mm.put("zxingpng", Constant.httpUrl + code);// 订单二维码
 		// /生成二维码
 		ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
 		String gmr = "";
@@ -413,6 +416,7 @@ public class AlipayServiceImpl implements AlipayService {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", zfCode);
+		mm.put("zxingpng", "");// 订单二维码
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //解析json
 		if (myJson == null || myJson.equals("")) {
@@ -563,6 +567,7 @@ public class AlipayServiceImpl implements AlipayService {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", zfCode);
+		mm.put("zxingpng", "");// 订单二维码
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 
 		Goods goods = null;
@@ -660,6 +665,7 @@ public class AlipayServiceImpl implements AlipayService {
 		// //商品二维码
 		String outPutPath = filePath + outTradeNo + ".png";
 		String code = "orderCodePng/" + outTradeNo + ".png";
+		mm.put("zxingpng", Constant.httpUrl + code);// 订单二维码
 		// /生成二维码
 		ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
 		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
