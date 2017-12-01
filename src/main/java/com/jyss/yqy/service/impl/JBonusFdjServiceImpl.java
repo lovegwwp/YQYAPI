@@ -42,13 +42,6 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 			double total = jBonusFdjMapper.selectTotal(uId);
 			List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjWek(uId);
 			
-			/*if(list != null && list.size()>0){
-				JBonusFdjResult.setEarnings(earnings);
-				JBonusFdjResult.setTotal(total);
-				JBonusFdjResult.setData(list);
-				return JBonusFdjResult;
-			}*/
-			//List<JBonusFdj> list2 = new ArrayList<JBonusFdj>();
 			jBonusFdjResult.setEarnings(earnings);
 			jBonusFdjResult.setTotal(total);
 			jBonusFdjResult.setData(list);
@@ -56,8 +49,8 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 		}
 		//若无下级代理人
 		List<JBonusFdj> list1 = new ArrayList<JBonusFdj>();
-		jBonusFdjResult.setEarnings(0.0);
-		jBonusFdjResult.setTotal(0.0);
+		jBonusFdjResult.setEarnings(0.00);
+		jBonusFdjResult.setTotal(0.00);
 		jBonusFdjResult.setData(list1);
 		return jBonusFdjResult;
 	}

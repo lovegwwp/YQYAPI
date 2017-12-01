@@ -41,14 +41,7 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 			double earnings = jBonusGljMapper.selectEarnings(uId);
 			double total = jBonusGljMapper.selectTotal(uId);
 			List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljWek(uId);
-			/*if(list != null && list.size()>0){
-				jBonusGljResult.setEarnings(earnings);
-				jBonusGljResult.setTotal(total);
-				jBonusGljResult.setList(list);
-				return jBonusGljResult;
-			}*/
-			//本周无记录
-			//List<JBonusGlj> list2 = new ArrayList<JBonusGlj>();
+			
 			jBonusGljResult.setEarnings(earnings);
 			jBonusGljResult.setTotal(total);
 			jBonusGljResult.setData(list);

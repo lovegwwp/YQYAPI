@@ -257,7 +257,7 @@
   </update>
   
   
-  <!-- 查询今天的收益 -->
+  <!-- 查询昨日的收益 -->
 	<select id="selectEarnings" parameterType="int" resultType="double">
 		SELECT
 			IFNULL(SUM(parent_money),0.00)
@@ -267,8 +267,8 @@
 			<if test="parentId != null and parentId != ''">
 				and parent_id = #{parentId,jdbcType=INTEGER}
 			</if>
-			AND `status` = 1
-			AND to_days(created) = to_days(now())
+			AND status = 1
+			AND to_days(now()) - to_days(created) = 1
 		</where>
 	</select>
  

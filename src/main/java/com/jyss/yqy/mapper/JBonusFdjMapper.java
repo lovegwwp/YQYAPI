@@ -30,7 +30,7 @@ public interface JBonusFdjMapper {
 
     int updateByPrimaryKey(JBonusFdj record);
     
-    //查询今天的收益
+    //查询昨日的收益
     double selectEarnings(@Param("parentId")int parentId);
     
     //查询总收益
