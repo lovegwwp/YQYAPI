@@ -11,7 +11,7 @@ public class JBonusScj implements Serializable{
     private Float aPv;        //市场A的总PV值
     private Integer bId;      //市场B的用户id
     private Float bPv;        //市场A的总PV值
-    private Float Pv;         //用户可得pv值
+    private Float pv;         //用户可得pv值
     private Integer status;        //状态   0禁用 1正常
     private String created;        //时间
     
@@ -53,10 +53,10 @@ public class JBonusScj implements Serializable{
 		this.bPv = bPv;
 	}
 	public Float getPv() {
-		return Pv;
+		return pv;
 	}
 	public void setPv(Float pv) {
-		Pv = pv;
+		this.pv = pv;
 	}
 	public Integer getStatus() {
 		return status;

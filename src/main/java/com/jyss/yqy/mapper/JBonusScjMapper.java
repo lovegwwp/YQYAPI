@@ -29,4 +29,7 @@ public interface JBonusScjMapper {
     
     //按月查询总pv
     List<JBonusScj> selectScjTotalByMonth(@Param("uId")int uId, @Param("month")String month);
+    
+    //添加市场奖
+    int insertBonusScj();
 }

@@ -8,7 +8,7 @@
     <result column="a_pv" property="aPv" jdbcType="FLOAT" />
     <result column="b_id" property="bId" jdbcType="INTEGER" />
     <result column="b_pv" property="bPv" jdbcType="FLOAT" />
-    <result column="pv" property="Pv" jdbcType="FLOAT" />
+    <result column="pv" property="pv" jdbcType="FLOAT" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -20,27 +20,27 @@
 			<if test="uId != null and uId != ''">
 				and u_id = #{uId,jdbcType=INTEGER}
 			</if>
-			and status = 1 and to_days(now()) - to_days( created) = 1
+			and status = 1 and to_days(now()) - to_days(created) = 1
 		</where>
 	
 	</select>
  
 
-	<!-- 查询用户可得pv总值 -->
+	<!-- 查询昨日可得pv总值 -->
 	<select id="selectTotalPv" parameterType="int" resultType="float" >
 		select IFNULL(SUM(pv),0.00)  from j_bonus_scj
 		<where>
 			<if test="uId != null and uId != ''">
 				and u_id = #{uId,jdbcType=INTEGER}
 			</if>
-			and status = 1
+			and status = 1 and to_days(now()) - to_days(created) = 1
 		</where>
 	</select>
 	
 
 	<!-- 查询本周列表 -->
 	<select id="selectJBonusScjWek" parameterType="int" resultMap="BaseResultMap">
-		select a_pv,b_pv,DATE_FORMAT(created, '%Y-%m-%d' ) created  
+		select a_pv,b_pv,DATE_FORMAT(created, '%Y-%m-%d') created  
 		from j_bonus_scj
 		<where>
 			<if test="uId != null and uId != ''">
@@ -122,6 +122,17 @@
 		</where>
 		ORDER BY  created DESC
 	</select>
+	
+	
+	
+	<!-- 添加市场奖 -->
+	<insert id="insertBonusScj" parameterType="com.jyss.yqy.entity.JBonusScj" useGeneratedKeys="true" keyProperty="id">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into j_bonus_scj (id,u_id,a_id,a_pv,b_id,b_pv,pv,status,created) values (null,#{uId},#{aId},#{aPv},#{bId},#{bPv},#{pv},#{status},now())
+	</insert>  
   
-  
+	
+ 
 </mapper>
