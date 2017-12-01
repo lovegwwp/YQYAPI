@@ -56,7 +56,7 @@ public class ZfPayAction {
 		}
 		// /获取最新token ===uuid
 		UMobileLogin uMobileLogin = loginList.get(0);
-		String uuid = uMobileLogin.getsUuid();
+		String uuid = uMobileLogin.getuUuid();
 		List<UserBean> ubList = userService.getUserByUuid(uuid);
 		if (ubList == null || ubList.size() == 0) {
 			map.put("status", "false");
@@ -84,10 +84,9 @@ public class ZfPayAction {
 
 	@RequestMapping(value = "/b/ymzOrderPay", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> ymzOrder(@RequestParam int money,
-			@RequestParam String type, @RequestParam String token,
-			@RequestParam int spId, @RequestParam int num,
-			HttpServletRequest request) {
+	public Map<String, Object> ymzOrder(@RequestParam String type,
+			@RequestParam String token, @RequestParam int spId,
+			@RequestParam int num, HttpServletRequest request) {
 		Map<String, Object> mmap = new HashMap<String, Object>();
 		String filePath = request.getSession().getServletContext()
 				.getRealPath("/");
@@ -107,10 +106,21 @@ public class ZfPayAction {
 		}
 		// /获取最新token ===uuid
 		UMobileLogin uMobileLogin = loginList.get(0);
-		int gmID = uMobileLogin.getId().intValue();
+		String uuid = uMobileLogin.getuUuid();
+		List<UserBean> ubList = userService.getUserByUuid(uuid);
+		if (ubList == null || ubList.size() == 0) {
+			mmap.put("status", "false");
+			mmap.put("message", "用户信息错误！");
+			mmap.put("code", "-2");
+			mmap.put("data", "");
+			return mmap;
+		}
+
+		UserBean ub = ubList.get(0);
+		int gmID = ub.getId();
 		// ///判断支付方式=== 走不同支付
 		if (type.equals("1")) {
-			mmap = aliService.addDlrOrder2(filePath, money, gmID);
+			mmap = aliService.addYmzOrder2(filePath, gmID, num, spId);
 		} else if (type.equals("2")) {
 
 		} else if (type.equals("3")) {

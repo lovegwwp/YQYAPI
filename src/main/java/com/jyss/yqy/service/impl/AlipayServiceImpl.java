@@ -101,6 +101,7 @@ public class AlipayServiceImpl implements AlipayService {
 	}
 
 	// 预下单 --type 1=初级，2=中级，3=高级代理人',
+
 	public Map<String, Object> addDlrOrder(
 			@RequestParam("filePath") String filePath, @RequestParam int money,
 			@RequestParam int gmID) {
@@ -314,7 +315,7 @@ public class AlipayServiceImpl implements AlipayService {
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
-			m.put("code", "-1");
+			m.put("code", "-2");
 			m.put("data", mm);
 			return m;
 		}
@@ -344,17 +345,37 @@ public class AlipayServiceImpl implements AlipayService {
 		}
 		// //所购买的商品信息==亚麻籽油
 		int pv = 0;
+		String singlePV = "300";
+		// //查找对应PV
+		Xtcl dlpv = clMapper.getClsValue("pv_type", "1");
+		if (dlpv != null && !dlpv.getBz_value().equals("")) {
+			singlePV = dlpv.getBz_value();
+		}
+		try {
+			pv = Integer.parseInt(singlePV) * Integer.parseInt(hs);
+		} catch (Exception e) {
+			m.put("status", "false");
+			m.put("message", "商品信息错误！");
+			m.put("code", "-3");
+			m.put("data", mm);
+			return m;
+		}
+
 		List<Goods> gList = new ArrayList<Goods>();
 		gList = obMapper.getGoods("4");
 		if (gList == null || gList.size() == 0) {
 			m.put("status", "false");
-			m.put("message", "该商品信息错误！");
-			m.put("code", "-2");
+			m.put("message", "商品信息错误！");
+			m.put("code", "-3");
 			m.put("data", mm);
 			return m;
 		}
 		Goods good = gList.get(0);
-
+		// //商品二维码
+		String outPutPath = filePath + outTradeNo + ".png";
+		String code = "orderCodePng/" + outTradeNo + ".png";
+		// /生成二维码
+		ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
 		String gmr = "";
 
 		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
@@ -364,7 +385,7 @@ public class AlipayServiceImpl implements AlipayService {
 		}
 		OrdersB ob = new OrdersB(outTradeNo, gmID + "", gmr, ub.getAccount(),
 				good.getName(), good.getPics(), hs, "盒", "-1", "1",
-				good.getPrice(), money, pv, jb, "code", "zfId", 1);
+				good.getPrice(), money, pv, jb, code, "zfId", 1);
 		int count = 0;
 		count = obMapper.addOrder(ob);
 		if (count == 1) {
@@ -377,7 +398,7 @@ public class AlipayServiceImpl implements AlipayService {
 			m.put("data", mm);
 			return m;
 		}
-		m.put("code", "-3");
+		m.put("code", "-5");
 		m.put("data", mm);
 		return m;
 	}
@@ -549,7 +570,7 @@ public class AlipayServiceImpl implements AlipayService {
 		if (goods == null) {
 			m.put("status", "false");
 			m.put("message", "商品信息错误！");
-			m.put("code", "-2");
+			m.put("code", "-3");
 			m.put("data", mm);
 			return m;
 		}
@@ -567,8 +588,8 @@ public class AlipayServiceImpl implements AlipayService {
 			money = (float) (gmNum * price);
 		} catch (Exception e) {
 			m.put("status", "false");
-			m.put("message", "金额错误！");
-			m.put("code", "-2");
+			m.put("message", "商品信息错误！");
+			m.put("code", "-3");
 			m.put("data", mm);
 			return m;
 		}
@@ -600,7 +621,7 @@ public class AlipayServiceImpl implements AlipayService {
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
-			m.put("code", "-1");
+			m.put("code", "-2");
 			m.put("data", mm);
 			return m;
 		}
@@ -614,29 +635,23 @@ public class AlipayServiceImpl implements AlipayService {
 		mm.put("zfCode", zfCode);
 		mm.put("xjjf", ub.getCashScore() + "");
 		// //// 商品明细列表，需填写购买商品详细信息，进行创建相应订单///////////
-
-		// //所购买的商品信息==亚麻籽油
-		List<Goods> gList = new ArrayList<Goods>();
-		gList = obMapper.getGoods("4");
-		if (gList == null || gList.size() == 0) {
-			m.put("status", "false");
-			m.put("message", "该商品信息错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-		Goods good = gList.get(0);
-		// //价格比较
-		if (good.getPrice() != price) {
-			m.put("status", "false");
-			m.put("message", "该商品信息错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-
 		String gmr = "";
+		String singlePV = "300";
+		// //查找对应PV
+		Xtcl dlpv = clMapper.getClsValue("pv_type", "1");
+		if (dlpv != null && !dlpv.getBz_value().equals("")) {
+			singlePV = dlpv.getBz_value();
+		}
 		int pv = 0;
+		try {
+			pv = Integer.parseInt(singlePV) * gmNum;
+		} catch (Exception e) {
+			m.put("status", "false");
+			m.put("message", "商品信息错误！");
+			m.put("code", "-3");
+			m.put("data", mm);
+			return m;
+		}
 		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
 			gmr = "XXX";
 		} else {
@@ -644,11 +659,12 @@ public class AlipayServiceImpl implements AlipayService {
 		}
 		// //商品二维码
 		String outPutPath = filePath + outTradeNo + ".png";
+		String code = "orderCodePng/" + outTradeNo + ".png";
 		// /生成二维码
 		ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
 		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
-				ub.getAccount(), good.getName(), good.getPics(), gmNum + "",
-				"盒", "-1", "1", good.getPrice(), money, pv, "", "code", "zfId",
+				ub.getAccount(), goods.getName(), goods.getPics(), gmNum + "",
+				"盒", "-1", "1", goods.getPrice(), money, pv, "0", code, "zfId",
 				1);
 		int count = 0;
 		count = obMapper.addOrder(orderb);
@@ -662,7 +678,7 @@ public class AlipayServiceImpl implements AlipayService {
 			m.put("data", mm);
 			return m;
 		}
-		m.put("code", "-3");
+		m.put("code", "-4");
 		m.put("data", mm);
 		return m;
 	}

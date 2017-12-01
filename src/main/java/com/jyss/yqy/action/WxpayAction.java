@@ -70,8 +70,8 @@ public class WxpayAction {
 
 		data.put("notify_url",
 				"http://121.40.29.64:8081/SSM/pat/WXnotify.action");
-		// 支付方式 扫码支付
-		data.put("trade_type", "NATIVE");
+		// 支付方式 app支付
+		data.put("trade_type", "APP");
 		// 随机数
 		// CommTool.getNonceStr(30)
 		data.put("nonce_str", WXPayUtil.generateNonceStr());
