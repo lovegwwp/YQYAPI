@@ -38,6 +38,8 @@ public class FirstLetterUtil {
 		} catch (Exception e) {
 			result = "";
 		}
+		String randomStr = CommTool.getYzm();// ///6位随机验证码
+		result += randomStr;
 		return result;
 	}
 

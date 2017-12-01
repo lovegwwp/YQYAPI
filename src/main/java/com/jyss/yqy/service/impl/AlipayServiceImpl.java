@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -44,19 +43,14 @@ import com.jyss.yqy.mapper.UMobileLoginMapper;
 import com.jyss.yqy.mapper.UserMapper;
 import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.AlipayService;
+import com.jyss.yqy.utils.FirstLetterUtil;
 import com.jyss.yqy.utils.ZxingCodeUtil;
 
 @Service
 @Transactional
 public class AlipayServiceImpl implements AlipayService {
 	private static Log log = LogFactory.getLog(AlipayServiceImpl.class);
-	//
-	// @Autowired
-	// private OrdersBService obService;
-	// @Autowired
-	// private XtclService clService;
-	// @Autowired
-	// private UserService userService;
+
 	@Autowired
 	private OrdersBMapper obMapper;
 	@Autowired
@@ -215,7 +209,7 @@ public class AlipayServiceImpl implements AlipayService {
 		switch (result.getTradeStatus()) {
 		case SUCCESS:
 			log.info("支付宝预下单成功: )");
-
+			// String tradeNo =result.getResponse().get
 			AlipayTradePrecreateResponse response = result.getResponse();
 			dumpResponse(response);
 
@@ -313,7 +307,7 @@ public class AlipayServiceImpl implements AlipayService {
 		mm.put("zxingpng", "");// 订单二维码
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////////
-		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "");
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
@@ -391,6 +385,24 @@ public class AlipayServiceImpl implements AlipayService {
 				good.getPrice(), money, pv, jb, code, "zfId", 1);
 		int count = 0;
 		count = obMapper.addOrder(ob);
+		// ///user表===isChuangke字段修改/////
+		String isChuangke = "2";
+		if (jb.equals("2")) {// //中级代理人
+			isChuangke = "3";
+		} else if (jb.equals("3")) {
+			isChuangke = "4";// //高级代理人
+		}
+		String bCode = "";
+		bCode = FirstLetterUtil.getFirstLetter(gmr);
+		if (bCode == null || bCode.equals("")) {
+			bCode = gmr;
+		}
+		if (count == 1) {
+			count = 0;
+			count = userMapper.upUserAllStatus("", bCode, "", isChuangke, "",
+					gmID + "");
+		}
+		// /////////////////////////
 		if (count == 1) {
 			m.put("status", "true");
 			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
@@ -402,155 +414,6 @@ public class AlipayServiceImpl implements AlipayService {
 			return m;
 		}
 		m.put("code", "-5");
-		m.put("data", mm);
-		return m;
-	}
-
-	// 预下单 --购买亚麻籽油',
-	public Map<String, Object> addYmzOrder(@RequestParam("myJson") String myJson) {
-		Map<String, Object> m = new HashMap<String, Object>();
-		Map<String, String> mm = new HashMap<String, String>();
-		Map<String, Object> dlReMap = new HashMap<String, Object>();
-		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
-		mm.put("outtradeno", "");
-		mm.put("money", "");
-		mm.put("xjjf", "");
-		mm.put("zfCode", zfCode);
-		mm.put("zxingpng", "");// 订单二维码
-		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
-		// //解析json
-		if (myJson == null || myJson.equals("")) {
-			m.put("status", "false");
-			m.put("message", "发送数据为空！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-		OrdersB ob = null;
-		try {
-			ob = JSON.parseObject(myJson, OrdersB.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-			m.put("status", "false");
-			m.put("message", "解析错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-		if (ob == null) {
-			m.put("status", "false");
-			m.put("message", "解析错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-		String gmID = ob.getGmId();
-		// (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
-		// 需保证商户系统端不能重复，建议通过数据库sequence生成，
-		String outTradeNo = System.currentTimeMillis() / 1000 + "O" + gmID
-				+ "r" + (long) (Math.random() * 1000L);
-
-		// (必填) 订单标题，粗略描述用户的支付目的。如“xx品牌xxx门店当面付扫码消费”
-		String subject = "亚麻籽油消费";
-		String gmNum = ob.getGmNum();
-		float price = 0;
-		float money = 0;
-		try {
-			price = Float.parseFloat(ob.getPics());
-			money = (float) (Integer.parseInt(gmNum) * price);
-		} catch (Exception e) {
-			m.put("status", "false");
-			m.put("message", "金额错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-		// (必填) 订单总金额，单位为元，不能超过1亿元
-		// 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
-		String totalAmount = money + "";
-
-		// (可选) 订单不可打折金额，可以配合商家平台配置折扣活动，如果酒水不参与打折，则将对应金额填写至此字段
-		// 如果该值未传入,但传入了【订单总金额】,【打折金额】,则该值默认为【订单总金额】-【打折金额】
-		String undiscountableAmount = "0";
-
-		// 卖家支付宝账号ID，用于支持一个签约账号下支持打款到不同的收款账号，(打款到sellerId对应的支付宝账号)
-		// 如果该字段为空，则默认为与支付宝签约的商户的PID，也就是appid对应的PID
-		String sellerId = "";
-
-		// 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
-		String body = "易起云商品消费：" + money + "元";
-
-		// 商户操作员编号，添加此参数可以为商户操作员做销售统计+
-		String operatorId = "test_operator_id";
-
-		// (必填) 商户门店编号，通过门店号和商家后台可以配置精准到门店的折扣信息，详询支付宝技术支持
-		String storeId = "2088102172143232";// test_store_id"=2088802858369537
-
-		// 支付超时，定义为120分钟
-		String timeoutExpress = "120m";
-		// //// 验证当前用户是否合法///////////
-		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
-		if (ublist == null || ublist.size() == 0) {
-			m.put("status", "false");
-			m.put("message", "用户信息错误！");
-			m.put("code", "-1");
-			m.put("data", mm);
-			return m;
-		}
-		UserBean ub = ublist.get(0);
-		if (ub.getPwd() == null || ub.getPwd().equals("")
-				|| ub.getPwd().equals("0")) {
-			zfCode = "0";
-		} else {
-			zfCode = "1";
-		}
-		mm.put("zfCode", zfCode);
-		mm.put("xjjf", ub.getCashScore() + "");
-		// //// 商品明细列表，需填写购买商品详细信息，进行创建相应订单///////////
-
-		// //所购买的商品信息==亚麻籽油
-		List<Goods> gList = new ArrayList<Goods>();
-		gList = obMapper.getGoods("4");
-		if (gList == null || gList.size() == 0) {
-			m.put("status", "false");
-			m.put("message", "该商品信息错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-		Goods good = gList.get(0);
-		// //价格比较
-		if (good.getPrice() != price) {
-			m.put("status", "false");
-			m.put("message", "该商品信息错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
-		}
-
-		String gmr = "";
-		int pv = 0;
-		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
-			gmr = "XXX";
-		} else {
-			gmr = ub.getRealName();
-		}
-		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
-				ub.getAccount(), good.getName(), good.getPics(), gmNum, "盒",
-				"-1", "1", good.getPrice(), money, pv, "", "code", "zfId", 1);
-		int count = 0;
-		count = obMapper.addOrder(orderb);
-		if (count == 1) {
-			m.put("status", "true");
-			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
-			m.put("message", "提交订单成功！");
-			mm.put("outtradeno", outTradeNo);
-			mm.put("money", money + "");
-			m.put("code", "0");
-			m.put("data", mm);
-			return m;
-		}
-		m.put("code", "-3");
 		m.put("data", mm);
 		return m;
 	}

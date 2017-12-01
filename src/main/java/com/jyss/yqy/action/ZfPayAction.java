@@ -19,6 +19,7 @@ import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.AlipayService;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserService;
+import com.jyss.yqy.service.WxpayService;
 import com.jyss.yqy.utils.CommTool;
 
 @Controller
@@ -26,6 +27,8 @@ public class ZfPayAction {
 
 	@Autowired
 	private AlipayService aliService;
+	@Autowired
+	private WxpayService wxService;
 	@Autowired
 	private UMobileLoginService uMobileLoginService;
 	@Autowired
@@ -72,11 +75,13 @@ public class ZfPayAction {
 		if (type.equals("1")) {
 			map = aliService.addDlrOrder2(filePath, money, gmID);
 		} else if (type.equals("2")) {
-
-		} else if (type.equals("3")) {
-
+			map = wxService.dlrWxpay(filePath, money, gmID);
 		} else {
-
+			map.put("status", "false");
+			map.put("message", "商品信息错误");
+			map.put("code", "-3");
+			map.put("data", "");
+			return map;
 		}
 		return map;
 
@@ -126,6 +131,11 @@ public class ZfPayAction {
 		} else if (type.equals("3")) {
 
 		} else {
+			mmap.put("status", "false");
+			mmap.put("message", "商品信息错误");
+			mmap.put("code", "-3");
+			mmap.put("data", "");
+			return mmap;
 
 		}
 

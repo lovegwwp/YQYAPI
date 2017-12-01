@@ -88,6 +88,19 @@ public interface UserMapper {
 	int upPwd(@Param("pwd") String pwd, @Param("salt") String salt,
 			@Param("id") String id);
 
+	/**
+	 * 修改个人。。。等等。。状态
+	 * 
+	 * @param pwd
+	 * @param salt
+	 * @param salt
+	 * @return
+	 */
+	int upUserAllStatus(@Param("status") String status,
+			@Param("bCode") String bCode, @Param("bIsPay") String bIsPay,
+			@Param("isChuangke") String isChuangke,
+			@Param("isAuth") String isAuth, @Param("id") String id);
+
 	// /////////////////login表//////////
 	/**
 	 * 增加token

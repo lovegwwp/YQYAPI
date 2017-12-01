@@ -85,6 +85,22 @@
              where uuid =#{uuid} 
     </update>
     
+   <!--修改个人。。。等等。。状态 -->
+   <!--is_chuangke=0普通会员1代言人2初级代理人 3中级代理人4高级代理人  -->
+   <!--status=1删除 1=正常2=禁用  -->  <!--isAuth= 1=已提交 2=审核通过3=审核不通过  -->
+    <!--bCode=====个人推广码  -->  <!--bIsPay===0=未 1=付款  -->
+    <update id="upUserAllStatus"  >
+        update u_user  set last_modify_time =now()
+          <if test="status != null and status !=''"> ,status = #{status} </if>
+          <if test="bCode != null and bCode !=''"> ,b_code = #{bCode} </if> 
+          <if test="bIsPay != null and bIsPay !=''"> ,b_is_pay = #{bIsPay} </if> 
+          <if test="isChuangke != null and isChuangke !=''"> ,is_chuangke = #{isChuangke} </if> 
+          <if test="isAuth != null and isAuth !=''"> ,is_auth = #{isAuth} </if> 
+         where id =#{id} 
+    </update>
+    
+    
+    
 
     <select id="getUserById" resultMap="ubResultMap">           
 	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,u.is_auth,u.cash_score,u.b_code,a.real_name,a.id_card  

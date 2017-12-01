@@ -616,17 +616,17 @@ public class UserAction {
 			isOk1 = Base64Image.GenerateImage(photo1, filePath1);
 			if (isOk1) {
 				userAuth.setCardPicture1(filePath1.substring(filePath1
-						.indexOf("uploadPic")));
+						.indexOf("uploadAuthPic")));
 			}
 			isOk2 = Base64Image.GenerateImage(photo2, filePath2);
 			if (isOk2) {
 				userAuth.setCardPicture2(filePath2.substring(filePath2
-						.indexOf("uploadPic")));
+						.indexOf("uploadAuthPic")));
 			}
 			isOk3 = Base64Image.GenerateImage(photo3, filePath3);
 			if (isOk3) {
 				userAuth.setCardPicture3(filePath3.substring(filePath3
-						.indexOf("uploadPic")));
+						.indexOf("uploadAuthPic")));
 			}
 
 			int idNum = userService.insertUserAuth(userAuth);

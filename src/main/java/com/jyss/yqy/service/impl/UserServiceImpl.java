@@ -227,4 +227,12 @@ public class UserServiceImpl implements UserService {
 		return userMapper.addLogin(uuid, token);
 	}
 
+	@Override
+	public int upUserAllStatus(String status, String bCode, String bIsPay,
+			String isChuangke, String isAuth, String id) {
+		// TODO Auto-generated method stub
+		return userMapper.upUserAllStatus(status, bCode, bIsPay, isChuangke,
+				isAuth, id);
+	}
+
 }
