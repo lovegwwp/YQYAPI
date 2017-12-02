@@ -45,9 +45,9 @@ public class ThdAction {
 	 */
 	@RequestMapping("/sendCode")
 	@ResponseBody
-	public Map<String,String> sendCode(@RequestParam("tel") String tel,
+	public Map<String,Object> sendCode(@RequestParam("tel") String tel,
 			HttpServletRequest request) {
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String,Object> map = new HashMap<String,Object>();
 		if (tel != null && !"".equals(tel)) {
 			List<Thd> list = thdService.findThdByTel(tel);
 			if (list != null && list.size() > 0) {
@@ -65,22 +65,27 @@ public class ThdAction {
 				session.setMaxInactiveInterval(10 * 60);
 
 				String msgDo = HttpClientUtil.MsgDo(tel, "您此次操作的验证码为：" + code
-						+ ",请尽快在10分钟内完成验证");
+						+ "，请尽快在10分钟内完成验证。");
+				Map<String,String> map2 = new HashMap<String,String>();
+				map2.put("sessionId", sessionId);
 				if (msgDo.equals("1")) {
+					map.put("code", "0");
 					map.put("status", "true");
 					map.put("message", "操作成功！");
-					map.put("sessionId", sessionId);
+					map.put("data", map2);
 					return map;
 				}
+				map.put("code", "-2");
 				map.put("status", "false");
 				map.put("message", "操作失败！");
-				map.put("sessionId", "");
+				map.put("data", "");
 				return map;
 			}
 		}
+		map.put("code", "-1");
 		map.put("status", "false");
 		map.put("message", "请输入正确的手机号");
-		map.put("sessionId", "");
+		map.put("data", "");
 		return map;
 	}
 
@@ -89,13 +94,18 @@ public class ThdAction {
 	 */
 	@RequestMapping("/upThdPwd")
 	@ResponseBody
-	public ResponseEntity upHtPwd(@RequestParam("tel") String tel,
+	public Map<String, String> upHtPwd(@RequestParam("tel") String tel,
 			@RequestParam("code") String code,
 			@RequestParam("password") String password,
 			HttpServletRequest request,
 			@RequestParam("sessionId") String sessionId) {
+		Map<String, String> map = new HashMap<String,String>();
 		if (StringUtils.isEmpty(password)) {
-			return new ResponseEntity("false", "密码不能为空");
+			map.put("code", "-1");
+			map.put("status", "false");
+			map.put("message", "密码不能为空！");
+			map.put("data", "");
+			return map;
 		}
 		List<Thd> list = thdService.findThdByTel(tel);
 		if (list != null && list.size() > 0) {
@@ -109,24 +119,38 @@ public class ThdAction {
 					String salt = CommTool.getSalt();
 					String pwd = PasswordUtil.generate(password, salt);
 					thdService.updatePwd(tel, pwd, salt);
-					return new ResponseEntity("true", "密码修改成功");
+					map.put("code", "0");
+					map.put("status", "true");
+					map.put("message", "密码修改成功！");
+					map.put("data", "");
+					return map;
 				}
 			}
 
 		}
-		return new ResponseEntity("false", "请重新修改");
+		map.put("code", "-2");
+		map.put("status", "false");
+		map.put("message", "请重新修改！");
+		map.put("data", "");
+		return map;
 	}
 
+	
 	/**
 	 * 修改密码
 	 */
 	@RequestMapping("/updatePwd")
 	@ResponseBody
-	public ResponseEntity updatePwd(@RequestParam("tel") String tel,
+	public Map<String, String> updatePwd(@RequestParam("tel") String tel,
 			@RequestParam("oldPwd") String oldPwd,
 			@RequestParam("password") String password) {
+		Map<String, String> map = new HashMap<String,String>();
 		if (StringUtils.isEmpty(password)) {
-			return new ResponseEntity("false", "新密码不能为空");
+			map.put("code", "-1");
+			map.put("status", "false");
+			map.put("message", "新密码不能为空！");
+			map.put("data", "");
+			return map;
 		}
 		List<Thd> list = thdService.findThdByTel(tel);
 		if (list != null && list.size() > 0) {
@@ -136,12 +160,24 @@ public class ThdAction {
 				String salt = CommTool.getSalt();
 				String pwd = PasswordUtil.generate(password, salt);
 				thdService.updatePwd(tel, pwd, salt);
-				return new ResponseEntity("true", "密码修改成功");
+				map.put("code", "0");
+				map.put("status", "true");
+				map.put("message", "密码修改成功！");
+				map.put("data", "");
+				return map;
 			}
-			return new ResponseEntity("false", "旧密码不正确");
+			map.put("code", "-2");
+			map.put("status", "false");
+			map.put("message", "旧密码不正确！");
+			map.put("data", "");
+			return map;
 		}
 
-		return new ResponseEntity("false", "请重新设置");
+		map.put("code", "-3");
+		map.put("status", "false");
+		map.put("message", "请重新修改！");
+		map.put("data", "");
+		return map;
 	}
 
 	// 查询个人订单
