@@ -29,11 +29,32 @@
   
   
   <!-- 查询所有 -->
+  <!-- select u_id from j_record where status = 1  -->
   <select id="selectJRecord" resultMap="BaseResultMap">
-  	select id,u_id,u_name,parent_id,depart,floor,pv+jy_pv as pv from j_record where status = 1  order by floor desc 
+  	select id,u_id,u_name,parent_id,depart,floor from j_record where status = 1 
    
   </select>
   
+  <!-- 根据父id查询 -->
+	<select id="selectJRecordByPid" parameterType="int" resultMap="BaseResultMap">
+		select id,u_id,u_name,depart,floor,(pv + jy_pv) as pv 
+		from j_record 
+		<where>
+			<if test="parentId != null and parentId != ''"> and parent_id = #{parentId}</if>
+			and status = 1
+		</where>
+	</select>
+	
+	<!-- 根据用户id查询 -->
+	<select id="selectJRecordByUid" parameterType="int" resultMap="BaseResultMap">
+		select id,u_name,parent_id,depart,floor,(pv + jy_pv) as pv 
+		from j_record 
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId}</if>
+			and status = 1
+		</where>
+	</select>
+	
   <!-- 修改结余pv -->
   
   

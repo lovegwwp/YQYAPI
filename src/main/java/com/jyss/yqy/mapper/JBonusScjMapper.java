@@ -31,5 +31,5 @@ public interface JBonusScjMapper {
     List<JBonusScj> selectScjTotalByMonth(@Param("uId")int uId, @Param("month")String month);
     
     //添加市场奖
-    int insertBonusScj();
+    int insertBonusScj(JBonusScj jbonusScj);
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.UMobileLogin;
+import com.jyss.yqy.service.JRecordService;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserRecordBService;
 import com.jyss.yqy.service.UserService;
@@ -25,6 +26,8 @@ public class UserRecordBAction {
 	private UserRecordBService userRecordBService;
 	@Autowired
 	private UMobileLoginService uMobileLoginService;
+	@Autowired
+	private JRecordService recordService;
 	
 	/**
 	 * 绑定用户关系
@@ -68,6 +71,17 @@ public class UserRecordBAction {
 	@ResponseBody
 	public void insertJBonusFdj(){
 		Map<String, String> map = userRecordBService.insertJBonusFdj();
+		logger.info(map.get("message"));
+	}
+	
+	
+	/**
+	 * 计算市场奖
+	 */
+	@RequestMapping("/scj/computeSCJ")
+	@ResponseBody
+	public void insertJBonusScj(){
+		Map<String, String> map = recordService.insertJBonusScj();
 		logger.info(map.get("message"));
 	}
 
