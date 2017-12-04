@@ -54,7 +54,7 @@ public class ThdServiceImpl implements ThdService {
 				thd.getPassword())) {
 			String token = CommTool.getUUID();
 			thd.setSalt(token);
-			int count = userMapper.addLogin(thd.getTel(), token);
+			int count = userMapper.addLogin((thd.getId()+""), token);
 			if (count == 1){
 				map.put("code", "0");
 				map.put("status", "true");
