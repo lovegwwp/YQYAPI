@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.Goods;
+import com.jyss.yqy.entity.JRecord;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.UserTotalAmount;
 
@@ -65,5 +66,8 @@ public interface OrdersBMapper {
 
 	// 查询已完成的订单
 	List<UserTotalAmount> getSuccessOrder();
+	
+	// 查询已完成的订单
+	List<JRecord> getSuccessOrderPv();
 
 }

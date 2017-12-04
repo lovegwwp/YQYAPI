@@ -11,7 +11,7 @@ public interface JRecordMapper {
     
     
     //更新pv值
-	int updateJRecordByUid(@Param("uId")int uId);
+	int updateJRecordByUid(@Param("pv")String pv,@Param("jyPv")String jyPv,@Param("uId")int uId);
 	
 	//查询所有用户
 	List<JRecord> selectJRecord();

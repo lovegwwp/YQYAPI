@@ -52,8 +52,8 @@ public class PasswordUtil {
 
 	public static void main(String[] args) {
 		// String password = generate("66", "37063766");
-		System.out.println(generate("111111", "86046381").equals(
-				"c7882d5abd7d602f8800b41efa3cc77c"));
+		System.out.println(generate("666666", "14065422").equals(
+				"9f23df571e5a8c0dd6ccfe02e69d811d"));
 		System.out.println(generate("111111", "466706").equals(
 				"29070cc5ca64a589656b961163975710"));
 		System.out.println(generate("111111", "86046381"));

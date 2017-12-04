@@ -22,16 +22,15 @@
 	  <set>
 	  <if test="pv != null and pv != ''">pv = #{pv},</if>
 	  <if test="jyPv != null and jyPv != ''">jy_pv = #{jyPv},</if>
-	  modify_time = now(),
+	  modify_time = now()
 	  </set>
 	  where u_id = #{uId}
   </update>
   
   
-  <!-- 查询所有 -->
-  <!-- select u_id from j_record where status = 1  -->
+  <!-- 查询所有用户 -->
   <select id="selectJRecord" resultMap="BaseResultMap">
-  	select id,u_id,u_name,parent_id,depart,floor from j_record where status = 1 
+  	select u_id from j_record where status = 1 
    
   </select>
   
@@ -55,11 +54,5 @@
 		</where>
 	</select>
 	
-  <!-- 修改结余pv -->
-  
-  
-  
-	
-  
   
 </mapper>

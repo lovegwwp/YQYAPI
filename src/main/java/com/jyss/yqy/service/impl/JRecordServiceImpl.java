@@ -1,6 +1,7 @@
 package com.jyss.yqy.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.jyss.yqy.entity.JBonusScj;
 import com.jyss.yqy.entity.JRecord;
 import com.jyss.yqy.mapper.JBonusScjMapper;
 import com.jyss.yqy.mapper.JRecordMapper;
+import com.jyss.yqy.mapper.OrdersBMapper;
 import com.jyss.yqy.service.JRecordService;
 
 @Service
@@ -23,14 +25,17 @@ public class JRecordServiceImpl implements JRecordService{
 	private JRecordMapper recordMapper;
 	@Autowired
 	private JBonusScjMapper bonusScjMapper;
+	@Autowired
+	private OrdersBMapper ordersBMapper;
 	
 	/**
 	 * 计算市场奖
 	 */
 	public Map<String,String> insertJBonusScj(){
 		Map<String,String> map = new HashMap<String,String>();
-		List<JRecord> uIdList = recordMapper.selectJRecord();  //查询用户列表
+		insertJbonusScj();       //修改今日pv
 		
+		List<JRecord> uIdList = recordMapper.selectJRecord();  //查询用户列表
 		for (int i = 0; i < uIdList.size(); i++) {
         	JRecord jRecord = uIdList.get(i);
 			JBonusScj bonusScj = new JBonusScj();
@@ -52,6 +57,13 @@ public class JRecordServiceImpl implements JRecordService{
 					bonusScj.setStatus(1);
 					bonusScjMapper.insertBonusScj(bonusScj);
 					
+					if(total1 >= total2){
+						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record1.getuId());
+						recordMapper.updateJRecordByUid(null, 0.00+"", record2.getuId());
+					}else {
+						recordMapper.updateJRecordByUid(null, 0.00+"", record1.getuId());
+						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record2.getuId());
+					}
 				}else if(depart1 == 2 && depart2 == 1){
 					bonusScj.setaId(record2.getuId());
 					bonusScj.setbId(record1.getuId());
@@ -62,15 +74,26 @@ public class JRecordServiceImpl implements JRecordService{
 					bonusScj.setPv(Math.min(total1, total2));
 					bonusScj.setStatus(1);
 					bonusScjMapper.insertBonusScj(bonusScj);
+					
+					if(total1 >= total2){
+						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record2.getuId());
+						recordMapper.updateJRecordByUid(null, 0.00+"", record1.getuId());
+					}else {
+						recordMapper.updateJRecordByUid(null, 0.00+"", record2.getuId());
+						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record1.getuId());
+					}
 				}
-				map.put("message", "市场奖计算成功！");
+				map.put("message", "市场奖计算成功！"+new Date());
 			}
+			
 		}
 		return map;
 		
 	}
 	
-	//计算递归后总pv
+	/**
+	 * 计算递归后总pv
+	 */
 	private float getTotal(int id){
 		Float total = 0.00f;
 		List<JRecord> list = getJRecordList(id);
@@ -82,7 +105,7 @@ public class JRecordServiceImpl implements JRecordService{
 	}
 
 	/**
-	 * 用递归的方式实现二叉树的前序遍历
+	 * 二叉树递归的前序遍历
 	 */
 	public List<JRecord> getJRecordList(int uId){
 		List<JRecord> result = new ArrayList<JRecord>();
@@ -122,33 +145,19 @@ public class JRecordServiceImpl implements JRecordService{
 	}
 	
 	
-	
-	
-	 /**
-     * 用递归的方式实现二叉树的前序遍历
-     * @param root
-     * @return
-     */
-    /*public static<T> List<T> preOrderVisit(BinaryTreeNode<T> root){
-        List<T> result=new ArrayList<>();
-        preOrderVisit(root,result);
-        return result;
-    }
-    private static<T> void preOrderVisit(BinaryTreeNode<T> node, List<T> result) {
-        //如果节点为空，返回
-        if(node==null){
-            return;
-        }
-        //不为空，则加入节点的值
-        result.add(node.getData());
-        //先递归左孩子
-        preOrderVisit(node.getLeft(),result);
-        //再递归右孩子
-        preOrderVisit(node.getRight(),result);
-    }*/
-
-	
-	
+	/**
+	 * 修改今日pv
+	 */
+	private void insertJbonusScj(){
+		List<JRecord> list = recordMapper.selectJRecord(); 
+		for (JRecord record : list) {
+			recordMapper.updateJRecordByUid(0.00+"",null,record.getuId());  //将每日的pv值置0
+		}
+		List<JRecord> orderPvList = ordersBMapper.getSuccessOrderPv();
+		for (JRecord jRecord : orderPvList) {
+			recordMapper.updateJRecordByUid(jRecord.getPv()+"",null,jRecord.getuId());
+		}
+	}
 	
 
 }

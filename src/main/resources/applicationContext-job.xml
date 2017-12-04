@@ -5,7 +5,7 @@
 
 
    <bean id="schedule1" class="com.jyss.yqy.action.UserRecordBAction"></bean>
-   <bean id="schedule2" class="com.jyss.yqy.action.JobAction"></bean>
+   <bean id="schedule2" class="com.jyss.yqy.action.UserRecordBAction"></bean>
    
    <bean id="SpringQtzJobMethod1"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -15,7 +15,7 @@
 	<bean id="SpringQtzJobMethod2"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule2" />
-		<property name="targetMethod" value="sendMail"/>    <!-- 要执行的方法名  -->
+		<property name="targetMethod" value="insertJBonusScj"/>    <!-- 要执行的方法名  -->
 	</bean>
 	
 	
@@ -27,7 +27,7 @@
 	</bean>
 	<bean id="cronTriggerFactoryBean2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod2"></property>
-		<property name="cronExpression" value="0 0 10 * * ? "></property>
+		<property name="cronExpression" value="0 40 23 * * ?"></property>     <!-- 每天23:40执行 -->
 	</bean>
 	
 	

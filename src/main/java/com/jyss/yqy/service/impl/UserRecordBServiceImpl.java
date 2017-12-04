@@ -240,11 +240,11 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		if(isAuth == 2 && (uLevel == 2 || uLevel == 3 || uLevel == 4)){
 			userRecordMapper.updateByUid(userBean.getId(), 1);
 			
-			try {
+			/*try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				map.put("message","请稍后再试！");
-			}
+			}*/
 			
 			UUserRRecordBExample example = new UUserRRecordBExample();
 			Criteria criteria = example.createCriteria();

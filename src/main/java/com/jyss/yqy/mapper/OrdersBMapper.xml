@@ -45,7 +45,12 @@
     <resultMap type="com.jyss.yqy.entity.UserTotalAmount" id="utaResultMap">   
         <result property="id" column="id"  />     
         <result property="amount" column="amount"  />             
-    </resultMap>       
+    </resultMap>   
+    
+    <resultMap type="com.jyss.yqy.entity.JRecord" id="jrResultMap">   
+        <result property="uId" column="id"  />     
+        <result property="pv" column="pv"  />             
+    </resultMap>      
      
     <!-- B端商品详情 type==4-->  
      <select id="getGoods" resultMap="gResultMap">          
@@ -157,5 +162,12 @@
     	
     </select>
    
+   <!-- 查询已完成的订单pv -->
+    <select id="getSuccessOrderPv" resultMap="jrResultMap">
+    	select CONVERT(gm_id,SIGNED) as id,CONVERT(sum(pv),DECIMAL) as pv
+    	from p_orders_b 
+    	where status = 2 and type =1 and to_days(last_modify_time) = to_days(now()) GROUP BY gm_id
+    	
+    </select>
 
 </mapper>
