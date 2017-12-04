@@ -54,8 +54,8 @@ public class ThdServiceImpl implements ThdService {
 				thd.getPassword())) {
 			String token = CommTool.getUUID();
 			thd.setSalt(token);
-			int count = userMapper.addLogin((thd.getId()+""), token);
-			if (count == 1){
+			int count = userMapper.addLogin((thd.getId() + ""), token);
+			if (count == 1) {
 				map.put("code", "0");
 				map.put("status", "true");
 				map.put("message", "登录成功");
@@ -88,6 +88,12 @@ public class ThdServiceImpl implements ThdService {
 	public List<ThOrders> getThdOrdersBy(String thId) {
 		// TODO Auto-generated method stub
 		return thdMapper.getThdOrdersBy(thId);
+	}
+
+	@Override
+	public int addThOrder(ThOrders thOrder) {
+		// TODO Auto-generated method stub
+		return thdMapper.addThOrder(thOrder);
 	}
 
 }

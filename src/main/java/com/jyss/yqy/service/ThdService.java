@@ -35,4 +35,12 @@ public interface ThdService {
 	 */
 	List<ThOrders> getThdOrdersBy(@Param("thId") String thId);
 
+	/**
+	 * 增加订单
+	 * 
+	 * @param thOrder
+	 * @return
+	 */
+	int addThOrder(ThOrders thOrder);
+
 }

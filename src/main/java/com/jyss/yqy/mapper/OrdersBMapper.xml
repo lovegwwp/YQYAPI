@@ -78,7 +78,8 @@
 			  <if test="gmId != null and gmId !=''"> and gm_id = #{gmId} </if> 		
 		 </where> 
 		 order by status ,created_at desc
-    </select>    
+    </select>  
+    
 
    <!-- 增加购买商品支付成功或者失败的订单记录 -->
     <insert id="addOrder" parameterType="com.jyss.yqy.entity.OrdersB" 

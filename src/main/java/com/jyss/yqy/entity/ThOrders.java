@@ -130,4 +130,22 @@ public class ThOrders {
 		this.thId = thId;
 	}
 
+	public ThOrders() {
+		super();
+	}
+
+	public ThOrders(String orderSn, String thr, String tel, String thSp,
+			String thNum, String thDw, String status, String thId, float price) {
+		super();
+		this.orderSn = orderSn;
+		this.thr = thr;
+		this.tel = tel;
+		this.thSp = thSp;
+		this.thNum = thNum;
+		this.thDw = thDw;
+		this.status = status;
+		this.thId = thId;
+		this.price = price;
+	}
+
 }

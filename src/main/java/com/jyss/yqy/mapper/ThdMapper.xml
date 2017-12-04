@@ -76,6 +76,13 @@
 		 order by created_at desc 
     </select>    
     
+   <!--提货点订单增加==扫码成功  -->
+    <insert id="addThOrder" parameterType="com.jyss.yqy.entity.ThOrders" 
+        useGeneratedKeys="true" keyProperty="id">     
+         	
+		insert into p_thd_orders values(null,#{orderSn},#{thr},#{tel},#{thSp},#{thNum},#{thDw},#{thId},#{status},now(),#{price})		        
+    </insert>    
+   
  
 
 </mapper>
