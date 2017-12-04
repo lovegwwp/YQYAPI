@@ -38,4 +38,12 @@ public interface ThdMapper {
 	 */
 	int addThOrder(ThOrders thOrder);
 
+	/**
+	 * 修改提货端客户信息
+	 * 
+	 * @param thd
+	 * @return
+	 */
+	int upThdInfo(Thd thd);
+
 }

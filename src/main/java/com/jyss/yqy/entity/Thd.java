@@ -23,6 +23,15 @@ public class Thd {
 	private String city;// 城市
 	private int areaId;// 区域id
 	private String area;// 区域
+	private String addr;// 详细地址
+
+	public String getAddr() {
+		return addr;
+	}
+
+	public void setAddr(String addr) {
+		this.addr = addr;
+	}
 
 	public String getThName() {
 		return thName;

@@ -83,6 +83,17 @@
 		insert into p_thd_orders values(null,#{orderSn},#{thr},#{tel},#{thSp},#{thNum},#{thDw},#{thId},#{status},now(),#{price})		        
     </insert>    
    
- 
+     <!--提货端个人信息修改--> 
+    <update id="upThdInfo" parameterType="com.jyss.yqy.entity.Thd" >
+        update p_thd  
+        <set>
+             last_modify_time = now()
+        	<if test="tel != null and tel != ''">,tel = #{tel}</if>
+        	<if test="addr != null and addr != ''">,addr = #{addr}</if>
+        	<if test="thName != null and thName != ''">,th_name = #{thName}</if>
+        	<if test="pics != null and pics != ''">,pics = #{pics}</if>
+        </set>
+        where id = #{id} and  status = 1
+    </update>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.jyss.yqy.action;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.jyss.yqy.filter.MySessionContext;
 import com.jyss.yqy.service.OrdersBService;
 import com.jyss.yqy.service.ThdService;
 import com.jyss.yqy.service.UMobileLoginService;
+import com.jyss.yqy.utils.Base64Image;
 import com.jyss.yqy.utils.CommTool;
 import com.jyss.yqy.utils.HttpClientUtil;
 import com.jyss.yqy.utils.PasswordUtil;
@@ -364,6 +366,91 @@ public class ThdAction {
 		map.put("status", "true");
 		map.put("message", "扫描成功！");
 		map.put("code", "0");
+		return map;
+
+	}
+
+	// 修改提货端个人信息
+	@RequestMapping("/upThdInfo")
+	@ResponseBody
+	public Map<String, Object> upThdInfo(@RequestParam("token") String token,
+			@RequestParam("tel") String tel, @RequestParam("addr") String addr,
+			@RequestParam("pics") String pics,
+			@RequestParam("thName") String thName, HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// //验证token 获取购买人ID===gmID
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
+		if (loginList == null || loginList.size() == 0) {
+			map.put("status", "false");
+			map.put("message", "请重新登录");
+			map.put("code", "-1");
+			return map;
+		}
+		// /获取最新token ===uuid就是购买ID
+		UMobileLogin uMobileLogin = loginList.get(0);
+		String thId = uMobileLogin.getuUuid();
+		if (thId == null || thId.equals("")) {
+			map.put("status", "false");
+			map.put("message", "提货单用户信息加载失败！");
+			map.put("code", "-2");
+			map.put("data", "");
+			return map;
+		}
+		Thd t = new Thd();
+		int id = 0;
+		try {
+			id = Integer.parseInt(thId);
+		} catch (Exception e) {
+			map.put("status", "false");
+			map.put("message", "提货单用户信息加载失败！");
+			map.put("code", "-2");
+			map.put("data", "");
+			return map;
+		}
+
+		if (id == 0) {
+			map.put("status", "false");
+			map.put("message", "提货单用户信息加载失败！");
+			map.put("code", "-2");
+			map.put("data", "");
+			return map;
+		}
+		// ///////图片生成、、、截取
+		String filePath = request.getSession().getServletContext()
+				.getRealPath("/");
+		int index = filePath.indexOf("YQYAPI");
+		// boolean isOk = false;
+		filePath = filePath.substring(0, index) + "uploadThd" + "/";
+		File f = new File(filePath);
+		CommTool.judeDirExists(f);
+		boolean isOk1 = false;
+		String filePath1 = filePath + id + ".png";
+		isOk1 = Base64Image.GenerateImage(pics, filePath1);
+		if (isOk1) {
+			t.setPics(filePath1.substring(filePath1.indexOf("uploadThd")));
+		} else {
+			map.put("status", "false");
+			map.put("message", "图片上传失败！");
+			map.put("code", "-3");
+			return map;
+		}
+		int count = 0;
+		t.setId(id);
+		t.setAddr(addr);
+		// t.setPics(pics);
+		t.setTel(tel);
+		t.setThName(thName);
+		count = thdService.upThdInfo(t);
+		if (count == 1) {
+			map.put("status", "true");
+			map.put("message", "修改成功！");
+			map.put("code", "0");
+			return map;
+		}
+		map.put("status", "false");
+		map.put("message", "修改失败！");
+		map.put("code", "-4");
 		return map;
 
 	}

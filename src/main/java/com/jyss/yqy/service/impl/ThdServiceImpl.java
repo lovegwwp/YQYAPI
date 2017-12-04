@@ -96,4 +96,10 @@ public class ThdServiceImpl implements ThdService {
 		return thdMapper.addThOrder(thOrder);
 	}
 
+	@Override
+	public int upThdInfo(Thd thd) {
+		// TODO Auto-generated method stub
+		return thdMapper.upThdInfo(thd);
+	}
+
 }
