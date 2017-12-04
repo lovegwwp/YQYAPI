@@ -17,6 +17,7 @@ public class Thd {
 	private String dlsj;// 登录时间
 	private String xgsj;// 修改时间
 	private String thName;// 提货点名称
+	private String telShow;// 提货点联系方式====展示用，可修改
 	/*
 	 * private int provinceId;// 省份id private String province;// 省份 private int
 	 * cityId;// 城市id private String city;// 城市 private int areaId;// 区域id
@@ -86,6 +87,14 @@ public class Thd {
 	// public void setArea(String area) {
 	// this.area = area;
 	// }
+
+	public String getTelShow() {
+		return telShow;
+	}
+
+	public void setTelShow(String telShow) {
+		this.telShow = telShow;
+	}
 
 	public String getCjsj() {
 		return cjsj;

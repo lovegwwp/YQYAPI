@@ -41,6 +41,7 @@
         <result property="createdAt" column="created_at"  />
         <result property="cjsj" column="cjsj"  />
         <result property="tel" column="tel"  />
+         <result property="telShow" column="tel_show"  />
         <result property="thSp" column="th_sp"  />
         <result property="thNum" column="th_num"  />
         <result property="thDw" column="th_dw"  />
@@ -91,7 +92,7 @@
         update p_thd  
         <set>
              last_modify_time = now()
-        	<if test="tel != null and tel != ''">,tel = #{tel}</if>
+        	<if test="tel != null and tel != ''">,tel_show = #{tel}</if>
         	<if test="addr != null and addr != ''">,addr = #{addr}</if>
         	<if test="thName != null and thName != ''">,th_name = #{thName}</if>
         	<if test="pics != null and pics != ''">,pics = #{pics}</if>
