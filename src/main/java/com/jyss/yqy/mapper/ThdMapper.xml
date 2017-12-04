@@ -8,6 +8,7 @@
     <resultMap type="com.jyss.yqy.entity.Thd" id="thdResultMap">   
         <id property="id" column="id"  />
         <result property="tel" column="tel"  />
+          <result property="telShow" column="tel_show"  />
         <result property="name" column="name"  />
         <result property="thName" column="th_name"  />
         <result property="pics" column="pics"  />      
@@ -71,8 +72,9 @@
              
     
    <!--获取提货点个人提货详情  -->
-    <select id="getThdOrdersBy" resultMap="spResultMap">     
-	     select *,DATE_FORMAT(created_at, '%Y-%m-%d %H:%i' )  cjsj  from p_thd_orders  				
+    <select id="getThdOrdersBy" resultMap="spResultMap">
+   <!--  DATE_FORMAT(created_at, '%Y-%m-%d %H:%i' )       -->
+	     select *,DATE_FORMAT(created_at, '%Y-%m-%d' )  cjsj  from p_thd_orders  				
          <where> 
               1 = 1
 			  <if test="thId != null and thId !=''"> and th_id = #{thId} </if> 		

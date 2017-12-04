@@ -465,23 +465,28 @@ public class ThdAction {
 			return map;
 		}
 		// ///////图片生成、、、截取
-		String filePath = request.getSession().getServletContext()
-				.getRealPath("/");
-		int index = filePath.indexOf("YQYAPI");
-		// boolean isOk = false;
-		filePath = filePath.substring(0, index) + "uploadThd" + "/";
-		File f = new File(filePath);
-		CommTool.judeDirExists(f);
-		boolean isOk1 = false;
-		String filePath1 = filePath + id + ".png";
-		isOk1 = Base64Image.GenerateImage(pics, filePath1);
-		if (isOk1) {
-			t.setPics(filePath1.substring(filePath1.indexOf("uploadThd")));
+		if (!pics.equals("") && pics != null) {
+
+			String filePath = request.getSession().getServletContext()
+					.getRealPath("/");
+			int index = filePath.indexOf("YQYAPI");
+			// boolean isOk = false;
+			filePath = filePath.substring(0, index) + "uploadThd" + "/";
+			File f = new File(filePath);
+			CommTool.judeDirExists(f);
+			boolean isOk1 = false;
+			String filePath1 = filePath + id + ".png";
+			isOk1 = Base64Image.GenerateImage(pics, filePath1);
+			if (isOk1) {
+				t.setPics(filePath1.substring(filePath1.indexOf("uploadThd")));
+			} else {
+				map.put("status", "false");
+				map.put("message", "图片上传失败！");
+				map.put("code", "-3");
+				return map;
+			}
 		} else {
-			map.put("status", "false");
-			map.put("message", "图片上传失败！");
-			map.put("code", "-3");
-			return map;
+			t.setPics("");
 		}
 		int count = 0;
 		t.setId(id);
