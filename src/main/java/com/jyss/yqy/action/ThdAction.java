@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jyss.yqy.constant.Constant;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.Page;
 import com.jyss.yqy.entity.ThOrders;
@@ -64,7 +65,7 @@ public class ThdAction {
 			HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (tel != null && !"".equals(tel)) {
-			List<Thd> list = thdService.findThdByTel(tel);
+			List<Thd> list = thdService.findThdByTel(tel, "");
 			if (list != null && list.size() > 0) {
 				Thd thd = list.get(0);
 				String code = CommTool.getYzm();
@@ -122,7 +123,7 @@ public class ThdAction {
 			map.put("data", "");
 			return map;
 		}
-		List<Thd> list = thdService.findThdByTel(tel);
+		List<Thd> list = thdService.findThdByTel(tel, "");
 		if (list != null && list.size() > 0) {
 			Thd thd = list.get(0);
 			if (sessionId != null && !"".equals(sessionId)) {
@@ -166,7 +167,7 @@ public class ThdAction {
 			map.put("data", "");
 			return map;
 		}
-		List<Thd> list = thdService.findThdByTel(tel);
+		List<Thd> list = thdService.findThdByTel(tel, "");
 		if (list != null && list.size() > 0) {
 			Thd thd = list.get(0);
 			if (PasswordUtil.generate(oldPwd, thd.getSalt()).equals(
@@ -235,7 +236,7 @@ public class ThdAction {
 
 	}
 
-	// 查询个人订单
+	// 确认订单
 	@RequestMapping("/confirmOrders")
 	@ResponseBody
 	public Map<String, Object> getThdOrders(
@@ -313,7 +314,7 @@ public class ThdAction {
 
 	}
 
-	// 查询个人订单
+	// 扫描订单
 	@RequestMapping("/scanOrders")
 	@ResponseBody
 	public Map<String, Object> scanOrders(@RequestParam("token") String token,
@@ -368,6 +369,50 @@ public class ThdAction {
 		map.put("data", m);
 		map.put("status", "true");
 		map.put("message", "扫描成功！");
+		map.put("code", "0");
+		return map;
+
+	}
+
+	@RequestMapping("/getThdInfo")
+	@ResponseBody
+	public Map<String, Object> getThdInfo(@RequestParam("token") String token) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> m = new HashMap<String, Object>();
+		// //验证token 获取购买人ID===gmID
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
+		if (loginList == null || loginList.size() == 0) {
+			map.put("status", "false");
+			map.put("message", "请重新登录");
+			map.put("code", "-1");
+			map.put("data", "");
+			return map;
+		}
+		// /获取最新token ===uuid就是购买ID
+		UMobileLogin uMobileLogin = loginList.get(0);
+		String thId = uMobileLogin.getuUuid();
+		if (thId == null || thId.equals("")) {
+			map.put("status", "false");
+			map.put("message", "提货单用户信息加载失败！");
+			map.put("code", "-2");
+			map.put("data", "");
+			return map;
+		}
+
+		List<Thd> ThdList = thdService.findThdByTel("", thId);
+		if (ThdList == null || ThdList.size() != 1) {
+			map.put("status", "false");
+			map.put("message", "提货单用户信息加载失败！");
+			map.put("code", "-2");
+			map.put("data", "");
+			return map;
+		}
+		Thd th = ThdList.get(0);
+		th.setPics(Constant.httpUrl + th.getPics());
+		map.put("data", th);
+		map.put("status", "true");
+		map.put("message", "加载成功！");
 		map.put("code", "0");
 		return map;
 
@@ -457,17 +502,17 @@ public class ThdAction {
 		return map;
 
 	}
-	
-	
+
 	/**
 	 * 用户退出
 	 */
-	
+
 	@RequestMapping("/thdLogOut")
 	@ResponseBody
 	public Map<String, Object> loginOut(@RequestParam("token") String token) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
 		if (loginList == null || loginList.size() == 0) {
 			map.put("status", "false");
 			map.put("message", "身份过期！");
@@ -493,5 +538,5 @@ public class ThdAction {
 		map.put("data", "");
 		return map;
 	}
-	
+
 }

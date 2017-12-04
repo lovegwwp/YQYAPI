@@ -16,9 +16,11 @@ public interface ThdService {
 			@Param("password") String password);
 
 	/**
-	 * 用户查询
+	 * 用户登陆
 	 */
-	public List<Thd> findThdByTel(@Param("tel") String tel);
+
+	public List<Thd> findThdByTel(@Param("tel") String tel,
+			@Param("id") String id);
 
 	/**
 	 * 密码修改

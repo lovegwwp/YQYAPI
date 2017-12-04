@@ -20,12 +20,13 @@
         <result property="cjsj" column="cjsj"  />
         <result property="xgsj" column="xgsj"  />
         <result property="dlsj" column="dlsj"  />
-        <result property="provinceId" column="province_id"  />
+       <!--  <result property="provinceId" column="province_id"  />
         <result property="province" column="province"  />
         <result property="cityId" column="city_id"  />
         <result property="city" column="city"  />
         <result property="areaId" column="area_id"  />
-        <result property="area" column="area"  />
+        <result property="area" column="area"  /> -->
+         <result property="addr" column="addr"  />
     </resultMap>    
     
     
@@ -50,8 +51,9 @@
     <select id="findThdByTel" parameterType="String" resultMap="thdResultMap">
         select * from p_thd 
         <where>
-        	<if test="tel != null and tel != ''">and tel = #{tel}
-        	<if test="id != null and id != ''">and id = #{id}  and status = 1</if>
+            status = 1
+        	<if test="tel != null and tel != ''"> and tel = #{tel}  </if>
+        	<if test="id != null and id != ''"> and id = #{id}  </if>
         </where>
     </select>
     
@@ -69,7 +71,7 @@
     
    <!--获取提货点个人提货详情  -->
     <select id="getThdOrdersBy" resultMap="spResultMap">     
-	     select *  from p_thd_orders  				
+	     select *,DATE_FORMAT(created_at, '%Y-%m-%d %H:%i' )  cjsj  from p_thd_orders  				
          <where> 
               1 = 1
 			  <if test="thId != null and thId !=''"> and th_id = #{thId} </if> 		

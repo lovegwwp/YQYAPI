@@ -17,13 +17,11 @@ public class Thd {
 	private String dlsj;// 登录时间
 	private String xgsj;// 修改时间
 	private String thName;// 提货点名称
-	private int provinceId;// 省份id
-	private String province;// 省份
-	private int cityId;// 城市id
-	private String city;// 城市
-	private int areaId;// 区域id
-	private String area;// 区域
-	private String addr;// 详细地址
+	/*
+	 * private int provinceId;// 省份id private String province;// 省份 private int
+	 * cityId;// 城市id private String city;// 城市 private int areaId;// 区域id
+	 * private String area;// 区域
+	 */private String addr;// 详细地址
 
 	public String getAddr() {
 		return addr;
@@ -41,53 +39,53 @@ public class Thd {
 		this.thName = thName;
 	}
 
-	public int getProvinceId() {
-		return provinceId;
-	}
-
-	public void setProvinceId(int provinceId) {
-		this.provinceId = provinceId;
-	}
-
-	public String getProvince() {
-		return province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
-
-	public int getCityId() {
-		return cityId;
-	}
-
-	public void setCityId(int cityId) {
-		this.cityId = cityId;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public int getAreaId() {
-		return areaId;
-	}
-
-	public void setAreaId(int areaId) {
-		this.areaId = areaId;
-	}
-
-	public String getArea() {
-		return area;
-	}
-
-	public void setArea(String area) {
-		this.area = area;
-	}
+	// public int getProvinceId() {
+	// return provinceId;
+	// }
+	//
+	// public void setProvinceId(int provinceId) {
+	// this.provinceId = provinceId;
+	// }
+	//
+	// public String getProvince() {
+	// return province;
+	// }
+	//
+	// public void setProvince(String province) {
+	// this.province = province;
+	// }
+	//
+	// public int getCityId() {
+	// return cityId;
+	// }
+	//
+	// public void setCityId(int cityId) {
+	// this.cityId = cityId;
+	// }
+	//
+	// public String getCity() {
+	// return city;
+	// }
+	//
+	// public void setCity(String city) {
+	// this.city = city;
+	// }
+	//
+	// public int getAreaId() {
+	// return areaId;
+	// }
+	//
+	// public void setAreaId(int areaId) {
+	// this.areaId = areaId;
+	// }
+	//
+	// public String getArea() {
+	// return area;
+	// }
+	//
+	// public void setArea(String area) {
+	// this.area = area;
+	// }
 
 	public String getCjsj() {
 		return cjsj;
