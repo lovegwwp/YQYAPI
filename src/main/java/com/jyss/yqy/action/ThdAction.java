@@ -27,6 +27,7 @@ import com.jyss.yqy.filter.MySessionContext;
 import com.jyss.yqy.service.OrdersBService;
 import com.jyss.yqy.service.ThdService;
 import com.jyss.yqy.service.UMobileLoginService;
+import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.utils.Base64Image;
 import com.jyss.yqy.utils.CommTool;
 import com.jyss.yqy.utils.HttpClientUtil;
@@ -41,6 +42,8 @@ public class ThdAction {
 	private UMobileLoginService uMobileLoginService;
 	@Autowired
 	private OrdersBService obService;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 用户登陆
@@ -454,4 +457,41 @@ public class ThdAction {
 		return map;
 
 	}
+	
+	
+	/**
+	 * 用户退出
+	 */
+	
+	@RequestMapping("/thdLogOut")
+	@ResponseBody
+	public Map<String, Object> loginOut(@RequestParam("token") String token) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
+		if (loginList == null || loginList.size() == 0) {
+			map.put("status", "false");
+			map.put("message", "身份过期！");
+			map.put("code", "-1");
+			map.put("data", "");
+			return map;
+		}
+		// /获取最新token ===uuid
+		UMobileLogin uMobileLogin = loginList.get(0);
+		String uuuid = uMobileLogin.getuUuid();
+		String newToken = CommTool.getUUID();
+		int count = userService.loginOut(uuuid, newToken);
+		if (count == 1) {
+			map.put("status", "true");
+			map.put("message", "退出成功！");
+			map.put("code", "0");
+			map.put("data", "");
+			return map;
+		}
+		map.put("status", "false");
+		map.put("message", "退出失败！");
+		map.put("code", "-2");
+		map.put("data", "");
+		return map;
+	}
+	
 }

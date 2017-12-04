@@ -41,7 +41,7 @@ public class ThdServiceImpl implements ThdService {
 			map.put("data", "");
 			return map;
 		}
-		List<Thd> list = thdMapper.findThdByTel(tel);
+		List<Thd> list = thdMapper.findThdByTel(tel,null);
 		if (list == null || list.size() == 0) {
 			map.put("code", "-2");
 			map.put("status", "false");
@@ -74,7 +74,7 @@ public class ThdServiceImpl implements ThdService {
 	 * 用户查询
 	 */
 	public List<Thd> findThdByTel(String tel) {
-		return thdMapper.findThdByTel(tel);
+		return thdMapper.findThdByTel(tel,null);
 	}
 
 	/**

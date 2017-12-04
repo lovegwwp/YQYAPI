@@ -13,7 +13,7 @@ public interface ThdMapper {
 	 * 用户登陆
 	 */
 
-	public List<Thd> findThdByTel(@Param("tel") String tel);
+	public List<Thd> findThdByTel(@Param("tel") String tel,@Param("id") String id);
 
 	/**
 	 * 修改密码
