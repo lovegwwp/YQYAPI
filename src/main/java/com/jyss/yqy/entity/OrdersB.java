@@ -16,7 +16,7 @@ public class OrdersB {
 	private String type;// 1B端商品，2非B端商品
 	private float price;// 价格
 	private float total;// 付钱总价
-	private int pv;// 价格对应PV值
+	private float pv;// 价格对应PV值
 	private int zfType;// 支付方式：1=支付宝，2=微信，3=现金支付
 	private String zfId;// 支付平台对应订单号
 	private String code;// 订单提货码
@@ -49,11 +49,11 @@ public class OrdersB {
 		this.total = total;
 	}
 
-	public int getPv() {
+	public float getPv() {
 		return pv;
 	}
 
-	public void setPv(int pv) {
+	public void setPv(float pv) {
 		this.pv = pv;
 	}
 
