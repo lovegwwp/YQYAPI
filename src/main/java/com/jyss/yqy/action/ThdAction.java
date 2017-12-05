@@ -475,7 +475,7 @@ public class ThdAction {
 			File f = new File(filePath);
 			CommTool.judeDirExists(f);
 			boolean isOk1 = false;
-			String filePath1 = filePath + id + ".png";
+			String filePath1 = filePath + id + CommTool.getSalt() + ".png";
 			isOk1 = Base64Image.GenerateImage(pics, filePath1);
 			if (isOk1) {
 				t.setPics(filePath1.substring(filePath1.indexOf("uploadThd")));

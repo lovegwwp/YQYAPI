@@ -521,7 +521,8 @@ public class UserAction {
 				File file = new File(filePath);
 				CommTool.judeDirExists(file);
 				boolean isOk = false;
-				filePath = filePath + uMobileLogin.getuUuid() + ".png";
+				filePath = filePath + uMobileLogin.getuUuid()
+						+ CommTool.getSalt() + ".png";
 				isOk = Base64Image.GenerateImage(picture, filePath);
 				if (isOk) {
 					user.setAvatar(filePath.substring(filePath
@@ -610,9 +611,9 @@ public class UserAction {
 			boolean isOk1 = false;
 			boolean isOk2 = false;
 			boolean isOk3 = false;
-			String filePath1 = filePath + uuid + "1.png";
-			String filePath2 = filePath + uuid + "2.png";
-			String filePath3 = filePath + uuid + "3.png";
+			String filePath1 = filePath + uuid + CommTool.getSalt() + "1.png";
+			String filePath2 = filePath + uuid + CommTool.getSalt() + "2.png";
+			String filePath3 = filePath + uuid + CommTool.getSalt() + "3.png";
 			isOk1 = Base64Image.GenerateImage(photo1, filePath1);
 			if (isOk1) {
 				userAuth.setCardPicture1(filePath1.substring(filePath1
