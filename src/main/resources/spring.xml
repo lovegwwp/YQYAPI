@@ -50,7 +50,7 @@
 		<property name="testOnBorrow" value="true"/> <!--指明连接对象是否被借出连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.   -->
 		<property name="testOnReturn" value="true"/> <!--指明连接对象是否被返回连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.   -->
 		<property name="testWhileIdle" value="true"/> <!--  指明连接对象是否被空闲连接回收器(如果有)进行检验.如果检测失败,则连接将被从池中去除.    -->
-		<property name="validationQuery" value="SELECT X"/> <!-- 验证使用的SQL语句  -->
+		<property name="validationQuery" value="SELECT 1"/> <!-- 验证使用的SQL语句  -->
 		<property name="minEvictableIdleTimeMillis" value="1800000"/> <!-- 池中的连接空闲30分钟后被回收   -->
 		<property name="timeBetweenEvictionRunsMillis" value="30000"/> <!--  每30秒运行一次空闲连接回收器 -->
 		 
