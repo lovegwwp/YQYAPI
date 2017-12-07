@@ -5,12 +5,13 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="u_id" property="uId" jdbcType="INTEGER" />
     <result column="u_name" property="uName" jdbcType="VARCHAR" />
+    <result column="u_account" property="uAccount" jdbcType="VARCHAR" />
     <result column="parent_id" property="parentId" jdbcType="INTEGER" />
-    <result column="depart" property="depart" jdbcType="INTEGER" />
+    <result column="depart" property="depart" jdbcType="TINYINT" />
     <result column="floor" property="floor" jdbcType="INTEGER" />
     <result column="pv" property="pv" jdbcType="FLOAT" />
     <result column="jy_pv" property="jyPv" jdbcType="FLOAT" />
-    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="TINYINT" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -28,15 +29,32 @@
   </update>
   
   
-  <!-- 查询所有用户 -->
+  <!-- 查询所有用户id -->
   <select id="selectJRecord" resultMap="BaseResultMap">
   	select u_id from j_record where status = 1 
-   
   </select>
   
-  <!-- 根据父id查询 -->
+    <!-- 查询用户 -->
+  <select id="selectAllJRecord" parameterType="String" resultMap="BaseResultMap">
+  	select id,u_id,u_name,u_account,parent_id,depart,floor from j_record  
+  	<where>
+  		<if test="uAccount != null and uAccount != ''">and u_account = #{uAccount} </if>
+  		and status = 1
+  	</where>
+  </select>
+  	
+  	<!-- 根据id查询 -->
+  	<select id="selectJRecordById" parameterType="int" resultMap="BaseResultMap">
+  		select id,u_id,u_name,u_account,parent_id,depart,floor from j_record  
+  		<where>
+  			<if test="id != null and id != ''">and id = #{id} </if>
+  			and status = 1
+  		</where>
+    </select>
+  
+    <!-- 根据父id查询 -->
 	<select id="selectJRecordByPid" parameterType="int" resultMap="BaseResultMap">
-		select id,u_id,u_name,depart,floor,(pv + jy_pv) as pv 
+		select id,u_id,depart,floor,(pv + jy_pv) as pv 
 		from j_record 
 		<where>
 			<if test="parentId != null and parentId != ''"> and parent_id = #{parentId}</if>
@@ -46,13 +64,52 @@
 	
 	<!-- 根据用户id查询 -->
 	<select id="selectJRecordByUid" parameterType="int" resultMap="BaseResultMap">
-		select id,u_name,parent_id,depart,floor,(pv + jy_pv) as pv 
+		select id,parent_id,depart,floor,(pv + jy_pv) as pv 
 		from j_record 
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId}</if>
 			and status = 1
 		</where>
 	</select>
+	
+	<!-- 将pv值置0 -->
+	<update id="updateJRecord">
+		update j_record set pv = 0.00 
+	</update>
+	
+	
+	<!-- 添加市场用户 -->
+	<insert id="insertJRecord" parameterType="com.jyss.yqy.entity.JRecord" useGeneratedKeys="true" keyProperty="id" >
+		insert into j_record  values(null,#{uId},#{uAccount},#{uName},#{parentId},#{depart},#{floor},'0.00','0.00',#{status},now(),now())
+
+	</insert>
+	
+  <!-- 修改市场用户 -->
+  <update id="updateJRecordById" parameterType="com.jyss.yqy.entity.JRecord" >
+	  update j_record 
+	  <set>
+	 	 <if test="uId != null and uId != ''">u_id = #{uId},</if>
+	 	 <if test="uName != null and uName != ''">u_name = #{uName},</if>
+	 	 <if test="uAccount != null and uAccount != ''">u_account = #{uAccount},</if>
+	 	 created = now()
+	  </set>
+	  where id = #{id} and status = 1
+  </update>
+  
+    <!-- 修改市场用户 -->
+  <update id="upJRecordById" >
+	  update j_record 
+	  <set>
+	 	 <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
+	 	 created = now()
+	  </set>
+	  where id = #{id} and status = 1
+  </update>
+  
+  <!-- 删除市场用户 -->
+  <delete id="deleteJRecordById" parameterType="int">
+  	delete from j_record where id = #{id}
+  </delete>
 	
   
 </mapper>

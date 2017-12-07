@@ -9,7 +9,7 @@
     <result column="b_id" property="bId" jdbcType="INTEGER" />
     <result column="b_pv" property="bPv" jdbcType="FLOAT" />
     <result column="pv" property="pv" jdbcType="FLOAT" />
-    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="TINYINT" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
   </resultMap>
   

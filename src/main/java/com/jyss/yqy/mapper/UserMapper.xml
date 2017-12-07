@@ -143,33 +143,44 @@
     
     <!-- 通过推荐码查询推荐人信息 -->
     <select id="getUserByBCode" resultMap="ubResultMap">           
-	      select id,uuid,real_name,is_chuangke   from u_user 						
+	      select u.id,u.uuid,a.real_name,u.is_chuangke   from u_user u left join u_user_auth a on u.uuid = a.u_uuid	 						
          <where> 
               1 = 1
-              <if test="bCode != null and bCode !=''"> and b_code = #{bCode} 
-              and status = 1 and is_auth = 2
+              <if test="bCode != null and bCode !=''"> and u.b_code = #{bCode} 
+              and u.status = 1 and u.is_auth = 2
               </if> 			  		
 		 </where> 
     </select> 
     
     <!-- 通过用户的uuid查询用户 -->
     <select id="getUserByUuid" resultMap="ubResultMap">           
-	      select id,real_name,is_chuangke,is_auth  from u_user 						
+	      select u.id,a.real_name,u.is_chuangke,u.is_auth  from u_user u left join u_user_auth a on u.uuid = a.u_uuid					
          <where> 
               1 = 1
-              <if test="uuid != null and uuid !=''"> and uuid = #{uuid}  
-              and status = 1 
+              <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid}  
+              and u.status = 1 
               </if> 			  		
 		 </where> 
     </select> 
     
     <!-- 通过用户的id查询用户 -->
     <select id="getUserNameById" resultMap="ubResultMap">           
-	      select real_name,is_chuangke,is_auth  from u_user 						
+	      select a.real_name,u.is_chuangke,u.is_auth  from u_user u left join u_user_auth a on u.uuid = a.u_uuid						
          <where> 
               1 = 1
-              <if test="id != null and id !=''"> and id = #{id}  
-              and status = 1 
+              <if test="id != null and id !=''"> and u.id = #{id}  
+              and u.status = 1 
+              </if> 			  		
+		 </where> 
+    </select> 
+    
+    <!-- 通过用户名查询用户id -->
+    <select id="getUserIdByAccount" resultMap="ubResultMap">           
+	      select u.id,a.real_name from u_user u left join u_user_auth a on u.uuid = a.u_uuid						
+         <where> 
+              1 = 1
+              <if test="account != null and account !=''"> and u.account = #{account}  
+              and u.status = 1  and u.is_auth = 2
               </if> 			  		
 		 </where> 
     </select> 
