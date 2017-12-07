@@ -17,6 +17,7 @@
         <result property="createdAt" column="created_at"  />
         <result property="title" column="title"  />
         <result property="cjsj" column="cjsj"  />
+        <result property="status" column="status"  />
 
     </resultMap>           
      
@@ -50,14 +51,14 @@
      <!--现金积分=插入-->
     <insert id="addCashScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id"> 
-        insert into u_cash_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},#{createdAt})              
+        insert into u_cash_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},#{createdAt},#{status})              
     </insert>
    
    
     <!--购物积分=插入-->
     <insert id="addShoppingScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id"> 
-        insert into u_shopping_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},#{createdAt})              
+        insert into u_shopping_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},#{createdAt},#{status})              
     </insert>
      
   

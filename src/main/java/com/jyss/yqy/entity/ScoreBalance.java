@@ -14,6 +14,7 @@ public class ScoreBalance {
 	private Date createdAt;
 	private String title;// 用户uuid
 	private String cjsj;// /格式化创建时间
+	private int status;// 1=收入 2=支出
 
 	public int getId() {
 		return id;
@@ -21,6 +22,14 @@ public class ScoreBalance {
 
 	public String getCjsj() {
 		return cjsj;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public void setCjsj(String cjsj) {

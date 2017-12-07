@@ -32,6 +32,7 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 	public int addCashScoreBalance(ScoreBalance sb) {
 		// TODO Auto-generated method stub
 		sb.setEnd(2);
+		sb.setStatus(1);
 		sb.setCreatedAt(CommTool.getNowTimestamp());
 		return sbMapper.addCashScoreBalance(sb);
 	}
@@ -40,6 +41,7 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 	public int addShoppingScoreBalance(ScoreBalance sb) {
 		// TODO Auto-generated method stub
 		sb.setEnd(2);
+		sb.setStatus(1);
 		sb.setCreatedAt(CommTool.getNowTimestamp());
 		return sbMapper.addShoppingScoreBalance(sb);
 	}
