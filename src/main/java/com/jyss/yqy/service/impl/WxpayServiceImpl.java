@@ -219,7 +219,7 @@ public class WxpayServiceImpl implements WxpayService {
 			}
 			if (count == 1) {
 				count = 0;
-				count = userMapper.upUserAllStatus("", bCode, "", isChuangke,
+				count = userMapper.upUserAllStatus("", bCode, "1", isChuangke,
 						"", gmID + "");
 			}
 			// /////////////////////////
