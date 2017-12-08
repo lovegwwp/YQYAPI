@@ -13,6 +13,6 @@ public interface UserRecordBService {
 	
 	Map<String,String> insertJBonusFdj();
 	
-	Map<String,String> insertJBonusGlj(@Param("uuid") String uuid);
+	/*Map<String,String> insertJBonusGlj(@Param("uuid") String uuid);*/
 
 }

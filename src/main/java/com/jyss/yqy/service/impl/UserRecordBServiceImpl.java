@@ -33,8 +33,6 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	@Autowired
 	private UUserRRecordBMapper userRecordMapper;
 	@Autowired
-	private JBonusGljMapper bonusGljMapper;
-	@Autowired
 	private OrdersBMapper ordersBMapper;
 	@Autowired
 	private JBonusFdjMapper jBonusFdjMapper;
@@ -230,7 +228,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	/**
 	 * 管理奖
 	 */
-	@Override
+	/*@Override
 	public Map<String,String>  insertJBonusGlj(String uuid){      
 		Map<String, String> map = new HashMap<String, String>();
 		List<UserBean> userList = userMapper.getUserByUuid(uuid);
@@ -276,9 +274,9 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 							List<UUserRRecordB> list1 = userRecordMapper.selectByExample(example1);
 							if(list1 != null && list1.size()>0){
 								UUserRRecordB userRecord1 = list1.get(0);
-								/*List<UserBean> nameById1 = userMapper.getUserNameById(userRecord1.getrId());
+								List<UserBean> nameById1 = userMapper.getUserNameById(userRecord1.getrId());
 							if(nameById1 != null && nameById1.size()>0){
-								UserBean userBean2 = nameById1.get(0);*/
+								UserBean userBean2 = nameById1.get(0);
 								
 								JBonusGlj bonusGlj1 = new JBonusGlj();
 								bonusGlj1.setuId(userRecord1.getuId());
@@ -355,7 +353,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		return map;
 		
 		
-	}
+	}*/
 	
 
 }

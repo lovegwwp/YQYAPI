@@ -174,17 +174,6 @@
 		 </where> 
     </select> 
     
-    <!-- 通过用户名查询用户id -->
-    <select id="getUserIdByAccount" resultMap="ubResultMap">           
-	      select u.id,a.real_name from u_user u left join u_user_auth a on u.uuid = a.u_uuid						
-         <where> 
-              1 = 1
-              <if test="account != null and account !=''"> and u.account = #{account}  
-              and u.status = 1  and u.is_auth = 2
-              </if> 			  		
-		 </where> 
-    </select> 
-    
     
     
    <!-- 插入推广关系，确定上下级 -->

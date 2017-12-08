@@ -144,9 +144,5 @@ public interface UserMapper {
 	 */
 	List<UserBean> getUserNameById(@Param("id") int id);
 
-	/**
-	 * 通过account查询用户id
-	 */
-	List<UserBean> getUserIdByAccount(@Param("account") String account);
 
 }

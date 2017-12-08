@@ -34,23 +34,6 @@
   	select u_id from j_record where status = 1 
   </select>
   
-    <!-- 查询用户 -->
-  <select id="selectAllJRecord" parameterType="String" resultMap="BaseResultMap">
-  	select id,u_id,u_name,u_account,parent_id,depart,floor from j_record  
-  	<where>
-  		<if test="uAccount != null and uAccount != ''">and u_account = #{uAccount} </if>
-  		and status = 1
-  	</where>
-  </select>
-  	
-  	<!-- 根据id查询 -->
-  	<select id="selectJRecordById" parameterType="int" resultMap="BaseResultMap">
-  		select id,u_id,u_name,u_account,parent_id,depart,floor from j_record  
-  		<where>
-  			<if test="id != null and id != ''">and id = #{id} </if>
-  			and status = 1
-  		</where>
-    </select>
   
     <!-- 根据父id查询 -->
 	<select id="selectJRecordByPid" parameterType="int" resultMap="BaseResultMap">
@@ -77,39 +60,6 @@
 		update j_record set pv = 0.00 
 	</update>
 	
-	
-	<!-- 添加市场用户 -->
-	<insert id="insertJRecord" parameterType="com.jyss.yqy.entity.JRecord" useGeneratedKeys="true" keyProperty="id" >
-		insert into j_record  values(null,#{uId},#{uAccount},#{uName},#{parentId},#{depart},#{floor},'0.00','0.00',#{status},now(),now())
-
-	</insert>
-	
-  <!-- 修改市场用户 -->
-  <update id="updateJRecordById" parameterType="com.jyss.yqy.entity.JRecord" >
-	  update j_record 
-	  <set>
-	 	 <if test="uId != null and uId != ''">u_id = #{uId},</if>
-	 	 <if test="uName != null and uName != ''">u_name = #{uName},</if>
-	 	 <if test="uAccount != null and uAccount != ''">u_account = #{uAccount},</if>
-	 	 created = now()
-	  </set>
-	  where id = #{id} and status = 1
-  </update>
-  
-    <!-- 修改市场用户 -->
-  <update id="upJRecordById" >
-	  update j_record 
-	  <set>
-	 	 <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
-	 	 created = now()
-	  </set>
-	  where id = #{id} and status = 1
-  </update>
-  
-  <!-- 删除市场用户 -->
-  <delete id="deleteJRecordById" parameterType="int">
-  	delete from j_record where id = #{id}
-  </delete>
 	
   
 </mapper>
