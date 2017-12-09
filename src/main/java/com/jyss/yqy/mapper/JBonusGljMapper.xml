@@ -252,7 +252,7 @@
 			<if test="parentId != null and parentId != ''">
 				and parent_id = #{parentId,jdbcType=INTEGER}
 			</if>
-			AND `status` = 1
+			AND status = 1
 			AND to_days(created) = to_days(now())
 		</where>
 	</select>
@@ -268,7 +268,7 @@
 			<if test="parentId != null and parentId != ''">
 				and parent_id = #{parentId,jdbcType=INTEGER}
 			</if>
-			AND `status` = 1
+			AND status = 1
 		</where>
 	</select>
 
@@ -281,7 +281,7 @@
 			<if test="parentId != null and parentId != ''">
 				and parent_id = #{parentId,jdbcType=INTEGER}
 			</if>
-			AND `status` = 1 
+			AND status = 1 
 			AND YEARWEEK(date_format(created,'%Y-%m-%d')) = YEARWEEK(now())
 		</where>
 		ORDER BY  created DESC
@@ -302,7 +302,7 @@
 			<if test="endTime != null and endTime != ''">
 				and date_format(created, '%Y-%m-%d') &lt;= #{endTime}
 			</if>
-			AND `status` = 1 
+			AND status = 1 
 		</where>
 		ORDER BY  created DESC
 	</select>
@@ -322,7 +322,7 @@
 			<if test="endTime != null and endTime != ''">
 				and date_format(created, '%Y-%m-%d') &lt;= #{endTime}
 			</if>
-			AND `status` = 1 
+			AND status = 1 
 		</where>
 		ORDER BY  created DESC
 	</select>
@@ -339,7 +339,7 @@
 			<if test="month != null and month != ''">
 				and date_format(created, '%Y-%m') = #{month}
 			</if>
-			AND `status` = 1 
+			AND status = 1 
 		</where>
 		ORDER BY  created DESC
 	</select>
@@ -356,7 +356,7 @@
 			<if test="month != null and month != ''">
 				and date_format(created, '%Y-%m') = #{month}
 			</if>
-			AND `status` = 1 
+			AND status = 1 
 		</where>
 		ORDER BY  created DESC
 	</select>
