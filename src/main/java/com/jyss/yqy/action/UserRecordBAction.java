@@ -52,18 +52,6 @@ public class UserRecordBAction {
 	
 	
 	/**
-	 * 给推荐人算管理奖
-	 */
-	
-	/*@RequestMapping("/fdj/computeGlj")
-	@ResponseBody
-	public Map<String, String> insertJBonusGlj(String uuid){
-		Map<String, String> map = userRecordBService.insertJBonusGlj(uuid);
-		return map;
-	}
-	*/
-	
-	/**
 	 * 给推荐人算辅导奖
 	 */
 	

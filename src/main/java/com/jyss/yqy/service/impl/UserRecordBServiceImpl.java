@@ -47,7 +47,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		List<UserBean> userList = userMapper.getUserByUuid(uuid);
 		UserBean userBean = userList.get(0); // 获取被推荐人信息
 		int isAuth = userBean.getIsAuth();
-		int uLevel = userBean.getIsChuangke();
+		//int uLevel = userBean.getIsChuangke();
 		List<UserBean> parentList = userMapper.getUserByBCode(bCode);
 		if (parentList != null && parentList.size() > 0) {
 			UserBean parentUser = parentList.get(0); // 获取推荐人信息
@@ -64,6 +64,17 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 			// if(isAuth == 2 && (uLevel==2 || uLevel==3 || uLevel==4) &&
 			// (pLevel==2 || pLevel==3 || pLevel==4)){
 			if (pLevel == 2 || pLevel == 3 || pLevel == 4) {
+				UUserRRecordBExample example = new UUserRRecordBExample();
+				Criteria criteria = example.createCriteria();
+				criteria.andUIdEqualTo(userBean.getId());
+				List<UUserRRecordB> list = userRecordMapper.selectByExample(example);
+				if(list != null && list.size()>0){
+					map.put("code", "-4");
+					map.put("status", "false");
+					map.put("message", "您已使用过推荐码！");
+					map.put("data", "");
+					return map;
+				}
 				UUserRRecordB userRRecordB = new UUserRRecordB();
 				userRRecordB.setuId(userBean.getId());
 				userRRecordB.setrId(parentUser.getId());
@@ -71,8 +82,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				userRRecordB.setType(pLevel);
 				userRRecordB.setCreatedAt(new Date());
 				int idNum = userRecordMapper.insert(userRRecordB);
-				String val = idNum + "";
-				if (val != null && !"".equals(val)) {
+				if (idNum > 0) {
 					map.put("code", "0");
 					map.put("status", "true");
 					map.put("message", "推荐码使用成功！");

@@ -39,20 +39,14 @@
 	<select id="selectJRecordByPid" parameterType="int" resultMap="BaseResultMap">
 		select id,u_id,depart,floor,(pv + jy_pv) as pv 
 		from j_record 
-		<where>
-			<if test="parentId != null and parentId != ''"> and parent_id = #{parentId}</if>
-			and status = 1
-		</where>
+		where parent_id = #{parentId} and status = 1
 	</select>
 	
 	<!-- 根据用户id查询 -->
 	<select id="selectJRecordByUid" parameterType="int" resultMap="BaseResultMap">
 		select id,parent_id,depart,floor,(pv + jy_pv) as pv 
 		from j_record 
-		<where>
-			<if test="uId != null and uId != ''"> and u_id = #{uId}</if>
-			and status = 1
-		</where>
+		where u_id = #{uId} and status = 1
 	</select>
 	
 	<!-- 将pv值置0 -->

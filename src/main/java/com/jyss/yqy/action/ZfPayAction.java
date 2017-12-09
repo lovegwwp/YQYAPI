@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.AlipayService;
+import com.jyss.yqy.service.OrdersBService;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.service.WxpayService;
@@ -33,6 +35,8 @@ public class ZfPayAction {
 	private UMobileLoginService uMobileLoginService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private OrdersBService ordersBService;
 
 	// type///// 支付方式：1=支付宝，2=微信，3=现金支付
 	@RequestMapping(value = "/b/dlrOrderPay", method = RequestMethod.POST)
@@ -142,5 +146,32 @@ public class ZfPayAction {
 		return mmap;
 
 	}
+	
+	/**
+	 * 代理人支付成功状态修改
+	 */
+	public String updateOrderAndUser(String orderNum){
+		int count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		if (count == 1){
+			List<OrdersB> orders = ordersBService.getOrdersBy("1", orderNum, null);
+			if(orders != null && orders.size()>0){
+				OrdersB ordersB = orders.get(0);
+				int count1 = userService.upUserAllStatus("1", null, null, null, null, ordersB.getGmId());
+				if(count1 == 1){
+					return "success";
+				}
+			}
+		}
+		return "failed";
+	}
+	
+	/**
+	 * 购买支付成功状态修改
+	 */
+	public int updateOrder(String orderNum){
+		int count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		return count;
+	}
+	
 
 }
