@@ -14,6 +14,7 @@ import com.jyss.yqy.entity.JBonusFdj;
 import com.jyss.yqy.entity.JBonusGlj;
 import com.jyss.yqy.entity.UUserRRecordB;
 import com.jyss.yqy.entity.UUserRRecordBExample;
+import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.UUserRRecordBExample.Criteria;
 import com.jyss.yqy.entity.UserTotalAmount;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
@@ -22,6 +23,7 @@ import com.jyss.yqy.mapper.JBonusGljMapper;
 import com.jyss.yqy.mapper.OrdersBMapper;
 import com.jyss.yqy.mapper.UUserRRecordBMapper;
 import com.jyss.yqy.mapper.UserMapper;
+import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.UserRecordBService;
 
 @Service
@@ -36,6 +38,8 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	private OrdersBMapper ordersBMapper;
 	@Autowired
 	private JBonusFdjMapper jBonusFdjMapper;
+	@Autowired
+	private XtclMapper xtclMapper;
 
 	@Override
 	public Map<String, String> insertUserRecordB(String uuid, String bCode) {
@@ -112,6 +116,16 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 					if (nameById != null && nameById.size() > 0) {
 						UserBean userBean1 = nameById.get(0);
 						int pLevel = userBean1.getIsChuangke();
+						
+						//查询返回比例
+						Xtcl xtcl1 = xtclMapper.getClsValue("fdj_type", "1");        //初级获得金额
+						double double1 = Double.parseDouble(xtcl1.getBz_value());    //0.02
+						Xtcl xtcl2 = xtclMapper.getClsValue("fdj_type", "2");        //中级获得金额
+						double double2 = Double.parseDouble(xtcl2.getBz_value());    //0.04
+						Xtcl xtcl3 = xtclMapper.getClsValue("fdj_type", "3");        //高级获得金额
+						double double3 = Double.parseDouble(xtcl3.getBz_value());    //0.06
+						
+						
 						JBonusFdj bonusFdj = new JBonusFdj();
 						bonusFdj.setuId(uId);
 						bonusFdj.setParentId(userRecord.getrId());
@@ -120,10 +134,10 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 						bonusFdj.setCreated(sdf.format(new Date()));
 						bonusFdj.setuName(userBean.getRealName());
 						if (pLevel == 4) {
-							bonusFdj.setParentMoney(amount * 0.06);
+							bonusFdj.setParentMoney(amount * double3);
 							jBonusFdjMapper.insert(bonusFdj);
 						} else if (pLevel == 3) {
-							bonusFdj.setParentMoney(amount * 0.04);
+							bonusFdj.setParentMoney(amount * double2);
 							jBonusFdjMapper.insert(bonusFdj);
 
 							UUserRRecordBExample example1 = new UUserRRecordBExample();
@@ -144,13 +158,13 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 									bonusFdj1.setStatus(1);
 									bonusFdj1.setCreated(sdf.format(new Date()));
 									bonusFdj1.setuName(userBean1.getRealName());
-									bonusFdj1.setParentMoney(amount * 0.02);
+									bonusFdj1.setParentMoney(amount * double1);
 									jBonusFdjMapper.insert(bonusFdj1);
 							//	}
 							}
 
 						} else if (pLevel == 2) {
-							bonusFdj.setParentMoney(amount * 0.02);
+							bonusFdj.setParentMoney(amount * double1);
 							jBonusFdjMapper.insert(bonusFdj);
 
 							UUserRRecordBExample example1 = new UUserRRecordBExample();
@@ -173,7 +187,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 										bonusFdj1.setStatus(1);
 										bonusFdj1.setCreated(sdf.format(new Date()));
 										bonusFdj1.setuName(userBean1.getRealName());
-										bonusFdj1.setParentMoney(amount * 0.04);
+										bonusFdj1.setParentMoney(amount * double2);
 										jBonusFdjMapper.insert(bonusFdj1);
 									} else if (pLevel1 == 2) {
 										JBonusFdj bonusFdj1 = new JBonusFdj();
@@ -183,7 +197,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 										bonusFdj1.setStatus(1);
 										bonusFdj1.setCreated(sdf.format(new Date()));
 										bonusFdj1.setuName(userBean1.getRealName());
-										bonusFdj1.setParentMoney(amount * 0.02);
+										bonusFdj1.setParentMoney(amount * double1);
 										jBonusFdjMapper.insert(bonusFdj1);
 
 										UUserRRecordBExample example2 = new UUserRRecordBExample();
@@ -203,7 +217,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 												bonusFdj2.setStatus(1);
 												bonusFdj2.setCreated(sdf.format(new Date()));
 												bonusFdj2.setuName(userBean2.getRealName());
-												bonusFdj2.setParentMoney(amount * 0.02);
+												bonusFdj2.setParentMoney(amount * double1);
 												jBonusFdjMapper.insert(bonusFdj2);
 										//	}
 
