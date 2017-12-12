@@ -50,4 +50,7 @@ public interface JBonusGljMapper {
     
     //按月查询总收益
     double selectGljTotalByMonth(@Param("parentId")int parentId, @Param("month")String month);
+    
+    //查询所有人当日的收益
+    List<JBonusGlj> selectEveryDayEarnings();
 }

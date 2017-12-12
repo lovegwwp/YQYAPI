@@ -374,4 +374,14 @@
 		</where>
 		ORDER BY  created DESC
 	</select>
+	
+	
+	<!-- 查询所有人当日的收益 -->
+	<select id="selectEveryDayEarnings" resultMap="BaseResultMap">
+		select parent_id,sum(parent_money) as parent_money from j_bonus_fdj  
+		where status = 1 and to_days(created) = to_days(now()) 
+		group by parent_id
+	</select>
+	
+	
 </mapper>

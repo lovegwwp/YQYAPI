@@ -132,6 +132,12 @@
 		</selectKey>
 		insert into j_bonus_scj (id,u_id,a_id,a_pv,b_id,b_pv,pv,status,created) values (null,#{uId},#{aId},#{aPv},#{bId},#{bPv},#{pv},#{status},now())
 	</insert>  
+	
+	<!-- 查询所有人当日的收益 -->
+	<select id="selectEveryDayEarnings" resultMap="BaseResultMap">
+		select u_id,pv from j_bonus_scj  
+		where status = 1 and to_days(created) = to_days(now())
+	</select>
   
 	
  

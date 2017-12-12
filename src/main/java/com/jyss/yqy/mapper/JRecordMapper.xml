@@ -31,7 +31,7 @@
   
   <!-- 查询所有用户id -->
   <select id="selectJRecord" resultMap="BaseResultMap">
-  	select u_id from j_record where status = 1 
+  	select u_id from j_record where status = 1 order by floor
   </select>
   
   

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.UMobileLogin;
+import com.jyss.yqy.service.JBonusGljService;
 import com.jyss.yqy.service.JRecordService;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserRecordBService;
@@ -28,6 +29,8 @@ public class UserRecordBAction {
 	private UMobileLoginService uMobileLoginService;
 	@Autowired
 	private JRecordService recordService;
+	@Autowired
+	private JBonusGljService bonusGljService;
 	
 	/**
 	 * 绑定用户关系
@@ -70,6 +73,17 @@ public class UserRecordBAction {
 	@ResponseBody
 	public void insertJBonusScj(){
 		Map<String, String> map = recordService.insertJBonusScj();
+		logger.info(map.get("message"));
+	}
+	
+	
+	/**
+	 * 计算积分
+	 */
+	@RequestMapping("/glj/computeScore")
+	@ResponseBody
+	public void insertScore(){
+		Map<String, String> map = bonusGljService.insertScore();
 		logger.info(map.get("message"));
 	}
 

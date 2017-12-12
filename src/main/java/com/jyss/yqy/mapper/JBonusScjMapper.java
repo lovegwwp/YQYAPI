@@ -1,5 +1,6 @@
 package com.jyss.yqy.mapper;
 
+import com.jyss.yqy.entity.JBonusGlj;
 import com.jyss.yqy.entity.JBonusScj;
 
 import java.util.List;
@@ -32,4 +33,7 @@ public interface JBonusScjMapper {
     
     //添加市场奖
     int insertBonusScj(JBonusScj jbonusScj);
+    
+    //查询所有人当日的收益
+    List<JBonusScj> selectEveryDayEarnings();
 }

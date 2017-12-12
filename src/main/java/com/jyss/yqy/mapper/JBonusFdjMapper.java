@@ -2,6 +2,7 @@ package com.jyss.yqy.mapper;
 
 import com.jyss.yqy.entity.JBonusFdj;
 import com.jyss.yqy.entity.JBonusFdjExample;
+import com.jyss.yqy.entity.JBonusGlj;
 
 import java.util.List;
 
@@ -50,4 +51,7 @@ public interface JBonusFdjMapper {
     
     //按月查询总收益
     double selectFdjTotalByMonth(@Param("parentId")int parentId, @Param("month")String month);
+    
+    //查询所有人当日的收益
+    List<JBonusFdj> selectEveryDayEarnings();
 }

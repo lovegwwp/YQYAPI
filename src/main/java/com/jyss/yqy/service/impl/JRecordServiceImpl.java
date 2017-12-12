@@ -14,11 +14,15 @@ import org.springframework.util.StringUtils;
 
 import com.jyss.yqy.entity.JBonusScj;
 import com.jyss.yqy.entity.JRecord;
+import com.jyss.yqy.entity.ScoreBalance;
+import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.mapper.JBonusScjMapper;
 import com.jyss.yqy.mapper.JRecordMapper;
 import com.jyss.yqy.mapper.OrdersBMapper;
+import com.jyss.yqy.mapper.ScoreBalanceMapper;
 import com.jyss.yqy.mapper.UserMapper;
+import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.JRecordService;
 
 @Service
@@ -31,6 +35,12 @@ public class JRecordServiceImpl implements JRecordService{
 	private JBonusScjMapper bonusScjMapper;
 	@Autowired
 	private OrdersBMapper ordersBMapper;
+	@Autowired
+	private UserMapper userMapper;
+	@Autowired
+	private XtclMapper xtclMapper;
+	@Autowired
+	private ScoreBalanceMapper scoreBalanceMapper;
 
 	
 	/**
@@ -90,10 +100,81 @@ public class JRecordServiceImpl implements JRecordService{
 						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record1.getuId());
 					}
 				}
-				map.put("message", "市场奖计算成功！"+new Date());
 			}
 			
 		}
+		
+		//计算现金积分和购物积分
+		List<JBonusScj> bonusScjList = bonusScjMapper.selectEveryDayEarnings();
+		if(bonusScjList != null && bonusScjList.size()>0){
+			for (JBonusScj jBonusScj : bonusScjList) {
+				List<UserBean> userList = userMapper.getUserScoreById(jBonusScj.getuId());
+				UserBean userBean = userList.get(0);
+				int level = userBean.getIsChuangke();
+				
+				//查询返现比列和封顶值
+				Xtcl xtcl1 = xtclMapper.getClsValue("scj_type", "1");        //初级获得金额
+				float float1 = Float.parseFloat(xtcl1.getBz_value());        //0.12
+				Xtcl xtcl2 = xtclMapper.getClsValue("scj_type", "2");        //中级获得金额
+				float float2 = Float.parseFloat(xtcl2.getBz_value());        //0.16
+				Xtcl xtcl3 = xtclMapper.getClsValue("scj_type", "3");        //高级获得金额
+				float float3 = Float.parseFloat(xtcl3.getBz_value());        //0.22
+				Xtcl xtcl4 = xtclMapper.getClsValue("scj_type", "4");        //初级获得金额
+				float float4 = Float.parseFloat(xtcl4.getBz_value());        //3000.00
+				Xtcl xtcl5 = xtclMapper.getClsValue("scj_type", "5");        //中级获得金额
+				float float5 = Float.parseFloat(xtcl5.getBz_value());        //6000.00
+				Xtcl xtcl6 = xtclMapper.getClsValue("scj_type", "6");        //高级获得金额
+				float float6 = Float.parseFloat(xtcl6.getBz_value());        //9000.00
+				
+				Xtcl xtcl7 = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
+				float float7 = Float.parseFloat(xtcl7.getBz_value());        //0.7
+				Xtcl xtcl8 = xtclMapper.getClsValue("jjbl_type", "gw");      //购物积分比例
+				float float8 = Float.parseFloat(xtcl8.getBz_value());        //0.2
+				
+				Float pv = jBonusScj.getPv();
+				Float money = 0.00f;
+				if(level == 2){
+					money = pv*float1 <= float4 ? pv*float1 : float4;
+				}else if(level == 3){
+					money = pv*float2 <= float5 ? pv*float2 : float5;
+				}else if(level == 4){
+					money = pv*float3 <= float6 ? pv*float3 : float6;
+				}
+				
+				//添加现金积分
+				ScoreBalance score1 = new ScoreBalance();
+				score1.setEnd(2);
+				score1.setuUuid(userBean.getUuid());
+				score1.setCategory(7);
+				score1.setType(1);
+				score1.setScore(money * float7);
+				score1.setJyScore(money * float7+ userBean.getCashScore());
+				score1.setCreatedAt(new Date());
+				score1.setStatus(1);
+				int count1 = scoreBalanceMapper.addCashScoreBalance(score1);
+				
+				ScoreBalance score2 = new ScoreBalance();
+				score2.setEnd(2);
+				score2.setuUuid(userBean.getUuid());
+				score2.setCategory(7);
+				score2.setType(1);
+				score2.setScore(money * float8);
+				score2.setJyScore(money * float8 + userBean.getShoppingScore());
+				score2.setCreatedAt(new Date());
+				score2.setStatus(1);
+				int count2 = scoreBalanceMapper.addShoppingScoreBalance(score2);
+				
+				if(count1 > 0 && count2 > 0){
+					UserBean userBean2 = new UserBean();
+					userBean2.setId(jBonusScj.getuId());
+					userBean2.setCashScore(money * float7+ userBean.getCashScore());
+					userBean2.setShoppingScore(money * float8 + userBean.getShoppingScore());
+					userMapper.updateScore(userBean2);
+				}
+				
+			}
+		}
+		map.put("message", "市场奖和积分计算时间："+new Date());
 		return map;
 		
 	}
