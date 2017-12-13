@@ -267,6 +267,47 @@ public class UserAction {
 	}
 
 	/**
+	 * 验证码===修改密码
+	 */
+	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
+	@RequestMapping("/upZfPwdByCode")
+	@ResponseBody
+	public ResponseEntity upZfPwdByCode(@RequestParam("code") String code,
+			@RequestParam("account") String account,
+			@RequestParam("password") String password,
+			HttpServletRequest request,
+			@RequestParam("sessionId") String sessionId) {
+		int count = 0;
+		HttpSession session = MySessionContext.getSession(sessionId);
+		String SessTo = (String) session.getAttribute("tel");
+		String SessToYzm = (String) session.getAttribute("code");
+		if (SessTo != null && !(SessTo.equals("")) && SessToYzm != null
+				&& !(SessToYzm.equals(""))) {
+			if (SessTo.equals(account)) {
+				if (SessToYzm.equals(code)) {
+					// 验证码正确，进行用户认证，密码修改
+					String salt = CommTool.getSalt();
+					String pwd = PasswordUtil.generate(password, salt);
+					List<UserBean> ulist = userService.getUserBy(account, "1",
+							"", "");
+					if (ulist == null && ulist.size() != 1) {
+						return new ResponseEntity("false", "请输入正确的手机号");
+					}
+					UserBean ub = ulist.get(0);
+					count = userService.upPayPwd(ub.getUuid(),
+							PasswordUtil.generatePayPwd(password));
+					if (count == 1) {
+						return new ResponseEntity("true", "修改成功！");
+					}
+					return new ResponseEntity("false", "修改失败！");
+				}
+			}
+		}
+		return new ResponseEntity("false", "验证码错误！");
+
+	}
+
+	/**
 	 * 直接===修改密码
 	 */
 	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
