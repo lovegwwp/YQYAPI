@@ -18,7 +18,7 @@
   
   
   <!-- 更新pv值 -->
-  <update id="updateJRecordByUid" parameterType="int" >
+  <update id="updateJRecordByUid"  >
 	  update j_record 
 	  <set>
 	  <if test="pv != null and pv != ''">pv = #{pv},</if>

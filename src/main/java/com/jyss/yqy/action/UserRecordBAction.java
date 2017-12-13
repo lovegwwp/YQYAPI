@@ -55,7 +55,7 @@ public class UserRecordBAction {
 	
 	
 	/**
-	 * 给推荐人算辅导奖
+	 * 计算辅导奖和积分
 	 */
 	
 	@RequestMapping("/fdj/computeFDJ")
@@ -67,7 +67,7 @@ public class UserRecordBAction {
 	
 	
 	/**
-	 * 计算市场奖
+	 * 计算市场奖和积分
 	 */
 	@RequestMapping("/scj/computeSCJ")
 	@ResponseBody
@@ -78,7 +78,7 @@ public class UserRecordBAction {
 	
 	
 	/**
-	 * 计算积分
+	 * 计算管理奖的积分
 	 */
 	@RequestMapping("/glj/computeScore")
 	@ResponseBody
