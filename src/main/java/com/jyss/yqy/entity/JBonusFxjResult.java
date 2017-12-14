@@ -4,8 +4,8 @@ import java.util.List;
 
 public class JBonusFxjResult {
 	
-	private Float earnings;          //今日收益
-	private Float total;             //总收益金额
+	private Float earnings;           //今日收益
+	private Float total;              //总收益金额
 	private List<JBonusFxj> data;     //辅导奖列表
 	
 	

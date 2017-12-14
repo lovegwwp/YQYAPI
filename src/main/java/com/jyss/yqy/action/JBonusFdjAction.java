@@ -143,7 +143,6 @@ public class JBonusFdjAction {
 		map.put("data", "");
 		return map;
 		
-		
 	}
 
 }

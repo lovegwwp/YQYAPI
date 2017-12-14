@@ -43,30 +43,13 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 	 */
 	@Override
 	public JBonusGljResult getJBonusGlj(int uId){
-		JBonusGljExample example = new JBonusGljExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andParentIdEqualTo(uId);
-		criteria.andStatusEqualTo(1);
-		List<JBonusGlj> parentList = jBonusGljMapper.selectByExample(example);
-		
 		JBonusGljResult jBonusGljResult = new JBonusGljResult();
-		//若有下级代理人
-		if(parentList != null && parentList.size()>0){
-			
-			double earnings = jBonusGljMapper.selectEarnings(uId);
-			double total = jBonusGljMapper.selectTotal(uId);
-			List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljWek(uId);
-			
-			jBonusGljResult.setEarnings(earnings);
-			jBonusGljResult.setTotal(total);
-			jBonusGljResult.setData(list);
-			return jBonusGljResult;
-		}
-		//若无下级代理人
-		List<JBonusGlj> list1 = new ArrayList<JBonusGlj>();
-		jBonusGljResult.setEarnings(0.0);
-		jBonusGljResult.setTotal(0.0);
-		jBonusGljResult.setData(list1);
+		double earnings = jBonusGljMapper.selectEarnings(uId);
+		double total = jBonusGljMapper.selectTotal(uId);
+		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljWek(uId);
+		jBonusGljResult.setEarnings(earnings);
+		jBonusGljResult.setTotal(total);
+		jBonusGljResult.setData(list);
 		return jBonusGljResult;
 	}
 

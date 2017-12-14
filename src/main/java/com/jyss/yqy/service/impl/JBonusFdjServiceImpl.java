@@ -28,31 +28,30 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 	 */
 	@Override
 	public JBonusFdjResult getJBonusFdj(int uId){
-		JBonusFdjExample example = new JBonusFdjExample();
+		/*JBonusFdjExample example = new JBonusFdjExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andParentIdEqualTo(uId);
 		criteria.andStatusEqualTo(1);
-		List<JBonusFdj> parentList = jBonusFdjMapper.selectByExample(example);
+		List<JBonusFdj> parentList = jBonusFdjMapper.selectByExample(example);*/
 		
 		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
+		double earnings = jBonusFdjMapper.selectEarnings(uId);
+		double total = jBonusFdjMapper.selectTotal(uId);
+		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjWek(uId);
+		jBonusFdjResult.setEarnings(earnings);
+		jBonusFdjResult.setTotal(total);
+		jBonusFdjResult.setData(list);
+		return jBonusFdjResult;
+		
 		//若有下级代理人
-		if(parentList != null && parentList.size()>0){
-			
-			double earnings = jBonusFdjMapper.selectEarnings(uId);
-			double total = jBonusFdjMapper.selectTotal(uId);
-			List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjWek(uId);
-			
-			jBonusFdjResult.setEarnings(earnings);
-			jBonusFdjResult.setTotal(total);
-			jBonusFdjResult.setData(list);
-			return jBonusFdjResult;
-		}
+		/*if(parentList != null && parentList.size()>0){
+		}*/
 		//若无下级代理人
-		List<JBonusFdj> list1 = new ArrayList<JBonusFdj>();
+		/*List<JBonusFdj> list1 = new ArrayList<JBonusFdj>();
 		jBonusFdjResult.setEarnings(0.00);
 		jBonusFdjResult.setTotal(0.00);
 		jBonusFdjResult.setData(list1);
-		return jBonusFdjResult;
+		return jBonusFdjResult;*/
 	}
 
 
