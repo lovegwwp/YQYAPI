@@ -108,7 +108,7 @@
       status, created)
     values (#{id,jdbcType=INTEGER}, #{uId,jdbcType=INTEGER}, #{uName,jdbcType=VARCHAR}, 
       #{parentId,jdbcType=INTEGER}, #{amount,jdbcType=DOUBLE}, #{parentMoney,jdbcType=DOUBLE}, 
-      #{status,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP})
+      #{status,jdbcType=INTEGER}, date_sub(now(),interval 12 hour))
   </insert>
   <insert id="insertSelective" parameterType="com.jyss.yqy.entity.JBonusFdj" >
     insert into j_bonus_fdj
@@ -376,10 +376,10 @@
 	</select>
 	
 	
-	<!-- 查询所有人当日的收益 -->
+	<!-- 查询所有人昨日的收益 -->
 	<select id="selectEveryDayEarnings" resultMap="BaseResultMap">
 		select parent_id,sum(parent_money) as parent_money from j_bonus_fdj  
-		where status = 1 and to_days(created) = to_days(now()) 
+		where status = 1 and to_days(now()) - to_days(created) = 1
 		group by parent_id
 	</select>
 	

@@ -118,7 +118,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 			List<UserBean> userList = userMapper.getUserNameById(uId);
 			if (userList != null && userList.size() > 0) {
 				UserBean userBean = userList.get(0);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				UUserRRecordBExample example = new UUserRRecordBExample();
 				Criteria criteria = example.createCriteria();
 				criteria.andUIdEqualTo(uId);
@@ -145,7 +145,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 						bonusFdj.setParentId(userRecord.getrId());
 						bonusFdj.setAmount(amount);
 						bonusFdj.setStatus(1);
-						bonusFdj.setCreated(sdf.format(new Date()));
+						//bonusFdj.setCreated(sdf.format(new Date()));
 						bonusFdj.setuName(userBean.getRealName());
 						if (pLevel == 4) {
 							bonusFdj.setParentMoney(amount * double3);
@@ -170,7 +170,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 									bonusFdj1.setParentId(userRecord1.getrId());
 									bonusFdj1.setAmount(amount);
 									bonusFdj1.setStatus(1);
-									bonusFdj1.setCreated(sdf.format(new Date()));
+									//bonusFdj1.setCreated(sdf.format(new Date()));
 									bonusFdj1.setuName(userBean1.getRealName());
 									bonusFdj1.setParentMoney(amount * double1);
 									jBonusFdjMapper.insert(bonusFdj1);
@@ -199,7 +199,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 										bonusFdj1.setParentId(userRecord1.getrId());
 										bonusFdj1.setAmount(amount);
 										bonusFdj1.setStatus(1);
-										bonusFdj1.setCreated(sdf.format(new Date()));
+										//bonusFdj1.setCreated(sdf.format(new Date()));
 										bonusFdj1.setuName(userBean1.getRealName());
 										bonusFdj1.setParentMoney(amount * double2);
 										jBonusFdjMapper.insert(bonusFdj1);
@@ -209,7 +209,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 										bonusFdj1.setParentId(userRecord1.getrId());
 										bonusFdj1.setAmount(amount);
 										bonusFdj1.setStatus(1);
-										bonusFdj1.setCreated(sdf.format(new Date()));
+										//bonusFdj1.setCreated(sdf.format(new Date()));
 										bonusFdj1.setuName(userBean1.getRealName());
 										bonusFdj1.setParentMoney(amount * double1);
 										jBonusFdjMapper.insert(bonusFdj1);
@@ -229,7 +229,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 												bonusFdj2.setParentId(userRecord2.getrId());
 												bonusFdj2.setAmount(amount);
 												bonusFdj2.setStatus(1);
-												bonusFdj2.setCreated(sdf.format(new Date()));
+												//bonusFdj2.setCreated(sdf.format(new Date()));
 												bonusFdj2.setuName(userBean2.getRealName());
 												bonusFdj2.setParentMoney(amount * double1);
 												jBonusFdjMapper.insert(bonusFdj2);
