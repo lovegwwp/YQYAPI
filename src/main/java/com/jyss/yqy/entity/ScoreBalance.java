@@ -13,11 +13,20 @@ public class ScoreBalance {
 	private float jyScore;// 结余数额
 	private Date createdAt;
 	private String title;// 用户uuid
+	private String orderSn;// 订单号
 	private String cjsj;// /格式化创建时间
 	private int status;// 1=收入 2=支出
 
 	public int getId() {
 		return id;
+	}
+
+	public String getOrderSn() {
+		return orderSn;
+	}
+
+	public void setOrderSn(String orderSn) {
+		this.orderSn = orderSn;
 	}
 
 	public String getCjsj() {
