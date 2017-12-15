@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.JBonusScjResult;
@@ -35,7 +36,9 @@ public class JBonusScjAction {
 	
 	@RequestMapping("/showScj")
 	@ResponseBody
-	public Map<String, Object> getJBonusScj(String token){
+	public Map<String, Object> getJBonusScj(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -44,7 +47,7 @@ public class JBonusScjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusScjResult result = bonusScjService.selectJBonusScjByUid(userBean.getId());
+				JBonusScjResult result = bonusScjService.selectJBonusScjByUid(userBean.getId(),page,limit);
 				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");
@@ -71,7 +74,10 @@ public class JBonusScjAction {
 	 */
 	@RequestMapping("/showScjByDay")
 	@ResponseBody
-	public Map<String, Object> selectScjByDay(String token,String beginTime,String endTime){
+	public Map<String, Object> selectScjByDay(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit,
+			@RequestParam("beginTime")String beginTime,@RequestParam("endTime")String endTime){
 		Map<String, Object> map = new HashMap<String,Object>();
 		
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
@@ -81,7 +87,7 @@ public class JBonusScjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusScjResult result = bonusScjService.selectJBonusScjByDay(userBean.getId(), beginTime, endTime);
+				JBonusScjResult result = bonusScjService.selectJBonusScjByDay(userBean.getId(),page,limit, beginTime, endTime);
 				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");
@@ -110,7 +116,10 @@ public class JBonusScjAction {
 	 */
 	@RequestMapping("/showScjByMonth")
 	@ResponseBody
-	public Map<String, Object> selectScjByMonth(String token,String month){
+	public Map<String, Object> selectScjByMonth(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit,
+			@RequestParam("month")String month){
 		Map<String, Object> map = new HashMap<String,Object>();
 		
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
@@ -120,7 +129,7 @@ public class JBonusScjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusScjResult result = bonusScjService.selectJBonusScjByMonth(userBean.getId(), month);
+				JBonusScjResult result = bonusScjService.selectJBonusScjByMonth(userBean.getId(),page,limit, month);
 				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");

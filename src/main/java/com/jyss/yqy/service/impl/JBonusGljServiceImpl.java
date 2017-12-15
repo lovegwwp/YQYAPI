@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jyss.yqy.entity.JBonusFdj;
+import com.jyss.yqy.entity.JBonusFxj;
 import com.jyss.yqy.entity.JBonusGlj;
 import com.jyss.yqy.entity.JBonusGljExample;
 import com.jyss.yqy.entity.ScoreBalance;
@@ -42,11 +45,13 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 	 * 查询用户管理奖
 	 */
 	@Override
-	public JBonusGljResult getJBonusGlj(int uId){
+	public JBonusGljResult getJBonusGlj(int uId,int page,int limit){
 		JBonusGljResult jBonusGljResult = new JBonusGljResult();
 		double earnings = jBonusGljMapper.selectEarnings(uId);
 		double total = jBonusGljMapper.selectTotal(uId);
+		PageHelper.startPage(page, limit);
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljWek(uId);
+		PageInfo<JBonusGlj> pageInfo = new PageInfo<JBonusGlj>(list);
 		jBonusGljResult.setEarnings(earnings);
 		jBonusGljResult.setTotal(total);
 		jBonusGljResult.setData(list);
@@ -55,10 +60,12 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 
 
 	@Override
-	public JBonusGljResult selectJBonusGljByDay(int uId, String beginTime,String endTime) {
+	public JBonusGljResult selectJBonusGljByDay(int uId,int page,int limit,String beginTime,String endTime) {
 		JBonusGljResult jBonusGljResult = new JBonusGljResult();
 		double totalByDay = jBonusGljMapper.selectGljTotalByDay(uId, beginTime, endTime);
+		PageHelper.startPage(page, limit);
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByDay(uId, beginTime, endTime);
+		PageInfo<JBonusGlj> pageInfo = new PageInfo<JBonusGlj>(list);
 		jBonusGljResult.setEarnings(null);
 		jBonusGljResult.setTotal(totalByDay);
 		jBonusGljResult.setData(list);
@@ -67,10 +74,12 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 
 
 	@Override
-	public JBonusGljResult selectJBonusGljByMonth(int uId, String month) {
+	public JBonusGljResult selectJBonusGljByMonth(int uId,int page,int limit,String month) {
 		JBonusGljResult jBonusGljResult = new JBonusGljResult();
 		double totalByMonth = jBonusGljMapper.selectGljTotalByMonth(uId, month);
+		PageHelper.startPage(page, limit);
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByMonth(uId, month);
+		PageInfo<JBonusGlj> pageInfo = new PageInfo<JBonusGlj>(list);
 		jBonusGljResult.setEarnings(null);
 		jBonusGljResult.setTotal(totalByMonth);
 		jBonusGljResult.setData(list);

@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jyss.yqy.entity.JBonusFdj;
 import com.jyss.yqy.entity.JBonusFdjExample;
+import com.jyss.yqy.entity.JBonusFxj;
 import com.jyss.yqy.entity.JBonusFdjExample.Criteria;
 import com.jyss.yqy.entity.JBonusFdjResult;
 import com.jyss.yqy.mapper.JBonusFdjMapper;
@@ -27,39 +30,28 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 	 * 查询用户辅导奖
 	 */
 	@Override
-	public JBonusFdjResult getJBonusFdj(int uId){
-		/*JBonusFdjExample example = new JBonusFdjExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andParentIdEqualTo(uId);
-		criteria.andStatusEqualTo(1);
-		List<JBonusFdj> parentList = jBonusFdjMapper.selectByExample(example);*/
-		
+	public JBonusFdjResult getJBonusFdj(int uId,int page,int limit){
 		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
 		double earnings = jBonusFdjMapper.selectEarnings(uId);
 		double total = jBonusFdjMapper.selectTotal(uId);
+		PageHelper.startPage(page, limit);
 		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjWek(uId);
+		PageInfo<JBonusFdj> pageInfo = new PageInfo<JBonusFdj>(list);
 		jBonusFdjResult.setEarnings(earnings);
 		jBonusFdjResult.setTotal(total);
 		jBonusFdjResult.setData(list);
 		return jBonusFdjResult;
 		
-		//若有下级代理人
-		/*if(parentList != null && parentList.size()>0){
-		}*/
-		//若无下级代理人
-		/*List<JBonusFdj> list1 = new ArrayList<JBonusFdj>();
-		jBonusFdjResult.setEarnings(0.00);
-		jBonusFdjResult.setTotal(0.00);
-		jBonusFdjResult.setData(list1);
-		return jBonusFdjResult;*/
 	}
 
 
 	@Override
-	public JBonusFdjResult selectJBonusFdjByDay(int uId, String beginTime,String endTime) {
+	public JBonusFdjResult selectJBonusFdjByDay(int uId,int page,int limit,String beginTime,String endTime) {
 		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
 		double totalByDay = jBonusFdjMapper.selectFdjTotalByDay(uId, beginTime, endTime);
+		PageHelper.startPage(page, limit);
 		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjByDay(uId, beginTime, endTime);
+		PageInfo<JBonusFdj> pageInfo = new PageInfo<JBonusFdj>(list);
 		jBonusFdjResult.setEarnings(null);
 		jBonusFdjResult.setTotal(totalByDay);
 		jBonusFdjResult.setData(list);
@@ -68,10 +60,12 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 
 
 	@Override
-	public JBonusFdjResult selectJBonusFdjByMonth(int uId, String month) {
+	public JBonusFdjResult selectJBonusFdjByMonth(int uId,int page,int limit,String month) {
 		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
 		double totalByMonth = jBonusFdjMapper.selectFdjTotalByMonth(uId, month);
+		PageHelper.startPage(page, limit);
 		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjByMonth(uId, month);
+		PageInfo<JBonusFdj> pageInfo = new PageInfo<JBonusFdj>(list);
 		jBonusFdjResult.setEarnings(null);
 		jBonusFdjResult.setTotal(totalByMonth);
 		jBonusFdjResult.setData(list);

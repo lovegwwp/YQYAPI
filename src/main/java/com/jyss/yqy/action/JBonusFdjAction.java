@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.JBonusFdj;
@@ -37,7 +38,9 @@ public class JBonusFdjAction {
 	
 	@RequestMapping("/showFdj")
 	@ResponseBody
-	public Map<String, Object> getJBonusFdj(String token){
+	public Map<String, Object> getJBonusFdj(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -46,7 +49,7 @@ public class JBonusFdjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusFdjResult result = jBonusFdjService.getJBonusFdj(userBean.getId());
+				JBonusFdjResult result = jBonusFdjService.getJBonusFdj(userBean.getId(),page,limit);
 				if(result != null){
 					map.put("status", "true");
 					map.put("code", "0");
@@ -75,7 +78,10 @@ public class JBonusFdjAction {
 	 */
 	@RequestMapping("/showFdjByDay")
 	@ResponseBody
-	public Map<String, Object> selectFdjByDay(String token,String beginTime,String endTime){
+	public Map<String, Object> selectFdjByDay(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit,
+			@RequestParam("beginTime")String beginTime,@RequestParam("endTime")String endTime){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -84,7 +90,7 @@ public class JBonusFdjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusFdjResult result = jBonusFdjService.selectJBonusFdjByDay(userBean.getId(), beginTime, endTime);
+				JBonusFdjResult result = jBonusFdjService.selectJBonusFdjByDay(userBean.getId(),page,limit, beginTime, endTime);
 				if(result != null){
 					map.put("status", "true");
 					map.put("code", "0");
@@ -113,7 +119,10 @@ public class JBonusFdjAction {
 	 */
 	@RequestMapping("/showFdjByMonth")
 	@ResponseBody
-	public Map<String, Object> selectFdjByMonth(String token,String month){
+	public Map<String, Object> selectFdjByMonth(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit,
+			@RequestParam("month")String month){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -122,7 +131,7 @@ public class JBonusFdjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusFdjResult result = jBonusFdjService.selectJBonusFdjByMonth(userBean.getId(), month);
+				JBonusFdjResult result = jBonusFdjService.selectJBonusFdjByMonth(userBean.getId(),page,limit, month);
 				if(result != null){
 					map.put("status", "true");
 					map.put("code", "0");

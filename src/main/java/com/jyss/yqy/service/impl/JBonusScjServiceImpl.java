@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.jyss.yqy.entity.JBonusFxj;
 import com.jyss.yqy.entity.JBonusScj;
 import com.jyss.yqy.entity.JBonusScjResult;
 import com.jyss.yqy.entity.Xtcl;
@@ -34,8 +37,7 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 	 * 查询用户市场奖
 	 */
 	@Override
-	public JBonusScjResult selectJBonusScjByUid(int uId) {
-		
+	public JBonusScjResult selectJBonusScjByUid(int uId,int page,int limit) {
 		JBonusScjResult result = new JBonusScjResult();
 		List<JBonusScj> bonusScjList = bonusScjMapper.selectJBonusScjByUid(uId);
 		JBonusScj bonusScj = bonusScjList.get(0);
@@ -69,7 +71,9 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 			result.setTotal((totalPv*float3) <= float6 ? (float)(Math.round((totalPv*float3)*100))/100 : float6);
 		}
 		//设置本周明细
+		PageHelper.startPage(page, limit);
 		List<JBonusScj> scjList = bonusScjMapper.selectJBonusScjWek(uId);
+		PageInfo<JBonusScj> pageInfo = new PageInfo<JBonusScj>(scjList);
 		result.setData(scjList);
 		return result;
 		
@@ -77,9 +81,11 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 	}
 
 	@Override
-	public JBonusScjResult selectJBonusScjByDay(int uId, String beginTime,String endTime) {
+	public JBonusScjResult selectJBonusScjByDay(int uId,int page,int limit,String beginTime,String endTime) {
 		JBonusScjResult result = new JBonusScjResult();
+		PageHelper.startPage(page, limit);
 		List<JBonusScj> bonusScjList = bonusScjMapper.selectJBonusScjByDay(uId, beginTime, endTime);
+		PageInfo<JBonusScj> pageInfo = new PageInfo<JBonusScj>(bonusScjList);
 		List<JBonusScj> scjList = bonusScjMapper.selectScjTotalByDay(uId, beginTime, endTime);
 		JBonusScj bonusScj = scjList.get(0);
 		result.setDepartA(bonusScj.getaPv());
@@ -91,9 +97,11 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 	}
 
 	@Override
-	public JBonusScjResult selectJBonusScjByMonth(int uId, String month) {
+	public JBonusScjResult selectJBonusScjByMonth(int uId,int page,int limit,String month) {
 		JBonusScjResult result = new JBonusScjResult();
+		PageHelper.startPage(page, limit);
 		List<JBonusScj> bonusScjList = bonusScjMapper.selectJBonusScjByMonth(uId, month);
+		PageInfo<JBonusScj> pageInfo = new PageInfo<JBonusScj>(bonusScjList);
 		List<JBonusScj> scjList = bonusScjMapper.selectScjTotalByMonth(uId, month);
 		JBonusScj bonusScj = scjList.get(0);
 		result.setDepartA(bonusScj.getaPv());

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.JBonusGlj;
@@ -28,13 +29,15 @@ public class JBonusGljAction {
 	@Autowired
 	private UserService userService;
 	
+	
 	/**
 	 * 管理奖展示(本周)
 	 */
-	
 	@RequestMapping("/showGlj")
 	@ResponseBody
-	public Map<String, Object> getJBonusGlj(String token){
+	public Map<String, Object> getJBonusGlj(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -43,7 +46,7 @@ public class JBonusGljAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusGljResult result = jBonusGljService.getJBonusGlj(userBean.getId());
+				JBonusGljResult result = jBonusGljService.getJBonusGlj(userBean.getId(),page,limit);
 				if(result != null){
 					map.put("status", "true");
 					map.put("code", "0");
@@ -70,7 +73,10 @@ public class JBonusGljAction {
 	 */
 	@RequestMapping("/showGljByDay")
 	@ResponseBody
-	public Map<String, Object> selectGljByDay(String token,String beginTime,String endTime){
+	public Map<String, Object> selectGljByDay(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit,
+			@RequestParam("beginTime")String beginTime,@RequestParam("endTime")String endTime){
 		Map<String, Object> map = new HashMap<String,Object>();
 		
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
@@ -80,7 +86,7 @@ public class JBonusGljAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusGljResult result = jBonusGljService.selectJBonusGljByDay(userBean.getId(), beginTime, endTime);
+				JBonusGljResult result = jBonusGljService.selectJBonusGljByDay(userBean.getId(),page,limit, beginTime, endTime);
 				if(result != null){
 					map.put("status", "true");
 					map.put("code", "0");
@@ -109,7 +115,10 @@ public class JBonusGljAction {
 	 */
 	@RequestMapping("/showGljByMonth")
 	@ResponseBody
-	public Map<String, Object> selectGljByMonth(String token,String month){
+	public Map<String, Object> selectGljByMonth(@RequestParam("token")String token,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "limit", required = true) int limit,
+			@RequestParam("month")String month){
 		Map<String, Object> map = new HashMap<String,Object>();
 		
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
@@ -119,7 +128,7 @@ public class JBonusGljAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusGljResult result = jBonusGljService.selectJBonusGljByMonth(userBean.getId(), month);
+				JBonusGljResult result = jBonusGljService.selectJBonusGljByMonth(userBean.getId(),page,limit, month);
 				if(result != null){
 					map.put("status", "true");
 					map.put("code", "0");
