@@ -187,7 +187,8 @@
     <!-- 登录表token -->
      <!-- useGeneratedKeys="true" keyProperty="id" -->
     <insert id="addLogin" >         
-		insert into u_mobile_login values(null,#{uuid},'0',#{token},now(),'0','0');          
+		insert into u_mobile_login(id, u_uuid, s_uuid, token, 
+      created_at, push_info) values(null,#{uuid},'0',#{token},now(),'0');          
     </insert>
     
     <select id="getToken" resultMap="ubResultMap">           
