@@ -149,9 +149,9 @@ public class JRecordServiceImpl implements JRecordService{
 				score1.setType(1);
 				score1.setScore(money * float7);
 				score1.setJyScore(money * float7+ userBean.getCashScore());
-				score1.setCreatedAt(new Date());
+				//score1.setCreatedAt(new Date());
 				score1.setStatus(1);
-				int count1 = scoreBalanceMapper.addCashScoreBalance(score1);
+				int count1 = scoreBalanceMapper.addCashScore(score1);
 				
 				ScoreBalance score2 = new ScoreBalance();
 				score2.setEnd(2);
@@ -160,9 +160,9 @@ public class JRecordServiceImpl implements JRecordService{
 				score2.setType(1);
 				score2.setScore(money * float8);
 				score2.setJyScore(money * float8 + userBean.getShoppingScore());
-				score2.setCreatedAt(new Date());
+				//score2.setCreatedAt(new Date());
 				score2.setStatus(1);
-				int count2 = scoreBalanceMapper.addShoppingScoreBalance(score2);
+				int count2 = scoreBalanceMapper.addShoppingScore(score2);
 				
 				if(count1 > 0 && count2 > 0){
 					UserBean userBean2 = new UserBean();

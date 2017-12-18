@@ -61,6 +61,19 @@
         useGeneratedKeys="true" keyProperty="id"> 
         insert into u_shopping_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',#{createdAt},#{status})              
     </insert>
+    
+    <!--现金积分=插入-->
+    <insert id="addCashScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
+        useGeneratedKeys="true" keyProperty="id">                                                     <!-- 创建时间减12小时 -->
+        insert into u_cash_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',date_sub(now(),interval 12 hour),#{status})              
+    </insert>
+   
+   
+    <!--购物积分=插入-->
+    <insert id="addShoppingScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
+        useGeneratedKeys="true" keyProperty="id"> 
+        insert into u_shopping_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',date_sub(now(),interval 12 hour),#{status})              
+    </insert>
      
   
   

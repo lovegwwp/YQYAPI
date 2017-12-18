@@ -272,9 +272,9 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 					score1.setType(1);
 					score1.setScore((float)(money * double1));
 					score1.setJyScore((float)(money * double1)+ userBean.getCashScore());
-					score1.setCreatedAt(new Date());
+					//score1.setCreatedAt(new Date());
 					score1.setStatus(1);
-					int count1 = scoreBalanceMapper.addCashScoreBalance(score1);
+					int count1 = scoreBalanceMapper.addCashScore(score1);
 					
 					ScoreBalance score2 = new ScoreBalance();
 					score2.setEnd(2);
@@ -283,9 +283,9 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 					score2.setType(1);
 					score2.setScore((float)(money * double2));
 					score2.setJyScore((float)(money * double2) + userBean.getShoppingScore());
-					score2.setCreatedAt(new Date());
+					//score2.setCreatedAt(new Date());
 					score2.setStatus(1);
-					int count2 = scoreBalanceMapper.addShoppingScoreBalance(score2);
+					int count2 = scoreBalanceMapper.addShoppingScore(score2);
 					
 					if(count1 > 0 && count2 > 0){
 						UserBean userBean2 = new UserBean();
