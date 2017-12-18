@@ -146,32 +146,37 @@ public class ZfPayAction {
 		return mmap;
 
 	}
-	
+
+	// /////////////////成为代理人购买/////////////////////
+
 	/**
 	 * 代理人支付成功状态修改
 	 */
-	public String updateOrderAndUser(String orderNum){
+	public String updateOrderAndUser(String orderNum) {
 		int count = ordersBService.upOrderStatus("1", "-1", orderNum);
-		if (count == 1){
-			List<OrdersB> orders = ordersBService.getOrdersBy("1", orderNum, null);
-			if(orders != null && orders.size()>0){
+		if (count == 1) {
+			List<OrdersB> orders = ordersBService.getOrdersBy("1", orderNum,
+					null);
+			if (orders != null && orders.size() > 0) {
 				OrdersB ordersB = orders.get(0);
-				int count1 = userService.upUserAllStatus("1", null, null, null, null, ordersB.getGmId());
-				if(count1 == 1){
+				int count1 = userService.upUserAllStatus("1", null, null, null,
+						null, ordersB.getGmId());
+				if (count1 == 1) {
 					return "success";
 				}
 			}
 		}
 		return "failed";
 	}
-	
+
+	// /////////////////订单购买/////////////////////
+
 	/**
 	 * 购买支付成功状态修改
 	 */
-	public int updateOrder(String orderNum){
+	public int updateOrder(String orderNum) {
 		int count = ordersBService.upOrderStatus("1", "-1", orderNum);
 		return count;
 	}
-	
 
 }
