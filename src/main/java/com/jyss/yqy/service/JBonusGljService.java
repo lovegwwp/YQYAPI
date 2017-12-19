@@ -15,6 +15,6 @@ public interface JBonusGljService {
     public JBonusGljResult selectJBonusGljByMonth(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
 			@Param("month")String month);
     
-    public Map<String,String> insertScore();
+    //public Map<String,String> insertScore();
 
 }

@@ -83,12 +83,12 @@ public class UserRecordBAction {
 	/**
 	 * 计算管理奖的积分
 	 */
-	@RequestMapping("/glj/computeScore")
+	/*@RequestMapping("/glj/computeScore")
 	@ResponseBody
 	public void insertScore(){
 		Map<String, String> map = bonusGljService.insertScore();
 		logger.info(map.get("message"));
-	}
+	}*/
 	
 	
 	/**

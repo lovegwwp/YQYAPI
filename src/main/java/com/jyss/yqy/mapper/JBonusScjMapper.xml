@@ -26,14 +26,14 @@
 	</select>
  
 
-	<!-- 查询昨日可得pv总值 -->
+	<!-- 查询所有可得pv总值 -->
 	<select id="selectTotalPv" parameterType="int" resultType="float" >
 		select IFNULL(SUM(pv),0.00)  from j_bonus_scj
 		<where>
 			<if test="uId != null and uId != ''">
 				and u_id = #{uId,jdbcType=INTEGER}
 			</if>
-			and status = 1 and to_days(now()) - to_days(created) = 1
+			and status = 1 
 		</where>
 	</select>
 	
@@ -88,7 +88,6 @@
 			</if>
 			and status = 1
 		</where>
-		ORDER BY  created DESC
 	</select>
 	
 	<!-- 按月查询 -->
@@ -120,7 +119,6 @@
 			</if>
 			and status = 1 
 		</where>
-		ORDER BY  created DESC
 	</select>
 	
 	

@@ -7,7 +7,6 @@
    <bean id="schedule1" class="com.jyss.yqy.action.UserRecordBAction"></bean>
    <bean id="schedule2" class="com.jyss.yqy.action.UserRecordBAction"></bean>
    <bean id="schedule3" class="com.jyss.yqy.action.UserRecordBAction"></bean>
-   <bean id="schedule4" class="com.jyss.yqy.action.UserRecordBAction"></bean>
    
    <bean id="SpringQtzJobMethod1"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -22,11 +21,6 @@
 	<bean id="SpringQtzJobMethod3"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule3" />
-		<property name="targetMethod" value="insertScore"/>        <!-- 计算管理奖的积分  -->
-	</bean>
-	<bean id="SpringQtzJobMethod4"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="schedule4" />
 		<property name="targetMethod" value="insertJBonusFxj"/>     <!-- 计算分销奖和积分  -->
 	</bean>
 	
@@ -35,18 +29,14 @@
 	<bean id="cronTriggerFactoryBean1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod1"></property>
 	<!-- 	<property name="cronExpression" value="0/5 * * * * ? "></property> -->
-		<property name="cronExpression" value="0 30 2 * * ?"></property>      <!-- 每天02:30执行 -->
+		<property name="cronExpression" value="0 0 2 * * ?"></property>      <!-- 每天02:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod2"></property>
-		<property name="cronExpression" value="0 30 0 * * ?"></property>      <!-- 每天00:30执行 -->
+		<property name="cronExpression" value="0 0 1 * * ?"></property>      <!-- 每天01:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean3" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod3"></property>
-		<property name="cronExpression" value="0 30 1 * * ?"></property>      <!-- 每天01:30执行 -->
-	</bean>
-	<bean id="cronTriggerFactoryBean4" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
-		<property name="jobDetail" ref="SpringQtzJobMethod4"></property>
 		<property name="cronExpression" value="0 30 3 * * ?"></property>      <!-- 每天03:30执行 -->
 	</bean>
 	
@@ -58,7 +48,6 @@
 				<ref bean="cronTriggerFactoryBean1" />
 				<ref bean="cronTriggerFactoryBean2" />
 				<ref bean="cronTriggerFactoryBean3" />
-				<ref bean="cronTriggerFactoryBean4" />
 			</list>
 		</property>
 	</bean>

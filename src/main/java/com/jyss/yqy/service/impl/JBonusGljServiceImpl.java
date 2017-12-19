@@ -91,7 +91,7 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 	/**
 	 * 计算现金积分和购物积分
 	 */
-	@Override
+	/*@Override
 	public Map<String,String> insertScore(){
 		Map<String, String> map = new HashMap<String,String>();
 		
@@ -146,7 +146,7 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 		}
 		map.put("message", "管理奖积分计算时间："+new Date());
 		return map;
-	}
+	}*/
 	
 	
 
