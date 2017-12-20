@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!--移动端的页面这个可以忽略，具体可以查看本文Internet Explorer浏览器部分-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,user-scalable=no,minimal-ui">
+    <!--具体可以查看本文 为移动设备添加 viewport 部分-->
+    <link type="text/css" rel="stylesheet" href="login.css">
+    <script src="jquery-1.12.3.min.js"></script>
+</head>
+<body>
+    <div class="login" >
+        <div class="header">
+            <P class="login_title">APP下载页-易起云</P>
+            <div class="login_pic"><img src="img/logo@2x.png"></div>
+        </div>
+        <div class="user_login">
+            <form>
+                <ul class="clearfix">
+                    <li><img src="./img/tel.png"></li>
+                    <li><input class="telephone" placeholder="请输入手机号"/></li>
+                </ul>
+                <ul class="clearfix">
+                    <li><img src="./img/code.png"></li>
+                    <li class="getmessage">
+                        <input class="message" placeholder="请输入验证码"/>
+                        <label></label>
+                        <button class="getCodeBtn"><span class="getCode_text">点击获取验证码</span></button>
+                    </li>
+                </ul>
+                <ul class="clearfix">
+                    <li><img src="./img/psd.png"></li>
+                    <li><input class="password" placeholder="请输入密码(大于6位)"/></li>
+                </ul>
+                <ul class="clearfix">
+                    <li><img src="./img/psd.png"></li>
+                    <li><input class="re_password" placeholder="请再次输入密码(大于6位)"/></li>
+                </ul>
+                <input value="注册" type="button" class="registerBtn">
+                <div class="readAgreement">
+                    <label class="check_read"><img src="img/n-a.png"></label><span >我已阅读并同意</span><a href="Registr_text.html" style="color: #149eff;border-bottom: 1px solid #149eff">易起云注册协议</a>
+                </div>
+            </form>
+        </div>
+        <div class="remind">
+            <p class="remind_text"></p>
+            <button class="remind_ok">确定</button>
+        </div>
+    </div>
+<script src="js.js"></script>
+</body>
+</html>
