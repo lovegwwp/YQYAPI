@@ -133,6 +133,7 @@ form input {
     text-align: center;
     background-color: rgba(0,0,0,0);
     border: none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 .getCode_text{
     width: 1rem;
@@ -141,7 +142,7 @@ form input {
     color: #7c7e86;
     line-height: .46rem;
     display: inline-block;
-    -webkit-tap-highlight-color:rgba(0,0,0,0);
+  
 }
 .getmessage .count_down_text{
     width: .8rem;
@@ -260,4 +261,8 @@ input{
     text-align: center;
     font-weight: normal;
     margin-bottom: .2rem;
+}
+
+.registerbox{
+    padding: 0 .2rem;
 }

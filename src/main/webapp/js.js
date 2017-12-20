@@ -15,11 +15,11 @@ $('.check_read').click(function () {
    }
 });
 $('.getCodeBtn').click(function () {
-    // if($('.telephone').val()==''){
-    //     alert('请输入手机号')
-    // }else if($('.telephone').val().length!=11){
-    //     alert('请输入正确的手机号')
-    // }else {
+     if($('.telephone').val()==''){
+         alert('请输入手机号')
+     }else if($('.telephone').val().length!=11){
+         alert('请输入正确的手机号')
+     }else {
         $(this).attr('disabled',true);
         var tel=$('.telephone').val();
         sendMessage(tel);
@@ -35,7 +35,7 @@ $('.getCodeBtn').click(function () {
                 $('.getCodeBtn').html('<span class="getCode_text">点击获取验证码</span>').attr('disabled',false)
             }
         },1000)
-    // }
+     }
 });
 
 $('.registerBtn').click(function () {
