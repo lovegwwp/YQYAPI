@@ -104,13 +104,12 @@ form input {
     border: none;
     color: #000;
     width: 2.5rem;
-    height: .46rem;
-    font-size: .15rem;
-    line-height: .46rem;
+    font-size: .16rem;
+    line-height: .21rem;
     display: block;
     padding-left: .1rem;
-    padding-top: .11rem;
-    padding-bottom: .11rem;
+    padding-top: .14rem;
+    padding-bottom: .14rem;
 }
 .getmessage input{
     width: 1.4rem;
