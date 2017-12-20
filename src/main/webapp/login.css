@@ -141,6 +141,7 @@ form input {
     color: #7c7e86;
     line-height: .46rem;
     display: inline-block;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 .getmessage .count_down_text{
     width: .8rem;
