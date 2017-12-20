@@ -109,6 +109,8 @@ form input {
     line-height: .46rem;
     display: block;
     padding-left: .1rem;
+    padding-top: .11rem;
+    padding-bottom: .11rem;
 }
 .getmessage input{
     width: 1.4rem;
@@ -203,6 +205,8 @@ input{
     background:no-repeat 0 0 scroll ＃EEEEEE;
     border:none!important;
     outline:medium;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+    /*//webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节。*/
 }
 .remind,.ok_register{
     width: 2.9rem;

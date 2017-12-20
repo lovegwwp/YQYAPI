@@ -11,7 +11,7 @@ body{
     width: 100%;
     background-image: url("./img/bg@3x.png");
     background-repeat: no-repeat;
-    background-position: 0 .4rem;
+    background-position: 0 .5rem;
     background-attachment: fixed;
     /* 让背景图基于容器大小伸缩 */
     background-size: cover;
@@ -47,7 +47,7 @@ button{
     height: 100%;
 }
 .head_title{
-    font-size: .1rem;
+    font-size: .2rem;
     text-align: center;
     line-height: .55rem;
 }
@@ -84,15 +84,16 @@ button{
 
 }
 .box-contain a{
-    width: 1.2rem;
-    height: .3rem;
-    font-size: .13rem;
+    width: 2rem;
+    height: .45rem;
+    font-size: .2rem;
     text-align: center;
     color: #fff;
     background-color: #149eff;
     border: none;
     display: block;
-    line-height: .3rem;
+    line-height: .45rem;
     margin: 0 auto;
     cursor: pointer;
+    border-radius: .05rem;
 }

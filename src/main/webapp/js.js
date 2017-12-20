@@ -23,7 +23,7 @@ $('.getCodeBtn').click(function () {
         $(this).attr('disabled',true);
         var tel=$('.telephone').val();
         sendMessage(tel);
-        $(this).html('<span class="count_down">10</span><span class="count_down_text">S后重新获取</span>')
+        $(this).html('<span class="count_down">60</span><span class="count_down_text">S后重新获取</span>')
         var timer=setInterval(function () {
             var time=parseInt($('.count_down').html());
             time--;
@@ -60,7 +60,7 @@ $('.registerBtn').click(function () {
     }
     //验证码验证
     if(code==''){
-        $('.remind').show().find('.remind_text').html('验证码不能为空')
+        $('.remind').show().find('.remind_text').html('验证码不能为空');
         return;
     }else {
         flog2=true;
@@ -68,16 +68,16 @@ $('.registerBtn').click(function () {
 
     //密码长度验证
     if(password==''||repassword==''){
-        $('.remind').show().find('.remind_text').html('密码不能为空')
+        $('.remind').show().find('.remind_text').html('密码不能为空');
     }else if(password.length<6||repassword.length<6){
-        $('.remind').show().find('.remind_text').html('密码长度需要6位及以上')
+        $('.remind').show().find('.remind_text').html('密码长度需要6位及以上');
         return;
     }else {
         flog3=true;
     }
     // 密码相同验证
     if(password!=repassword){
-        $('.remind').show().find('.remind_text').html('两次输入密码不同')
+        $('.remind').show().find('.remind_text').html('两次输入密码不同');
         return;
     }else{
         flog4=true;
@@ -86,11 +86,11 @@ $('.registerBtn').click(function () {
     if($('.check_read.active').length==1){
         flog5=true;
     }else{
-        $('.remind').show().find('.remind_text').html('请认真阅读注册协议并确认')
+        $('.remind').show().find('.remind_text').html('请认真阅读注册协议并确认');
         return;
     }
     if(flog1&&flog2&&flog3&&flog4&&flog5){
-        signOn(tel,password,code)
+        signOn(tel,password,code);
     }
 });
 
