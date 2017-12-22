@@ -398,6 +398,13 @@ public class ThdAction {
 			List<OrdersB> oaList = obService.selectTotalOrderABy("1", orderSn, thId);
 			if(oaList != null && oaList.size() == 1){
 				OrdersB oa = oaList.get(0);
+				if (oa==null||oa.getTel()==null||oa.getTel().equals("")||oa.getGmNum()==null||oa.getGmNum().equals("")||oa.getGmr()==null||oa.getGmr().equals("")) {
+					map.put("status", "false");
+					map.put("message", "无此订单！！");
+					map.put("code", "-3");
+					map.put("data", "");
+					return map;
+				}
 				m.put("tel", oa.getTel());
 				m.put("num", oa.getGmNum() + "件商品");
 				m.put("kh", oa.getGmr());

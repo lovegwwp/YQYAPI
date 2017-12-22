@@ -89,8 +89,8 @@
     <!-- 查询A端商品总数量 -->
     <select id="selectTotalOrderABy" resultMap="obResultMap">
     	select sum(b.good_num) gm_num,c.name gmr,c.tel from o_order_good a 
-    	join o_order_good_relation b on a.order_sn = b.order_sn
- 		join u_user_address c on a.address_id = c.id
+    	left join o_order_good_relation b on a.order_sn = b.order_sn
+ 		left join u_user_address c on a.address_id = c.id
  		<where>
  			<if test="status != null and status !=''">and a.status = #{status}</if>
  			<if test="orderSn != null and orderSn !=''">and a.order_sn = #{orderSn}</if>
