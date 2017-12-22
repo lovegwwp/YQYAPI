@@ -35,6 +35,18 @@ public interface OrdersBMapper {
 	 */
 	List<OrdersB> getOrdersBy(@Param("status") String status,
 			@Param("orderSn") String orderSn, @Param("gmId") String gmId);
+	
+	/**
+	 * 查询A端商品总数量 
+	 */
+	List<OrdersB> selectTotalOrderABy(@Param("status") String status,
+			@Param("orderSn") String orderSn, @Param("gmId") String gmId);
+	
+	/**
+	 * 查询A端订单信息
+	 */
+	List<OrdersB> selectOrderABy(@Param("status") String status,
+			@Param("orderSn") String orderSn, @Param("gmId") String gmId);
 
 	/**
 	 * 新增订单
@@ -55,6 +67,14 @@ public interface OrdersBMapper {
 	int upOrderStatus(@Param("status") String status,
 			@Param("statusBefore") String statusBefore,
 			@Param("orderSn") String orderSn);
+	
+	/**
+	 * 修改A端订单状态
+	 */
+	int updateOrderAStatus(@Param("status") String status,
+			@Param("statusBefore") String statusBefore,
+			@Param("orderSn") String orderSn);
+	
 
 	/**
 	 * 删除订单

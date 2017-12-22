@@ -25,6 +25,18 @@ public class OrdersBServiceImpl implements OrdersBService {
 		// TODO Auto-generated method stub
 		return obMapper.getOrdersBy(status, orderSn, gmId);
 	}
+	
+	@Override
+	public List<OrdersB> selectTotalOrderABy(String status, String orderSn, String gmId) {
+		// TODO Auto-generated method stub
+		return obMapper.selectTotalOrderABy(status, orderSn, gmId);
+	}
+	
+	@Override
+	public List<OrdersB> selectOrderABy(String status, String orderSn, String gmId) {
+		// TODO Auto-generated method stub
+		return obMapper.selectOrderABy(status, orderSn, gmId);
+	}
 
 	@Override
 	public int addOrder(OrdersB ob) {
@@ -37,6 +49,12 @@ public class OrdersBServiceImpl implements OrdersBService {
 	public int upOrderStatus(String status, String statusBefore, String orderSn) {
 		// TODO Auto-generated method stub
 		return obMapper.upOrderStatus(status, statusBefore, orderSn);
+	}
+	
+	@Override
+	public int updateOrderAStatus(String status, String statusBefore, String orderSn) {
+		// TODO Auto-generated method stub
+		return obMapper.updateOrderAStatus(status, statusBefore, orderSn);
 	}
 
 	@Override

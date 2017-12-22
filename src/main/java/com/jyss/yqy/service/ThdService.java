@@ -16,7 +16,7 @@ public interface ThdService {
 			@Param("password") String password);
 
 	/**
-	 * 用户登陆
+	 * 用户查询
 	 */
 
 	public List<Thd> findThdByTel(@Param("tel") String tel,
@@ -52,5 +52,8 @@ public interface ThdService {
 	 * @return
 	 */
 	int upThdInfo(Thd thd);
+	
+	
+	//
 
 }

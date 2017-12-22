@@ -73,6 +73,7 @@ public class ThdServiceImpl implements ThdService {
 	/**
 	 * 用户查询
 	 */
+	@Override
 	public List<Thd> findThdByTel(String tel, String id) {
 		return thdMapper.findThdByTel(tel, id);
 	}
@@ -80,6 +81,7 @@ public class ThdServiceImpl implements ThdService {
 	/**
 	 * 密码修改
 	 */
+	@Override
 	public void updatePwd(String tel, String password, String salt) {
 		thdMapper.updatePwd(tel, password, salt);
 	}
