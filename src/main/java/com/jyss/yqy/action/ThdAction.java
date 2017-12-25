@@ -270,7 +270,7 @@ public class ThdAction {
 		// ///type ===2 ====代表b端，1===代表A端商品
 		//A端
 		if(Integer.parseInt(type) == 1){
-			List<OrdersB> oaList = obService.selectOrderABy("1", orderSn, thId);
+			List<OrdersB> oaList = obService.selectOrderABy("2", orderSn, thId);
 			if (oaList == null || oaList.size() == 0) {
 				map.put("status", "false");
 				map.put("message", "无此订单！！");
@@ -291,7 +291,7 @@ public class ThdAction {
 				tdOrder.setPrice(ordersB.getPrice());
 				thdService.addThOrder(tdOrder);
 			}
-			int count = obService.updateOrderAStatus("3", "1", orderSn);
+			int count = obService.updateOrderAStatus("3", "2", orderSn);
 			if (count == 1) {
 				List<OrdersB> oaList1 = obService.selectTotalOrderABy("3", orderSn, thId);
 				OrdersB ordersB = oaList1.get(0);
@@ -395,7 +395,7 @@ public class ThdAction {
 		
 		//A端
 		if(Integer.parseInt(type) == 1){
-			List<OrdersB> oaList = obService.selectTotalOrderABy("1", orderSn, thId);
+			List<OrdersB> oaList = obService.selectTotalOrderABy("2", orderSn, thId);
 			if(oaList != null && oaList.size() == 1){
 				OrdersB oa = oaList.get(0);
 				if (oa==null||oa.getTel()==null||oa.getTel().equals("")||oa.getGmNum()==null||oa.getGmNum().equals("")||oa.getGmr()==null||oa.getGmr().equals("")) {

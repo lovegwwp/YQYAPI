@@ -112,7 +112,7 @@
  		</where>
     </select>
     
-    
+
 
    <!-- 增加购买商品支付成功或者失败的订单记录 -->
     <insert id="addOrder" parameterType="com.jyss.yqy.entity.OrdersB" 

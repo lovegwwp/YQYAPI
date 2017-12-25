@@ -39,10 +39,10 @@ public interface ScoreBalanceMapper {
 	 */
 	int addShoppingScoreBalance(ScoreBalance sb);
 	
-	//现金积分插入(创建时间减12小时)
+	//现金积分插入(创建时间减6小时)
 	int addCashScore(ScoreBalance sb);
 	
-	//购物积分插入(创建时间减12小时)
+	//购物积分插入(创建时间减6小时)
 	int addShoppingScore(ScoreBalance sb);
 
 }
