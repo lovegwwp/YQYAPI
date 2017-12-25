@@ -88,27 +88,27 @@
     
     <!-- 查询A端商品总数量 -->
     <select id="selectTotalOrderABy" resultMap="obResultMap">
-    	select sum(b.good_num) gm_num,c.name gmr,c.tel from o_order_good a 
+    	select sum(b.good_num) gm_num,c.nick gmr,c.account tel from o_order_good a 
     	left join o_order_good_relation b on a.order_sn = b.order_sn
- 		left join u_user_address c on a.address_id = c.id
+ 		left join u_user c on a.u_uuid = c.uuid
  		<where>
  			<if test="status != null and status !=''">and a.status = #{status}</if>
  			<if test="orderSn != null and orderSn !=''">and a.order_sn = #{orderSn}</if>
  			<if test="gmId != null and gmId !=''">and a.thd_id = #{gmId}</if>
- 			and a.pick_up = 1 and c.is_default = 1
+ 			and a.pick_up = 1 
  		</where>
     </select>
     
     <!-- 查询A端订单信息 -->
     <select id="selectOrderABy" resultMap="obResultMap">
-    	select b.good_num gm_num,b.good_price price,b.name gm_sp,c.name gmr,c.tel from o_order_good a 
+    	select b.good_num gm_num,b.good_price price,b.name gm_sp,c.nick gmr,c.account tel from o_order_good a 
 		join (select d.*,e.name from o_order_good_relation d left join s_good e on d.good_uuid = e.uuid) b on a.order_sn = b.order_sn
-		join u_user_address c on a.address_id = c.id
+		join u_user c on a.u_uuid = c.uuid
  		<where>
  			<if test="status != null and status !=''">and a.status = #{status}</if>
  			<if test="orderSn != null and orderSn !=''">and a.order_sn = #{orderSn}</if>
  			<if test="gmId != null and gmId !=''">and a.thd_id = #{gmId}</if>
- 			and a.pick_up = 1 and c.is_default = 1
+ 			and a.pick_up = 1 
  		</where>
     </select>
     
