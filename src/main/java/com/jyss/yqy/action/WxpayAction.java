@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,11 +23,17 @@ import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.jyss.yqy.config.WXPayConfigImpl;
 import com.jyss.yqy.entity.Cwzf;
+import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.service.OrdersBService;
+import com.jyss.yqy.service.UserService;
 
 @Controller
 public class WxpayAction {
 	@Autowired
-	// /private CwzfService cwService;
+	private UserService userService;
+	@Autowired
+	private OrdersBService ordersBService;
+
 	private static Log log = LogFactory.getLog(WxpayAction.class);
 
 	// 预下单--当面付--生成二维码 --type 视频== 2=视频= 3=通话=',
@@ -134,7 +141,7 @@ public class WxpayAction {
 		return mapRe;
 	}
 
-	@RequestMapping(value = "/pat/WXnotify", method = RequestMethod.POST)
+	@RequestMapping(value = "/YQYB/DlrWxNotify", method = RequestMethod.POST)
 	public String notifyResult(HttpServletRequest request) {
 		log.info("收到微信异步通知！");
 		BufferedReader reader = null;
@@ -174,47 +181,91 @@ public class WxpayAction {
 				log.info("===========map ==========");
 				String returnCode = map.get("return_code");
 				String resultCode = map.get("result_code");
-				Cwzf cw = null;
-				Cwzf cwzf = new Cwzf();
 				if ("SUCCESS".equals(returnCode)) {
 					outtradeno = map.get("out_trade_no");
-					// 查询个人业务订单
-					// cw = cwService.getCwByNo(outtradeno).get(0);
-					if (cw == null) {
-						return "failed";
-					}
 					log.info("outtradeno: " + outtradeno);
-					if (cw.getStatus() == 1) {
-						cwzf.setMacOrderId(outtradeno);
-						if ("SUCCESS".equals(resultCode)) {
-							cwzf.setStatus(2);// 交易成功
-						}
-						if ("FAIL".equals(resultCode)) {
-							cwzf.setStatus(4);// 交易失败
-						}
+					// 修改订单状态
+					int isSucc = 0;
+					isSucc = updateOrderAndUser("outtradeno");
+					if (isSucc == 1) {
+						// return "success";
+						returnStr = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+						System.out.println(returnStr);
+						return returnStr;
 					} else {
-						return "failed";
+						returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[数据更新失败]]></return_msg></xml>";
+						System.out.println(returnStr);
+						return returnStr;
 					}
+				} else {
+					returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[数据更新失败]]></return_msg></xml>";
+					System.out.println(returnStr);
+					return returnStr;
 				}
-				// cw = cwService.getCwByNo(outtradeno).get(0);
-				cwzf.setStatus(2);
-				cwzf.setMacOrderId(outtradeno);// 交易成功
-				// 修改订单状态
+
+			} else {
+				returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名校验失败]]></return_msg></xml>";
+				System.out.println(returnStr);
+				return returnStr;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[平台错误]]></return_msg></xml>";
+		System.out.println(returnStr);
+		return returnStr;
+
+	}
+
+	@RequestMapping(value = "/YQYB/YmzWxNotify", method = RequestMethod.POST)
+	public String YmzWxNotify(HttpServletRequest request) {
+		log.info("收到微信异步通知！");
+		BufferedReader reader = null;
+		String returnStr = "";
+		try {
+			// 拿出所有参数
+			reader = request.getReader();
+			String line = "";
+			String outtradeno = "";
+			String xmlString = null;
+			StringBuffer inputString = new StringBuffer();
+
+			while ((line = reader.readLine()) != null) {
+				inputString.append(line);
+			}
+			xmlString = inputString.toString();
+			request.getReader().close();
+
+			log.info("==========xmlString,微信回调请求数据：============");
+			log.info(xmlString);
+			System.out.println("==========xmlString,微信回调请求数据：============");
+			log.info("==========xmlString,微信回调请求数据  =============");
+			// 验签
+			boolean flag = checkResponseParams(xmlString);
+			System.out.println("验签参数  ============" + flag);
+			if (flag == true) {
+				System.out.println("===============开始验签==========");
+				Map<String, String> map = WXPayUtil.xmlToMap(xmlString);
+				log.info("===========map:==========");
+				Set<String> set = map.keySet();
+				Iterator<String> it = set.iterator();
+				while (it.hasNext()) {
+					String name = it.next();
+					String val = map.get(name);
+					log.info("key : " + name + ", value : " + val);
+				}
+				log.info("===========map ==========");
+				String returnCode = map.get("return_code");
+				String resultCode = map.get("result_code");
 				int isSucc = 0;
-				// isSucc = cwService.upCw(cwzf);
-				if (isSucc == 1) {
-					// 具体对应业务 病人增值业务
-					isSucc = 0;
-					int cztYPE = cw.getCzType();
-					// 1 基础付费设置 2视频套餐设置 3通话套餐设置',
-					System.out.println(cw.getCzTime());
-					if (cztYPE == 3) {
-						// isSucc = patService.upTalkTimeByCz(cw.getCzTime(),
-						// cw.getAccount());
-					} else if (cztYPE == 2) {
-						// isSucc = patService.upVedioTimeByCz(cw.getCzTime(),
-						// cw.getAccount());
-					}
+				if ("SUCCESS".equals(returnCode)) {
+					outtradeno = map.get("out_trade_no");
+					log.info("outtradeno: " + outtradeno);
+					// //个人业务处理
+					isSucc = updateOrder("outtradeno");
 					if (isSucc == 1) {
 						// return "success";
 						returnStr = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
@@ -267,6 +318,55 @@ public class WxpayAction {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	// /////////////////成为代理人购买/////////////////////
+
+	/**
+	 * 代理人支付成功状态修改
+	 */
+	public int updateOrderAndUser(String orderNum) {
+		int count = 0;
+		int count1 = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		if (count == 1) {
+			List<OrdersB> orders = ordersBService.getOrdersBy("1", orderNum,
+					null);
+			if (orders != null && orders.size() == 1) {
+				OrdersB ordersB = orders.get(0);
+				// 更改代理人状态
+				count1 = userService.upUserAllStatus("1", null, null, null,
+						null, ordersB.getGmId());
+				// 查询积分返还
+				if (count1 == 1) {
+					return count1;
+				}
+			}
+		}
+		return count1;
+	}
+
+	// /////////////////订单购买/////////////////////
+
+	/**
+	 * 购买支付成功状态修改
+	 */
+	public int updateOrder(String orderNum) {
+		int count = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		return count;
 	}
 
 }

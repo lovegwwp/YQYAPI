@@ -152,21 +152,31 @@ public class ZfPayAction {
 	/**
 	 * 代理人支付成功状态修改
 	 */
-	public String updateOrderAndUser(String orderNum) {
-		int count = ordersBService.upOrderStatus("1", "-1", orderNum);
+	public int updateOrderAndUser(String orderNum) {
+		int count = 0;
+		int count1 = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
 		if (count == 1) {
 			List<OrdersB> orders = ordersBService.getOrdersBy("1", orderNum,
 					null);
-			if (orders != null && orders.size() > 0) {
+			if (orders != null && orders.size() == 1) {
 				OrdersB ordersB = orders.get(0);
-				int count1 = userService.upUserAllStatus("1", null, null, null,
+				// 更改代理人状态
+				count1 = userService.upUserAllStatus("1", null, null, null,
 						null, ordersB.getGmId());
+				// 查询积分返还
 				if (count1 == 1) {
-					return "success";
+					return count1;
 				}
 			}
 		}
-		return "failed";
+		return count1;
 	}
 
 	// /////////////////订单购买/////////////////////
@@ -175,7 +185,14 @@ public class ZfPayAction {
 	 * 购买支付成功状态修改
 	 */
 	public int updateOrder(String orderNum) {
-		int count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		int count = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
 		return count;
 	}
 

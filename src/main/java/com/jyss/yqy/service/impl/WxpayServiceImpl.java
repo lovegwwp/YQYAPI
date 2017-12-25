@@ -1,30 +1,21 @@
 package com.jyss.yqy.service.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.jyss.yqy.config.WXPayConfigImpl;
 import com.jyss.yqy.constant.Constant;
-import com.jyss.yqy.entity.Cwzf;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.Xtcl;
@@ -79,7 +70,7 @@ public class WxpayServiceImpl implements WxpayService {
 		// data.put("total_fee", money + "");
 
 		data.put("notify_url",
-				"http://121.40.29.64:8081/SSM/pat/WXnotify.action");
+				"http://121.40.29.64:8081/YQYAPI/YQYB/DlrWxNotify.action");
 		// 支付方式 app支付
 		data.put("trade_type", "APP");
 		// 随机数
@@ -317,9 +308,8 @@ public class WxpayServiceImpl implements WxpayService {
 		// 单位为分
 		data.put("total_fee", money * 100 + "");
 		// data.put("total_fee", money + "");
-
 		data.put("notify_url",
-				"http://121.40.29.64:8081/SSM/pat/WXnotify.action");
+				"http://121.40.29.64:8081/YQYAPI/YQYB/YmzWxNotify.action");
 		// 支付方式 app支付
 		data.put("trade_type", "APP");
 		// 随机数
@@ -448,120 +438,6 @@ public class WxpayServiceImpl implements WxpayService {
 		mapRe.put("status", "false");
 		mapRe.put("message", "初始化订单失败！");
 		return mapRe;
-	}
-
-	@RequestMapping(value = "/pat/WXnotify", method = RequestMethod.POST)
-	public String wxNotifyResult(HttpServletRequest request) {
-		log.info("收到微信异步通知！");
-		BufferedReader reader = null;
-		String returnStr = "";
-		try {
-			// 拿出所有参数
-			reader = request.getReader();
-			String line = "";
-			String outtradeno = "";
-			String xmlString = null;
-			StringBuffer inputString = new StringBuffer();
-
-			while ((line = reader.readLine()) != null) {
-				inputString.append(line);
-			}
-			xmlString = inputString.toString();
-			request.getReader().close();
-
-			log.info("==========xmlString,微信回调请求数据：============");
-			log.info(xmlString);
-			System.out.println("==========xmlString,微信回调请求数据：============");
-			log.info("==========xmlString,微信回调请求数据  =============");
-			// 验签
-			boolean flag = checkResponseParams(xmlString);
-			System.out.println("验签参数  ============" + flag);
-			if (flag == true) {
-				System.out.println("===============开始验签==========");
-				Map<String, String> map = WXPayUtil.xmlToMap(xmlString);
-				log.info("===========map:==========");
-				Set<String> set = map.keySet();
-				Iterator<String> it = set.iterator();
-				while (it.hasNext()) {
-					String name = it.next();
-					String val = map.get(name);
-					log.info("key : " + name + ", value : " + val);
-				}
-				log.info("===========map ==========");
-				String returnCode = map.get("return_code");
-				String resultCode = map.get("result_code");
-				Cwzf cw = null;
-				Cwzf cwzf = new Cwzf();
-				if ("SUCCESS".equals(returnCode)) {
-					outtradeno = map.get("out_trade_no");
-					// 查询个人业务订单
-					// cw = cwService.getCwByNo(outtradeno).get(0);
-					if (cw == null) {
-						return "failed";
-					}
-					log.info("outtradeno: " + outtradeno);
-					if (cw.getStatus() == 1) {
-						cwzf.setMacOrderId(outtradeno);
-						if ("SUCCESS".equals(resultCode)) {
-							cwzf.setStatus(2);// 交易成功
-						}
-						if ("FAIL".equals(resultCode)) {
-							cwzf.setStatus(4);// 交易失败
-						}
-					} else {
-						return "failed";
-					}
-				}
-				// cw = cwService.getCwByNo(outtradeno).get(0);
-				cwzf.setStatus(2);
-				cwzf.setMacOrderId(outtradeno);// 交易成功
-				// 修改订单状态
-				int isSucc = 0;
-				// isSucc = cwService.upCw(cwzf);
-				if (isSucc == 1) {
-					// 具体对应业务 病人增值业务
-					isSucc = 0;
-					int cztYPE = cw.getCzType();
-					// 1 基础付费设置 2视频套餐设置 3通话套餐设置',
-					System.out.println(cw.getCzTime());
-					if (cztYPE == 3) {
-						// isSucc = patService.upTalkTimeByCz(cw.getCzTime(),
-						// cw.getAccount());
-					} else if (cztYPE == 2) {
-						// isSucc = patService.upVedioTimeByCz(cw.getCzTime(),
-						// cw.getAccount());
-					}
-					if (isSucc == 1) {
-						// return "success";
-						returnStr = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-						System.out.println(returnStr);
-						return returnStr;
-					} else {
-						returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[数据更新失败]]></return_msg></xml>";
-						System.out.println(returnStr);
-						return returnStr;
-					}
-				} else {
-					returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[数据更新失败]]></return_msg></xml>";
-					System.out.println(returnStr);
-					return returnStr;
-				}
-
-			} else {
-				returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名校验失败]]></return_msg></xml>";
-				System.out.println(returnStr);
-				return returnStr;
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		returnStr = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[平台错误]]></return_msg></xml>";
-		System.out.println(returnStr);
-		return returnStr;
-
 	}
 
 	public boolean checkResponseParams(String xmlStr) {
