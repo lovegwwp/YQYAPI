@@ -33,7 +33,6 @@ import com.alipay.demo.trade.service.AlipayTradeService;
 import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
-import com.jyss.yqy.entity.Cwzf;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.Xtcl;
@@ -53,6 +52,8 @@ public class AlipayAction {
 	private XtclService clService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private OrdersBService ordersBService;
 
 	// 支付宝当面付2.0服务
 	private static AlipayTradeService tradeService;
@@ -554,8 +555,8 @@ public class AlipayAction {
 		return mm;
 	}
 
-	@RequestMapping(value = "/orderNotify", method = RequestMethod.POST)
-	public String notifyResult(HttpServletRequest request,
+	@RequestMapping(value = "/YQYB/DlrAliNotify", method = RequestMethod.POST)
+	public String DlrAliNotify(HttpServletRequest request,
 			HttpServletResponse response) {
 		log.info("收到支付宝异步通知！");
 		Map<String, String> params = new HashMap<String, String>();
@@ -585,57 +586,71 @@ public class AlipayAction {
 				log.warn("与付款时的appid不同，此为异常通知，应忽略！");
 				return "failed";
 			}
-
-			// 在数据库中查找订单号对应的订单，并将其金额与数据库中的金额对比，若对不上，也为异常通知
-			Cwzf cw = null;
-			// cw = cwService.getCwByNo(outtradeno).get(0);
-			if (cw == null) {
-				log.warn(outtradeno + "查无此订单！");
-				return "failed";
-			}
-			if (cw.getCzMoney() != Double.parseDouble(params
-					.get("total_amount"))) {
-				log.warn("与付款时的金额不同，此为异常通知，应忽略！");
-				return "failed";
-			}
-			// 0 未知状态 1预下单状态 2支付成功 3交易超时 4交易失败 5等待付款 ',
-			if (cw.getStatus() == 2)
-				return "success"; // 如果订单已经支付成功了，就直接忽略这次通知
-
+			// ////自我业务处理
 			String status = params.get("trade_status");
-			Cwzf cwzf = null;
-			cwzf.setMacOrderId(outtradeno);
 			int isSucc = 0;
 			if (status.equals("WAIT_BUYER_PAY")) { // 如果状态是正在等待用户付款
-				if (cw.getStatus() != 5)
-					cwzf.setStatus(5);
-			} else if (status.equals("TRADE_CLOSED")) { // 如果状态是未付款交易超时关闭，或支付完成后全额退款
-				if (cw.getStatus() != 3)
-					cwzf.setStatus(3);
-			} else if (status.equals("TRADE_SUCCESS")
-					|| status.equals("TRADE_FINISHED")) { // 如果状态是已经支付成功
-				cwzf.setStatus(2);
+				isSucc = updateOrderAndUser(outtradeno);
 			} else {
-				cwzf.setStatus(0);
+				log.warn("付款状态异常，非代付款，此为异常通知，应忽略！");
+				return "failed";
+
 			}
-			// 修改订单状态
-			// isSucc = cwService.upCw(cwzf);
 			if (isSucc == 1) {
-				// 具体对应业务
-				isSucc = 0;
-				int cztYPE = cw.getCzType();
-				// 1 基础付费设置 2视频套餐设置 3通话套餐设置',
-				if (cztYPE == 3) {
-					// isSucc = patService.upTalkTimeByCz(cw.getCzTime(),
-					// cw.getAccount());
-				} else if (cztYPE == 2) {
-					// isSucc = patService.upVedioTimeByCz(cw.getCzTime(),
-					// cw.getAccount());
-				}
-				if (isSucc == 1) {
-					log.info(outtradeno + "订单的状态已经修改为" + status);
-					return "success";
-				}
+				log.info(outtradeno + "订单的状态已经修改为" + status);
+				return "success";
+			}
+
+		} else { // 如果验证签名没有通过
+			return "failed";
+		}
+		return "success";
+	}
+
+	@RequestMapping(value = "/YQYB/YmzAliNotify", method = RequestMethod.POST)
+	public String YmzAliNotify(HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("收到支付宝异步通知！");
+		Map<String, String> params = new HashMap<String, String>();
+
+		// 取出所有参数是为了验证签名
+		Enumeration<String> parameterNames = request.getParameterNames();
+		while (parameterNames.hasMoreElements()) {
+			String parameterName = parameterNames.nextElement();
+			params.put(parameterName, request.getParameter(parameterName));
+		}
+		boolean signVerified;
+		try {
+			signVerified = AlipaySignature.rsaCheckV1(params,
+					Configs.getAlipayPublicKey(), "UTF-8");
+		} catch (AlipayApiException e) {
+			e.printStackTrace();
+			return "failed";
+		}
+		if (signVerified) {
+			String outtradeno = params.get("out_trade_no");
+			log.info(outtradeno + "号订单回调通知。");
+			// System.out.println("验证签名成功！");
+			log.info("验证签名成功！");
+
+			// 若参数中的appid和填入的appid不相同，则为异常通知
+			if (!Configs.getAppid().equals(params.get("app_id"))) {
+				log.warn("与付款时的appid不同，此为异常通知，应忽略！");
+				return "failed";
+			}
+			// ////自我业务处理
+			String status = params.get("trade_status");
+			int isSucc = 0;
+			if (status.equals("WAIT_BUYER_PAY")) { // 如果状态是正在等待用户付款
+				isSucc = updateOrder(outtradeno);
+			} else {
+				log.warn("付款状态异常，非代付款，此为异常通知，应忽略！");
+				return "failed";
+
+			}
+			if (isSucc == 1) {
+				log.info(outtradeno + "订单的状态已经修改为" + status);
+				return "success";
 			}
 
 		} else { // 如果验证签名没有通过
@@ -655,6 +670,55 @@ public class AlipayAction {
 			}
 			log.info("body:" + response.getBody());
 		}
+	}
+
+	// /////////////////成为代理人购买/////////////////////
+
+	/**
+	 * 代理人支付成功状态修改
+	 */
+	public int updateOrderAndUser(String orderNum) {
+		int count = 0;
+		int count1 = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		if (count == 1) {
+			List<OrdersB> orders = ordersBService.getOrdersBy("1", orderNum,
+					null);
+			if (orders != null && orders.size() == 1) {
+				OrdersB ordersB = orders.get(0);
+				// 更改代理人状态
+				count1 = userService.upUserAllStatus("1", null, null, null,
+						null, ordersB.getGmId());
+				// 查询积分返还
+				if (count1 == 1) {
+					return count1;
+				}
+			}
+		}
+		return count1;
+	}
+
+	// /////////////////订单购买/////////////////////
+
+	/**
+	 * 购买支付成功状态修改
+	 */
+	public int updateOrder(String orderNum) {
+		int count = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		return count;
 	}
 
 }

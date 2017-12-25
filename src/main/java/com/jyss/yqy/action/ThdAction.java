@@ -2,7 +2,6 @@ package com.jyss.yqy.action;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -266,10 +265,10 @@ public class ThdAction {
 			map.put("data", "");
 			return map;
 		}
-		
+
 		// ///type ===2 ====代表b端，1===代表A端商品
-		//A端
-		if(Integer.parseInt(type) == 1){
+		// A端
+		if (Integer.parseInt(type) == 1) {
 			List<OrdersB> oaList = obService.selectOrderABy("2", orderSn, thId);
 			if (oaList == null || oaList.size() == 0) {
 				map.put("status", "false");
@@ -293,7 +292,8 @@ public class ThdAction {
 			}
 			int count = obService.updateOrderAStatus("3", "2", orderSn);
 			if (count == 1) {
-				List<OrdersB> oaList1 = obService.selectTotalOrderABy("3", orderSn, thId);
+				List<OrdersB> oaList1 = obService.selectTotalOrderABy("3",
+						orderSn, thId);
 				OrdersB ordersB = oaList1.get(0);
 				m.put("tel", ordersB.getTel());
 				m.put("num", ordersB.getGmNum() + "件商品");
@@ -310,11 +310,11 @@ public class ThdAction {
 			map.put("message", "确认失败！");
 			map.put("code", "-4");
 			return map;
-			
+
 		}
-		
-		//B端
-		if(Integer.parseInt(type) == 2){
+
+		// B端
+		if (Integer.parseInt(type) == 2) {
 			// //status='-1未付款状态,1待提货状态，2已提货，订单完成',
 			List<OrdersB> obList = new ArrayList<OrdersB>();
 			obList = obService.getOrdersBy("1", orderSn, "");
@@ -327,8 +327,8 @@ public class ThdAction {
 			}
 			OrdersB ob = obList.get(0);
 			ThOrders tdOrder = new ThOrders(ob.getOrderSn(), ob.getGmr(),
-					ob.getTel(), ob.getGmSp(), ob.getGmNum(), ob.getGmDw(), "1",
-					thId, ob.getPrice());
+					ob.getTel(), ob.getGmSp(), ob.getGmNum(), ob.getGmDw(),
+					"1", thId, ob.getPrice());
 			int count = 0;
 			// ///提货端--订单插入===
 			count = thdService.addThOrder(tdOrder);
@@ -354,7 +354,7 @@ public class ThdAction {
 			map.put("code", "-4");
 			return map;
 		}
-		
+
 		map.put("status", "false");
 		map.put("message", "无此订单！");
 		map.put("code", "-3");
@@ -392,13 +392,16 @@ public class ThdAction {
 			return map;
 		}
 		// ///type ===2 ====代表b端，1===代表A端商品
-		
-		//A端
-		if(Integer.parseInt(type) == 1){
-			List<OrdersB> oaList = obService.selectTotalOrderABy("2", orderSn, thId);
-			if(oaList != null && oaList.size() == 1){
+
+		// A端
+		if (Integer.parseInt(type) == 1) {
+			List<OrdersB> oaList = obService.selectTotalOrderABy("2", orderSn,
+					thId);
+			if (oaList != null && oaList.size() == 1) {
 				OrdersB oa = oaList.get(0);
-				if (oa==null||oa.getTel()==null||oa.getTel().equals("")||oa.getGmNum()==null||oa.getGmNum().equals("")||oa.getGmr()==null||oa.getGmr().equals("")) {
+				if (oa == null || oa.getTel() == null || oa.getTel().equals("")
+						|| oa.getGmNum() == null || oa.getGmNum().equals("")
+						|| oa.getGmr() == null || oa.getGmr().equals("")) {
 					map.put("status", "false");
 					map.put("message", "无此订单！！");
 					map.put("code", "-3");
@@ -420,11 +423,11 @@ public class ThdAction {
 			map.put("code", "-3");
 			map.put("data", "");
 			return map;
-			
+
 		}
-		
-		//B端
-		if(Integer.parseInt(type) == 2){
+
+		// B端
+		if (Integer.parseInt(type) == 2) {
 			// //status='-1未付款状态,1待提货状态，2已提货，订单完成',
 			List<OrdersB> obList = new ArrayList<OrdersB>();
 			obList = obService.getOrdersBy("1", orderSn, "");
@@ -436,7 +439,7 @@ public class ThdAction {
 				return map;
 			}
 			OrdersB ob = obList.get(0);
-			
+
 			m.put("tel", ob.getTel());
 			m.put("num", ob.getGmNum() + ob.getGmDw());
 			m.put("kh", ob.getGmr());
@@ -447,13 +450,12 @@ public class ThdAction {
 			map.put("code", "0");
 			return map;
 		}
-		
+
 		map.put("status", "false");
 		map.put("message", "无此订单！");
 		map.put("code", "-3");
 		map.put("data", "");
 		return map;
-		
 
 	}
 

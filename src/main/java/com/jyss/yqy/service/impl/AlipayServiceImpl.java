@@ -1,13 +1,9 @@
 package com.jyss.yqy.service.impl;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -15,13 +11,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayResponse;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.ExtendParams;
@@ -33,7 +25,6 @@ import com.alipay.demo.trade.service.impl.AlipayMonitorServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
 import com.jyss.yqy.constant.Constant;
-import com.jyss.yqy.entity.Cwzf;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.Xtcl;
@@ -202,7 +193,7 @@ public class AlipayServiceImpl implements AlipayService {
 				.setExtendParams(extendParams)
 				.setTimeoutExpress(timeoutExpress)
 				.setNotifyUrl(
-						"http://192.168.0.26:8080/YQYAPI/orderNotify.action");// 支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
+						"http://121.40.29.64:8081/YQYAPI/YQYB/DlrAliNotify.action");// 支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
 		// .setGoodsDetailList(goodsDetailList);
 
 		AlipayF2FPrecreateResult result = tradeService.tradePrecreate(builder);
@@ -583,96 +574,6 @@ public class AlipayServiceImpl implements AlipayService {
 		}
 		mm.put("hs", hs);
 		return mm;
-	}
-
-	@RequestMapping(value = "/orderNotify", method = RequestMethod.POST)
-	public String notifyResult(HttpServletRequest request,
-			HttpServletResponse response) {
-		log.info("收到支付宝异步通知！");
-		Map<String, String> params = new HashMap<String, String>();
-
-		// 取出所有参数是为了验证签名
-		Enumeration<String> parameterNames = request.getParameterNames();
-		while (parameterNames.hasMoreElements()) {
-			String parameterName = parameterNames.nextElement();
-			params.put(parameterName, request.getParameter(parameterName));
-		}
-		boolean signVerified;
-		try {
-			signVerified = AlipaySignature.rsaCheckV1(params,
-					Configs.getAlipayPublicKey(), "UTF-8");
-		} catch (AlipayApiException e) {
-			e.printStackTrace();
-			return "failed";
-		}
-		if (signVerified) {
-			String outtradeno = params.get("out_trade_no");
-			log.info(outtradeno + "号订单回调通知。");
-			// System.out.println("验证签名成功！");
-			log.info("验证签名成功！");
-
-			// 若参数中的appid和填入的appid不相同，则为异常通知
-			if (!Configs.getAppid().equals(params.get("app_id"))) {
-				log.warn("与付款时的appid不同，此为异常通知，应忽略！");
-				return "failed";
-			}
-
-			// 在数据库中查找订单号对应的订单，并将其金额与数据库中的金额对比，若对不上，也为异常通知
-			Cwzf cw = null;
-			// cw = cwService.getCwByNo(outtradeno).get(0);
-			if (cw == null) {
-				log.warn(outtradeno + "查无此订单！");
-				return "failed";
-			}
-			if (cw.getCzMoney() != Double.parseDouble(params
-					.get("total_amount"))) {
-				log.warn("与付款时的金额不同，此为异常通知，应忽略！");
-				return "failed";
-			}
-			// 0 未知状态 1预下单状态 2支付成功 3交易超时 4交易失败 5等待付款 ',
-			if (cw.getStatus() == 2)
-				return "success"; // 如果订单已经支付成功了，就直接忽略这次通知
-
-			String status = params.get("trade_status");
-			Cwzf cwzf = null;
-			cwzf.setMacOrderId(outtradeno);
-			int isSucc = 0;
-			if (status.equals("WAIT_BUYER_PAY")) { // 如果状态是正在等待用户付款
-				if (cw.getStatus() != 5)
-					cwzf.setStatus(5);
-			} else if (status.equals("TRADE_CLOSED")) { // 如果状态是未付款交易超时关闭，或支付完成后全额退款
-				if (cw.getStatus() != 3)
-					cwzf.setStatus(3);
-			} else if (status.equals("TRADE_SUCCESS")
-					|| status.equals("TRADE_FINISHED")) { // 如果状态是已经支付成功
-				cwzf.setStatus(2);
-			} else {
-				cwzf.setStatus(0);
-			}
-			// 修改订单状态
-			// isSucc = cwService.upCw(cwzf);
-			if (isSucc == 1) {
-				// 具体对应业务
-				isSucc = 0;
-				int cztYPE = cw.getCzType();
-				// 1 基础付费设置 2视频套餐设置 3通话套餐设置',
-				if (cztYPE == 3) {
-					// isSucc = patService.upTalkTimeByCz(cw.getCzTime(),
-					// cw.getAccount());
-				} else if (cztYPE == 2) {
-					// isSucc = patService.upVedioTimeByCz(cw.getCzTime(),
-					// cw.getAccount());
-				}
-				if (isSucc == 1) {
-					log.info(outtradeno + "订单的状态已经修改为" + status);
-					return "success";
-				}
-			}
-
-		} else { // 如果验证签名没有通过
-			return "failed";
-		}
-		return "success";
 	}
 
 	// 简单打印应答
