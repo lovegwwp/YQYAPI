@@ -18,8 +18,6 @@ import com.jyss.yqy.service.JBonusFdjService;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserService;
 
-
-
 @Controller
 @RequestMapping("/fdj")
 public class JBonusFdjAction {
