@@ -75,6 +75,14 @@ public interface OrdersBService {
 	 */
 	int delOrder(@Param("orderSn") String orderSn);
 	
+	/**
+	 * 获取B端商品=亚麻籽油
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Goods getGoodsByid(@Param("id") String id);
+	
 	
 
 }
