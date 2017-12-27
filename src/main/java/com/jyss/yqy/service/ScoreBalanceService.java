@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.jyss.yqy.entity.ScoreBack;
 import com.jyss.yqy.entity.ScoreBalance;
 
 public interface ScoreBalanceService {
@@ -38,5 +39,13 @@ public interface ScoreBalanceService {
 	 * @return
 	 */
 	int addShoppingScoreBalance(ScoreBalance sb);
+
+	// /////////积分返还///////////////
+	// 积分记录查询
+	List<ScoreBack> getBackScore(@Param("uuuid") String uuuid,
+			@Param("status") String status, @Param("backTime") String backTime);
+
+	// 插入积分记录
+	int addBackScore(ScoreBack sBack);
 
 }

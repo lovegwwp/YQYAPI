@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,17 @@ public class CommTool {
 	public static Timestamp getNowTimestamp() {
 		Date date = new Date();// 获得系统时间.
 		String nowTime = sdf.format(date);// 将时间格式转换成符合Timestamp要求的格式.
+		Timestamp times = Timestamp.valueOf(nowTime);// 把时间转换
+		return times;
+	}
+
+	public static Timestamp getAfterWeekTimestamp() {
+		Date date = new Date();// 获得系统时间.
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.WEEK_OF_MONTH, 1);// ==一周后
+		Date afterWeek = c.getTime();
+		String nowTime = sdf.format(afterWeek);// 将时间格式转换成符合Timestamp要求的格式.
 		Timestamp times = Timestamp.valueOf(nowTime);// 把时间转换
 		return times;
 	}
@@ -248,10 +260,12 @@ public class CommTool {
 		// }
 		// System.out.println("cfmeogvo");
 		// System.out.println(getOrderSn("28"));
-		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-		System.out.println(getUUID());
-		System.out.println(getUUID().length());
-		System.out.println(getSalt());
+		// String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		// System.out.println(getUUID());
+		// System.out.println(getUUID().length());
+		// System.out.println(getSalt());
+		System.out.println(getNowTimestamp());
+		System.out.println(getAfterWeekTimestamp());
 
 	}
 

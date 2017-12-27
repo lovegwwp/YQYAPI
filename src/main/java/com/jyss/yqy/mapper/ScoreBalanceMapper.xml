@@ -20,7 +20,42 @@
         <result property="status" column="status"  />
          <result property="orderSn" column="order_sn"  />
 
-    </resultMap>           
+    </resultMap>    
+    
+    <!--积分返还-->
+    <resultMap type="com.jyss.yqy.entity.ScoreBack" id="sBackResultMap">   
+        <id property="id" column="id"  />   
+        <result property="uuuid" column="u_uuid"  />   
+        <result property="dlType" column="dl_type"  />
+        <result property="backNum" column="back_num"  />
+        <result property="leftNum" column="left_num"  />
+        <result property="backScore" column="back_score"  />
+        <result property="eachScore" column="each_score"  />
+        <result property="createdAt" column="created_at"  />
+        <result property="backTime" column="back_time"  />
+        <result property="status" column="status"  />
+
+    </resultMap>   
+    
+    <!-- 积分返还 -->
+    <!--返还记录=插入-->
+    <insert id="addBackScore" parameterType="com.jyss.yqy.entity.ScoreBack" 
+        useGeneratedKeys="true" keyProperty="id">                                                     <!-- ordersn -->
+        insert into u_back_score values(null,#{uuuid},#{dlType},#{backNum},#{leftNum},#{backScore},#{eachScore},#{createdAt},#{backTime},#{status})              
+    </insert>
+    
+    <!--记录查询--> 
+    <select id="getBackScore" resultMap="sBackResultMap" >  
+        select * from u_back_score                           
+            <where> 
+               1 = 1
+			   <if test="uuuid != null and uuuid !=''"> and u_uuid = #{uuuid} </if> 
+			   <if test="status != null and status !=''"> and status = #{status} </if> 
+			   <if test="backTime != null and backTime !=''"> and back_ime > #{backTime} </if>  
+			</where>  
+			order by created_at desc 
+    </select> 
+         
      
     <!--购物积分=查询--> 
     <select id="getShoppingScoreBalance" resultMap="sblResultMap" >  
