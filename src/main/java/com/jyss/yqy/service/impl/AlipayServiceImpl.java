@@ -145,6 +145,13 @@ public class AlipayServiceImpl implements AlipayService {
 			return m;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getIsChuangke() < 2) {
+			m.put("status", "false");
+			m.put("message", "用户信息错误！");
+			m.put("code", "-2");
+			m.put("data", mm);
+			return m;
+		}
 		if (ub.getPwd() == null || ub.getPwd().equals("")) {
 			zfCode = "0";
 		} else {
@@ -307,6 +314,13 @@ public class AlipayServiceImpl implements AlipayService {
 			return m;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getIsChuangke() < 2) {
+			m.put("status", "false");
+			m.put("message", "用户信息错误！");
+			m.put("code", "-2");
+			m.put("data", mm);
+			return m;
+		}
 		if (ub.getPwd() == null || ub.getPwd().equals("")
 				|| ub.getPwd().equals("0")) {
 			zfCode = "0";
@@ -485,6 +499,13 @@ public class AlipayServiceImpl implements AlipayService {
 			return m;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getIsChuangke() < 2) {
+			m.put("status", "false");
+			m.put("message", "用户信息错误！");
+			m.put("code", "-2");
+			m.put("data", mm);
+			return m;
+		}
 		if (ub.getPwd() == null || ub.getPwd().equals("")
 				|| ub.getPwd().equals("0")) {
 			zfCode = "0";

@@ -58,7 +58,7 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 	public int addBackScore(ScoreBack sBack) {
 		// TODO Auto-generated method stub
 		sBack.setStatus(1);
-		sBack.setCratedAt(CommTool.getNowTimestamp());
+		sBack.setCreatedAt(CommTool.getNowTimestamp());
 		sBack.setBackTime(CommTool.getAfterWeekTimestamp());
 		return sbMapper.addBackScore(sBack);
 	}

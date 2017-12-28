@@ -99,6 +99,13 @@ public class WxpayServiceImpl implements WxpayService {
 			return mapRe;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getIsChuangke() < 2) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "用户信息错误！");
+			mapRe.put("code", "-2");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
 		if (ub.getPwd() == null || ub.getPwd().equals("")
 				|| ub.getPwd().equals("0")) {
 			zfCode = "0";
@@ -329,6 +336,13 @@ public class WxpayServiceImpl implements WxpayService {
 			return mapRe;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getIsChuangke() < 2) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "用户信息错误！");
+			mapRe.put("code", "-2");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
 		if (ub.getPwd() == null || ub.getPwd().equals("")
 				|| ub.getPwd().equals("0")) {
 			zfCode = "0";
