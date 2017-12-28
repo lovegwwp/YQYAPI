@@ -51,10 +51,18 @@
                1 = 1
 			   <if test="uuuid != null and uuuid !=''"> and u_uuid = #{uuuid} </if> 
 			   <if test="status != null and status !=''"> and status = #{status} </if> 
-			   <if test="backTime != null and backTime !=''"> and back_ime > #{backTime} </if>  
+			   <if test="backTime != null and backTime !=''"> and back_ime &gt #{backTime} </if>  
+			   <if test="backTime1 != null and backTime1 !=''"> and back_ime &lt #{backTime1} </if>  
 			</where>  
 			order by created_at desc 
     </select> 
+    
+   <!-- 更新剩余返还次数 -->
+   <update id="upBackNum"  >
+	  update u_back_score  set  back_num = #{backNum} , back_time = #{backTime}
+            where u_uuid = #{uId}  and status =1;
+   </update>
+  
          
      
     <!--购物积分=查询--> 

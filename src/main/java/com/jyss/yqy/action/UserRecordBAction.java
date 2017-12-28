@@ -15,12 +15,14 @@ import com.jyss.yqy.entity.ScoreBack;
 import com.jyss.yqy.entity.ScoreBalance;
 import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.Xtcl;
+import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.JBonusFxjService;
 import com.jyss.yqy.service.JBonusGljService;
 import com.jyss.yqy.service.JRecordService;
 import com.jyss.yqy.service.ScoreBalanceService;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserRecordBService;
+import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.service.XtclService;
 import com.jyss.yqy.utils.CommTool;
 
@@ -44,6 +46,8 @@ public class UserRecordBAction {
 	private ScoreBalanceService sBackService;
 	@Autowired
 	private XtclService clService;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 绑定用户关系
@@ -111,8 +115,13 @@ public class UserRecordBAction {
 
 	// /**积分双倍返还***/////
 	public void insertBackScore() {
+		int count = 0;
+		int count2 = 0;
+		int count3 = 0;
+		int count4 = 0;
 		List<ScoreBack> sbLIst = sBackService.getBackScore("", "1", CommTool
-				.getNowTimestamp().toString());
+				.getNowTimestamp().toString(), CommTool.getTommorowTimestamp()
+				.toString());
 		if (sbLIst != null && sbLIst.size() > 0) {
 			Xtcl cl = clService.getClsValue("jjbl_type", "xj");
 			Xtcl cl2 = clService.getClsValue("jjbl_type", "gw");
@@ -127,17 +136,46 @@ public class UserRecordBAction {
 				shopPercent = Float.parseFloat(cl.getBz_value());
 			}
 			for (ScoreBack scoreBack : sbLIst) {
-				if (scoreBack != null) {
+				if (scoreBack != null && scoreBack.getBackNum() != 0) {
 					float cashScore = 0;
 					float shopScore = 0;
+					float jyCashScore = 0;
+					float jyShopScore = 0;
 					cashScore = scoreBack.getEachScore() * cashPercent;
 					shopScore = scoreBack.getEachScore() * shopPercent;
 					ScoreBalance sb = new ScoreBalance();
 					sb.setCategory(9);// /积分返还
 					sb.setuUuid(scoreBack.getUuuid());
 					sb.setType(1);// 收入
-					sBackService.addCashScoreBalance(sb);
-					sBackService.addShoppingScoreBalance(sb);
+					List<UserBean> ubList = userService.getUserByUuid(scoreBack
+							.getUuuid());
+					if (ubList != null && ubList.size() == 1) {
+						jyCashScore = ubList.get(0).getCashScore();
+						jyShopScore = ubList.get(0).getShoppingScore();
+					}
+					jyCashScore = jyCashScore + cashScore;
+					jyShopScore = jyShopScore + shopScore;
+					// //现金积分记录
+					sb.setScore(cashScore);
+					sb.setJyScore(jyCashScore);
+					count = sBackService.addCashScoreBalance(sb);
+					// //购物积分记录
+					sb.setScore(shopScore);
+					sb.setJyScore(jyShopScore);
+					count2 = sBackService.addShoppingScoreBalance(sb);
+					// //修改uuid对应的购物积分
+					if (count + count2 == 2) {
+						count3 = userService.updateUserBackScore(jyCashScore,
+								jyShopScore, scoreBack.getUuuid());
+					}
+					// //修改对应积分记录表剩余返还次数
+					if (count3 == 1) {
+						sBackService.upBackNum(
+								scoreBack.getUuuid(),
+								scoreBack.getBackNum() - 1,
+								CommTool.getAddAfterWeekTimestamp(
+										scoreBack.getBackTime()).toString());
+					}
 				}
 			}
 		}

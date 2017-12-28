@@ -143,14 +143,18 @@ public interface UserMapper {
 	 * 通过用户的id查询用户
 	 */
 	List<UserBean> getUserNameById(@Param("id") int id);
-	
+
 	/**
 	 * 通过id查询积分
 	 */
 	List<UserBean> getUserScoreById(@Param("id") int id);
-	
-	//更新积分
+
+	// 更新积分
 	int updateScore(UserBean userBean);
 
+	// 更新积分
+	int updateUserBackScore(@Param("cashScore") float cashScore,
+			@Param("shoppingScore") float shoppingScore,
+			@Param("uuuid") String uuuid);
 
 }

@@ -50,10 +50,32 @@ public class CommTool {
 		return times;
 	}
 
+	public static Timestamp getTommorowTimestamp() {
+		Date date = new Date();// 获得系统时间.
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DAY_OF_MONTH, 1);// ==一天后
+		Date afterWeek = c.getTime();
+		String nowTime = sdf.format(afterWeek);// 将时间格式转换成符合Timestamp要求的格式.
+		Timestamp times = Timestamp.valueOf(nowTime);// 把时间转换
+		return times;
+	}
+
 	public static Timestamp getAfterWeekTimestamp() {
 		Date date = new Date();// 获得系统时间.
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
+		c.add(Calendar.WEEK_OF_MONTH, 1);// ==一周后
+		Date afterWeek = c.getTime();
+		String nowTime = sdf.format(afterWeek);// 将时间格式转换成符合Timestamp要求的格式.
+		Timestamp times = Timestamp.valueOf(nowTime);// 把时间转换
+		return times;
+	}
+
+	public static Timestamp getAddAfterWeekTimestamp(Date t) {
+		// Date date = new Date();// 获得系统时间.
+		Calendar c = Calendar.getInstance();
+		c.setTime(t);
 		c.add(Calendar.WEEK_OF_MONTH, 1);// ==一周后
 		Date afterWeek = c.getTime();
 		String nowTime = sdf.format(afterWeek);// 将时间格式转换成符合Timestamp要求的格式.
