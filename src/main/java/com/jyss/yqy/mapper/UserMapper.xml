@@ -269,5 +269,16 @@
     	where id = #{id} 
     </update>
     
+    
+        <!-- 更新积分 -->
+    <update id="updateUserBackScore" parameterType="com.jyss.yqy.entity.jsonEntity.UserBean">
+    	update u_user
+    	<set>
+    		<if test="cashScore != null and cashScore != '' or cashScore == 0">cash_score = #{cashScore},</if>
+    		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = #{shoppingScore}</if>
+    	</set>
+    	where uuid = #{uuuid} 
+    </update>
+    
 
 </mapper>

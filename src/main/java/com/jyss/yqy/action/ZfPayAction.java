@@ -352,7 +352,7 @@ public class ZfPayAction {
 					int dlType = uList.get(0).getIsChuangke();
 					// //判断是否有返还记录
 					List<ScoreBack> sbaList = sBackService.getBackScore(puuid,
-							"1", "");
+							"1", "", "");
 					// /没有第一次返还记录==就增加
 					if (sbaList == null || sbaList.size() == 0) {
 						ScoreBack sBack = new ScoreBack();

@@ -43,9 +43,13 @@ public interface ScoreBalanceService {
 	// /////////积分返还///////////////
 	// 积分记录查询
 	List<ScoreBack> getBackScore(@Param("uuuid") String uuuid,
-			@Param("status") String status, @Param("backTime") String backTime);
+			@Param("status") String status, @Param("backTime") String backTime,
+			@Param("backTime1") String backTime1);
 
 	// 插入积分记录
 	int addBackScore(ScoreBack sBack);
 
+	// 修改剩余返还次数
+	int upBackNum(@Param("uId") String uId, @Param("backNum") int backNum,
+			@Param("backTime") String backTime);
 }

@@ -49,9 +49,9 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 
 	@Override
 	public List<ScoreBack> getBackScore(String uuuid, String status,
-			String backTime) {
+			String backTime, String backTime1) {
 		// TODO Auto-generated method stub
-		return sbMapper.getBackScore(uuuid, status, backTime);
+		return sbMapper.getBackScore(uuuid, status, backTime, backTime1);
 	}
 
 	@Override
@@ -61,6 +61,12 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 		sBack.setCratedAt(CommTool.getNowTimestamp());
 		sBack.setBackTime(CommTool.getAfterWeekTimestamp());
 		return sbMapper.addBackScore(sBack);
+	}
+
+	@Override
+	public int upBackNum(String uId, int backNum, String backTime) {
+		// TODO Auto-generated method stub
+		return sbMapper.upBackNum(uId, backNum, backTime);
 	}
 
 }

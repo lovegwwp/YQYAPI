@@ -149,4 +149,9 @@ public interface UserService {
 	 */
 	List<UserBean> getUserByUuid(@Param("uuid") String uuid);
 
+	// 更新积分
+	int updateUserBackScore(@Param("cashScore") float cashScore,
+			@Param("shoppingScore") float shoppingScore,
+			@Param("uuuid") String uuuid);
+
 }

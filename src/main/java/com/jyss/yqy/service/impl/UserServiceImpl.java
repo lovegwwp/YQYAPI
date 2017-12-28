@@ -235,4 +235,11 @@ public class UserServiceImpl implements UserService {
 				isAuth, id);
 	}
 
+	@Override
+	public int updateUserBackScore(float cashScore, float shoppingScore,
+			String uuuid) {
+		// TODO Auto-generated method stub
+		return userMapper.updateUserBackScore(cashScore, shoppingScore, uuuid);
+	}
+
 }
