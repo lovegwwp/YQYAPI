@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jyss.yqy.constant.Constant;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.entity.ScoreBack;
 import com.jyss.yqy.entity.UMobileLogin;
+import com.jyss.yqy.entity.UUserRRecordB;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.AlipayService;
 import com.jyss.yqy.service.OrdersBService;
+import com.jyss.yqy.service.ScoreBalanceService;
 import com.jyss.yqy.service.UMobileLoginService;
+import com.jyss.yqy.service.UserRecordBService;
 import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.service.WxpayService;
 import com.jyss.yqy.service.XtclService;
@@ -43,7 +47,10 @@ public class ZfPayAction {
 	private UserService userService;
 	@Autowired
 	private OrdersBService ordersBService;
-
+	@Autowired
+	private ScoreBalanceService sBackService;
+	@Autowired
+	private UserRecordBService recordBService;
 	@Autowired
 	private XtclService clService;
 
@@ -327,14 +334,52 @@ public class ZfPayAction {
 				// 更改代理人状态
 				count1 = userService.upUserAllStatus("1", null, null, null,
 						null, ordersB.getGmId());
-				// 查询积分返还
-
+				if (count1 == 1) {
+					// 查询积分返还
+					// //当前成为代理人的推荐人uuid
+					List<UUserRRecordB> rbList = recordBService.getRecordB(
+							ordersB.getGmId(), "", "1");
+					if (rbList == null || rbList.size() != 1) {
+						return 0;
+					}
+					String pId = rbList.get(0).getrId() + "";
+					List<UserBean> uList = userService.getUserById(pId, "1",
+							"2");
+					if (uList == null || uList.size() != 1) {
+						return 0;
+					}
+					String puuid = uList.get(0).getUuid();
+					int dlType = uList.get(0).getIsChuangke();
+					// //判断是否有返还记录
+					List<ScoreBack> sbaList = sBackService.getBackScore(puuid,
+							"1", "");
+					// /没有第一次返还记录==就增加
+					if (sbaList == null || sbaList.size() == 0) {
+						ScoreBack sBack = new ScoreBack();
+						sBack.setUuuid(puuid);
+						sBack.setDlType(dlType); // 2 ,3,4
+						String bz_id = (dlType - 1) + "";
+						Xtcl cl = clService.getClsValue("fhzq_type", "1");
+						int backNum = 100;
+						backNum = Integer.parseInt(cl.getBz_value());
+						Xtcl cl2 = clService.getClsValue("dyjf_type", bz_id);
+						sBack.setBackNum(backNum);
+						sBack.setLeftNum(backNum);
+						int backScore = 300;
+						backScore = Integer.parseInt(cl2.getBz_value());
+						sBack.setBackScore(backScore);
+						int eachScore = backScore / backNum;
+						sBack.setEachScore(eachScore);
+						int count3 = sBackService.addBackScore(sBack);
+						return count3;
+					}
+				}
 				if (count1 == 1) {
 					return count1;
 				}
 			}
 		}
-		return count1;
+		return count;
 	}
 
 	// /////////////////订单购买/////////////////////

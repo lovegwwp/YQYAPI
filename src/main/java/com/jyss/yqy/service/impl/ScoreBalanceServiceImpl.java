@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jyss.yqy.entity.ScoreBack;
 import com.jyss.yqy.entity.ScoreBalance;
 import com.jyss.yqy.mapper.ScoreBalanceMapper;
 import com.jyss.yqy.service.ScoreBalanceService;
@@ -44,6 +45,22 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 		sb.setStatus(1);
 		sb.setCreatedAt(CommTool.getNowTimestamp());
 		return sbMapper.addShoppingScoreBalance(sb);
+	}
+
+	@Override
+	public List<ScoreBack> getBackScore(String uuuid, String status,
+			String backTime) {
+		// TODO Auto-generated method stub
+		return sbMapper.getBackScore(uuuid, status, backTime);
+	}
+
+	@Override
+	public int addBackScore(ScoreBack sBack) {
+		// TODO Auto-generated method stub
+		sBack.setStatus(1);
+		sBack.setCratedAt(CommTool.getNowTimestamp());
+		sBack.setBackTime(CommTool.getAfterWeekTimestamp());
+		return sbMapper.addBackScore(sBack);
 	}
 
 }

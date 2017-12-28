@@ -236,4 +236,16 @@
     where u_id = #{uId,jdbcType=INTEGER}
   </update>
   
+   <!--记录查询--> 
+    <select id="getRecordB" resultMap="BaseResultMap" >  
+        select * from u_user_r_record_b                           
+            <where> 
+               1 = 1
+			   <if test="uId != null and uId !=''"> and u_id = #{uId} </if> 
+			   <if test="rId != null and rId !=''"> and r_id = #{rId} </if> 
+			   <if test="status != null and status !=''"> and status = #{status} </if> 			 
+			</where>  
+    </select> 
+    
+  
 </mapper>

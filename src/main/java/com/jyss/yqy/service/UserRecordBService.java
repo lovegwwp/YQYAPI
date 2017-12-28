@@ -5,14 +5,18 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.jyss.yqy.entity.jsonEntity.UserBean;
+import com.jyss.yqy.entity.UUserRRecordB;
 
 public interface UserRecordBService {
-	
-	Map<String,String> insertUserRecordB(@Param("uuid") String uuid,@Param("bCode") String bCode);
-	
-	Map<String,String> insertJBonusFdj();
-	
-	/*Map<String,String> insertJBonusGlj(@Param("uuid") String uuid);*/
+
+	Map<String, String> insertUserRecordB(@Param("uuid") String uuid,
+			@Param("bCode") String bCode);
+
+	Map<String, String> insertJBonusFdj();
+
+	/* Map<String,String> insertJBonusGlj(@Param("uuid") String uuid); */
+
+	List<UUserRRecordB> getRecordB(@Param("uId") String uId,
+			@Param("rId") String rId, @Param("status") String status);
 
 }
