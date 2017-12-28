@@ -10,7 +10,7 @@
         <id property="id" column="id"  />
         <result property="end" column="end"  /> <!--1=A端 2=B端  -->
         <result property="uUuid" column="u_uuid"  />
-        <result property="category" column="category"  /><!--积分来源或去向[1=A端取现，2=A端消费，3=A端返佣，4=管理奖，5=辅导奖，6=分销奖，7=市场奖，8=B端消费]  -->
+        <result property="category" column="category"  /><!--积分来源或去向[1=A端取现，2=A端消费，3=A端返佣，4=管理奖，5=辅导奖，6=分销奖，7=市场奖，8=B端消费,9积分返还]  -->
         <result property="type" column="type"  /><!--1=收入 2=支出  -->
         <result property="score" column="score"  />
         <result property="jyScore" column="jy_score"  />
@@ -41,25 +41,25 @@
     <!--返还记录=插入-->
     <insert id="addBackScore" parameterType="com.jyss.yqy.entity.ScoreBack" 
         useGeneratedKeys="true" keyProperty="id">                                                     <!-- ordersn -->
-        insert into u_back_score values(null,#{uuuid},#{dlType},#{backNum},#{leftNum},#{backScore},#{eachScore},#{createdAt},#{backTime},#{status})              
+        insert into u_score_back values(null,#{uuuid},#{dlType},#{backNum},#{leftNum},#{backScore},#{eachScore},#{createdAt},#{backTime},#{status})              
     </insert>
     
     <!--记录查询--> 
     <select id="getBackScore" resultMap="sBackResultMap" >  
-        select * from u_back_score                           
+        select * from u_score_back                           
             <where> 
                1 = 1
 			   <if test="uuuid != null and uuuid !=''"> and u_uuid = #{uuuid} </if> 
 			   <if test="status != null and status !=''"> and status = #{status} </if> 
-			   <if test="backTime != null and backTime !=''"> and back_ime &gt #{backTime} </if>  
-			   <if test="backTime1 != null and backTime1 !=''"> and back_ime &lt #{backTime1} </if>  
+			   <if test="backTime != null and backTime !=''"> and back_ime &gt; #{backTime} </if>  
+			   <if test="backTime1 != null and backTime1 !=''"> and back_ime &lt; #{backTime1} </if>  
 			</where>  
 			order by created_at desc 
     </select> 
     
    <!-- 更新剩余返还次数 -->
    <update id="upBackNum"  >
-	  update u_back_score  set  back_num = #{backNum} , back_time = #{backTime}
+	  update u_score_back  set  back_num = #{backNum} , back_time = #{backTime}
             where u_uuid = #{uId}  and status =1;
    </update>
   

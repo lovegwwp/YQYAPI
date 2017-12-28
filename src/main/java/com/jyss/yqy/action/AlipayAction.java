@@ -35,9 +35,13 @@ import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.entity.ScoreBack;
+import com.jyss.yqy.entity.UUserRRecordB;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.OrdersBService;
+import com.jyss.yqy.service.ScoreBalanceService;
+import com.jyss.yqy.service.UserRecordBService;
 import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.service.XtclService;
 
@@ -54,6 +58,10 @@ public class AlipayAction {
 	private UserService userService;
 	@Autowired
 	private OrdersBService ordersBService;
+	@Autowired
+	private ScoreBalanceService sBackService;
+	@Autowired
+	private UserRecordBService recordBService;
 
 	// 支付宝当面付2.0服务
 	private static AlipayTradeService tradeService;
@@ -684,6 +692,7 @@ public class AlipayAction {
 		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
 		if (obList == null || obList.size() != 1) {
 			count = 0;
+			return count;
 		}
 		// 更改订单状态
 		count = ordersBService.upOrderStatus("1", "-1", orderNum);
@@ -695,13 +704,54 @@ public class AlipayAction {
 				// 更改代理人状态
 				count1 = userService.upUserAllStatus("1", null, null, null,
 						null, ordersB.getGmId());
-				// 查询积分返还
 				if (count1 == 1) {
-					return count1;
+					// 查询积分返还
+					// //当前成为代理人的推荐人uuid
+					List<UUserRRecordB> rbList = recordBService.getRecordB(
+							ordersB.getGmId(), "", "1");
+					if (rbList == null || rbList.size() != 1) {
+						return 0;
+					}
+					String pId = rbList.get(0).getrId() + "";
+					List<UserBean> uList = userService.getUserById(pId, "1",
+							"2");
+					if (uList == null || uList.size() != 1) {
+						return 1;// /无上级直接返回
+					}
+					String puuid = uList.get(0).getUuid();
+					int dlType = uList.get(0).getIsChuangke();
+					// //判断是否有返还记录
+					List<ScoreBack> sbaList = sBackService.getBackScore(puuid,
+							"1", "", "");
+					// /没有第一次返还记录==就增加
+					if (sbaList == null || sbaList.size() == 0) {
+						ScoreBack sBack = new ScoreBack();
+						sBack.setUuuid(puuid);
+						sBack.setDlType(dlType); // 2 ,3,4
+						String bz_id = (dlType - 1) + "";
+						Xtcl cl = clService.getClsValue("fhzq_type", "1");
+						int backNum = 100;
+						if (cl != null) {
+							backNum = Integer.parseInt(cl.getBz_value());
+						}
+						Xtcl cl2 = clService.getClsValue("dyjf_type", bz_id);
+						sBack.setBackNum(backNum);
+						sBack.setLeftNum(backNum);
+						int backScore = 300;
+						if (cl2 != null) {
+							backScore = Integer.parseInt(cl2.getBz_value());
+						}
+						sBack.setBackScore(backScore);
+						int eachScore = backScore / backNum;
+						sBack.setEachScore(eachScore);
+						int count3 = sBackService.addBackScore(sBack);
+						return count3;
+					}
 				}
+				return count1;
 			}
 		}
-		return count1;
+		return count;
 	}
 
 	// /////////////////订单购买/////////////////////
@@ -715,9 +765,43 @@ public class AlipayAction {
 		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
 		if (obList == null || obList.size() != 1) {
 			count = 0;
+			return count;
 		}
 		// 更改订单状态
 		count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		if (count == 1) {
+			try {
+				// /判断代理等级，和购买亚麻籽油相应数量，进行比较是否相应进行升级
+				int gmNum = Integer.parseInt(obList.get(0).getGmNum());
+				// /查找当前购买人等级；
+				String gmID = obList.get(0).getGmId();
+				List<UserBean> ubList = userService.getUserById(gmID, "1", "2");// /通过审核用户
+				if (ubList == null || ubList.size() != 1) {
+					count = 0;
+					return count;
+				}
+				// //2=一级代理人 3=二级代理人 4=三级代理人',
+				int dlrLevel = ubList.get(0).getIsChuangke();
+				// /最高等级时不进行相应变化
+				if (dlrLevel != 4) {
+					// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
+					int compareLevel = dlrLevel + 3;
+					// /查找往上一等级对应盒数
+					Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel
+							+ "");
+					int compareNum = Integer.parseInt(dlHs.getBz_value());
+					if (gmNum >= compareNum) {
+						// //超过数量的购买。直接升级
+						dlrLevel = dlrLevel + 1;
+						count = userService.upUserAllStatus("", "", "",
+								dlrLevel + "", "", gmID);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
+		}
 		return count;
 	}
 

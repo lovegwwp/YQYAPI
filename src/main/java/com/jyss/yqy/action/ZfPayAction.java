@@ -19,6 +19,7 @@ import com.jyss.yqy.constant.Constant;
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.ScoreBack;
+import com.jyss.yqy.entity.ScoreBalance;
 import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.UUserRRecordB;
 import com.jyss.yqy.entity.Xtcl;
@@ -155,7 +156,7 @@ public class ZfPayAction {
 			mmap = ymzCashScorePay(filePath, gmID, num, spId);
 		} else {
 			mmap.put("status", "false");
-			mmap.put("message", "商品信息错误");
+			mmap.put("message", "商品信息错误!");
 			mmap.put("code", "-3");
 			mmap.put("data", "");
 			return mmap;
@@ -179,7 +180,7 @@ public class ZfPayAction {
 		// 支付主题
 		String subject = "亚麻籽油消费";
 		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
-		mm.put("outtradeno", "");
+		mm.put("outtradeno", outTradeNo);
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", zfCode);
@@ -190,7 +191,7 @@ public class ZfPayAction {
 		goods = ordersBService.getGoodsByid(spID + "");
 		if (goods == null) {
 			mapRe.put("status", "false");
-			mapRe.put("message", "商品信息错误！");
+			mapRe.put("message", "商品信息错误！！");
 			mapRe.put("code", "-3");
 			mapRe.put("data", mm);
 			return mapRe;
@@ -202,7 +203,7 @@ public class ZfPayAction {
 			money = (float) (gmNum * price);
 		} catch (Exception e) {
 			mapRe.put("status", "false");
-			mapRe.put("message", "商品信息错误！");
+			mapRe.put("message", "商品信息错误！！！");
 			mapRe.put("code", "-3");
 			mapRe.put("data", mm);
 			return mapRe;
@@ -218,6 +219,13 @@ public class ZfPayAction {
 			return mapRe;
 		}
 		UserBean ub = ublist.get(0);
+		if (ub.getIsChuangke() < 2) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "用户信息错误！");
+			mapRe.put("code", "-2");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
 		if (ub.getPwd() == null || ub.getPwd().equals("")
 				|| ub.getPwd().equals("0")) {
 			zfCode = "0";
@@ -226,6 +234,14 @@ public class ZfPayAction {
 		}
 		mm.put("zfCode", zfCode);
 		mm.put("xjjf", ub.getCashScore() + "");
+
+		if (ub.getCashScore() < money) {
+			mapRe.put("status", "false");
+			mapRe.put("message", "商品信息错误！！！！");
+			mapRe.put("code", "-3");
+			mapRe.put("data", mm);
+			return mapRe;
+		}
 
 		// //// 商品明细列表，需填写购买商品详细信息，进行创建相应订单///////////
 		String jb = "0";
@@ -241,8 +257,8 @@ public class ZfPayAction {
 			pv = Integer.parseInt(singlePV) * gmNum;
 		} catch (Exception e) {
 			mapRe.put("status", "false");
-			mapRe.put("message", "商品信息错误！");
-			mapRe.put("code", "-3");
+			mapRe.put("message", "现金积分不足！");
+			mapRe.put("code", "-5");
 			mapRe.put("data", mm);
 			return mapRe;
 		}
@@ -262,12 +278,12 @@ public class ZfPayAction {
 		}
 		OrdersB ob = new OrdersB(outTradeNo, gmID + "", gmr, ub.getAccount(),
 				goods.getName(), goods.getPics(), gmNum + "", "盒", "-1", "1",
-				goods.getPrice(), money, pv, jb, code, "zfId", 2);
+				goods.getPrice(), money, pv, jb, code, "zfId", 3);
 		int count = 0;
 		count = ordersBService.addOrder(ob);
 		if (count == 1) {
 			Date sjc = new Date();
-			mm.put("outtradeno", "");
+			mm.put("outtradeno", outTradeNo);
 			mm.put("money", money + "");
 			mapRe.put("status", "true");
 			mapRe.put("message", "提交订单成功！");
@@ -300,13 +316,17 @@ public class ZfPayAction {
 		}
 		// ////更改订单状态
 		int count = 0;
-		count = updateOrder(orderNum);
+		count = updateOrder2(orderNum);
 		if (count == 1) {
 			map.put("status", "true");
 			map.put("message", "购买成功!");
 			map.put("code", "0");
+			return map;
 			// map.put("data", "");
 		}
+		map.put("status", "false");
+		map.put("message", "购买失败!");
+		map.put("code", "-2");
 		return map;
 	}
 
@@ -346,7 +366,7 @@ public class ZfPayAction {
 					List<UserBean> uList = userService.getUserById(pId, "1",
 							"2");
 					if (uList == null || uList.size() != 1) {
-						return 0;
+						return 1;// /无上级直接返回
 					}
 					String puuid = uList.get(0).getUuid();
 					int dlType = uList.get(0).getIsChuangke();
@@ -361,12 +381,16 @@ public class ZfPayAction {
 						String bz_id = (dlType - 1) + "";
 						Xtcl cl = clService.getClsValue("fhzq_type", "1");
 						int backNum = 100;
-						backNum = Integer.parseInt(cl.getBz_value());
+						if (cl != null) {
+							backNum = Integer.parseInt(cl.getBz_value());
+						}
 						Xtcl cl2 = clService.getClsValue("dyjf_type", bz_id);
 						sBack.setBackNum(backNum);
 						sBack.setLeftNum(backNum);
 						int backScore = 300;
-						backScore = Integer.parseInt(cl2.getBz_value());
+						if (cl2 != null) {
+							backScore = Integer.parseInt(cl2.getBz_value());
+						}
 						sBack.setBackScore(backScore);
 						int eachScore = backScore / backNum;
 						sBack.setEachScore(eachScore);
@@ -374,9 +398,7 @@ public class ZfPayAction {
 						return count3;
 					}
 				}
-				if (count1 == 1) {
-					return count1;
-				}
+				return count1;
 			}
 		}
 		return count;
@@ -397,36 +419,112 @@ public class ZfPayAction {
 		}
 		// 更改订单状态
 		count = ordersBService.upOrderStatus("1", "-1", orderNum);
-		try {
-			// /判断代理等级，和购买亚麻籽油相应数量，进行比较是否相应进行升级
-			int gmNum = Integer.parseInt(obList.get(0).getGmNum());
-			// /查找当前购买人等级；
-			String gmID = obList.get(0).getGmId();
-			List<UserBean> ubList = userService.getUserById(gmID, "1", "2");// /通过审核用户
-			if (ubList == null || ubList.size() != 1) {
-				count = 0;
-				return count;
-			}
-			// //2=一级代理人 3=二级代理人 4=三级代理人',
-			int dlrLevel = ubList.get(0).getIsChuangke();
-			// /最高等级时不进行相应变化
-			if (dlrLevel != 4) {
-				// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
-				int compareLevel = dlrLevel + 3;
-				// /查找往上一等级对应盒数
-				Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel
-						+ "");
-				int compareNum = Integer.parseInt(dlHs.getBz_value());
-				if (gmNum >= compareNum) {
-					// //超过数量的购买。直接升级
-					dlrLevel = dlrLevel + 1;
-					count = userService.upUserAllStatus("", "", "", dlrLevel
-							+ "", "", gmID);
+		if (count == 1) {
+			try {
+				// /判断代理等级，和购买亚麻籽油相应数量，进行比较是否相应进行升级
+				int gmNum = Integer.parseInt(obList.get(0).getGmNum());
+				// /查找当前购买人等级；
+				String gmID = obList.get(0).getGmId();
+				List<UserBean> ubList = userService.getUserById(gmID, "1", "2");// /通过审核用户
+				if (ubList == null || ubList.size() != 1) {
+					count = 0;
+					return count;
 				}
+				// //2=一级代理人 3=二级代理人 4=三级代理人',
+				int dlrLevel = ubList.get(0).getIsChuangke();
+				// /最高等级时不进行相应变化
+				if (dlrLevel != 4) {
+					// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
+					int compareLevel = dlrLevel + 3;
+					// /查找往上一等级对应盒数
+					Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel
+							+ "");
+					int compareNum = Integer.parseInt(dlHs.getBz_value());
+					if (gmNum >= compareNum) {
+						// //超过数量的购买。直接升级
+						dlrLevel = dlrLevel + 1;
+						count = userService.upUserAllStatus("", "", "",
+								dlrLevel + "", "", gmID);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return 0;
+		}
+		return count;
+	}
+
+	/**
+	 * 购买支付成功状态修改、、、、、、现金积分购买
+	 */
+	public int updateOrder2(String orderNum) {
+		int count = 0;
+		int count1 = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+			return count;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		if (count == 1) {
+			try {
+				// /判断代理等级，和购买亚麻籽油相应数量，进行比较是否相应进行升级
+				int gmNum = Integer.parseInt(obList.get(0).getGmNum());
+				float price = obList.get(0).getPrice();
+				float money = gmNum * price;
+				String gmID = obList.get(0).getGmId();
+				List<UserBean> ubList = userService.getUserById(gmID, "1", "2");// /通过审核用户
+				if (ubList == null || ubList.size() != 1) {
+					count = 0;
+					return count;
+				}
+				// /扣除相应积分，并增加积分记录
+				float cashScore = 0;
+				cashScore = ubList.get(0).getCashScore();
+				cashScore = cashScore - money;
+				count1 = userService.updateUserBackScore(cashScore,
+						ubList.get(0).getShoppingScore(), ubList.get(0)
+								.getUuid());
+				if (count1 != 1) {
+					return 0;
+				}
+				count1 = 0;
+				ScoreBalance sb = new ScoreBalance();
+				sb.setCategory(8);
+				sb.setType(2);
+				sb.setuUuid(ubList.get(0).getUuid());
+				sb.setScore(money);
+				sb.setJyScore(cashScore);
+				sb.setOrderSn(orderNum);
+				count1 = sBackService.addCashScoreBalance(sb);
+				if (count1 != 1) {
+					return 0;
+				}
+				// /查找当前购买人等级；
+				// //2=一级代理人 3=二级代理人 4=三级代理人',
+				int dlrLevel = ubList.get(0).getIsChuangke();
+				// /最高等级时不进行相应变化
+				if (dlrLevel != 4) {
+					// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
+					int compareLevel = dlrLevel + 3;
+					// /查找往上一等级对应盒数
+					Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel
+							+ "");
+					int compareNum = Integer.parseInt(dlHs.getBz_value());
+					if (gmNum >= compareNum) {
+						// //超过数量的购买。直接升级
+						dlrLevel = dlrLevel + 1;
+						count = userService.upUserAllStatus("", "", "",
+								dlrLevel + "", "", gmID);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
 		}
 		return count;
 	}

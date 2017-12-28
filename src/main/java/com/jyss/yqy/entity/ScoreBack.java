@@ -11,7 +11,7 @@ public class ScoreBack {
 	private int leftNum;
 	private int backScore;
 	private int eachScore;
-	private Date cratedAt;
+	private Date createdAt;
 	private Date backTime;
 	private int status;
 
@@ -71,16 +71,16 @@ public class ScoreBack {
 		this.eachScore = eachScore;
 	}
 
-	public Date getCratedAt() {
-		return cratedAt;
-	}
-
-	public void setCratedAt(Date cratedAt) {
-		this.cratedAt = cratedAt;
-	}
-
 	public Date getBackTime() {
 		return backTime;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public void setBackTime(Date backTime) {
