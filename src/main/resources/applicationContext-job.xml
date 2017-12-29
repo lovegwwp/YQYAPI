@@ -43,11 +43,11 @@
 	</bean>
 	<bean id="cronTriggerFactoryBean3" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod3"></property>
-		<property name="cronExpression" value="0 0 3 * * ?"></property>      <!-- 每天03:00执行 -->
+		<property name="cronExpression" value="0 0 4 * * ?"></property>      <!-- 每天04:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean4" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod4"></property>
-		<property name="cronExpression" value="0 0 4 * * ?"></property>      <!-- 每天04:00执行 -->
+		<property name="cronExpression" value="0 0 3 * * ?"></property>      <!-- 每天03:00执行 -->
 	</bean>
 	
 	
