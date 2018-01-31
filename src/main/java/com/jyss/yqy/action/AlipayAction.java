@@ -780,7 +780,7 @@ public class AlipayAction {
 					count = 0;
 					return count;
 				}
-				// //2=一级代理人 3=二级代理人 4=三级代理人',
+				// //2=一级代理人 3=二级代理人 4=三级代理人5经理人',
 				int dlrLevel = ubList.get(0).getIsChuangke();
 				// /最高等级时不进行相应变化
 				if (dlrLevel != 4) {

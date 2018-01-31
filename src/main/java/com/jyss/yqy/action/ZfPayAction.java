@@ -94,7 +94,9 @@ public class ZfPayAction {
 		int gmID = ub.getId();
 		// ///判断支付方式=== 走不同支付
 		if (type.equals("1")) {
-			map = aliService.addDlrOrder2(filePath, money, gmID);
+			System.out.println(11);
+			map = aliService.addDlrOrder(filePath, money, gmID);
+			//map = aliService.addDlrOrder2(filePath, money, gmID);
 		} else if (type.equals("2")) {
 			map = wxService.dlrWxpay(filePath, money, gmID);
 		} else {
