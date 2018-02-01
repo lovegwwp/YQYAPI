@@ -79,7 +79,14 @@
     </update>
      
       
-    <!--修改支付密码 --> 
+    <!--修改total_pv=加=返现额度 --> 
+    <update id="upTotalPv"  >
+        update u_user  set total_pv = total_pv + #{totalPv} ,last_modify_time=now()
+             where uuid =#{uuid} 
+    </update>
+    
+    
+        <!--修改支付密码 --> 
     <update id="upPayPwd"  >
         update u_user  set pay_pwd = #{payPwd} ,last_modify_time=now()
              where uuid =#{uuid} 

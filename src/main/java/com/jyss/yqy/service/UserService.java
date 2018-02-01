@@ -56,6 +56,12 @@ public interface UserService {
 	 * @return
 	 */
 	int upPayPwd(@Param("uuid") String uuid, @Param("payPwd") String payPwd);
+	
+	/**
+	 * 修改返现额度
+	 */
+	int upTotalPv(@Param("uuid") String uuid, @Param("totalPv") String totalPv);
+
 
 	/**
 	 * 修改个人。。。等等。。状态

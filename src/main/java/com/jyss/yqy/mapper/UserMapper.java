@@ -59,6 +59,11 @@ public interface UserMapper {
 	 * @return
 	 */
 	int upPayPwd(@Param("uuid") String uuid, @Param("payPwd") String payPwd);
+	
+	/**
+	 * 修改返现额度
+	 */
+	int upTotalPv(@Param("uuid") String uuid, @Param("totalPv") String totalPv);
 
 	/**
 	 * 查询个人信息

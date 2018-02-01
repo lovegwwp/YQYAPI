@@ -242,4 +242,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateUserBackScore(cashScore, shoppingScore, uuuid);
 	}
 
+	@Override
+	public int upTotalPv(String uuid, String totalPv) {
+		// TODO Auto-generated method stub
+		return userMapper.upTotalPv(uuid, totalPv);
+	}
+
 }

@@ -59,6 +59,7 @@ public class User {
 	private float rShopMoney;
 	private String aliAccount;// 支付宝账号
 	private String aliName;// 支付宝姓名
+	private Float totalPv;      //剩余返还pv
 
 	public int getId() {
 		return id;
@@ -66,6 +67,14 @@ public class User {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Float getTotalPv() {
+		return totalPv;
+	}
+
+	public void setTotalPv(Float totalPv) {
+		this.totalPv = totalPv;
 	}
 
 	public String getUuid() {

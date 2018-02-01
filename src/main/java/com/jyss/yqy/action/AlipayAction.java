@@ -251,7 +251,8 @@ public class AlipayAction {
 				count1 = userService.upUserAllStatus("1", null, null, null,
 						null, ordersB.getGmId());
 				if (count1 == 1) {
-					// 查询积分返还
+					// 查询积分返还==2018.2.1==之前返还积分【推荐别人成为代理人开始增加一条返还记录表，一周后开始返还积分】
+					///===2018.2.1==之后===模式不变===可以返积分多次==例；初级的积分在返还，升级为中级了，则返还中级的，返完之后，返初级的。
 					// //当前成为代理人的推荐人uuid
 					List<UUserRRecordB> rbList = recordBService.getRecordB(
 							ordersB.getGmId(), "", "1");
@@ -265,32 +266,14 @@ public class AlipayAction {
 						return 1;// /无上级直接返回
 					}
 					String puuid = uList.get(0).getUuid();
+					///创客等级  ==2=一级代理人 3=二级代理人 4=三级代理人5经理人',
 					int dlType = uList.get(0).getIsChuangke();
 					// //判断是否有返还记录
 					List<ScoreBack> sbaList = sBackService.getBackScore(puuid,
 							"1", "", "");
-					// /没有第一次返还记录==就增加
+					// /没有1=第一次返还记录==就增加，2=u_ser的total_pv增加额度 
 					if (sbaList == null || sbaList.size() == 0) {
-						ScoreBack sBack = new ScoreBack();
-						sBack.setUuuid(puuid);
-						sBack.setDlType(dlType); // 2 ,3,4
-						String bz_id = (dlType - 1) + "";
-						Xtcl cl = clService.getClsValue("fhzq_type", "1");
-						int backNum = 100;
-						if (cl != null) {
-							backNum = Integer.parseInt(cl.getBz_value());
-						}
-						Xtcl cl2 = clService.getClsValue("dyjf_type", bz_id);
-						sBack.setBackNum(backNum);
-						sBack.setLeftNum(backNum);
-						int backScore = 300;
-						if (cl2 != null) {
-							backScore = Integer.parseInt(cl2.getBz_value());
-						}
-						sBack.setBackScore(backScore);
-						int eachScore = backScore / backNum;
-						sBack.setEachScore(eachScore);
-						int count3 = sBackService.addBackScore(sBack);
+						int count3 = addScoreBack(dlType,puuid);
 						return count3;
 					}
 				}
@@ -298,6 +281,40 @@ public class AlipayAction {
 			}
 		}
 		return count;
+	}
+	
+	////不管是第一次成为代理人，还是后续升级代理人 都要先判断一下 scoreback是否有返还记录 ，有的话 之前记录状态为-1封存，没有正常状态1添加
+	public int addScoreBack(int dlType ,String puuid){
+		//没有1=第一次返还记录==就增加，2=u_ser的total_pv增加额度 
+		int  cun =0;
+		ScoreBack sBack = new ScoreBack();
+		sBack.setUuuid(puuid);
+		sBack.setDlType(dlType); // 2 ,3,4
+		String bz_id = (dlType - 1) + "";
+		///返还日期
+		Xtcl cl = clService.getClsValue("fhzq_type", "1");
+		int backNum = 100;
+		if (cl != null) {
+			backNum = Integer.parseInt(cl.getBz_value());
+		}
+		//返还积分
+		Xtcl cl2 = clService.getClsValue("dyjf_type", bz_id);
+		sBack.setBackNum(backNum);
+		sBack.setLeftNum(backNum);
+		int backScore = 300;
+		if (cl2 != null) {
+			backScore = Integer.parseInt(cl2.getBz_value());
+		}
+		sBack.setBackScore(backScore);
+		int eachScore = backScore / backNum;
+		sBack.setEachScore(eachScore);
+		cun = sBackService.addBackScore(sBack);
+		//2=u_ser的total_pv增加额度 
+		if (cun==1) {
+			cun=0;
+			cun = userService.upTotalPv(puuid, backScore+"");
+		}		
+		return cun;
 	}
 
 	// /////////////////订单购买/////////////////////
@@ -318,7 +335,7 @@ public class AlipayAction {
 		if (count == 1) {
 			try {
 				// /判断代理等级，和购买亚麻籽油相应数量，进行比较是否相应进行升级
-				int gmNum = Integer.parseInt(obList.get(0).getGmNum());
+				int gmNum = Integer.parseInt(obList.get(0).getGmNum());  
 				// /查找当前购买人等级；
 				String gmID = obList.get(0).getGmId();
 				List<UserBean> ubList = userService.getUserById(gmID, "1", "2");// /通过审核用户
@@ -338,9 +355,14 @@ public class AlipayAction {
 					int compareNum = Integer.parseInt(dlHs.getBz_value());
 					if (gmNum >= compareNum) {
 						// //超过数量的购买。直接升级
-						dlrLevel = dlrLevel + 1;
+						if (dlrLevel==5) {
+							dlrLevel =2;////经理人升级为初级代理人
+						}else{
+						    dlrLevel = dlrLevel + 1;
+						}
 						count = userService.upUserAllStatus("", "", "",
 								dlrLevel + "", "", gmID);
+						///代理人升级，1=包括返还记录的增加 以及2=低等级返还记录的状态数据封存3=用户 total_pv的额度增加
 					}
 				}
 			} catch (Exception e) {
