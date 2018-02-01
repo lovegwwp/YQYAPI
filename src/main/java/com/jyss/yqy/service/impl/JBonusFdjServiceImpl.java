@@ -52,7 +52,7 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 		PageHelper.startPage(page, limit);
 		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjByDay(uId, beginTime, endTime);
 		PageInfo<JBonusFdj> pageInfo = new PageInfo<JBonusFdj>(list);
-		jBonusFdjResult.setEarnings(null);
+		jBonusFdjResult.setEarnings(0.0);
 		jBonusFdjResult.setTotal(totalByDay);
 		jBonusFdjResult.setData(list);
 		return jBonusFdjResult;
@@ -66,7 +66,7 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 		PageHelper.startPage(page, limit);
 		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjByMonth(uId, month);
 		PageInfo<JBonusFdj> pageInfo = new PageInfo<JBonusFdj>(list);
-		jBonusFdjResult.setEarnings(null);
+		jBonusFdjResult.setEarnings(0.0);
 		jBonusFdjResult.setTotal(totalByMonth);
 		jBonusFdjResult.setData(list);
 		return jBonusFdjResult;

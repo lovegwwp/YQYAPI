@@ -66,7 +66,7 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 		JBonusScj bonusScj = scjList.get(0);
 		result.setDepartA(bonusScj.getaPv());
 		result.setDepartB(bonusScj.getbPv());
-		result.setTotal(null);
+		result.setTotal(0f);
 		result.setData(bonusScjList);
 		return result;
 		
@@ -82,7 +82,7 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 		JBonusScj bonusScj = scjList.get(0);
 		result.setDepartA(bonusScj.getaPv());
 		result.setDepartB(bonusScj.getbPv());
-		result.setTotal(null);
+		result.setTotal(0f);
 		result.setData(bonusScjList);
 		return result;
 		
