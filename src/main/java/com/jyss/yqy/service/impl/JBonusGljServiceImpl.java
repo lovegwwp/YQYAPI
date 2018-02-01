@@ -1,31 +1,18 @@
 package com.jyss.yqy.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jyss.yqy.entity.JBonusFdj;
-import com.jyss.yqy.entity.JBonusFxj;
 import com.jyss.yqy.entity.JBonusGlj;
-import com.jyss.yqy.entity.JBonusGljExample;
-import com.jyss.yqy.entity.ScoreBalance;
-import com.jyss.yqy.entity.Xtcl;
-import com.jyss.yqy.entity.JBonusGljExample.Criteria;
-import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.entity.JBonusGljResult;
 import com.jyss.yqy.mapper.JBonusGljMapper;
-import com.jyss.yqy.mapper.ScoreBalanceMapper;
-import com.jyss.yqy.mapper.UserMapper;
-import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.JBonusGljService;
+
+
 
 @Service
 @Transactional
@@ -33,12 +20,12 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 	
 	@Autowired
 	private JBonusGljMapper jBonusGljMapper;
-	@Autowired
+	/*@Autowired
 	private XtclMapper xtclMapper;
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
-	private ScoreBalanceMapper scoreBalanceMapper;
+	private ScoreBalanceMapper scoreBalanceMapper;*/
 	
 	
 	/**
@@ -66,7 +53,7 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 		PageHelper.startPage(page, limit);
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByDay(uId, beginTime, endTime);
 		PageInfo<JBonusGlj> pageInfo = new PageInfo<JBonusGlj>(list);
-		jBonusGljResult.setEarnings(null);
+		jBonusGljResult.setEarnings(0.0);
 		jBonusGljResult.setTotal(totalByDay);
 		jBonusGljResult.setData(list);
 		return jBonusGljResult;
@@ -80,7 +67,7 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 		PageHelper.startPage(page, limit);
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljByMonth(uId, month);
 		PageInfo<JBonusGlj> pageInfo = new PageInfo<JBonusGlj>(list);
-		jBonusGljResult.setEarnings(null);
+		jBonusGljResult.setEarnings(0.0);
 		jBonusGljResult.setTotal(totalByMonth);
 		jBonusGljResult.setData(list);
 		return jBonusGljResult;

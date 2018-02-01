@@ -102,7 +102,7 @@
 			</if>
 			AND status = 1 
 		</where>
-		ORDER BY  created DESC
+		ORDER BY created DESC
 	</select>
 	
 	<!-- 按月查询 -->

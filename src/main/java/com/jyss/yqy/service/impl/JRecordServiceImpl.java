@@ -65,20 +65,25 @@ public class JRecordServiceImpl implements JRecordService{
 				Integer depart2 = record2.getDepart();
 				
 				//查询返现比列和封顶值
-				Xtcl xtcl1 = xtclMapper.getClsValue("scj_type", "1");        //初级获得金额
-				float float1 = Float.parseFloat(xtcl1.getBz_value());        //0.12
-				Xtcl xtcl2 = xtclMapper.getClsValue("scj_type", "2");        //中级获得金额
-				float float2 = Float.parseFloat(xtcl2.getBz_value());        //0.16
-				Xtcl xtcl3 = xtclMapper.getClsValue("scj_type", "3");        //高级获得金额
-				float float3 = Float.parseFloat(xtcl3.getBz_value());        //0.22
-				Xtcl xtcl4 = xtclMapper.getClsValue("scj_type", "4");        //初级获得金额
-				float float4 = Float.parseFloat(xtcl4.getBz_value());        //3000.00
-				Xtcl xtcl5 = xtclMapper.getClsValue("scj_type", "5");        //中级获得金额
-				float float5 = Float.parseFloat(xtcl5.getBz_value());        //6000.00
-				Xtcl xtcl6 = xtclMapper.getClsValue("scj_type", "6");        //高级获得金额
-				float float6 = Float.parseFloat(xtcl6.getBz_value());        //9000.00
-				Xtcl xtcl7 = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
-				float float7 = Float.parseFloat(xtcl7.getBz_value());        //0.7
+				Xtcl xtcl1 = xtclMapper.getClsValue("scj_type", "1");        //初级代理人市场奖比例
+				float float1 = Float.parseFloat(xtcl1.getBz_value());       			  //0.12
+				Xtcl xtcl2 = xtclMapper.getClsValue("scj_type", "2");        //中级代理人市场奖比例
+				float float2 = Float.parseFloat(xtcl2.getBz_value());        			  //0.16
+				Xtcl xtcl3 = xtclMapper.getClsValue("scj_type", "3");        //高级代理人市场奖比例
+				float float3 = Float.parseFloat(xtcl3.getBz_value());       			  //0.22
+				Xtcl xtcl4 = xtclMapper.getClsValue("scj_type", "4");        //经理人市场奖比例
+				float float4 = Float.parseFloat(xtcl4.getBz_value());        			  //0.10
+				Xtcl xtcl5 = xtclMapper.getClsValue("scj_type", "5");        //初级代理人日封顶金额
+				float float5 = Float.parseFloat(xtcl5.getBz_value());        			  //3000.00
+				Xtcl xtcl6 = xtclMapper.getClsValue("scj_type", "6");        //中级代理人日封顶金额
+				float float6 = Float.parseFloat(xtcl6.getBz_value());        			  //6000.00
+				Xtcl xtcl7 = xtclMapper.getClsValue("scj_type", "7");        //高级代理人日封顶金额
+				float float7 = Float.parseFloat(xtcl7.getBz_value());        			  //9000.00
+				Xtcl xtcl8 = xtclMapper.getClsValue("scj_type", "8");        //经理人日封顶金额
+				float float8 = Float.parseFloat(xtcl8.getBz_value());        			  //1000.00
+				Xtcl xtcl9 = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
+				float float9 = Float.parseFloat(xtcl9.getBz_value());        			  //0.7
+
 				List<UserBean> userList = userMapper.getUserScoreById(jRecord.getuId());
 				UserBean userBean = userList.get(0);
 				int level = userBean.getIsChuangke();
@@ -93,11 +98,13 @@ public class JRecordServiceImpl implements JRecordService{
 					
 					float money = 0.00f;
 					if(level == 2){
-						money = Math.min(total1, total2)*float1 <= (float4/float7) ? Math.min(total1, total2)*float1 : (float4/float7);
+						money = Math.min(total1, total2)*float1 <= (float5/float9) ? Math.min(total1, total2)*float1 : (float5/float9);
 					}else if(level == 3){
-						money = Math.min(total1, total2)*float2 <= (float5/float7) ? Math.min(total1, total2)*float2 : (float5/float7);
+						money = Math.min(total1, total2)*float2 <= (float6/float9) ? Math.min(total1, total2)*float2 : (float6/float9);
 					}else if(level == 4){
-						money = Math.min(total1, total2)*float3 <= (float6/float7) ? Math.min(total1, total2)*float3 : (float6/float7);
+						money = Math.min(total1, total2)*float3 <= (float7/float9) ? Math.min(total1, total2)*float3 : (float7/float9);
+					}else if(level == 5){
+						money = Math.min(total1, total2)*float4 <= (float8/float9) ? Math.min(total1, total2)*float4 : (float8/float9);
 					}
 					bonusScj.setPv(money);
 					bonusScj.setStatus(1);
@@ -120,11 +127,13 @@ public class JRecordServiceImpl implements JRecordService{
 					
 					float money = 0.00f;
 					if(level == 2){
-						money = Math.min(total1, total2)*float1 <= (float4/float7) ? Math.min(total1, total2)*float1 : (float4/float7);
+						money = Math.min(total1, total2)*float1 <= (float5/float9) ? Math.min(total1, total2)*float1 : (float5/float9);
 					}else if(level == 3){
-						money = Math.min(total1, total2)*float2 <= (float5/float7) ? Math.min(total1, total2)*float2 : (float5/float7);
+						money = Math.min(total1, total2)*float2 <= (float6/float9) ? Math.min(total1, total2)*float2 : (float6/float9);
 					}else if(level == 4){
-						money = Math.min(total1, total2)*float3 <= (float6/float7) ? Math.min(total1, total2)*float3 : (float6/float7);
+						money = Math.min(total1, total2)*float3 <= (float7/float9) ? Math.min(total1, total2)*float3 : (float7/float9);
+					}else if(level == 5){
+						money = Math.min(total1, total2)*float4 <= (float8/float9) ? Math.min(total1, total2)*float4 : (float8/float9);
 					}
 					bonusScj.setPv(money);
 					bonusScj.setStatus(1);
@@ -150,9 +159,9 @@ public class JRecordServiceImpl implements JRecordService{
 				UserBean userBean = userList.get(0);
 				
 				Xtcl xtcl7 = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
-				float float7 = Float.parseFloat(xtcl7.getBz_value());        //0.7
+				float float7 = Float.parseFloat(xtcl7.getBz_value());        			  //0.7
 				Xtcl xtcl8 = xtclMapper.getClsValue("jjbl_type", "gw");      //购物积分比例
-				float float8 = Float.parseFloat(xtcl8.getBz_value());        //0.2
+				float float8 = Float.parseFloat(xtcl8.getBz_value());        			  //0.2
 				
 				Float money = jBonusScj.getPv();
 				Float totalPv = userBean.getTotalPv();
@@ -223,10 +232,7 @@ public class JRecordServiceImpl implements JRecordService{
 							userMapper.updateScore(userBean2);
 						}
 					}
-
 				}
-
-
 			}
 		}
 		map.put("message", "市场奖和积分计算完成时间："+new Date());

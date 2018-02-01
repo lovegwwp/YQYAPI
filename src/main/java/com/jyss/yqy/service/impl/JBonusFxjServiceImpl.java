@@ -74,7 +74,7 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 		PageHelper.startPage(page, limit);
 		List<JBonusFxj> list = bonusFxjMapper.selectJBonusFxjByDay(uId, beginTime, endTime);
 		PageInfo<JBonusFxj> pageInfo = new PageInfo<JBonusFxj>(list);
-		result.setEarnings(null);
+		result.setEarnings(0f);
 		result.setTotal(totalByDay);
 		result.setData(list);
 		return result;
@@ -87,7 +87,7 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 		PageHelper.startPage(page, limit);
 		List<JBonusFxj> list = bonusFxjMapper.selectJBonusFxjByMonth(uId, month);
 		PageInfo<JBonusFxj> pageInfo = new PageInfo<JBonusFxj>(list);
-		result.setEarnings(null);
+		result.setEarnings(0f);
 		result.setTotal(totalByMonth);
 		result.setData(list);
 		return result;
