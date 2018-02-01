@@ -101,10 +101,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jyss.yqy.entity.UUserRRecordB" >
-  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-			select LAST_INSERT_ID()
+  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer" >
+		select LAST_INSERT_ID()
 	</selectKey>
-    insert into u_user_r_record_b (id, u_id, r_id, 
+    insert into u_user_r_record_b (id, u_id, r_id,
       type, created_at, status
       )
     values (#{id,jdbcType=INTEGER}, #{uId,jdbcType=INTEGER}, #{rId,jdbcType=INTEGER}, 

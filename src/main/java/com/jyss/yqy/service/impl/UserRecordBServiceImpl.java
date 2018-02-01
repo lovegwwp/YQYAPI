@@ -71,7 +71,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 			}
 			// if(isAuth == 2 && (uLevel==2 || uLevel==3 || uLevel==4) &&
 			// (pLevel==2 || pLevel==3 || pLevel==4)){
-			if (pLevel == 2 || pLevel == 3 || pLevel == 4) {
+			if (pLevel == 2 || pLevel == 3 || pLevel == 4 || pLevel == 5) {
 				UUserRRecordBExample example = new UUserRRecordBExample();
 				Criteria criteria = example.createCriteria();
 				criteria.andUIdEqualTo(userBean.getId());
@@ -90,7 +90,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				userRRecordB.setType(pLevel);
 				userRRecordB.setCreatedAt(new Date());
 				int idNum = userRecordMapper.insert(userRRecordB);
-				if (idNum > 0) {
+				if (idNum == 1) {
 					map.put("code", "0");
 					map.put("status", "true");
 					map.put("message", "推荐码使用成功！");
@@ -98,11 +98,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 					return map;
 				}
 			}
-			/*
-			 * map.put("code", "-2"); map.put("status", "false");
-			 * map.put("message", "您的上级还不是代理人！"); map.put("data", ""); return
-			 * map;
-			 */
+			
 		}
 		map.put("code", "-2");
 		map.put("status", "false");
@@ -126,8 +122,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 			List<UserBean> userList = userMapper.getUserNameById(uId);
 			if (userList != null && userList.size() > 0) {
 				UserBean userBean = userList.get(0);
-				// SimpleDateFormat sdf = new
-				// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				UUserRRecordBExample example = new UUserRRecordBExample();
 				Criteria criteria = example.createCriteria();
 				criteria.andUIdEqualTo(uId);
@@ -166,16 +161,9 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 							Criteria criteria1 = example1.createCriteria();
 							criteria1.andUIdEqualTo(userRecord.getrId());
 							criteria1.andStatusEqualTo(1);
-							List<UUserRRecordB> list1 = userRecordMapper
-									.selectByExample(example1);
+							List<UUserRRecordB> list1 = userRecordMapper.selectByExample(example1);
 							if (list1 != null && list1.size() > 0) {
 								UUserRRecordB userRecord1 = list1.get(0);
-								/*
-								 * List<UserBean> nameById1 = userMapper
-								 * .getUserNameById(userRecord1.getrId()); if
-								 * (nameById1 != null && nameById1.size() > 0) {
-								 * UserBean userBean2 = nameById1.get(0);
-								 */
 								JBonusFdj bonusFdj1 = new JBonusFdj();
 								bonusFdj1.setuId(userRecord.getrId());
 								bonusFdj1.setParentId(userRecord1.getrId());
@@ -185,7 +173,6 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 								bonusFdj1.setuName(userBean1.getRealName());
 								bonusFdj1.setParentMoney(amount * double1);
 								jBonusFdjMapper.insert(bonusFdj1);
-								// }
 							}
 
 						} else if (pLevel == 2) {
@@ -209,8 +196,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 										bonusFdj1.setParentId(userRecord1.getrId());
 										bonusFdj1.setAmount(amount);
 										bonusFdj1.setStatus(1);
-										// bonusFdj1.setCreated(sdf.format(new
-										// Date()));
+										// bonusFdj1.setCreated(sdf.format(new Date()));
 										bonusFdj1.setuName(userBean1.getRealName());
 										bonusFdj1.setParentMoney(amount * double2);
 										jBonusFdjMapper.insert(bonusFdj1);
@@ -220,8 +206,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 										bonusFdj1.setParentId(userRecord1.getrId());
 										bonusFdj1.setAmount(amount);
 										bonusFdj1.setStatus(1);
-										// bonusFdj1.setCreated(sdf.format(new
-										// Date()));
+										// bonusFdj1.setCreated(sdf.format(new Date()));
 										bonusFdj1.setuName(userBean1.getRealName());
 										bonusFdj1.setParentMoney(amount * double1);
 										jBonusFdjMapper.insert(bonusFdj1);
@@ -233,38 +218,22 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 										List<UUserRRecordB> list2 = userRecordMapper.selectByExample(example2);
 										if (list2 != null && list2.size() > 0) {
 											UUserRRecordB userRecord2 = list2.get(0);
-											/*
-											 * List<UserBean> nameById2 =
-											 * userMapper
-											 * .getUserNameById(userRecord2
-											 * .getrId()); if (nameById2 != null
-											 * && nameById2.size() > 0) {
-											 * UserBean userBean3 =
-											 * nameById2.get(0);
-											 */
 											JBonusFdj bonusFdj2 = new JBonusFdj();
 											bonusFdj2.setuId(userRecord1.getrId());
 											bonusFdj2.setParentId(userRecord2.getrId());
 											bonusFdj2.setAmount(amount);
 											bonusFdj2.setStatus(1);
-											// bonusFdj2.setCreated(sdf.format(new
-											// Date()));
+											// bonusFdj2.setCreated(sdf.format(new Date()));
 											bonusFdj2.setuName(userBean2.getRealName());
 											bonusFdj2.setParentMoney(amount * double1);
 											jBonusFdjMapper.insert(bonusFdj2);
-											// }
-
 										}
-
 									}
-
 								}
 							}
-
 						}
 					}
 				}
-
 			}
 		}
 
