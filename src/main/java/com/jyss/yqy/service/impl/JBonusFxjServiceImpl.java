@@ -290,35 +290,75 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 				if(userList != null && userList.size()>0){
 					Float money = jBonusFxj.getAmount();
 					UserBean userBean = userList.get(0);
-					//添加现金积分
-					ScoreBalance score1 = new ScoreBalance();
-					score1.setEnd(2);
-					score1.setuUuid(userBean.getUuid());
-					score1.setCategory(6);
-					score1.setType(1);
-					score1.setScore(money * float5);
-					score1.setJyScore(money * float5 + userBean.getCashScore());
-					//score1.setCreatedAt(new Date());
-					score1.setStatus(1);
-					int count1 = scoreBalanceMapper.addCashScore(score1);
-					
-					ScoreBalance score2 = new ScoreBalance();
-					score2.setEnd(2);
-					score2.setuUuid(userBean.getUuid());
-					score2.setCategory(6);
-					score2.setType(1);
-					score2.setScore(money * float6);
-					score2.setJyScore(money * float6 + userBean.getShoppingScore());
-					//score2.setCreatedAt(new Date());
-					score2.setStatus(1);
-					int count2 = scoreBalanceMapper.addShoppingScore(score2);
-					
-					if(count1 > 0 && count2 > 0){
-						UserBean userBean2 = new UserBean();
-						userBean2.setId(jBonusFxj.getParentId());
-						userBean2.setCashScore(money * float5 + userBean.getCashScore());
-						userBean2.setShoppingScore(money * float6 + userBean.getShoppingScore());
-						userMapper.updateScore(userBean2);
+					Float totalPv = userBean.getTotalPv();
+					if(totalPv > 0){
+						if(money <= totalPv){
+
+							//添加现金积分
+							ScoreBalance score1 = new ScoreBalance();
+							score1.setEnd(2);
+							score1.setuUuid(userBean.getUuid());
+							score1.setCategory(6);
+							score1.setType(1);
+							score1.setScore(money * float5);
+							score1.setJyScore(money * float5 + userBean.getCashScore());
+							//score1.setCreatedAt(new Date());
+							score1.setStatus(1);
+							int count1 = scoreBalanceMapper.addCashScore(score1);
+
+							ScoreBalance score2 = new ScoreBalance();
+							score2.setEnd(2);
+							score2.setuUuid(userBean.getUuid());
+							score2.setCategory(6);
+							score2.setType(1);
+							score2.setScore(money * float6);
+							score2.setJyScore(money * float6 + userBean.getShoppingScore());
+							//score2.setCreatedAt(new Date());
+							score2.setStatus(1);
+							int count2 = scoreBalanceMapper.addShoppingScore(score2);
+
+							if(count1 == 1 && count2 == 1){
+								UserBean userBean2 = new UserBean();
+								userBean2.setId(jBonusFxj.getParentId());
+								userBean2.setCashScore(money * float5 + userBean.getCashScore());
+								userBean2.setShoppingScore(money * float6 + userBean.getShoppingScore());
+								userBean2.setTotalPv(totalPv - money);
+								userMapper.updateScore(userBean2);
+							}
+						}else{
+							//添加现金积分
+							ScoreBalance score1 = new ScoreBalance();
+							score1.setEnd(2);
+							score1.setuUuid(userBean.getUuid());
+							score1.setCategory(6);
+							score1.setType(1);
+							score1.setScore(totalPv * float5);
+							score1.setJyScore(totalPv * float5 + userBean.getCashScore());
+							//score1.setCreatedAt(new Date());
+							score1.setStatus(1);
+							int count1 = scoreBalanceMapper.addCashScore(score1);
+
+							ScoreBalance score2 = new ScoreBalance();
+							score2.setEnd(2);
+							score2.setuUuid(userBean.getUuid());
+							score2.setCategory(6);
+							score2.setType(1);
+							score2.setScore(totalPv * float6);
+							score2.setJyScore(totalPv * float6 + userBean.getShoppingScore());
+							//score2.setCreatedAt(new Date());
+							score2.setStatus(1);
+							int count2 = scoreBalanceMapper.addShoppingScore(score2);
+
+							if(count1 == 1 && count2 == 1){
+								UserBean userBean2 = new UserBean();
+								userBean2.setId(jBonusFxj.getParentId());
+								userBean2.setCashScore(totalPv * float5 + userBean.getCashScore());
+								userBean2.setShoppingScore(totalPv * float6 + userBean.getShoppingScore());
+								userBean2.setTotalPv(totalPv - totalPv);
+								userMapper.updateScore(userBean2);
+							}
+						}
+
 					}
 				}
 				

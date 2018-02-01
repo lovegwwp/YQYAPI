@@ -31,7 +31,8 @@
         <result property="payPwd" column="pay_pwd"  /> 
         <result property="cashScore" column="cash_score"  /> 
         <result property="shoppingScore" column="shopping_score"  /> 
-        <result property="createdAt" column="created_at"  /> 
+        <result property="totalPv" column="total_pv"  />
+        <result property="createdAt" column="created_at"  />
         <result property="lastAccessTime" column="last_access_time"  />     
     </resultMap>              
              
@@ -216,7 +217,7 @@
 
    
     <!--修改密码 --> 
-    <update id="upPwd" parameterType="String" >
+    <update id="upPwd" parameterType="string" >
         update u_user  set pwd = #{pwd},salt = #{salt}  ,last_modify_time = now()  where id = #{id}
     </update>
     
@@ -251,7 +252,7 @@
     
     <!-- 通过id查询积分 -->
     <select id="getUserScoreById" resultMap="ubResultMap">           
-	      select uuid,cash_score,shopping_score,is_chuangke from u_user 						
+	      select uuid,cash_score,shopping_score,is_chuangke,total_pv from u_user
          <where> 
               <if test="id != null and id !=''"> and id = #{id}  
               and status = 1 
@@ -265,6 +266,7 @@
     	<set>
     		<if test="cashScore != null and cashScore != '' or cashScore == 0">cash_score = #{cashScore},</if>
     		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = #{shoppingScore}</if>
+    		<if test="totalPv != null and totalPv != ''or totalPv == 0">total_pv = #{totalPv}</if>
     	</set>
     	where id = #{id} 
     </update>

@@ -26,6 +26,7 @@ public class UserBean {
 	private String city;//
 	private String areaId;//
 	private String area;//
+	private Float totalPv;      //剩余返还pv
 
 	// private Date createdAt;//
 	// private int lastAccessTime;//
@@ -246,4 +247,11 @@ public class UserBean {
 		this.bCode = bCode;
 	}
 
+	public Float getTotalPv() {
+		return totalPv;
+	}
+
+	public void setTotalPv(Float totalPv) {
+		this.totalPv = totalPv;
+	}
 }
