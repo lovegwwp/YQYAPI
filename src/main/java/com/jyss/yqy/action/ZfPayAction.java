@@ -24,6 +24,7 @@ import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.UUserRRecordB;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
+import com.jyss.yqy.service.AlipayAppService;
 import com.jyss.yqy.service.AlipayService;
 import com.jyss.yqy.service.OrdersBService;
 import com.jyss.yqy.service.ScoreBalanceService;
@@ -40,6 +41,8 @@ public class ZfPayAction {
 
 	@Autowired
 	private AlipayService aliService;
+	@Autowired
+	private AlipayAppService aliAppService;
 	@Autowired
 	private WxpayService wxService;
 	@Autowired
@@ -93,9 +96,9 @@ public class ZfPayAction {
 		UserBean ub = ubList.get(0);
 		int gmID = ub.getId();
 		// ///判断支付方式=== 走不同支付
-		if (type.equals("1")) {
-			System.out.println(11);
-			map = aliService.addDlrOrder(filePath, money, gmID);
+		if (type.equals("1")) {			
+			//map = aliService.addDlrOrder(filePath, money, gmID);
+			map = aliAppService.getDLROrderString(filePath, money, gmID);
 			//map = aliService.addDlrOrder2(filePath, money, gmID);
 		} else if (type.equals("2")) {
 			map = wxService.dlrWxpay(filePath, money, gmID);
@@ -149,7 +152,8 @@ public class ZfPayAction {
 		// ///判断支付方式=== 走不同支付
 		if (type.equals("1")) {
 			// 支付宝
-			mmap = aliService.addYmzOrder2(filePath, gmID, num, spId);
+			//mmap = aliService.addYmzOrder2(filePath, gmID, num, spId);
+			mmap = aliAppService.getYmzOrderString(filePath, gmID, num, spId);
 		} else if (type.equals("2")) {
 			// 微信
 			mmap = wxService.ymzWxpay(filePath, gmID, num, spId);

@@ -218,7 +218,7 @@ System.out.println(2222222);
 						"http://121.40.29.64:8081/YQYAPI/YQYB/DlrAliNotify.action");// 支付宝服务器主动通知商户服务器里指定的页面http路径,根据需要设置
 		// .setGoodsDetailList(goodsDetailList);
 		
-System.out.println(111111111);
+        System.out.println(111111111);
 		AlipayF2FPrecreateResult result = tradeService.tradePrecreate(builder);
 		System.out.println(result.toString());
 		switch (result.getTradeStatus()) {
