@@ -2,6 +2,7 @@ package com.jyss.yqy.service.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,10 +49,10 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 	}
 
 	@Override
-	public List<ScoreBack> getBackScore(String uuuid, String status,
+	public List<ScoreBack> getBackScore(String uuuid, String status,String leftNum,
 			String backTime, String backTime1) {
 		// TODO Auto-generated method stub
-		return sbMapper.getBackScore(uuuid, status, backTime, backTime1);
+		return sbMapper.getBackScore(uuuid, status,leftNum, backTime, backTime1);
 	}
 
 	@Override
@@ -67,6 +68,18 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 	public int upBackNum(String uId, int backNum, String backTime) {
 		// TODO Auto-generated method stub
 		return sbMapper.upBackNum(uId, backNum, backTime);
+	}
+
+	@Override
+	public int upBackStatus(String uId, String status, String statusBefore) {
+		// TODO Auto-generated method stub
+		return sbMapper.upBackStatus(uId, status, statusBefore);
+	}
+
+	@Override
+	public int upBackStatusByID(String id, String status, String statusBefore) {
+		// TODO Auto-generated method stub
+		return sbMapper.upBackStatusByID(id, status, statusBefore);
 	}
 
 }

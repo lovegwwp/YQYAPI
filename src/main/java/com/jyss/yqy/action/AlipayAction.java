@@ -270,7 +270,7 @@ public class AlipayAction {
 					int dlType = uList.get(0).getIsChuangke();
 					// //判断是否有返还记录
 					List<ScoreBack> sbaList = sBackService.getBackScore(puuid,
-							"1", "", "");
+							"1","0","", "");
 					// /没有1=第一次返还记录==就增加，2=u_ser的total_pv增加额度 
 					if (sbaList == null || sbaList.size() == 0) {
 						int count3 = addScoreBack(dlType,puuid);
@@ -362,15 +362,44 @@ public class AlipayAction {
 						}
 						count = userService.upUserAllStatus("", "", "",
 								dlrLevel + "", "", gmID);
-						///代理人升级，1=包括返还记录的增加 以及2=低等级返还记录的状态数据封存3=用户 total_pv的额度增加
+						if (count==1) {
+							count =0;
+						
+						///代理人升级，1=包括返还记录的增加 以及2=低等级返还记录的状态-1数据封存3=用户 total_pv的额度增加
+						// //判断是否有返还记录
+						String uuuid = ubList.get(0).getUuid();
+						List<ScoreBack> sbaList = sBackService.getBackScore(uuuid,
+								"1","0", "", "");
+						int ccc =0;
+						int count3 =0;
+						if (sbaList != null && sbaList.size() > 0) {							
+							for (ScoreBack scoreBack : sbaList) {
+								if (scoreBack!=null&&scoreBack.getUuuid()!=null&&!(scoreBack.getUuuid().equals(""))) {
+									count++;
+									ccc +=sBackService.upBackStatus(scoreBack.getUuuid(), "-1", "1");
+								}								
+							}
+						    ////有返还记录，进行封存，再增加
+							if (ccc==count) {
+								count3 = addScoreBack(dlrLevel,uuuid);
+								return count3;
+							}else{
+								return 0;
+							}
+							
+						}else{
+							count3 = addScoreBack(dlrLevel,uuuid);
+							return count3;
+						}						
 					}
+						}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				return 0;
 			}
 		}
-		return count;
+		return 0;
 	}
 
 }

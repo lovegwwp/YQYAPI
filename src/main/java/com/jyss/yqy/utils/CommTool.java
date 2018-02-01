@@ -82,6 +82,18 @@ public class CommTool {
 		Timestamp times = Timestamp.valueOf(nowTime);// 把时间转换
 		return times;
 	}
+	
+	public static Timestamp getZeroTimestamp() {
+	     Calendar calendar = Calendar.getInstance();
+         calendar.setTime(new Date());
+         calendar.set(Calendar.HOUR_OF_DAY, 0);
+         calendar.set(Calendar.MINUTE, 0);
+         calendar.set(Calendar.SECOND, 0);
+         Date zero = calendar.getTime();
+         String nowTime = sdf.format(zero);// 将时间格式转换成符合Timestamp要求的格式.
+ 		 Timestamp times = Timestamp.valueOf(nowTime);// 把时间转换
+		return times;
+	}
 
 	// 随机生成八位数字
 	public static String getSalt() {
@@ -286,8 +298,9 @@ public class CommTool {
 		// System.out.println(getUUID());
 		// System.out.println(getUUID().length());
 		// System.out.println(getSalt());
-		System.out.println(getNowTimestamp());
-		System.out.println(getAfterWeekTimestamp());
+		//System.out.println(getNowTimestamp());
+		//System.out.println(getAfterWeekTimestamp());
+		System.out.println(getZeroTimestamp());
 
 	}
 

@@ -159,5 +159,17 @@ public interface UserService {
 	int updateUserBackScore(@Param("cashScore") float cashScore,
 			@Param("shoppingScore") float shoppingScore,
 			@Param("uuuid") String uuuid);
+	
+	//////分红奖/////
+	/**
+	 * 通过id查询积分
+	 */
+	List<UserBean> getUserByFHJ(@Param("account") String account,
+			@Param("status") String status, @Param("isAuth") String isAuth,
+			@Param("isChuangke") String isChuangke);
+
+	// 更新积分
+	int updateScoreByFHJ(@Param("cashScore") String cashScore,
+			@Param("shoppingScore") String shoppingScore,@Param("totalPv") String totalPv,@Param("id") String id,@Param("isChuangke") String isChuangke);
 
 }

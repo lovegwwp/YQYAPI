@@ -113,20 +113,20 @@ public class UserRecordBAction {
 		logger.info(map.get("message"));
 	}
 
-	// /**积分双倍返还***/////
+	// /**积分按照后台设置比例返还***/////
 	public void insertBackScore() {
 		int count = 0;
 		int count2 = 0;
 		int count3 = 0;
 		int count4 = 0;
-		List<ScoreBack> sbLIst = sBackService.getBackScore("", "1", CommTool
-				.getNowTimestamp().toString(), CommTool.getTommorowTimestamp()
-				.toString());
+		List<ScoreBack> sbLIst = sBackService.getBackScore("", "1", "0",
+				CommTool.getNowTimestamp().toString(), CommTool
+						.getTommorowTimestamp().toString());
 		if (sbLIst != null && sbLIst.size() > 0) {
 			Xtcl cl = clService.getClsValue("jjbl_type", "xj");
 			Xtcl cl2 = clService.getClsValue("jjbl_type", "gw");
 			float cashPercent = 0.7f;
-			float shopPercent = 0.2f;
+			float shopPercent = 0.3f;
 			if (cl != null && cl.getBz_value() != null
 					&& !cl.getBz_value().equals("")) {
 				cashPercent = Float.parseFloat(cl.getBz_value());
@@ -136,7 +136,7 @@ public class UserRecordBAction {
 				shopPercent = Float.parseFloat(cl.getBz_value());
 			}
 			for (ScoreBack scoreBack : sbLIst) {
-				if (scoreBack != null && scoreBack.getBackNum() != 0) {
+				if (scoreBack != null && scoreBack.getLeftNum() != 0) {
 					float cashScore = 0;
 					float shopScore = 0;
 					float jyCashScore = 0;
@@ -168,13 +168,100 @@ public class UserRecordBAction {
 						count3 = userService.updateUserBackScore(jyCashScore,
 								jyShopScore, scoreBack.getUuuid());
 					}
-					// //修改对应积分记录表剩余返还次数
+					// //修改对应积分记录表剩余返还次数..每周固定时间返还
 					if (count3 == 1) {
-						sBackService.upBackNum(
+						count3 = 0;
+						count3 = sBackService.upBackNum(
 								scoreBack.getUuuid(),
-								scoreBack.getBackNum() - 1,
+								scoreBack.getLeftNum() - 1,
 								CommTool.getAddAfterWeekTimestamp(
 										scoreBack.getBackTime()).toString());
+						if (count3 == 1) {
+							// ///如果返还记录已完成，则判断是否有其他封存记录，按照等级高低来解封，每次解封一条
+							if ((scoreBack.getLeftNum() - 1) == 0) {
+								List<ScoreBack> sbLIst2 = sBackService
+										.getBackScore(scoreBack.getUuuid(),
+												"-1", "0", "", "");
+								if (sbLIst2 != null && sbLIst2.size() >= 1) {
+									sBackService.upBackStatusByID(sbLIst2
+											.get(0).getId() + "", "1", "-1");
+								}
+
+							}
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	public int addBalance(String uuid, float cashScore, float shopScore) {
+		Xtcl cl = clService.getClsValue("jjbl_type", "xj");
+		Xtcl cl2 = clService.getClsValue("jjbl_type", "gw");
+		float cashPercent = 0.7f;
+		float shopPercent = 0.3f;
+		float jyCashScore = 0;
+		float jyShopScore = 0;
+		int count = 0;
+		if (cl != null && cl.getBz_value() != null
+				&& !cl.getBz_value().equals("")) {
+			cashPercent = Float.parseFloat(cl.getBz_value());
+		}
+		if (cl2 != null && cl2.getBz_value() != null
+				&& !cl2.getBz_value().equals("")) {
+			shopPercent = Float.parseFloat(cl.getBz_value());
+		}
+
+		ScoreBalance sb = new ScoreBalance();
+		sb.setCategory(9);// /积分返还
+		sb.setuUuid(uuid);
+		sb.setType(1);// 收入
+		List<UserBean> ubList = userService.getUserByUuid(uuid);
+		if (ubList != null && ubList.size() == 1) {
+			jyCashScore = ubList.get(0).getCashScore();
+			jyShopScore = ubList.get(0).getShoppingScore();
+		}
+		jyCashScore = jyCashScore + cashScore;
+		jyShopScore = jyShopScore + shopScore;
+		// //现金积分记录
+		sb.setScore(cashScore);
+		sb.setJyScore(jyCashScore);
+		count = sBackService.addCashScoreBalance(sb);
+		// //购物积分记录
+		if (count == 1) {
+			count = 0;
+			sb.setScore(shopScore);
+			sb.setJyScore(jyShopScore);
+			count = sBackService.addShoppingScoreBalance(sb);
+			return count;
+		}else{
+			return  0;
+		}	
+	}
+
+	// /**全球分红奖***/////
+	// //2018-2-1==计算当天（截止0点，比如24号定时计算24号0点之前的）代言人+代理人的全部费用===平均分配给当天的高级代理人==user表的积分进行相应改动。2记录表增加数据
+	public void CountTotalFh() {
+		// ///代言人的总金额
+
+		// ///代理人的总金额
+
+		// ///所有总金额
+
+		// //////获取高级代理人4用户列表、///
+		List<UserBean> ublist = userService.getUserByFHJ(null, "1", "2", "4");
+		if (ublist != null && ublist.size() > 0) {
+			int totalNum = ublist.size();// /高级代理人人数
+			// /每个人可以分到的钱/////
+
+			for (UserBean userBean : ublist) {
+				if (userBean != null && userBean.getId() != 0) {
+					float totalPv = userBean.getTotalPv();
+					// //有额度才能进行发钱
+					if (totalPv > 0) {
+						userService.updateScoreByFHJ(cashScore, shoppingScore,
+								totalPv, userBean.getId() + "", "4");
 					}
 				}
 			}

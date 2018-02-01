@@ -248,4 +248,18 @@ public class UserServiceImpl implements UserService {
 		return userMapper.upTotalPv(uuid, totalPv);
 	}
 
+	@Override
+	public List<UserBean> getUserByFHJ(String account, String status,
+			String isAuth, String isChuangke) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByFHJ(account, status, isAuth, isChuangke);
+	}
+
+	@Override
+	public int updateScoreByFHJ(String cashScore, String shoppingScore,
+			String totalPv, String id, String isChuangke) {
+		// TODO Auto-generated method stub
+		return userMapper.updateScoreByFHJ(cashScore, shoppingScore, totalPv, id, isChuangke);
+	}
+
 }
