@@ -95,6 +95,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 		float totalByMonth = scoreBalanceMapper.selectFhjTotalByMonth(uUUid, "11", month);
 		float total = (float)(Math.round((totalByMonth / float1)*100))/100;        //现金转pv
 
+		PageHelper.startPage(page, limit);
 		List<ScoreBalance> list = scoreBalanceMapper.selectJBonusFhjByMonth(uUUid, "11", month);
 		for (ScoreBalance scoreBalance : list) {
 			float score = (float) (Math.round((scoreBalance.getScore() / float1) * 100)) / 100;
