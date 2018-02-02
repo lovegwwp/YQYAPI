@@ -109,7 +109,8 @@
      <!--现金积分=插入-->     <!-- ordersn -->
     <insert id="addCashScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id">
-        insert into u_cash_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},
+        insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',#{createdAt},now(),#{status})
     </insert>
    
@@ -117,14 +118,16 @@
     <!--购物积分=插入-->
     <insert id="addShoppingScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance"
         useGeneratedKeys="true" keyProperty="id">
-        insert into u_shopping_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},
+        insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',#{createdAt},now(),#{status})
     </insert>
     
     <!--现金积分=插入-->     <!-- 结算时间减12小时 -->
     <insert id="addCashScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id">
-        insert into u_cash_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},
+        insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
     </insert>
    
@@ -132,7 +135,8 @@
     <!--购物积分=插入-->     <!-- 结算时间减12小时 -->
     <insert id="addShoppingScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id"> 
-        insert into u_shopping_score_balance values(null,#{end},#{uUuid},#{category},#{type},#{score},
+        insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
     </insert>
 
