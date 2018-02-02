@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jyss.yqy.entity.ScoreBack;
 import com.jyss.yqy.entity.ScoreBalance;
 import com.jyss.yqy.entity.UMobileLogin;
+import com.jyss.yqy.entity.UserTotalAmount;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.JBonusFxjService;
 import com.jyss.yqy.service.JBonusGljService;
 import com.jyss.yqy.service.JRecordService;
+import com.jyss.yqy.service.OrdersBService;
 import com.jyss.yqy.service.ScoreBalanceService;
 import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserRecordBService;
@@ -47,7 +49,9 @@ public class UserRecordBAction {
 	@Autowired
 	private XtclService clService;
 	@Autowired
-	private UserService userService;
+	private UserService userService;	
+	@Autowired
+	private OrdersBService obService;
 
 	/**
 	 * 绑定用户关系
@@ -196,13 +200,19 @@ public class UserRecordBAction {
 
 	}
 
-	public int addBalance(String uuid, float cashScore, float shopScore) {
+	public Map<String,Object> addBalance(String uuid, float total) {
+		Map<String,Object> m = new HashMap<String,Object>();
+		m.put("count", "0");
+		m.put("cashScore", "0");
+		m.put("shopScore", "0");
 		Xtcl cl = clService.getClsValue("jjbl_type", "xj");
 		Xtcl cl2 = clService.getClsValue("jjbl_type", "gw");
 		float cashPercent = 0.7f;
 		float shopPercent = 0.3f;
 		float jyCashScore = 0;
 		float jyShopScore = 0;
+		float cashScore=0;
+		float shopScore =0;
 		int count = 0;
 		if (cl != null && cl.getBz_value() != null
 				&& !cl.getBz_value().equals("")) {
@@ -213,8 +223,11 @@ public class UserRecordBAction {
 			shopPercent = Float.parseFloat(cl.getBz_value());
 		}
 
+		cashScore = total * cashPercent;
+		shopScore = total * shopPercent;
+		
 		ScoreBalance sb = new ScoreBalance();
-		sb.setCategory(9);// /积分返还
+		sb.setCategory(11);// /分红奖
 		sb.setuUuid(uuid);
 		sb.setType(1);// 收入
 		List<UserBean> ubList = userService.getUserByUuid(uuid);
@@ -234,34 +247,43 @@ public class UserRecordBAction {
 			sb.setScore(shopScore);
 			sb.setJyScore(jyShopScore);
 			count = sBackService.addShoppingScoreBalance(sb);
-			return count;
+			m.put("count", count+"");
+			m.put("cashScore", cashScore+"");
+			m.put("shopScore", shopScore+"");
+			return m;
 		}else{
-			return  0;
+			return  m;
 		}	
 	}
 
 	// /**全球分红奖***/////
 	// //2018-2-1==计算当天（截止0点，比如24号定时计算24号0点之前的）代言人+代理人的全部费用===平均分配给当天的高级代理人==user表的积分进行相应改动。2记录表增加数据
 	public void CountTotalFh() {
-		// ///代言人的总金额
-
+		String count ="0";
+		// ///代言人的总金额---订单表查询当天记录
+		UserTotalAmount uta = obService.getRecordDyrSum(CommTool.getYestodayZeroTimestamp().toString(), CommTool.getZeroTimestamp().toString());
 		// ///代理人的总金额
-
+		UserTotalAmount uta2 = obService.getOrdersDlrSum(CommTool.getYestodayZeroTimestamp().toString(), CommTool.getZeroTimestamp().toString());
 		// ///所有总金额
-
+        double total =uta.getAmount()+uta2.getAmount();
 		// //////获取高级代理人4用户列表、///
 		List<UserBean> ublist = userService.getUserByFHJ(null, "1", "2", "4");
 		if (ublist != null && ublist.size() > 0) {
 			int totalNum = ublist.size();// /高级代理人人数
 			// /每个人可以分到的钱/////
-
+			float eachTotal = (float) (total/ublist.size());
 			for (UserBean userBean : ublist) {
 				if (userBean != null && userBean.getId() != 0) {
 					float totalPv = userBean.getTotalPv();
 					// //有额度才能进行发钱
-					if (totalPv > 0) {
-						userService.updateScoreByFHJ(cashScore, shoppingScore,
-								totalPv, userBean.getId() + "", "4");
+					if (totalPv > 0) {								
+						Map<String,Object> m=addBalance(userBean.getUuid(),eachTotal);
+						count =  (String) m.get("count");
+						if (count.equals("1")) {
+							userService.updateScoreByFHJ(m.get("cashScore")+"", m.get("shopScore")+"",
+									(-eachTotal)+"", userBean.getId() + "", "4");
+						}
+						
 					}
 				}
 			}

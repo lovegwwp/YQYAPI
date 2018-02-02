@@ -83,6 +83,12 @@ public interface OrdersBService {
 	 */
 	Goods getGoodsByid(@Param("id") String id);
 	
+	////分红奖统计///////
+	////代理人
+	UserTotalAmount getOrdersDlrSum(@Param("kssj") String kssj,@Param("jssj") String jssj);
+	////代言人
+	UserTotalAmount getRecordDyrSum(@Param("kssj") String kssj,@Param("jssj") String jssj);
+	
 	
 
 }

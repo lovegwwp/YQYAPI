@@ -72,7 +72,7 @@
          
                
      <!-- B端商品订单 -->        
-     <!-- 查询b端商品 -->   
+     <!-- 查询b端订单表 -->   
     <select id="getOrdersBy" resultMap="obResultMap">   
          <!--  DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s' ) cjsj    LIKE CONCAT('%',#{name},'%')  -->
 	     select * ,DATE_FORMAT(created_at, '%Y-%m-%d %H:%i' )  cjsj  from p_orders_b  				
@@ -83,6 +83,25 @@
 			  <if test="gmId != null and gmId !=''"> and gm_id = #{gmId} </if> 		
 		 </where> 
 		 order by status ,created_at desc
+    </select>  
+    
+    
+     <!--获取当天代理人的全部收益==已支付或者已完成提货订单-->   
+    <select id="getOrdersDlrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">   
+         select  sum(total) as amount  from p_orders_b where status !=-1 and dljb is not null and dljb !=0		
+         <where>              
+              <if test="kssj != null and kssj !=''"> and created_at &gt;= #{kssj} </if>  
+			  <if test="jssj != null and jssj !=''"> and created_at &lt; #{jssj} </if>		
+		 </where> 
+    </select>  
+    
+      <!--获取当天代言人的全部人数-->   
+    <select id="getRecordDyrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">   
+         select  sum(pay_value)  as amount from  u_user_r_record where status =1
+         <where>              
+              <if test="kssj != null and kssj !=''"> and created_at &gt;= #{kssj} </if>  
+			  <if test="jssj != null and jssj !=''"> and created_at &lt; #{jssj} </if>		
+		 </where> 
     </select>  
     
     

@@ -52,7 +52,7 @@
 			   <if test="uuuid != null and uuuid !=''"> and u_uuid = #{uuuid} </if> 
 			   <if test="status != null and status !=''"> and status = #{status} </if> 
 			   <if test="leftNum != null and leftNum !=''"> and left_num > #{leftNum} </if> 
-			   <if test="backTime != null and backTime !=''"> and back_ime &gt; #{backTime} </if>  
+			   <if test="backTime != null and backTime !=''"> and back_ime &gt;= #{backTime} </if>  
 			   <if test="backTime1 != null and backTime1 !=''"> and back_ime &lt; #{backTime1} </if>  
 			</where>  
 			order by created_at desc,dl_type desc 
@@ -71,7 +71,7 @@
    </update>
    
       <!-- 更新返还数据状态1=正常，-1=数据封存状态，-2=返还完毕', -->
-   <update id="upBackStatusByID"  >
+   <update id="upBackStatus"  >
 	  update u_score_back  set  status =#{status}
             where id = #{id}  and status =#{statusBefore};
    </update>

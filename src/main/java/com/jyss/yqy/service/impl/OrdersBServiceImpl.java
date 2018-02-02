@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
+import com.jyss.yqy.entity.UserTotalAmount;
 import com.jyss.yqy.mapper.OrdersBMapper;
 import com.jyss.yqy.service.OrdersBService;
 
@@ -74,6 +75,18 @@ public class OrdersBServiceImpl implements OrdersBService {
 	public Goods getGoodsByid(String id) {
 		// TODO Auto-generated method stub
 		return obMapper.getGoodsByid(id);
+	}
+
+	@Override
+	public UserTotalAmount getOrdersDlrSum(String kssj, String jssj) {
+		// TODO Auto-generated method stub
+		return obMapper.getOrdersDlrSum(kssj, jssj);
+	}
+
+	@Override
+	public UserTotalAmount getRecordDyrSum(String kssj, String jssj) {
+		// TODO Auto-generated method stub
+		return obMapper.getRecordDyrSum(kssj, jssj);
 	}
 
 }
