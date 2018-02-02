@@ -47,6 +47,7 @@ import com.jyss.yqy.service.ScoreBalanceService;
 import com.jyss.yqy.service.UserRecordBService;
 import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.service.XtclService;
+import com.jyss.yqy.utils.FirstLetterUtil;
 
 @Controller
 public class AlipayAction {
@@ -248,8 +249,22 @@ public class AlipayAction {
 			if (orders != null && orders.size() == 1) {
 				OrdersB ordersB = orders.get(0);
 				// 更改代理人状态
-				count1 = userService.upUserAllStatus("1", null, null, null,
-						null, ordersB.getGmId());
+				String jb = ordersB.getDljb();
+				String  isChuangke = "5";//经理人
+				if (jb.equals("1")) {
+					isChuangke = "2";// //初级代理人
+				}else if (jb.equals("2")) {// //中级代理人
+					isChuangke = "3";
+				} else if (jb.equals("3")) {
+					isChuangke = "4";// //高级代理人
+				}else if (jb.equals("4")) {
+					isChuangke = "5";// //经理人
+				}				
+				if (count == 1) {
+					count = 0;
+					count1 = userService.upUserAllStatus("", "", "1", isChuangke, "",
+							ordersB.getGmId() + "");
+				}
 				if (count1 == 1) {
 					// 查询积分返还==2018.2.1==之前返还积分【推荐别人成为代理人开始增加一条返还记录表，一周后开始返还积分】
 					///===2018.2.1==之后===模式不变===可以返积分多次==例；初级的积分在返还，升级为中级了，则返还中级的，返完之后，返初级的。

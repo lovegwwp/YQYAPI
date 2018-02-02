@@ -79,7 +79,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		mm.put("zfCode", "");
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////code='-1=其他，0=无支付密码，1=有支付密码，'////
-		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "1");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
@@ -88,7 +88,8 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			return m;
 		}
 		UserBean ub = ublist.get(0);
-		if (ub.getIsChuangke() < 2) {
+		/////不能是代理人，才能购买
+		if (ub.getIsChuangke() >= 2) {
 			m.put("status", "false");
 			m.put("message", "用户信息错误！");
 			m.put("code", "-2");
@@ -164,9 +165,10 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		model.setOutTradeNo(outTradeNo); // outtradeno,应用系统内的订单编号
 		model.setTimeoutExpress(timeoutExpress); // "30m"
 		model.setTotalAmount(totalAmount); // "0.01"
-		//model.setProductCode(paramsMap.get("productCode")); // "QUICK_MSECURITY_PAY"
+		model.setProductCode("QUICK_MSECURITY_PAY"); // "QUICK_MSECURITY_PAY"
 		model.setSellerId(config.getSELLER_ID());
 		request.setBizModel(model);
+		//request.setBizContent(bizContent);
 		request.setNotifyUrl(notifyUrl); // "商户外网可以访问的异步地址"
 
 		try {
@@ -213,7 +215,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				}
 				if (count == 1) {
 					count = 0;
-					count = userMapper.upUserAllStatus("", bCode, "1", isChuangke, "",
+					count = userMapper.upUserAllStatus("", bCode, "", "", "",
 							gmID + "");
 				}
 				// /////////////////////////
@@ -468,7 +470,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		model.setOutTradeNo(outTradeNo); // outtradeno,应用系统内的订单编号
 		model.setTimeoutExpress(timeoutExpress); // "30m"
 		model.setTotalAmount(totalAmount); // "0.01"
-		//model.setProductCode(paramsMap.get("productCode")); // "QUICK_MSECURITY_PAY"
+		model.setProductCode("QUICK_MSECURITY_PAY"); // "QUICK_MSECURITY_PAY"
 		model.setSellerId(config.getSELLER_ID());
 		request.setBizModel(model);
 		request.setNotifyUrl(notifyUrl); // "商户外网可以访问的异步地址"

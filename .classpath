@@ -29,7 +29,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952-source.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952.jar" sourcepath="src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952-source.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215-source.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215.jar" sourcepath="src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215-source.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-codec-1.10.jar"/>
