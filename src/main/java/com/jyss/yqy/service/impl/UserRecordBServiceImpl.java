@@ -69,10 +69,9 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				return map;
 
 			}
-			// if(isAuth == 2 && (uLevel==2 || uLevel==3 || uLevel==4) &&
-			// (pLevel==2 || pLevel==3 || pLevel==4)){
+
 			if (pLevel == 2 || pLevel == 3 || pLevel == 4 || pLevel == 5) {
-				UUserRRecordBExample example = new UUserRRecordBExample();
+				/*UUserRRecordBExample example = new UUserRRecordBExample();
 				Criteria criteria = example.createCriteria();
 				criteria.andUIdEqualTo(userBean.getId());
 				List<UUserRRecordB> list = userRecordMapper.selectByExample(example);
@@ -82,7 +81,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 					map.put("message", "您已使用过推荐码！");
 					map.put("data", "");
 					return map;
-				}
+				}*/
 				UUserRRecordB userRRecordB = new UUserRRecordB();
 				userRRecordB.setuId(userBean.getId());
 				userRRecordB.setrId(parentUser.getId());
