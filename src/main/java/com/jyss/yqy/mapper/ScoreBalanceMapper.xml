@@ -71,7 +71,7 @@
    </update>
    
       <!-- 更新返还数据状态1=正常，-1=数据封存状态，-2=返还完毕', -->
-   <update id="upBackStatus"  >
+   <update id="upBackStatusByID"  >
 	  update u_score_back  set  status =#{status}
             where id = #{id}  and status =#{statusBefore};
    </update>
