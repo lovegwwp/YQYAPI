@@ -142,19 +142,24 @@ public class XtclAction {
 			pvsz = Integer.parseInt(pvcl.getBz_value());
 		}
 		// 初级
-		info = (String) getDlcsInfo("1", pvsz, "1", "4").get("info");
+		info = (String) getDlcsInfo("1", pvsz, "1", "5").get("info");
 		reMap.put("jb1", info);
-		reMap.put("jb1Money", getDlcsInfo("1", pvsz, "1", "4").get("money"));
+		reMap.put("jb1Money", getDlcsInfo("1", pvsz, "1", "5").get("money"));
 		// 中级
 		info = "";
-		info = (String) getDlcsInfo("2", pvsz, "2", "5").get("info");
+		info = (String) getDlcsInfo("2", pvsz, "2", "6").get("info");
 		reMap.put("jb2", info);
-		reMap.put("jb2Money", getDlcsInfo("2", pvsz, "2", "5").get("money"));
+		reMap.put("jb2Money", getDlcsInfo("2", pvsz, "2", "6").get("money"));
 		// 高级
 		info = "";
-		info = (String) getDlcsInfo("3", pvsz, "3", "6").get("info");
+		info = (String) getDlcsInfo("3", pvsz, "3", "7").get("info");
 		reMap.put("jb3", info);
-		reMap.put("jb3Money", getDlcsInfo("3", pvsz, "3", "6").get("money"));
+		reMap.put("jb3Money", getDlcsInfo("3", pvsz, "3", "7").get("money"));
+		// 高级
+		info = "";
+		info = (String) getDlcsInfo("4", pvsz, "4", "8").get("info");
+		reMap.put("jb4", info);
+		reMap.put("jb4Money", getDlcsInfo("4", pvsz, "4", "8").get("money"));
 		m.put("data", reMap);
 		return m;
 	}
@@ -170,13 +175,15 @@ public class XtclAction {
 			info = "中级代理人：投资金额";
 		} else if (jbId.equals("3")) {
 			info = "高级代理人：投资金额";
+		} else if (jbId.equals("4")) {
+			info = "经理人：投资金额";
 		}
 		// 代理对应钱
 		Xtcl dlf = clService.getClsValue("dyf_type", dyfId);
-		int dlfy = 1990;
+		double dlfy = 1990;
 		if (dlf != null && dlf.getBz_value() != null
 				&& !dlf.getBz_value().equals("")) {
-			dlfy = Integer.parseInt(dlf.getBz_value());
+			dlfy = Double.parseDouble(dlf.getBz_value());
 		}
 		info = info + dlfy + "元、";
 		// 代理对应盒数
