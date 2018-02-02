@@ -12,6 +12,7 @@ public class ScoreBalance {
 	private float score;// 积分数额
 	private float jyScore;// 结余数额
 	private Date createdAt;
+	private Date jsTime;   //结算时间
 	private String title;// 用户uuid
 	private String orderSn;// 订单号
 	private String cjsj;// /格式化创建时间
@@ -113,4 +114,11 @@ public class ScoreBalance {
 		this.createdAt = createdAt;
 	}
 
+	public Date getJsTime() {
+		return jsTime;
+	}
+
+	public void setJsTime(Date jsTime) {
+		this.jsTime = jsTime;
+	}
 }
