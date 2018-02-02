@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface AlipayAppService {
 
 
-	public Map<String, Object> getDLROrderString( String filePath,  int money,
+	public Map<String, Object> getDLROrderString( String filePath,  float money,
 			 int gmID);
 	
 	public Map<String, Object> getYmzOrderString(

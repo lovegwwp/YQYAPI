@@ -61,7 +61,7 @@ public class ZfPayAction {
 	// type///// 支付方式：1=支付宝，2=微信，3=现金支付
 	@RequestMapping(value = "/b/dlrOrderPay", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> dlrOrder(@RequestParam int money,
+	public Map<String, Object> dlrOrder(@RequestParam float money,
 			@RequestParam String type, @RequestParam String token,
 			HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -378,7 +378,7 @@ public class ZfPayAction {
 					int dlType = uList.get(0).getIsChuangke();
 					// //判断是否有返还记录
 					List<ScoreBack> sbaList = sBackService.getBackScore(puuid,
-							"1", "", "");
+							"1","0","", "");
 					// /没有第一次返还记录==就增加
 					if (sbaList == null || sbaList.size() == 0) {
 						ScoreBack sBack = new ScoreBack();

@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 		}
 		int count = userMapper.addLogin(ub.getUuid(), token);
 		if (count == 1) {
-			// //已有用户，判断身份，是普通会员0还是代言人1，代理人2,3,4
+			// //已有用户，判断身份，是普通会员0还是代言人1，代理人2,3,4 ,5经理人
 			// 普通会员
 			if (ub.getIsChuangke() == 0) {
 				m.put("status", "true");

@@ -51,7 +51,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 	private static Logger log = Logger.getLogger(AlipayServiceImpl.class);
 
 	@Override
-	public Map<String, Object> getDLROrderString(@RequestParam("filePath") String filePath, @RequestParam int money,
+	public Map<String, Object> getDLROrderString(@RequestParam("filePath") String filePath, @RequestParam float money,
 			@RequestParam int gmID) {
 		
 		//////////前期业务字段处理///////////////////
@@ -313,7 +313,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 	
 	
 	// 获取代理参数
-	public Map<String, Object> getDlInfo(int money) {
+	public Map<String, Object> getDlInfo(float money) {
 		Map<String, Object> mm = new HashMap<String, Object>();
 		String info = "";
 		String jb = "1";
