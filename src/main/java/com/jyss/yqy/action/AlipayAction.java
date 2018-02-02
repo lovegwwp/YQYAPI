@@ -80,7 +80,7 @@ public class AlipayAction {
 
 
 	// 获取代理参数
-	public Map<String, Object> getDlInfo(int money) {
+	public Map<String, Object> getDlInfo(float money) {
 		Map<String, Object> mm = new HashMap<String, Object>();
 		String info = "";
 		String jb = "1";

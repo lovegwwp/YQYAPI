@@ -42,7 +42,7 @@ public class WxpayServiceImpl implements WxpayService {
 	private UMobileLoginMapper uMobileLoginMapper;
 	private static Log log = LogFactory.getLog(WxpayServiceImpl.class);
 
-	public Map<String, Object> dlrWxpay(String filePath, int money, int gmID) {
+	public Map<String, Object> dlrWxpay(String filePath, float money, int gmID) {
 		Map<String, Object> mapRe = new HashMap<String, Object>();
 		Map<String, Object> dlReMap = new HashMap<String, Object>();
 		HashMap<String, String> data = new HashMap<String, String>();
@@ -476,7 +476,7 @@ public class WxpayServiceImpl implements WxpayService {
 	}
 
 	// 获取代理参数
-	public Map<String, Object> getDlInfo(int money) {
+	public Map<String, Object> getDlInfo(float money) {
 		Map<String, Object> mm = new HashMap<String, Object>();
 		String info = "";
 		String jb = "1";

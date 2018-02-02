@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface WxpayService {
 
-	public Map<String, Object> dlrWxpay(String filePath, int money, int gmID);
+	public Map<String, Object> dlrWxpay(String filePath, float money, int gmID);
 
 	public Map<String, Object> ymzWxpay(String filePath, int gmID, int gmNum,
 			int spID);
