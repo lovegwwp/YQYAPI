@@ -7,12 +7,12 @@ import com.jyss.yqy.entity.JBonusScjResult;
 
 public interface JBonusScjService {
 	
-	public JBonusScjResult selectJBonusScjByUid(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit);
+	JBonusScjResult selectJBonusScjByUid(@Param("uId")int uId);
 	
-    public JBonusScjResult selectJBonusScjByDay(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
+    JBonusScjResult selectJBonusScjByDay(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
 			@Param("beginTime")String beginTime,@Param("endTime")String endTime);
     
-    public JBonusScjResult selectJBonusScjByMonth(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
+    JBonusScjResult selectJBonusScjByMonth(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
 			@Param("month")String month);
 
 }

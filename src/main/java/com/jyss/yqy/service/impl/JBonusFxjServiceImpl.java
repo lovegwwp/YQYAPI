@@ -53,13 +53,11 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 	 * 查询用户分销奖
 	 */
 	@Override
-	public JBonusFxjResult getJBonusFxj(int uId,int page,int limit){
+	public JBonusFxjResult getJBonusFxj(int uId){
 		JBonusFxjResult result = new JBonusFxjResult();
 		float earnings = bonusFxjMapper.selectEarnings(uId);
 		float total = bonusFxjMapper.selectTotal(uId);
-		PageHelper.startPage(page, limit);         //分页，只对该语句以后的第一个查询语句得到的数据进行分页
 		List<JBonusFxj> list = bonusFxjMapper.selectJBonusFxjWek(uId);
-		PageInfo<JBonusFxj> pageInfo = new PageInfo<JBonusFxj>(list);
 		result.setEarnings(earnings);
 		result.setTotal(total);
 		result.setData(list);
@@ -71,7 +69,7 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 	public JBonusFxjResult selectJBonusFxjByDay(int uId,int page,int limit,String beginTime,String endTime) {
 		JBonusFxjResult result = new JBonusFxjResult();
 		float totalByDay = bonusFxjMapper.selectFxjTotalByDay(uId, beginTime, endTime);
-		PageHelper.startPage(page, limit);
+		PageHelper.startPage(page, limit);       //分页，只对该语句以后的第一个查询语句得到的数据进行分页
 		List<JBonusFxj> list = bonusFxjMapper.selectJBonusFxjByDay(uId, beginTime, endTime);
 		PageInfo<JBonusFxj> pageInfo = new PageInfo<JBonusFxj>(list);
 		result.setEarnings(0f);

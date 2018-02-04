@@ -42,9 +42,7 @@ public class JBonusFxjAction {
 	 */
 	@RequestMapping("/showFxj")
 	@ResponseBody
-	public Map<String, Object> getJBonusFxj(@RequestParam("token")String token,
-			@RequestParam(value = "page", required = true) int page,
-			@RequestParam(value = "limit", required = true) int limit){
+	public Map<String, Object> getJBonusFxj(@RequestParam("token")String token){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -53,7 +51,7 @@ public class JBonusFxjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusFxjResult result = jBonusFxjService.getJBonusFxj(userBean.getId(),page,limit);
+				JBonusFxjResult result = jBonusFxjService.getJBonusFxj(userBean.getId());
 				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");

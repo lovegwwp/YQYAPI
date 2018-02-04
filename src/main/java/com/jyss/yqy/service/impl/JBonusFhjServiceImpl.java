@@ -30,7 +30,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	 * 查询本周
 	 */
 	@Override
-	public JBonusFhjResult getJBonusFhj(String uUUid, int page, int limit) {
+	public JBonusFhjResult getJBonusFhj(String uUUid) {
 		Xtcl xtcl = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
 		float float1 = Float.parseFloat(xtcl.getBz_value());                     //0.7
 
@@ -40,13 +40,12 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 		float total = scoreBalanceMapper.selectTotal(uUUid, "11");
 		float total1 = (float)(Math.round((total / float1)*100))/100;
 
-		PageHelper.startPage(page, limit);
 		List<ScoreBalance> list = scoreBalanceMapper.selectJBonusFhjWek(uUUid, "11");
 		for (ScoreBalance scoreBalance : list) {
 			float score = (float) (Math.round((scoreBalance.getScore() / float1) * 100)) / 100;
 			scoreBalance.setScore(score);
+			scoreBalance.setOrderSn("分红奖");
 		}
-		PageInfo<ScoreBalance> pageInfo = new PageInfo<ScoreBalance>(list);
 		JBonusFhjResult result = new JBonusFhjResult();
 		result.setEarnings(earnings1);
 		result.setTotal(total1);
@@ -72,6 +71,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 		for (ScoreBalance scoreBalance : list) {
 			float score = (float) (Math.round((scoreBalance.getScore() / float1) * 100)) / 100;
 			scoreBalance.setScore(score);
+			scoreBalance.setOrderSn("分红奖");
 		}
 
 		PageInfo<ScoreBalance> pageInfo = new PageInfo<ScoreBalance>(list);
@@ -100,6 +100,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 		for (ScoreBalance scoreBalance : list) {
 			float score = (float) (Math.round((scoreBalance.getScore() / float1) * 100)) / 100;
 			scoreBalance.setScore(score);
+			scoreBalance.setOrderSn("分红奖");
 		}
 
 		PageInfo<ScoreBalance> pageInfo = new PageInfo<ScoreBalance>(list);

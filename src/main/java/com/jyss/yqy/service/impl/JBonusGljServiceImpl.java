@@ -32,13 +32,11 @@ public class JBonusGljServiceImpl implements JBonusGljService{
 	 * 查询用户管理奖
 	 */
 	@Override
-	public JBonusGljResult getJBonusGlj(int uId,int page,int limit){
+	public JBonusGljResult getJBonusGlj(int uId){
 		JBonusGljResult jBonusGljResult = new JBonusGljResult();
 		double earnings = jBonusGljMapper.selectEarnings(uId);
 		double total = jBonusGljMapper.selectTotal(uId);
-		PageHelper.startPage(page, limit);
 		List<JBonusGlj> list = jBonusGljMapper.selectJBonusGljWek(uId);
-		PageInfo<JBonusGlj> pageInfo = new PageInfo<JBonusGlj>(list);
 		jBonusGljResult.setEarnings(earnings);
 		jBonusGljResult.setTotal(total);
 		jBonusGljResult.setData(list);
