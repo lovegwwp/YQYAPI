@@ -166,7 +166,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		model.setTimeoutExpress(timeoutExpress); // "30m"
 		model.setTotalAmount(totalAmount); // "0.01"
 		model.setProductCode("QUICK_MSECURITY_PAY"); // "QUICK_MSECURITY_PAY"
-		model.setSellerId(config.getSELLER_ID());
+		//model.setSellerId(config.getSELLER_ID());
 		request.setBizModel(model);
 		//request.setBizContent(bizContent);
 		request.setNotifyUrl(notifyUrl); // "商户外网可以访问的异步地址"
