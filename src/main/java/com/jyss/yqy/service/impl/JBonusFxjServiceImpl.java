@@ -103,13 +103,13 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 			
 			//查询返回比例
 			Xtcl xtcl1 = xtclMapper.getClsValue("fxj_type", "1");        //分销奖第一代
-			float float1 = Float.parseFloat(xtcl1.getBz_value());        //0.06
+			float float1 = Float.parseFloat(xtcl1.getBz_value());                     //0.06
 			Xtcl xtcl2 = xtclMapper.getClsValue("fxj_type", "2");        //分销奖第二代
-			float float2 = Float.parseFloat(xtcl2.getBz_value());        //0.03
+			float float2 = Float.parseFloat(xtcl2.getBz_value());                     //0.03
 			Xtcl xtcl3 = xtclMapper.getClsValue("fxj_type", "3");        //分销奖第三代
-			float float3 = Float.parseFloat(xtcl3.getBz_value());        //0.02
-			Xtcl xtcl4 = xtclMapper.getClsValue("fxj_type", "4");        //分销奖第四代至第八代
-			float float4 = Float.parseFloat(xtcl4.getBz_value());        //0.01
+			float float3 = Float.parseFloat(xtcl3.getBz_value());                     //0.02
+			//Xtcl xtcl4 = xtclMapper.getClsValue("fxj_type", "4");       			  //分销奖第四代至第八代
+			//float float4 = Float.parseFloat(xtcl4.getBz_value());                   //0.01
 			
 			for (JRecord jRecord : orderPvList) {
 				Float pv = jRecord.getPv();
@@ -165,8 +165,8 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 									bonusFxj3.setParentId(recordB3.getrId());
 									bonusFxj3.setAmount(pv * float3);
 									bonusFxj3.setStatus(1);
-									int count3 = bonusFxjMapper.insert(bonusFxj3);
-									if(count3 == 1){
+									bonusFxjMapper.insert(bonusFxj3);
+									/*if(count3 == 1){
 										//第四代
 										UUserRRecordBExample example3 = new UUserRRecordBExample();
 										Criteria criteria3 = example3.createCriteria();
@@ -265,7 +265,7 @@ public class JBonusFxjServiceImpl implements JBonusFxjService{
 												}
 											}
 										}
-									}
+									}*/
 								}
 							}
 						}
