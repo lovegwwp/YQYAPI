@@ -66,7 +66,8 @@ public class JBonusScjAction {
 		map.put("data", "");
 		return map;
 	}
-	
+
+
 	/**
 	 * 按两个日期查询
 	 */
