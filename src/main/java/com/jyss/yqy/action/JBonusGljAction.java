@@ -35,9 +35,7 @@ public class JBonusGljAction {
 	 */
 	@RequestMapping("/showGlj")
 	@ResponseBody
-	public Map<String, Object> getJBonusGlj(@RequestParam("token")String token,
-			@RequestParam(value = "page", required = true) int page,
-			@RequestParam(value = "limit", required = true) int limit){
+	public Map<String, Object> getJBonusGlj(@RequestParam("token")String token){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -46,7 +44,7 @@ public class JBonusGljAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusGljResult result = jBonusGljService.getJBonusGlj(userBean.getId(),page,limit);
+				JBonusGljResult result = jBonusGljService.getJBonusGlj(userBean.getId());
 				if(result != null){
 					map.put("status", "true");
 					map.put("code", "0");

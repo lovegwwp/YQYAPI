@@ -69,19 +69,27 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				return map;
 
 			}
-
 			if (pLevel == 2 || pLevel == 3 || pLevel == 4 || pLevel == 5) {
-				/*UUserRRecordBExample example = new UUserRRecordBExample();
+				UUserRRecordBExample example = new UUserRRecordBExample();
 				Criteria criteria = example.createCriteria();
 				criteria.andUIdEqualTo(userBean.getId());
 				List<UUserRRecordB> list = userRecordMapper.selectByExample(example);
-				if (list != null && list.size() > 0) {
-					map.put("code", "-4");
-					map.put("status", "false");
-					map.put("message", "您已使用过推荐码！");
-					map.put("data", "");
-					return map;
-				}*/
+				if (list != null && list.size() == 1) {
+					UUserRRecordB userRRecordB = list.get(0);
+					userRRecordB.setrId(parentUser.getId());
+					userRRecordB.setStatus(0);                   // 设置初始值为0
+					userRRecordB.setType(pLevel);
+					userRRecordB.setCreatedAt(new Date());
+					int count = userRecordMapper.updateByPrimaryKeySelective(userRRecordB);
+					if(count == 1){
+						map.put("code", "-4");
+						map.put("status", "false");
+						map.put("message", "您已使用过推荐码！");
+						map.put("data", "");
+						return map;
+					}
+
+				}
 				UUserRRecordB userRRecordB = new UUserRRecordB();
 				userRRecordB.setuId(userBean.getId());
 				userRRecordB.setrId(parentUser.getId());

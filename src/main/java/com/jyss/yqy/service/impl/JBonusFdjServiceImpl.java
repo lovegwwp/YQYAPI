@@ -30,13 +30,11 @@ public class JBonusFdjServiceImpl implements JBonusFdjService{
 	 * 查询用户辅导奖
 	 */
 	@Override
-	public JBonusFdjResult getJBonusFdj(int uId,int page,int limit){
+	public JBonusFdjResult getJBonusFdj(int uId){
 		JBonusFdjResult jBonusFdjResult = new JBonusFdjResult();
 		double earnings = jBonusFdjMapper.selectEarnings(uId);
 		double total = jBonusFdjMapper.selectTotal(uId);
-		PageHelper.startPage(page, limit);
 		List<JBonusFdj> list = jBonusFdjMapper.selectJBonusFdjWek(uId);
-		PageInfo<JBonusFdj> pageInfo = new PageInfo<JBonusFdj>(list);
 		jBonusFdjResult.setEarnings(earnings);
 		jBonusFdjResult.setTotal(total);
 		jBonusFdjResult.setData(list);

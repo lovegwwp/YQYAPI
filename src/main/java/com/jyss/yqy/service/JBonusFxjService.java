@@ -9,14 +9,14 @@ import com.jyss.yqy.entity.JBonusFxjResult;
 
 public interface JBonusFxjService {
 	
-	public JBonusFxjResult getJBonusFxj(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit);
+	JBonusFxjResult getJBonusFxj(@Param("uId")int uId);
 	
-	public JBonusFxjResult selectJBonusFxjByDay(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
+	JBonusFxjResult selectJBonusFxjByDay(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
 			@Param("beginTime")String beginTime,@Param("endTime")String endTime);
     
-	public JBonusFxjResult selectJBonusFxjByMonth(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
+	JBonusFxjResult selectJBonusFxjByMonth(@Param("uId")int uId,@Param("page")int page,@Param("limit")int limit,
 			@Param("month")String month);
     
-    public Map<String, String> insertJBonusFxj();
+    Map<String, String> insertJBonusFxj();
 
 }

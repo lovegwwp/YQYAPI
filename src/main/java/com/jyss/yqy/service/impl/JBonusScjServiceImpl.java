@@ -27,17 +27,14 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 	
 	@Autowired
 	private JBonusScjMapper bonusScjMapper;
-	@Autowired
-	private UserMapper userMapper;
-	@Autowired
-	private XtclMapper xtclMapper;
+
 	
 	
 	/**
 	 * 查询用户市场奖
 	 */
 	@Override
-	public JBonusScjResult selectJBonusScjByUid(int uId,int page,int limit) {
+	public JBonusScjResult selectJBonusScjByUid(int uId) {
 		JBonusScjResult result = new JBonusScjResult();
 		List<JBonusScj> bonusScjList = bonusScjMapper.selectJBonusScjByUid(uId);
 		JBonusScj bonusScj = bonusScjList.get(0);
@@ -47,9 +44,7 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 		float totalPv = bonusScjMapper.selectTotalPv(uId);
 		result.setTotal(totalPv);
 		//设置本周明细
-		PageHelper.startPage(page, limit);
 		List<JBonusScj> scjList = bonusScjMapper.selectJBonusScjWek(uId);
-		PageInfo<JBonusScj> pageInfo = new PageInfo<JBonusScj>(scjList);
 		result.setData(scjList);
 		return result;
 		

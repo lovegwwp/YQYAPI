@@ -36,9 +36,7 @@ public class JBonusScjAction {
 	
 	@RequestMapping("/showScj")
 	@ResponseBody
-	public Map<String, Object> getJBonusScj(@RequestParam("token")String token,
-			@RequestParam(value = "page", required = true) int page,
-			@RequestParam(value = "limit", required = true) int limit){
+	public Map<String, Object> getJBonusScj(@RequestParam("token")String token){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
@@ -47,7 +45,7 @@ public class JBonusScjAction {
 			if(list != null && list.size()>0){
 				UserBean userBean = list.get(0);
 				
-				JBonusScjResult result = bonusScjService.selectJBonusScjByUid(userBean.getId(),page,limit);
+				JBonusScjResult result = bonusScjService.selectJBonusScjByUid(userBean.getId());
 				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");

@@ -32,15 +32,13 @@ public class JBonusFhjAction {
 	 */
 	@RequestMapping("/showFhj")
 	@ResponseBody
-	public Map<String, Object> getJBonusFhj(@RequestParam("token")String token,
-											@RequestParam(value = "page", required = true) int page,
-											@RequestParam(value = "limit", required = true) int limit){
+	public Map<String, Object> getJBonusFhj(@RequestParam("token")String token){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
 			UMobileLogin uMobileLogin = loginList.get(0);
 			String uUuid = uMobileLogin.getuUuid();
-			JBonusFhjResult result = jBonusFhjService.getJBonusFhj(uUuid, page, limit);
+			JBonusFhjResult result = jBonusFhjService.getJBonusFhj(uUuid);
 			if(StringUtils.isEmpty(result)){
 				map.put("status", "false");
 				map.put("code", "-1");
