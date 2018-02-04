@@ -116,7 +116,7 @@
               1 = 1
               <if test="id != null and id !=''"> and u.id = #{id} </if> 	
               <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
-			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 				  
+			  <if test="isAuth != null and isAuth !=''"> and u.is_auth &gt;= #{isAuth} </if> 				  
 		 </where> 
     </select>  
     
