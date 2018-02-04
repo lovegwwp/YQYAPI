@@ -19,9 +19,6 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.alipay.api.response.AlipayTradePrecreateResponse;
-import com.alipay.demo.trade.model.builder.AlipayTradePrecreateRequestBuilder;
-import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.jyss.yqy.config.AliConfig;
 import com.jyss.yqy.constant.Constant;
 import com.jyss.yqy.entity.Goods;
@@ -65,10 +62,10 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		String subject = "代理人消费";		
 		String totalAmount = money + "";
 		// 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
-		String body = "易起云商品消费：" + money + "元";
+		String body = "易起云商品消费 " + money + "元";
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "30m";
-		String notifyUrl ="http://121.40.29.64:8081/YQYAPI/YQYB/DlrAliNotify.action";
+		String notifyUrl ="http://121.40.29.64:8081/YQYAPI/DlrAliNotify.action";
 		
 		/////////////用户本地数据判断////////////////
 		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
@@ -160,17 +157,17 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 
 		// SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
 		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-		model.setBody(body); // "我是测试数据"
-		model.setSubject(subject); // "App支付测试Java"
-		model.setOutTradeNo(outTradeNo); // outtradeno,应用系统内的订单编号
-		model.setTimeoutExpress(timeoutExpress); // "30m"
-		model.setTotalAmount(totalAmount); // "0.01"
+		model.setBody("易起云商品消费 0.1元"); // "易起云商品消费 0.1元"
+		model.setSubject("代理人消费"); // "代理人消费"
+		model.setOutTradeNo("9999999999"); // outtradeno,应用系统内的订单编号
+		model.setTimeoutExpress("30m"); // "30m"
+		model.setTotalAmount("0.10"); // "0.1"
 		model.setProductCode("QUICK_MSECURITY_PAY"); // "QUICK_MSECURITY_PAY"
 		//model.setSellerId(config.getSELLER_ID());
 		request.setBizModel(model);
 		//request.setBizContent(bizContent);
-		request.setNotifyUrl(notifyUrl); // "商户外网可以访问的异步地址"
-
+		//request.setNotifyUrl("http://121.40.29.64:8081/YQYAPI/DlrAliNotify.action"); // "http://121.40.29.64:8081/YQYAPI/YQYB/DlrAliNotify.action"
+		request.setNotifyUrl("https://openapi.alipay.com/gateway.do");
 		try {
 			// 这里和普通的接口调用不同，使用的是sdkExecute
 			AlipayTradeAppPayResponse response = alipayClient
@@ -215,7 +212,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				}
 				if (count == 1) {
 					count = 0;
-					count = userMapper.upUserAllStatus("", bCode, "", "", "",
+					count = userMapper.upUserAllStatus("", bCode, "1", "", "",
 							gmID + "");
 				}
 				// /////////////////////////
@@ -397,7 +394,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		String totalAmount = money + "";
 	
 		// 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
-		String body = "易起云商品消费：" + money + "元";
+		String body = "易起云商品消费 " + money + "元";
 
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "30m";
