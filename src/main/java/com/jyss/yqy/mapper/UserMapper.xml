@@ -272,8 +272,8 @@
     	update u_user
     	<set>
     		<if test="cashScore != null and cashScore != '' or cashScore == 0">cash_score = #{cashScore},</if>
-    		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = #{shoppingScore}</if>
-    		<if test="totalPv != null and totalPv != ''or totalPv == 0">total_pv = #{totalPv}</if>
+    		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = #{shoppingScore},</if>
+    		<if test="totalPv != null and totalPv != ''or totalPv == 0">total_pv = #{totalPv},</if>
     	</set>
     	where id = #{id} 
     </update>
@@ -283,7 +283,7 @@
     	update u_user
     	<set>
     		<if test="cashScore != null and cashScore != '' or cashScore == 0">cash_score = cash_score + #{cashScore},</if>
-    		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = shopping_score + #{shoppingScore}</if>
+    		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = shopping_score + #{shoppingScore},</if>
     		<if test="totalPv != null and totalPv != ''or totalPv == 0">total_pv = total_pv + #{totalPv}</if>
     	</set>
     	where id = #{id} and is_chuangke = #{isChuangke}
