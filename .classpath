@@ -28,8 +28,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952-source.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952.jar" sourcepath="src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952-source.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215-source.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215.jar" sourcepath="src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215-source.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-codec-1.10.jar"/>
@@ -42,5 +40,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3-javadoc.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3-sources.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-sdk-java20180104135026-source.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/alipay-sdk-java20180104135026.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -180,7 +180,7 @@
 			<version>1.0</version> 
 	        <scope>system</scope>  
 	        <!--本地jar的路径,相对或者绝对都可以-->  
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20180104135026.jar</systemPath>
         </dependency>
         
         <dependency> 
@@ -189,7 +189,7 @@
 			<version>1.0</version> 
 	        <scope>system</scope>  
 	        <!--本地jar的路径,相对或者绝对都可以-->  
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952-source.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20180104135026-source.jar</systemPath>
         </dependency>
         
         <dependency> 

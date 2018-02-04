@@ -12,6 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
+
+
+
+
+
+
+
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -19,7 +27,6 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.demo.trade.model.builder.AlipayTradePrecreateRequestBuilder;
 import com.alipay.demo.trade.model.result.AlipayF2FPrecreateResult;
 import com.jyss.yqy.config.AliConfig;
@@ -65,7 +72,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		String subject = "代理人消费";		
 		String totalAmount = money + "";
 		// 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
-		String body = "易起云商品消费：" + money + "元";
+		String body = "易起云商品消费 " + money + "元";
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "30m";
 		String notifyUrl ="http://121.40.29.64:8081/YQYAPI/YQYB/DlrAliNotify.action";
@@ -215,7 +222,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				}
 				if (count == 1) {
 					count = 0;
-					count = userMapper.upUserAllStatus("", bCode, "", "", "",
+					count = userMapper.upUserAllStatus("", bCode, "1", "", "",
 							gmID + "");
 				}
 				// /////////////////////////
@@ -397,7 +404,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		String totalAmount = money + "";
 	
 		// 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
-		String body = "易起云商品消费：" + money + "元";
+		String body = "易起云商品消费 " + money + "元";
 
 		// 支付超时，定义为120分钟
 		String timeoutExpress = "30m";
