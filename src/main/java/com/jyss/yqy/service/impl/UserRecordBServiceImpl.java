@@ -341,6 +341,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		return map;
 	}
 
+
 	@Override
 	public List<UUserRRecordB> getRecordB(String uId, String rId, String status) {
 		// TODO Auto-generated method stub
