@@ -77,9 +77,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				if (list != null && list.size() == 1) {
 					UUserRRecordB userRRecordB = list.get(0);
 					userRRecordB.setrId(parentUser.getId());
-					userRRecordB.setStatus(0);                   // 设置初始值为0
 					userRRecordB.setType(pLevel);
-					userRRecordB.setCreatedAt(new Date());
 					int count = userRecordMapper.updateByPrimaryKeySelective(userRRecordB);
 					if(count == 1){
 						map.put("code", "0");
