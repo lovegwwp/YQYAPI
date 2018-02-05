@@ -155,7 +155,7 @@ public class XtclAction {
 		info = (String) getDlcsInfo("3", pvsz, "3", "7").get("info");
 		reMap.put("jb3", info);
 		reMap.put("jb3Money", getDlcsInfo("3", pvsz, "3", "7").get("money"));
-		// 高级
+		// 经理人
 		info = "";
 		info = (String) getDlcsInfo("4", pvsz, "4", "8").get("info");
 		reMap.put("jb4", info);

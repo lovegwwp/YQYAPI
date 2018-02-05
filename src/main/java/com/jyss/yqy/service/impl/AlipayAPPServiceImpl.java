@@ -499,7 +499,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			AlipayTradeAppPayResponse response = alipayClient
 					.sdkExecute(request);			 
 			System.out.println(response.getBody());	
-			////////////自我订单业务////////
+			////////////自我订单业务/////////
 			if (response.isSuccess()) {
 			// 自我业务处理
 				// //商品二维码

@@ -275,8 +275,11 @@ public class UserRecordBAction {
 			for (UserBean userBean : ublist) {
 				if (userBean != null && userBean.getId() != 0) {
 					float totalPv = userBean.getTotalPv();
-					// //有额度才能进行发钱
-					if (totalPv > 0) {								
+					// //有额度才能进行发钱 超过额度 按照额度发钱
+					if (totalPv > 0) {	
+						if (totalPv < eachTotal) {
+							eachTotal = totalPv;
+						}
 						Map<String,Object> m=addBalance(userBean.getUuid(),eachTotal);
 						count =  (String) m.get("count");
 						if (count.equals("1")) {

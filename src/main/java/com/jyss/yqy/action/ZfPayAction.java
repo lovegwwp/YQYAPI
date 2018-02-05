@@ -190,6 +190,7 @@ public class ZfPayAction {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", zfCode);
+		mm.put("zfPwd", "");//支付密码
 		mm.put("zxingpng", "");// 订单二维码
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 
@@ -232,11 +233,12 @@ public class ZfPayAction {
 			mapRe.put("data", mm);
 			return mapRe;
 		}
-		if (ub.getPwd() == null || ub.getPwd().equals("")
-				|| ub.getPwd().equals("0")) {
+		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")
+				|| ub.getPayPwd().equals("0")) {
 			zfCode = "0";
 		} else {
 			zfCode = "1";
+			mm.put("zfPwd", ub.getPayPwd());//支付密码
 		}
 		mm.put("zfCode", zfCode);
 		mm.put("xjjf", ub.getCashScore() + "");
