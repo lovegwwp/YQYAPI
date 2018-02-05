@@ -147,41 +147,44 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 
 		AliConfig config = new AliConfig();
 		// 实例化客户端
-//		AlipayClient alipayClient = new DefaultAlipayClient(config.getURL(),
-//				config.getAPP_ID(), config.getAPP_PRIVATE_KEY(),
-//				config.getFORMAT(), config.getCHARSET(),
-//				config.getALIPAY_PUBLIC_KEY(), config.getSIGN_TYPE());
-        String alipay_public_key ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuJIEE+7+doITMI+/sczhKZbTmpjzDmLIdtoNXpa/IwnBOYPItz+5sOoYjdn9+ka4Dd1Gq4cDLwGbohLHjiSAbvaKRF0zoUpJTe0cVDGOQNjTg7a0OYTbCmO/Ymyea+coWfiSO1oNFWXmPggz/E2+HSxf411b1P/M5X0Qy0/lwJpT65S00cpCBVRwOh3lJ9S+t6Heag292vcVhq7BsdrHMZHhx+SeaIYVbq/GGyCPzfFuImYFCb76r0Ge2eYgZiAq/H79mZJFs9T54axxszlPONq5CDEZPr5cY1Kgt1pOTqCPDrvLWaaedzHRuN/W0uceOp5xx2qfB1Spz1ZicFrMwIDAQAB";
-        String private_key ="MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCEYVQphrvywUOrbfujlOQFQHBYKCrZAl3mlso3EUhEKzNUBHpxtQVO1mJvS1m1oI50xCFBhF1kmdTGc0PQU0b0F+RgYSgE5Y0sI3GVPNxJOqzLPVlR9t4JRNA883mVCzIbnvEyV8M2pMQnwtVKBybEM+8vyf7tSMm0Ty98/cTJqgh68uCEDU8FBBIvylpp1Ds9R++45uAXcFITm5SmMxrM2ffZ72tQzwVDAUGaLdkkcYTHd1NeXUXJy2QtlFFQkzKNG2rvPpA9ucjy1O8S/sC+7x+fnDaDARobD/3K0zfhi7CfB8vMZXaOpljCz71xREt2rFY6ZFRSaseY/ILZRhZjAgMBAAECggEABTF4RsTFXMmeKPyAkbNGmrojbiHtRGQmYORrfGuOJTZ4pgQi9ZD/a09Xvzv6gfiRfh0vnM1fiJHMWhitgV+y+eJyECHfmwmSVzfwvcUMc0b8/mAiv+dqYHy1mp6Gl4U/6vt6RNpSizM9ir3G9kd/itTqvjozaQWg/BTbLREbhjm57J4tFrYnP8OTKPtv3bmKKyh0KD1T/MovggwboMyEwhn9dHs6achUh4DBbkECsbx7ntMMW/rS5gDQGYplz1UUZ+khm2WCaKJQic1xtymCnUiaNIl7lbt8UeTBVvKMlanlGY1vjQAMk3s3obA3ODyakdVKCEL9LrzElyhD1V/sQQKBgQDG+0eSDt+JUr4SGYUmqYZ0cYwnSuS9n0Pvx0c68FRJ5eU2vhRyim1/Jd7zO0OSzwnJ/x/rulTck7WTaU7S0T/cUKQfIrwNwD1Ysb1uqKpiYrfV2Xuew109vWISTGKaS51Fbcm26RfowRsoziwIk2MQd4KZPjDqQm3dwd4lX/Q6YQKBgQCqUFzF9JtntWCxeBcdh85VtkN36AkVA/SYCz9ffrFbC+wivf2Ip9Z9d7dfTA1UTIaPvJ/5gttqn1yZ3gLYcBob40uhxtKVyvsTvXWLtMl82Y5D/CBhqNS+2tWGwamEkmYHRuVaPwx51e2nJyNEgRicoi08lPFBEOOW53Z8xoMvQwKBgQCoJvuhk44WR2U2eHiMZqCoULiHEARjtm679+TbCvPAC1Z7v4AaF59W3tMdK4z8SJhWKpJ4K9vBF9ZPP6QMBib4cPFxGnJfEIEHLhUOqdxrDk+amZKdZS2rmhqBqil9iL7cSF45g5vf5yijgC+4A42pAcXM6MB/hym/SDEJ1p/WoQKBgQCWCTGRWglFdW13KfoDE85bh7MsAIdvsgpZnx72+182e+xMNt8Q8fpskXhDRXZAmyG3ok2zuumcpkMncYNENI1rn/LS05pUR3qkSzUwG9WcXPONRKEqJ1czwwh0LEsv9OBY7MXDmONeuW0g4cOZ57hM1DnRssxNq5kzKTkidqa+jQKBgQCEZPTHY6WPt/vjVQtq4Y+x6u2YRHD9+m2G8HM9U85Io/Nqq5iXPGf42pR7BADEYm+rkhG0yCOuLMkY75vfLJr2EASdwyfccZ/a/yAukfc1JJFnX4tsz9oGqHZpFcG7vzhumfxIMlguN2hvx1xpJrXOOcJZK2Utb1YYh0gI2RP4Qw==";
-        String appid ="2018011501886037";
-		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",appid,private_key,
-				"json","UTF-8",alipay_public_key,"RSA2");
+		AlipayClient alipayClient = new DefaultAlipayClient(config.getURL(),
+				config.getAPP_ID(), config.getAPP_PRIVATE_KEY(),
+				config.getFORMAT(), config.getCHARSET(),
+				config.getALIPAY_PUBLIC_KEY(), config.getSIGN_TYPE());
+//        String alipay_public_key ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuJIEE+7+doITMI+/sczhKZbTmpjzDmLIdtoNXpa/IwnBOYPItz+5sOoYjdn9+ka4Dd1Gq4cDLwGbohLHjiSAbvaKRF0zoUpJTe0cVDGOQNjTg7a0OYTbCmO/Ymyea+coWfiSO1oNFWXmPggz/E2+HSxf411b1P/M5X0Qy0/lwJpT65S00cpCBVRwOh3lJ9S+t6Heag292vcVhq7BsdrHMZHhx+SeaIYVbq/GGyCPzfFuImYFCb76r0Ge2eYgZiAq/H79mZJFs9T54axxszlPONq5CDEZPr5cY1Kgt1pOTqCPDrvLWaaedzHRuN/W0uceOp5xx2qfB1Spz1ZicFrMwIDAQAB";
+//        String private_key ="MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCEYVQphrvywUOrbfujlOQFQHBYKCrZAl3mlso3EUhEKzNUBHpxtQVO1mJvS1m1oI50xCFBhF1kmdTGc0PQU0b0F+RgYSgE5Y0sI3GVPNxJOqzLPVlR9t4JRNA883mVCzIbnvEyV8M2pMQnwtVKBybEM+8vyf7tSMm0Ty98/cTJqgh68uCEDU8FBBIvylpp1Ds9R++45uAXcFITm5SmMxrM2ffZ72tQzwVDAUGaLdkkcYTHd1NeXUXJy2QtlFFQkzKNG2rvPpA9ucjy1O8S/sC+7x+fnDaDARobD/3K0zfhi7CfB8vMZXaOpljCz71xREt2rFY6ZFRSaseY/ILZRhZjAgMBAAECggEABTF4RsTFXMmeKPyAkbNGmrojbiHtRGQmYORrfGuOJTZ4pgQi9ZD/a09Xvzv6gfiRfh0vnM1fiJHMWhitgV+y+eJyECHfmwmSVzfwvcUMc0b8/mAiv+dqYHy1mp6Gl4U/6vt6RNpSizM9ir3G9kd/itTqvjozaQWg/BTbLREbhjm57J4tFrYnP8OTKPtv3bmKKyh0KD1T/MovggwboMyEwhn9dHs6achUh4DBbkECsbx7ntMMW/rS5gDQGYplz1UUZ+khm2WCaKJQic1xtymCnUiaNIl7lbt8UeTBVvKMlanlGY1vjQAMk3s3obA3ODyakdVKCEL9LrzElyhD1V/sQQKBgQDG+0eSDt+JUr4SGYUmqYZ0cYwnSuS9n0Pvx0c68FRJ5eU2vhRyim1/Jd7zO0OSzwnJ/x/rulTck7WTaU7S0T/cUKQfIrwNwD1Ysb1uqKpiYrfV2Xuew109vWISTGKaS51Fbcm26RfowRsoziwIk2MQd4KZPjDqQm3dwd4lX/Q6YQKBgQCqUFzF9JtntWCxeBcdh85VtkN36AkVA/SYCz9ffrFbC+wivf2Ip9Z9d7dfTA1UTIaPvJ/5gttqn1yZ3gLYcBob40uhxtKVyvsTvXWLtMl82Y5D/CBhqNS+2tWGwamEkmYHRuVaPwx51e2nJyNEgRicoi08lPFBEOOW53Z8xoMvQwKBgQCoJvuhk44WR2U2eHiMZqCoULiHEARjtm679+TbCvPAC1Z7v4AaF59W3tMdK4z8SJhWKpJ4K9vBF9ZPP6QMBib4cPFxGnJfEIEHLhUOqdxrDk+amZKdZS2rmhqBqil9iL7cSF45g5vf5yijgC+4A42pAcXM6MB/hym/SDEJ1p/WoQKBgQCWCTGRWglFdW13KfoDE85bh7MsAIdvsgpZnx72+182e+xMNt8Q8fpskXhDRXZAmyG3ok2zuumcpkMncYNENI1rn/LS05pUR3qkSzUwG9WcXPONRKEqJ1czwwh0LEsv9OBY7MXDmONeuW0g4cOZ57hM1DnRssxNq5kzKTkidqa+jQKBgQCEZPTHY6WPt/vjVQtq4Y+x6u2YRHD9+m2G8HM9U85Io/Nqq5iXPGf42pR7BADEYm+rkhG0yCOuLMkY75vfLJr2EASdwyfccZ/a/yAukfc1JJFnX4tsz9oGqHZpFcG7vzhumfxIMlguN2hvx1xpJrXOOcJZK2Utb1YYh0gI2RP4Qw==";
+//        String appid ="2018011501886037";
+//		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",appid,private_key,
+//				"json","UTF-8",alipay_public_key,"RSA2");
 		
 		// 实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
 		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 
 		// SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
 		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-		//model.setBody("易起云商品消费 0.1元"); // "易起云商品消费 0.1元"
-		//model.setSubject("代理人消费"); // "代理人消费"
-		//model.setOutTradeNo("20189999999999"); // outtradeno,应用系统内的订单编号
-		//model.setTimeoutExpress("30m"); // "30m"
-		//model.setTotalAmount("0.10"); // "0.1"
-		//model.setProductCode("QUICK_MSECURITY_PAY"); // "QUICK_MSECURITY_PAY"
+		model.setBody(body); // "易起云商品消费 0.1元"
+		model.setSubject(subject); // "代理人消费"
+		model.setOutTradeNo(outTradeNo); // outtradeno,应用系统内的订单编号
+		model.setTimeoutExpress(timeoutExpress); // "30m"
+		model.setTotalAmount(totalAmount); // "0.1"
+		model.setProductCode("QUICK_MSECURITY_PAY"); // "QUICK_MSECURITY_PAY"
 		//model.setSellerId(config.getSELLER_ID());////不需要
-		//request.setBizModel(model);
-		//request.setBizContent(bizContent);
-		//request.setNotifyUrl("http://121.40.29.64:8081/YQYAPI/DlrAliNotify.action"); // "http://121.40.29.64:8081/YQYAPI/YQYB/DlrAliNotify.action"
-		//request.setNotifyUrl("http://121.40.29.64:8081/YQYAPI/DlrAliNotify.action");
-		
-		model.setBody("111");
-		model.setSubject("2222");
-		model.setOutTradeNo("20171110191203");
-		model.setTimeoutExpress("90m");
-		model.setTotalAmount("1.00");
-		model.setProductCode("QUICK_MSECURITY_PAY");  
 		request.setBizModel(model);
-		request.setNotifyUrl("http://192.168.1.18:89/Student/Notify_Action");//商户外网可以访问的异步地址，不能重定向
+		//request.setBizContent(bizContent);
+		request.setNotifyUrl(notifyUrl); // "http://121.40.29.64:8081/YQYAPI/YQYB/DlrAliNotify.action"
+	
+//		
+//		model.setBody("111");
+//		model.setSubject("2222");
+//		model.setOutTradeNo("20171110191203");
+//		model.setTimeoutExpress("90m");
+//		model.setTotalAmount("1.00");
+//		model.setProductCode("QUICK_MSECURITY_PAY");  
+//		request.setBizModel(model);
+//		request.setNotifyUrl("http://192.168.1.18:89/Student/Notify_Action");//商户外网可以访问的异步地址，不能重定向
+		
+		///////////////////
+		
 		try {
 			// 这里和普通的接口调用不同，使用的是sdkExecute
 			AlipayTradeAppPayResponse response = alipayClient
@@ -226,7 +229,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				}
 				if (count == 1) {
 					count = 0;
-					count = userMapper.upUserAllStatus("", bCode, "1", "", "",
+					count = userMapper.upUserAllStatus("", bCode, "", "", "",
 							gmID + "");
 				}
 				// /////////////////////////
