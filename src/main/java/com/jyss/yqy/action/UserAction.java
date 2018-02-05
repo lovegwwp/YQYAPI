@@ -101,7 +101,7 @@ public class UserAction {
 		Map<String, String> m2 = new HashMap<String, String>();
 		if (bz.equals("1")) {
 			if (tel != null && !"".equals(tel)) {
-				List<UserBean> ulist = userService.getUserBy(tel, "1", "", "");
+				List<UserBean> ulist = userService.getUserBy(tel, "1", "", "","");
 				if (ulist == null || ulist.size() == 0) {
 					m2 = sendCode(tel, request);
 					if (m2.get("msgDo").equals("1")) {
@@ -184,7 +184,7 @@ public class UserAction {
 				if (SessToYzm.equals(code)) {
 					// 验证码正确，进行注册表插入
 					List<UserBean> ulist = userService.getUserBy(account, "1",
-							"", "");
+							"", "","");
 					System.out.println(ulist.size());
 					if (ulist != null && ulist.size() >= 1) {
 						m.put("status", "false");
@@ -200,7 +200,7 @@ public class UserAction {
 					if (count == 1) {
 						String token = CommTool.getUUID();
 						List<UserBean> relist = userService.getUserBy(account,
-								"1", "", "");
+								"1", "", "","");
 						UserBean userb = relist.get(0);
 						count = userService.addLogin(userb.getUuid(), token);
 						if (count == 1) {
@@ -249,7 +249,7 @@ public class UserAction {
 					String salt = CommTool.getSalt();
 					String pwd = PasswordUtil.generate(password, salt);
 					List<UserBean> ulist = userService.getUserBy(account, "1",
-							"", "");
+							"", "","");
 					if (ulist == null && ulist.size() != 1) {
 						return new ResponseEntity("false", "请输入正确的手机号");
 					}
@@ -289,7 +289,7 @@ public class UserAction {
 					String salt = CommTool.getSalt();
 					String pwd = PasswordUtil.generate(password, salt);
 					List<UserBean> ulist = userService.getUserBy(account, "1",
-							"", "");
+							"", "","");
 					if (ulist == null && ulist.size() != 1) {
 						return new ResponseEntity("false", "请输入正确的手机号");
 					}
@@ -320,7 +320,7 @@ public class UserAction {
 
 		String salt = CommTool.getSalt();
 		String pwd = PasswordUtil.generate(password, salt);// 新密码加密
-		List<UserBean> ulist = userService.getUserBy(account, "1", "2", "");
+		List<UserBean> ulist = userService.getUserBy(account, "1", "2", "","");
 		if (ulist == null || ulist.size() != 1) {
 			return new ResponseEntity("false", "请输入正确的手机号");
 		}
