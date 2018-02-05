@@ -73,6 +73,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		mm.put("responseBody", "");///支付宝返回
 		mm.put("money", "");
 		mm.put("xjjf", "");
+		mm.put("zfPwd", "");
 		mm.put("zfCode", "");
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 		// //// 验证当前用户是否合法///////code='-1=其他，0=无支付密码，1=有支付密码，'////
@@ -93,7 +94,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			m.put("data", mm);
 			return m;
 		}
-		if (ub.getPwd() == null || ub.getPwd().equals("")) {
+		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")) {
 			zfCode = "0";
 		} else {
 			zfCode = "1";
@@ -376,6 +377,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		mm.put("money", "");
 		mm.put("xjjf", "");
 		mm.put("zfCode", zfCode);
+		mm.put("zfPwd", "");
 		mm.put("zxingpng", "");// 订单二维码
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
 
@@ -433,11 +435,13 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			m.put("data", mm);
 			return m;
 		}
-		if (ub.getPwd() == null || ub.getPwd().equals("")
-				|| ub.getPwd().equals("0")) {
+		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")
+				|| ub.getPayPwd().equals("0")) {
 			zfCode = "0";
 		} else {
 			zfCode = "1";
+			String  pwd = ub.getPayPwd();
+			mm.put("zfPwd", pwd);
 		}
 		mm.put("zfCode", zfCode);
 		mm.put("xjjf", ub.getCashScore() + "");
@@ -465,7 +469,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			gmr = ub.getRealName();
 		}
 		
-		String notifyUrl = "http://121.40.29.64:8081/YQYAPI/YQYB/YmzAliNotify.action";
+		String notifyUrl = "http://121.40.29.64:8081/YQYAPI/YmzAliNotify.action";
 		////////支付组件初始化////////////////////
 
 		AliConfig config = new AliConfig();
