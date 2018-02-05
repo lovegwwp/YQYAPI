@@ -34,6 +34,7 @@ import com.jyss.yqy.service.UserService;
 import com.jyss.yqy.service.WxpayService;
 import com.jyss.yqy.service.XtclService;
 import com.jyss.yqy.utils.CommTool;
+import com.jyss.yqy.utils.PasswordUtil;
 import com.jyss.yqy.utils.ZxingCodeUtil;
 
 @Controller
@@ -159,7 +160,8 @@ public class ZfPayAction {
 			mmap = wxService.ymzWxpay(filePath, gmID, num, spId);
 		} else if (type.equals("3")) {
 			// 现金积分
-			mmap = ymzCashScorePay(filePath, gmID, num, spId);
+			String payPwd = request.getParameter("payPwd");///支付密码
+			mmap = ymzCashScorePay(filePath, gmID, num, spId,payPwd);
 		} else {
 			mmap.put("status", "false");
 			mmap.put("message", "商品信息错误!");
@@ -175,7 +177,7 @@ public class ZfPayAction {
 
 	// ////现金积分购买商品///////
 	public Map<String, Object> ymzCashScorePay(String filePath, int gmID,
-			int gmNum, int spID) {
+			int gmNum, int spID,String payPwd) {
 		Map<String, Object> mapRe = new HashMap<String, Object>();
 		Map<String, Object> dlReMap = new HashMap<String, Object>();
 		Map<String, Object> mm = new HashMap<String, Object>();
@@ -215,6 +217,7 @@ public class ZfPayAction {
 			mapRe.put("data", mm);
 			return mapRe;
 		}
+		
 
 		// //// 验证当前用户是否合法///////////
 		List<UserBean> ublist = userService.getUserById(gmID + "", "1", "");
@@ -236,9 +239,21 @@ public class ZfPayAction {
 		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")
 				|| ub.getPayPwd().equals("0")) {
 			zfCode = "0";
+			mapRe.put("status", "false");
+			mapRe.put("message", "支付密码错误！");
+			mapRe.put("code", "-6");
+			mapRe.put("data", mm);
+			return mapRe;
 		} else {
 			zfCode = "1";
-			mm.put("zfPwd", ub.getPayPwd());//支付密码
+			//mm.put("zfPwd", ub.getPayPwd());//支付密码
+			if (!(PasswordUtil.generatePayPwd(payPwd).equals("ub.getPayPwd()"))) {
+				mapRe.put("status", "false");
+				mapRe.put("message", "支付密码错误！");
+				mapRe.put("code", "-6");
+				mapRe.put("data", mm);
+				return mapRe;
+			}
 		}
 		mm.put("zfCode", zfCode);
 		mm.put("xjjf", ub.getCashScore() + "");
@@ -265,8 +280,8 @@ public class ZfPayAction {
 			pv = Integer.parseInt(singlePV) * gmNum;
 		} catch (Exception e) {
 			mapRe.put("status", "false");
-			mapRe.put("message", "现金积分不足！");
-			mapRe.put("code", "-5");
+			mapRe.put("message", "商品信息错误！");
+			mapRe.put("code", "-3");
 			mapRe.put("data", mm);
 			return mapRe;
 		}
@@ -303,7 +318,7 @@ public class ZfPayAction {
 		mapRe.put("code", "-4");
 		mapRe.put("data", "");
 		mapRe.put("status", "false");
-		mapRe.put("message", "初始化订单失败！");
+		mapRe.put("message", "下单失败！");
 		return mapRe;
 	}
 

@@ -441,7 +441,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		} else {
 			zfCode = "1";
 			String  pwd = ub.getPayPwd();
-			mm.put("zfPwd", pwd);
+			//mm.put("zfPwd", pwd);
 		}
 		mm.put("zfCode", zfCode);
 		mm.put("xjjf", ub.getCashScore() + "");
