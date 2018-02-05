@@ -115,7 +115,7 @@ public class AlipayAction {
 
 
 	
-	@RequestMapping(value = "/YQYB/DlrAliNotify", method = RequestMethod.POST)
+	@RequestMapping(value = "/DlrAliNotify", method = RequestMethod.POST)
 	public String DlrAliNotify(HttpServletRequest request,
 			HttpServletResponse response) {
 		log.info("收到支付宝异步通知！");
@@ -188,7 +188,7 @@ public class AlipayAction {
 		return "failed";
 	}
 
-	@RequestMapping(value = "/YQYB/YmzAliNotify", method = RequestMethod.POST)
+	@RequestMapping(value = "/YmzAliNotify", method = RequestMethod.POST)
 	public String YmzAliNotify(HttpServletRequest request,
 			HttpServletResponse response) {
 		log.info("收到支付宝异步通知！");

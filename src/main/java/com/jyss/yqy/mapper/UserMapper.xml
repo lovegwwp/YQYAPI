@@ -46,7 +46,7 @@
 				  left join u_user_auth a on u.uuid = a.u_uuid	 	
 				 <!--  left join u_mobile_login m on u.uuid = m.u_uuid	 --> 			
          <where> 
-              1 = 1
+              1 = 1 and a.status &gt;=0 
               <if test="account != null and account !=''"> and u.account = #{account} </if> 	
               <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
 			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
