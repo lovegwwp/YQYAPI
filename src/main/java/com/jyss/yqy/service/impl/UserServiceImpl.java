@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 			m.put("data", "");
 			return m;
 		}
-		List<UserBean> list = userMapper.getUserBy(account, "1", "", "");
+		List<UserBean> list = userMapper.getUserBy(account, "1", "", "","");
 		if (list == null || list.size() != 1) {
 			m.put("status", "false");
 			m.put("message", "当前无此用户！");
@@ -125,9 +125,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserBean> getUserBy(String account, String status,
-			String isAuth, String statusAuth) {
+			String isAuth, String statusAuth,String statusAuthMoreThan) {
 		// TODO Auto-generated method stub
-		return userMapper.getUserBy(account, status, isAuth, statusAuth);
+		return userMapper.getUserBy(account, status, isAuth, statusAuth,statusAuthMoreThan);
 	}
 
 	@Override

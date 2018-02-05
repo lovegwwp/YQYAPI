@@ -19,7 +19,7 @@ public interface UserMapper {
 	 */
 	List<UserBean> getUserBy(@Param("account") String account,
 			@Param("status") String status, @Param("isAuth") String isAuth,
-			@Param("statusAuth") String statusAuth);
+			@Param("statusAuth") String statusAuth,@Param("statusAuthMoreThan") String statusAuthMoreThan);
 
 	List<UserBean> getUserById(@Param("id") String id,
 			@Param("status") String status, @Param("isAuth") String isAuth);
