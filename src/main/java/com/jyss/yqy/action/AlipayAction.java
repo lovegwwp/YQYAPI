@@ -270,7 +270,7 @@ public class AlipayAction {
 					///===2018.2.1==之后===模式不变===可以返积分多次==例；初级的积分在返还，升级为中级了，则返还中级的，返完之后，返初级的。
 					// //当前成为代理人的推荐人uuid
 					List<UUserRRecordB> rbList = recordBService.getRecordB(
-							ordersB.getGmId(), "", "1");
+							ordersB.getGmId(), "", "");
 					if (rbList == null || rbList.size() != 1) {
 						return 0;
 					}
