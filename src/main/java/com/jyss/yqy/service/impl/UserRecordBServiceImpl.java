@@ -78,6 +78,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 					UUserRRecordB userRRecordB = list.get(0);
 					userRRecordB.setrId(parentUser.getId());
 					userRRecordB.setType(pLevel);
+					userRRecordB.setCreatedAt(new Date());
 					int count = userRecordMapper.updateByPrimaryKeySelective(userRRecordB);
 					if(count == 1){
 						map.put("code", "0");
@@ -340,7 +341,6 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		map.put("message", "辅导奖和积分计算完成时间：" + new Date());
 		return map;
 	}
-
 
 	@Override
 	public List<UUserRRecordB> getRecordB(String uId, String rId, String status) {
