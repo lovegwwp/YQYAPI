@@ -387,6 +387,7 @@ public class AlipayAction {
 								"1","0", "", "");
 						int ccc =0;
 						int count3 =0;
+						 ////有返还记录，进行封存，再增加
 						if (sbaList != null && sbaList.size() > 0) {							
 							for (ScoreBack scoreBack : sbaList) {
 								if (scoreBack!=null&&scoreBack.getUuuid()!=null&&!(scoreBack.getUuuid().equals(""))) {
@@ -394,14 +395,7 @@ public class AlipayAction {
 									ccc +=sBackService.upBackStatus(scoreBack.getUuuid(), "-1", "1");
 								}								
 							}
-						    ////有返还记录，进行封存，再增加
-							if (ccc==count) {
-								count3 = addScoreBack(dlrLevel,uuuid);
-								return count3;
-							}else{
-								return 0;
-							}
-							
+	
 						}else{
 							count3 = addScoreBack(dlrLevel,uuuid);
 							return count3;

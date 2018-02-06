@@ -107,6 +107,16 @@
          where id =#{id} 
     </update>
     
+    <update id="upUserAllStatusByUUid"  >
+        update u_user  set last_modify_time =now()
+          <if test="status != null and status !=''"> ,status = #{status} </if>
+          <if test="bCode != null and bCode !=''"> ,b_code = #{bCode} </if> 
+          <if test="bIsPay != null and bIsPay !=''"> ,b_is_pay = #{bIsPay} </if> 
+          <if test="isChuangke != null and isChuangke !=''"> ,is_chuangke = #{isChuangke} </if> 
+          <if test="isAuth != null and isAuth !=''"> ,is_auth = #{isAuth} </if> 
+         where uuid =#{uuid} 
+    </update>
+    
     
     
 
@@ -127,9 +137,14 @@
 	<!-- 	insert into u_user values(null,#{uuid},#{account},#{pwd},#{salt},'0','1',now(),'0','0','0','tjr','0','0',
 		'0','0','0','0','1','0',now(),'0','0',now(),'0','0',now(),'1','0','0','1','0','0','0','0','0','0',
 		'0','0','0','0','0','code','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'); -->
-		insert into u_user values(null,#{uuid},#{account},#{pwd},#{salt},'','1',now(),'0','0','','','0','',
-		'0','','0','','1','0',now(),'','0',now(),'','0',now(),'1','','','1','0','0','','0','0','0',
-		'0','0','0','0','0','','','','','','0','0','0','0','0','0','0','0','0','','','0','0','0');
+		insert into u_user (id,uuid,account,pwd,salt,nick,status,created_at,integral,currency,avatar,r_uuid_1,province_id,province,city_id,
+              city,area_id,area,sex,age,last_modify_time,real_name,uid,last_login_time,pay_pwd,is_chuangke,birth_date,is_auth,r_uuid_2,r_uuid_3,
+              is_pay,b_is_pay,qr_code,money,chuangke_money,chuangke_r_1,chuangke_r_2,chuangke_r_3,chuangke_r_1_money,chuangke_r_2_money,chuangke_r_3_money,
+               code,b_code,d_uuid_1,d_uuid_2,d_uuid_3,d_r_1_money,d_r_2_money,d_r_3_money,d_money,d_r_money,d_r_1,d_r_2,d_r_3,r_shop_money,ali_account,
+               ali_name,cash_score,shopping_score,consume,total_pv) 
+		values(null,#{uuid},#{account},#{pwd},#{salt},'','1',now(),'0','0','','','0','',
+		'0','','0','','1','0',now(),'','0',now(),'','0',now(),'0','','','0','0','','0','0','0',
+		'0','0','0','0','0','','','','','','0','0','0','0','0','0','0','0','0','','','0','0','0','0');
            
     </insert>
     
@@ -151,7 +166,7 @@
     
     <!-- 通过推荐码查询推荐人信息 -->
     <select id="getUserByBCode" resultMap="ubResultMap">           
-	      select u.id,u.uuid,a.real_name,u.is_chuangke ,u.total_pv  from u_user u left join u_user_auth a on u.uuid = a.u_uuid	 						
+	      select u.id,u.uuid,a.real_name,u.is_chuangke ,is_auth,u.total_pv  from u_user u left join u_user_auth a on u.uuid = a.u_uuid	 						
          <where> 
               1 = 1
               <if test="bCode != null and bCode !=''"> and u.b_code = #{bCode} 
