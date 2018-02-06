@@ -262,4 +262,11 @@ public class UserServiceImpl implements UserService {
 		return userMapper.updateScoreByFHJ(cashScore, shoppingScore, totalPv, id, isChuangke);
 	}
 
+	@Override
+	public int upUserAllStatusByUUid(String status, String bCode,
+			String bIsPay, String isChuangke, String isAuth, String uuid) {
+		// TODO Auto-generated method stub
+		return userMapper.upUserAllStatusByUUid(status, bCode, bIsPay, isChuangke, isAuth, uuid);
+	}
+
 }

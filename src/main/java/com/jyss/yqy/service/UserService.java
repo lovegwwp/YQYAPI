@@ -76,6 +76,12 @@ public interface UserService {
 			@Param("isChuangke") String isChuangke,
 			@Param("isAuth") String isAuth, @Param("id") String id);
 
+	
+	int upUserAllStatusByUUid(@Param("status") String status,
+			@Param("bCode") String bCode, @Param("bIsPay") String bIsPay,
+			@Param("isChuangke") String isChuangke,
+			@Param("isAuth") String isAuth, @Param("uuid") String uuid);
+	
 	/**
 	 * 查询个人信息
 	 * 

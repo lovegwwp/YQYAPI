@@ -715,6 +715,12 @@ public class UserAction {
 			}
 
 			int idNum = userService.insertUserAuth(userAuth);
+			if (idNum==1) {
+				/////实名提交后，user 表该状态
+				idNum=0;
+				idNum = userService.upUserAllStatusByUUid("", "", "", "", "1", uuid);
+			}
+			
 			String val = idNum + "";
 			if (val != null && !"".equals(val)) {
 				map.put("code", "0");

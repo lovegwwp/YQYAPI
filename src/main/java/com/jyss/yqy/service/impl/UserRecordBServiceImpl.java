@@ -56,19 +56,12 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		UserBean userBean = userList.get(0); // 获取被推荐人信息
 		int isAuth = userBean.getIsAuth();
 		// int uLevel = userBean.getIsChuangke();
+		////查询推荐人的消息，is_auth=2 已经实名认证过
 		List<UserBean> parentList = userMapper.getUserByBCode(bCode);
 		if (parentList != null && parentList.size() > 0) {
 			UserBean parentUser = parentList.get(0); // 获取推荐人信息
 			int pLevel = parentUser.getIsChuangke();
-			// 推荐关系表
-			if (isAuth == 0) {
-				map.put("code", "-1");
-				map.put("status", "false");
-				map.put("message", "未实名");
-				map.put("data", "");
-				return map;
-
-			}
+			// 推荐关系表		
 			if (pLevel == 2 || pLevel == 3 || pLevel == 4 || pLevel == 5) {
 				UUserRRecordBExample example = new UUserRRecordBExample();
 				Criteria criteria = example.createCriteria();
@@ -114,9 +107,9 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				return map;
 			}
 		}
-		map.put("code", "-2");
+		map.put("code", "-1");
 		map.put("status", "false");
-		map.put("message", "此推荐码不可用！");
+		map.put("message", "未实名");
 		map.put("data", "");
 		return map;
 	}

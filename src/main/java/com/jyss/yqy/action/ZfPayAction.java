@@ -321,6 +321,120 @@ public class ZfPayAction {
 		mapRe.put("message", "下单失败！");
 		return mapRe;
 	}
+	
+	
+	////不管是第一次成为代理人，还是后续升级代理人 都要先判断一下 scoreback是否有返还记录 ，有的话 之前记录状态为-1封存，没有正常状态1添加
+	public int addScoreBack(int dlType ,String puuid){
+		//没有1=第一次返还记录==就增加，2=u_ser的total_pv增加额度 
+		int  cun =0;
+		ScoreBack sBack = new ScoreBack();
+		sBack.setUuuid(puuid);
+		sBack.setDlType(dlType); // 2 ,3,4
+		String bz_id = (dlType - 1) + "";
+		///返还日期
+		Xtcl cl = clService.getClsValue("fhzq_type", "1");
+		int backNum = 100;
+		if (cl != null) {
+			backNum = Integer.parseInt(cl.getBz_value());
+		}
+		//返还积分
+		Xtcl cl2 = clService.getClsValue("dyjf_type", bz_id);
+		sBack.setBackNum(backNum);
+		sBack.setLeftNum(backNum);
+		int backScore = 300;
+		if (cl2 != null) {
+			backScore = Integer.parseInt(cl2.getBz_value());
+		}
+		sBack.setBackScore(backScore);
+		int eachScore = backScore / backNum;
+		sBack.setEachScore(eachScore);
+		cun = sBackService.addBackScore(sBack);
+		//2=u_ser的total_pv增加额度 
+		if (cun==1) {
+			cun=0;
+			cun = userService.upTotalPv(puuid, backScore+"");
+		}		
+		return cun;
+	}
+
+	// /////////////////订单购买/////////////////////
+
+	/**
+	 * 购买支付成功状态修改
+	 */
+	public int updateOrder(String orderNum) {
+		int count = 0;
+		// 查询订单存在
+		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		if (obList == null || obList.size() != 1) {
+			count = 0;
+			return count;
+		}
+		// 更改订单状态
+		count = ordersBService.upOrderStatus("1", "-1", orderNum);
+		if (count == 1) {
+			try {
+				// /判断代理等级，和购买亚麻籽油相应数量，进行比较是否相应进行升级
+				int gmNum = Integer.parseInt(obList.get(0).getGmNum());  
+				// /查找当前购买人等级；
+				String gmID = obList.get(0).getGmId();
+				List<UserBean> ubList = userService.getUserById(gmID, "1", "2");// /通过审核用户
+				if (ubList == null || ubList.size() != 1) {
+					count = 0;
+					return count;
+				}
+				// //2=一级代理人 3=二级代理人 4=三级代理人5经理人',
+				int dlrLevel = ubList.get(0).getIsChuangke();
+				// /最高等级时不进行相应变化
+				if (dlrLevel != 4) {
+					// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
+					int compareLevel = dlrLevel + 3;
+					// /查找往上一等级对应盒数
+					Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel
+							+ "");
+					int compareNum = Integer.parseInt(dlHs.getBz_value());
+					if (gmNum >= compareNum) {
+						// //超过数量的购买。直接升级
+						if (dlrLevel==5) {
+							dlrLevel =2;////经理人升级为初级代理人
+						}else{
+						    dlrLevel = dlrLevel + 1;
+						}
+						count = userService.upUserAllStatus("", "", "",
+								dlrLevel + "", "", gmID);
+						if (count==1) {
+							count =0;
+						
+						///代理人升级，1=包括返还记录的增加 以及2=低等级返还记录的状态-1数据封存3=用户 total_pv的额度增加
+						// //判断是否有返还记录
+						String uuuid = ubList.get(0).getUuid();
+						List<ScoreBack> sbaList = sBackService.getBackScore(uuuid,
+								"1","0", "", "");
+						int ccc =0;
+						int count3 =0;
+						 ////有返还记录，进行封存，再增加
+						if (sbaList != null && sbaList.size() > 0) {							
+							for (ScoreBack scoreBack : sbaList) {
+								if (scoreBack!=null&&scoreBack.getUuuid()!=null&&!(scoreBack.getUuuid().equals(""))) {
+									count++;
+									ccc +=sBackService.upBackStatus(scoreBack.getUuuid(), "-1", "1");
+								}								
+							}
+	
+						}else{
+							count3 = addScoreBack(dlrLevel,uuuid);
+							return count3;
+						}						
+					}
+						}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return 0;
+			}
+		}
+		return 0;
+	}
 
 	@RequestMapping(value = "/b/ymzCashPayNotify", method = RequestMethod.POST)
 	@ResponseBody
@@ -432,7 +546,7 @@ public class ZfPayAction {
 	/**
 	 * 购买支付成功状态修改
 	 */
-	public int updateOrder(String orderNum) {
+	public int updateOrder1(String orderNum) {
 		int count = 0;
 		// 查询订单存在
 		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
