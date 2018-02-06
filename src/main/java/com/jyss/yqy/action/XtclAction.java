@@ -217,4 +217,29 @@ public class XtclAction {
 		return m;
 	}
 
+
+	/**
+	 * 分享链接
+	 * @return
+	 */
+	@RequestMapping("/b/share")
+	@ResponseBody
+	public Map<String, Object> selectBaseConfig() {
+		Map<String, Object> m = new HashMap<String, Object>();
+		List<BaseConfig> configs = clService.getBcs("config.share", "");
+		if(configs != null && configs.size() == 1){
+			BaseConfig baseConfig = configs.get(0);
+			m.put("status", "true");
+			m.put("message", "查询成功！");
+			m.put("data", baseConfig);
+			m.put("code", "-1");
+			return m;
+		}
+		m.put("status", "false");
+		m.put("message", "查询失败！");
+		m.put("data", "");
+		m.put("code", "-2");
+		return m;
+	}
+
 }
