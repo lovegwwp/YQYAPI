@@ -119,52 +119,6 @@ public class AlipayAction {
 	public String DlrAliNotify(HttpServletRequest request,
 			HttpServletResponse response) {
 		log.info("收到支付宝异步通知！");
-//		Map<String, String> params = new HashMap<String, String>();
-//
-//		// 取出所有参数是为了验证签名
-//		Enumeration<String> parameterNames = request.getParameterNames();
-//		while (parameterNames.hasMoreElements()) {
-//			String parameterName = parameterNames.nextElement();
-//			params.put(parameterName, request.getParameter(parameterName));
-//		}
-//		boolean signVerified;
-//		try {
-//			signVerified = AlipaySignature.rsaCheckV1(params,
-//					Configs.getAlipayPublicKey(), "UTF-8");
-//		} catch (AlipayApiException e) {
-//			e.printStackTrace();
-//			return "failed";
-//		}
-//		if (signVerified) {
-//			String outtradeno = params.get("out_trade_no");
-//			log.info(outtradeno + "号订单回调通知。");
-//			// System.out.println("验证签名成功！");
-//			log.info("验证签名成功！");
-//
-//			// 若参数中的appid和填入的appid不相同，则为异常通知
-//			if (!Configs.getAppid().equals(params.get("app_id"))) {
-//				log.warn("与付款时的appid不同，此为异常通知，应忽略！");
-//				return "failed";
-//			}
-//			// ////自我业务处理
-//			String status = params.get("trade_status");
-//			int isSucc = 0;
-//			if (status.equals("WAIT_BUYER_PAY")) { // 如果状态是正在等待用户付款
-//				isSucc = updateOrderAndUser(outtradeno);
-//			} else {
-//				log.warn("付款状态异常，非代付款，此为异常通知，应忽略！");
-//				return "failed";
-//
-//			}
-//			if (isSucc == 1) {
-//				log.info(outtradeno + "订单的状态已经修改为" + status);
-//				return "success";
-//			}
-//
-//		} else { // 如果验证签名没有通过
-//			return "failed";
-//		}
-//		return "failed";
 		
 		Map<String, String[]> params = new HashMap<String, String[]>();
 		params=  request.getParameterMap();
