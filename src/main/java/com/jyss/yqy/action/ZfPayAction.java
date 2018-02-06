@@ -194,7 +194,7 @@ public class ZfPayAction {
 		mm.put("zfCode", zfCode);
 		mm.put("zfPwd", "");// 支付密码
 		mm.put("zxingpng", "");// 订单二维码
-		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
+		mm.put("type", "3");// 支付方式：1=支付宝，2=微信，3=现金支付
 
 		Goods goods = null;
 		goods = ordersBService.getGoodsByid(spID + "");
@@ -248,7 +248,7 @@ public class ZfPayAction {
 		} else {
 			zfCode = "1";
 			// mm.put("zfPwd", ub.getPayPwd());//支付密码
-			if (!(PasswordUtil.generatePayPwd(payPwd).equals("ub.getPayPwd()"))) {
+			if (!(PasswordUtil.generatePayPwd(payPwd).equals(ub.getPayPwd()))) {
 				mapRe.put("status", "false");
 				mapRe.put("message", "支付密码错误！");
 				mapRe.put("code", "-6");
@@ -305,10 +305,11 @@ public class ZfPayAction {
 				goods.getPrice(), money, pv, jb, code, "zfId", 3);
 		int count = 0;
 		count = ordersBService.addOrder(ob);
+		float leftmoney =0;
 		/////现金积分减少
 		if (count ==1) {
 			count = 0;
-			float leftmoney = cashScore-money;
+			leftmoney = cashScore-money;
 			if (leftmoney==0) {
 				leftmoney =0.01f;
 			}
@@ -322,6 +323,7 @@ public class ZfPayAction {
 		if (count == 1) {
 			Date sjc = new Date();
 			mm.put("outtradeno", outTradeNo);
+			mm.put("xjjf", leftmoney + "");
 			mm.put("money", money + "");
 			mapRe.put("status", "true");
 			mapRe.put("message", "提交订单成功！");

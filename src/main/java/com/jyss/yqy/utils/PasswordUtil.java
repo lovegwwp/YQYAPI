@@ -75,6 +75,7 @@ public class PasswordUtil {
 		// System.out.println(password.length()); //
 		// System.out.println(verify("admin", password));
 		// System.out.println("79faf82271944fe38c4f1d99be71bc9c".length());
+		System.out.println(generatePayPwd("222222").equals("e3ceb5881a0a1fdaad01296d7554868d"));
 	}
 
 }
