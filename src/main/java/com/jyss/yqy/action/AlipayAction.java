@@ -395,6 +395,8 @@ public class AlipayAction {
 									ccc +=sBackService.upBackStatus(scoreBack.getUuuid(), "-1", "1");
 								}								
 							}
+							count3 = addScoreBack(dlrLevel,uuuid);
+							return count3;
 	
 						}else{
 							count3 = addScoreBack(dlrLevel,uuuid);
