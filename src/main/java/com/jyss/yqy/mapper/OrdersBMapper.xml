@@ -64,7 +64,7 @@
    <select id="getGoodsByid" resultMap="gResultMap">          
 	     select g.id,g.name,g.pics,g.spec,g.stock,g.desc,g.price,g.old_price  from s_good g 				
          <where> 
-              1 = 1
+              1 = 1 and type =4 
               <if test="id != null and id !=''"> and id = #{id} </if> 				
 		 </where> 
 		 limit 1
