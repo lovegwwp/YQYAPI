@@ -80,6 +80,13 @@ public class WxpayServiceImpl implements WxpayService {
 		System.out.println("动态随机字符" + WXPayUtil.generateNonceStr());
 		// 商品ID
 		// data.put("product_id", "12");
+		if (money==0) {		
+			mapRe.put("status", "false");
+			mapRe.put("message", "代理人消费金额错误！");
+			mapRe.put("code", "-4");
+			mapRe.put("data", mm);
+			return mapRe;
+	}
 		// //////////////////////////////////////////////
 		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
 		mm.put("outtradeno", "");

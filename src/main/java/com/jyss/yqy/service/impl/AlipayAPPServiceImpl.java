@@ -67,6 +67,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		String timeoutExpress = "30m";
 		String notifyUrl ="http://121.40.29.64:8081/YQYAPI/DlrAliNotify.action";
 		
+		
 		/////////////用户本地数据判断////////////////
 		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
 		mm.put("outtradeno", "");
@@ -76,6 +77,14 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		mm.put("zfPwd", "");
 		mm.put("zfCode", "");
 		mm.put("type", "1");// 支付方式：1=支付宝，2=微信，3=现金支付
+		//////////////////////
+		if (money==0) {		
+				m.put("status", "false");
+				m.put("message", "代理人消费金额错误！");
+				m.put("code", "-4");
+				m.put("data", mm);
+				return m;
+		}
 		// //// 验证当前用户是否合法///////code='-1=其他，0=无支付密码，1=有支付密码，'////
 		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "1");
 		if (ublist == null || ublist.size() == 0) {
