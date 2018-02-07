@@ -38,6 +38,7 @@
         <result column="content" property="content" jdbcType="VARCHAR" />
         <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
         <result column="link_pic" property="linkPic" jdbcType="VARCHAR" />
+        <result column="share_key" property="shareKey" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="TINYINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     </resultMap>
@@ -124,7 +125,7 @@
     <!--查询分享-->
     <select id="getBaseShare" resultMap="bsBaseResultMap">
         select id,title,content,link_url,link_pic,status,create_time
-        from p_base_share where status = 1 limit 0,1
+        from p_base_share where share_key = #{shareKey} and status = 1 limit 0,1
     </select>
     
 </mapper>
