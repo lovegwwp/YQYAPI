@@ -223,7 +223,7 @@ public class XtclAction {
 	@ResponseBody
 	public Map<String, Object> selectBaseConfig() {
 		Map<String, Object> m = new HashMap<String, Object>();
-		List<BaseShare> shares = clService.getBaseShare();
+		List<BaseShare> shares = clService.getBaseShare("chunagke.sign");
 		if(shares != null && shares.size() == 1){
 			BaseShare baseShare = shares.get(0);
 			baseShare.setLinkPic(Constant.httpUrl+baseShare.getLinkPic());

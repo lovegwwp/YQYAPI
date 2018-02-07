@@ -13,6 +13,7 @@ public class BaseShare implements Serializable{
     private String content;   //分享文字内容
     private String linkUrl;  //分享网址链接
     private String linkPic;  //链接图片
+    private String shareKey;
     private Integer status;
     private Date createTime;
 
@@ -71,5 +72,13 @@ public class BaseShare implements Serializable{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getShareKey() {
+        return shareKey;
+    }
+
+    public void setShareKey(String shareKey) {
+        this.shareKey = shareKey;
     }
 }

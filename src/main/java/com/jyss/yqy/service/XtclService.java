@@ -93,5 +93,5 @@ public interface XtclService {
 
 
 	//查询分享
-	List<BaseShare> getBaseShare();
+	List<BaseShare> getBaseShare(@Param("shareKey") String shareKey);
 }

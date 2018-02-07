@@ -92,7 +92,7 @@ public class XtclServiceImpl implements XtclService {
 	 * @return
 	 */
 	@Override
-	public List<BaseShare> getBaseShare() {
-		return xtclMapper.getBaseShare();
+	public List<BaseShare> getBaseShare(String shareKey) {
+		return xtclMapper.getBaseShare(shareKey);
 	}
 }
