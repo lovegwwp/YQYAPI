@@ -305,17 +305,17 @@ public class ZfPayAction {
 				goods.getPrice(), money, pv, jb, code, "zfId", 3);
 		int count = 0;
 		count = ordersBService.addOrder(ob);
-		float leftmoney =0;
-		/////现金积分减少
-		if (count ==1) {
+		float leftmoney = 0;
+		// ///现金积分减少
+		if (count == 1) {
 			count = 0;
-			leftmoney = cashScore-money;
-			if (leftmoney==0) {
-				leftmoney =0.01f;
+			leftmoney = cashScore - money;
+			if (leftmoney == 0) {
+				leftmoney = 0.01f;
 			}
 			count = userService.updateUserBackScore(leftmoney, 0, uuid);
 		}
-		/////判断是否升级以及积分返还
+		// ///判断是否升级以及积分返还
 		if (count == 1) {
 			count = 0;
 			count = updateOrder(uuid, isChuangke, gmNum, gmID + "");
@@ -382,85 +382,94 @@ public class ZfPayAction {
 	public int updateOrder(String uuid, int dlrLevel, int gmNum, String gmID) {
 
 		int count = 0;
-		// /最高等级时不进行相应变化
-		if (dlrLevel != 4) {
-			// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
-			int compareLevel = dlrLevel + 3;
-			// /查找往上一等级对应盒数
-			Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel + "");
-			int compareNum = Integer.parseInt(dlHs.getBz_value());
-			if (gmNum >= compareNum) {
-				// //超过数量的购买。直接升级
-				if (dlrLevel == 5) {
-					dlrLevel = 2;// //经理人升级为初级代理人
-				} else {
-					dlrLevel = dlrLevel + 1;
-				}
+		// /最高等级时user=chuangke不进行相应变化,但是返还要增加
+		// if (dlrLevel != 4) {
+		int level = dlrLevel;
+		// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
+		int compareLevel = dlrLevel + 3;
+		// /查找往上一等级对应盒数
+		Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel + "");
+		int compareNum = Integer.parseInt(dlHs.getBz_value());
+		if (gmNum >= compareNum) {
+			// //超过数量的购买。直接升级
+			if (dlrLevel == 5) {
+				dlrLevel = 2;// //经理人升级为初级代理人
+			} else {
+				dlrLevel = dlrLevel + 1;
+			}
+			if (level != 4) {
 				count = userService.upUserAllStatus("", "", "", dlrLevel + "",
 						"", gmID);
-				if (count == 1) {
-					count = 0;
+			} else {
+				count = 1;
+			}
+			if (count == 1) {
+				count = 0;
 
-					// /代理人升级，1=包括返还记录的增加 以及2=低等级返还记录的状态-1数据封存3=用户 total_pv的额度增加
-					// //判断是否有返还记录
-					List<ScoreBack> sbaList = sBackService.getBackScore(uuid,
-							"1", "0", "", "");
-					int ccc = 0;
-					int count3 = 0;
-					// //有返还记录，进行封存，再增加
-					if (sbaList != null && sbaList.size() > 0) {
-						for (ScoreBack scoreBack : sbaList) {
-							if (scoreBack != null
-									&& scoreBack.getUuuid() != null
-									&& !(scoreBack.getUuuid().equals(""))) {
-								count++;
-								ccc += sBackService.upBackStatus(
-										scoreBack.getUuuid(), "-1", "1");
-							}
+				// /代理人升级，1=包括返还记录的增加 以及2=低等级返还记录的状态-1数据封存3=用户 total_pv的额度增加
+				// //判断是否有返还记录
+				List<ScoreBack> sbaList = sBackService.getBackScore(uuid, "1",
+						"0", "", "");
+				int ccc = 0;
+				int count3 = 0;
+				// //有返还记录，进行封存，再增加
+				if (sbaList != null && sbaList.size() > 0) {
+					for (ScoreBack scoreBack : sbaList) {
+						if (scoreBack != null && scoreBack.getUuuid() != null
+								&& !(scoreBack.getUuuid().equals(""))) {
+							count++;
+							ccc += sBackService.upBackStatus(
+									scoreBack.getUuuid(), "-1", "1");
 						}
-						count3 = addScoreBack(dlrLevel, uuid);
-						return count3;
+					}
 
-					} else {
+					if (count == sbaList.size()) {
 						count3 = addScoreBack(dlrLevel, uuid);
 						return count3;
 					}
+
+				} else {
+					count3 = addScoreBack(dlrLevel, uuid);
+					return count3;
 				}
 			}
 		}
+		// }
 		return 1;
 	}
 
-//	@RequestMapping(value = "/b/ymzCashPayNotify", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Map<String, Object> ymzCashPayNotify(@RequestParam String orderNum,
-//			@RequestParam String token) {
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		// //验证token 获取购买人ID===gmID
-//		List<UMobileLogin> loginList = uMobileLoginService
-//				.findUserByToken(token);
-//		if (loginList == null || loginList.size() == 0) {
-//			map.put("status", "false");
-//			map.put("message", "请重新登录");
-//			map.put("code", "-1");
-//			// map.put("data", "");
-//			return map;
-//		}
-//		// ////更改订单状态
-//		int count = 0;
-//		count = updateOrder2(orderNum);
-//		if (count == 1) {
-//			map.put("status", "true");
-//			map.put("message", "购买成功!");
-//			map.put("code", "0");
-//			return map;
-//			// map.put("data", "");
-//		}
-//		map.put("status", "false");
-//		map.put("message", "购买失败!");
-//		map.put("code", "-2");
-//		return map;
-//	}
+	// @RequestMapping(value = "/b/ymzCashPayNotify", method =
+	// RequestMethod.POST)
+	// @ResponseBody
+	// public Map<String, Object> ymzCashPayNotify(@RequestParam String
+	// orderNum,
+	// @RequestParam String token) {
+	// Map<String, Object> map = new HashMap<String, Object>();
+	// // //验证token 获取购买人ID===gmID
+	// List<UMobileLogin> loginList = uMobileLoginService
+	// .findUserByToken(token);
+	// if (loginList == null || loginList.size() == 0) {
+	// map.put("status", "false");
+	// map.put("message", "请重新登录");
+	// map.put("code", "-1");
+	// // map.put("data", "");
+	// return map;
+	// }
+	// // ////更改订单状态
+	// int count = 0;
+	// count = updateOrder2(orderNum);
+	// if (count == 1) {
+	// map.put("status", "true");
+	// map.put("message", "购买成功!");
+	// map.put("code", "0");
+	// return map;
+	// // map.put("data", "");
+	// }
+	// map.put("status", "false");
+	// map.put("message", "购买失败!");
+	// map.put("code", "-2");
+	// return map;
+	// }
 
 	// /////////////////成为代理人购买/////////////////////
 

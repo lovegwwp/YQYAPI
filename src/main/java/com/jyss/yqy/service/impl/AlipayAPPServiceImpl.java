@@ -349,11 +349,15 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		mm.put("jb", jb);
 		// //查询级别对应的亚麻籽油盒数
 		String hs = "10";
-		String hsjbid = "4";
-		if (jb.equals("2")) {
+		String hsjbid = "1";
+		if (jb.equals("1")) {
 			hsjbid = "5";
-		} else if (jb.equals("3")) {
+		} else if (jb.equals("2")) {
 			hsjbid = "6";
+		} else if (jb.equals("3")) {
+			hsjbid = "7";
+		} else if (jb.equals("4")) {
+			hsjbid = "8";
 		}
 		Xtcl dlhs = clMapper.getClsValue("dyjf_type", hsjbid);
 		if (dlhs != null && !dlhs.getBz_value().equals("")) {
