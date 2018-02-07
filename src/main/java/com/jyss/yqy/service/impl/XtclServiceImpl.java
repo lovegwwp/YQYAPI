@@ -2,6 +2,7 @@ package com.jyss.yqy.service.impl;
 
 import java.util.List;
 
+import com.jyss.yqy.entity.BaseShare;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,4 +86,13 @@ public class XtclServiceImpl implements XtclService {
 		return xtclMapper.getBaseAreas(status, area);
 	}
 
+
+	/**
+	 * 查询分享
+	 * @return
+	 */
+	@Override
+	public List<BaseShare> getBaseShare() {
+		return xtclMapper.getBaseShare();
+	}
 }

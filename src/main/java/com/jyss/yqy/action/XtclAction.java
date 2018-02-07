@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jyss.yqy.constant.Constant;
+import com.jyss.yqy.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,11 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jyss.yqy.entity.BaseArea;
-import com.jyss.yqy.entity.BaseConfig;
-import com.jyss.yqy.entity.Page;
-import com.jyss.yqy.entity.ResponseEntity;
-import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.service.XtclService;
 import com.jyss.yqy.utils.Utils;
 
@@ -226,12 +223,13 @@ public class XtclAction {
 	@ResponseBody
 	public Map<String, Object> selectBaseConfig() {
 		Map<String, Object> m = new HashMap<String, Object>();
-		List<BaseConfig> configs = clService.getBcs("config.share", "");
-		if(configs != null && configs.size() == 1){
-			BaseConfig baseConfig = configs.get(0);
+		List<BaseShare> shares = clService.getBaseShare();
+		if(shares != null && shares.size() == 1){
+			BaseShare baseShare = shares.get(0);
+			baseShare.setLinkPic(Constant.httpUrl+baseShare.getLinkPic());
 			m.put("status", "true");
 			m.put("message", "查询成功！");
-			m.put("data", baseConfig);
+			m.put("data", baseShare);
 			m.put("code", "-1");
 			return m;
 		}
@@ -241,5 +239,9 @@ public class XtclAction {
 		m.put("code", "-2");
 		return m;
 	}
+
+
+
+
 
 }

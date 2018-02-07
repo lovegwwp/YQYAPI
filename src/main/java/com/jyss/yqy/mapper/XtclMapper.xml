@@ -30,7 +30,17 @@
         <id property="id" column="id"  />
         <result property="name" column="name"  />
         <result property="fid" column="fid"  />      
-    </resultMap>  
+    </resultMap>
+
+    <resultMap id="bsBaseResultMap" type="com.jyss.yqy.entity.BaseShare" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+        <result column="link_pic" property="linkPic" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
      
     <!-- 查询对应常量-->  
     <select id="getCls" resultMap="clResultMap" >  
@@ -109,6 +119,12 @@
 			  <if test="area != null and area !=''"> and  a.area =#{area}  </if> 
 		 </where>   
 		 order by id  
-    </select> 
+    </select>
+
+    <!--查询分享-->
+    <select id="getBaseShare" resultMap="bsBaseResultMap">
+        select id,title,content,link_url,link_pic,status,create_time
+        from p_base_share where status = 1 limit 0,1
+    </select>
     
 </mapper>

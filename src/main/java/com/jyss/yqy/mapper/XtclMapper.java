@@ -2,6 +2,7 @@ package com.jyss.yqy.mapper;
 
 import java.util.List;
 
+import com.jyss.yqy.entity.BaseShare;
 import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.BaseArea;
@@ -86,5 +87,9 @@ public interface XtclMapper {
 	 */
 	List<BaseArea> getBaseAreas(@Param("status") String status,
 			@Param("area") String area);
+
+
+	//查询分享
+	List<BaseShare> getBaseShare();
 
 }
