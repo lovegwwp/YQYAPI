@@ -99,7 +99,7 @@
     
     
     
-    <!-- 系统基础配置表 -->
+    <!-- 系统==基础配置表 -->
     
     <select id="getBcs" resultMap="bcResultMap" >  
         select * from p_base_config b
