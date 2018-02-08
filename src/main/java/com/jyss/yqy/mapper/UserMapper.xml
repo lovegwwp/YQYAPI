@@ -188,7 +188,7 @@
     
     <!-- 通过用户的id查询用户 -->
     <select id="getUserNameById" resultMap="ubResultMap">           
-	      select a.real_name,u.is_chuangke,u.is_auth,u.total_pv  from u_user u left join u_user_auth a on u.uuid = a.u_uuid						
+	      select u.id,a.real_name,u.is_chuangke,u.is_auth,u.total_pv  from u_user u left join u_user_auth a on u.uuid = a.u_uuid
          <where> 
               1 = 1
               <if test="id != null and id !=''"> and u.id = #{id}  

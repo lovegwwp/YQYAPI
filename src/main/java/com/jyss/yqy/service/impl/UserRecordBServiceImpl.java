@@ -5,17 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jyss.yqy.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jyss.yqy.entity.JBonusFdj;
-import com.jyss.yqy.entity.ScoreBalance;
-import com.jyss.yqy.entity.UUserRRecordB;
-import com.jyss.yqy.entity.UUserRRecordBExample;
 import com.jyss.yqy.entity.UUserRRecordBExample.Criteria;
-import com.jyss.yqy.entity.UserTotalAmount;
-import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.mapper.JBonusFdjMapper;
 import com.jyss.yqy.mapper.OrdersBMapper;
@@ -53,13 +48,13 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	public Map<String, String> insertUserRecordB(String uuid, String bCode) {
 		Map<String, String> map = new HashMap<String, String>();
 		List<UserBean> userList = userMapper.getUserByUuid(uuid);
-		UserBean userBean = userList.get(0); // 获取被推荐人信息
-		int isAuth = userBean.getIsAuth();
-		// int uLevel = userBean.getIsChuangke();
-		////查询推荐人的消息，is_auth=2 已经实名认证过
+		UserBean userBean = userList.get(0);           // 获取被推荐人信息
+		//int isAuth = userBean.getIsAuth();
+		//int uLevel = userBean.getIsChuangke();
+
 		List<UserBean> parentList = userMapper.getUserByBCode(bCode);
 		if (parentList != null && parentList.size() > 0) {
-			UserBean parentUser = parentList.get(0); // 获取推荐人信息
+			UserBean parentUser = parentList.get(0);     // 获取推荐人信息
 			int pLevel = parentUser.getIsChuangke();
 			// 推荐关系表		
 			if (pLevel == 2 || pLevel == 3 || pLevel == 4 || pLevel == 5) {
@@ -126,122 +121,10 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		for (UserTotalAmount userTotalAmount : taList) {
 			Integer uId = userTotalAmount.getId();
 			Double amount = userTotalAmount.getAmount();
-			List<UserBean> userList = userMapper.getUserNameById(uId);
-			if (userList != null && userList.size() > 0) {
-				UserBean userBean = userList.get(0);
-				// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				UUserRRecordBExample example = new UUserRRecordBExample();
-				Criteria criteria = example.createCriteria();
-				criteria.andUIdEqualTo(uId);
-				criteria.andStatusEqualTo(1);
-				List<UUserRRecordB> list = userRecordMapper.selectByExample(example);
-				if (list != null && list.size() > 0) {
-					UUserRRecordB userRecord = list.get(0);
-					List<UserBean> nameById = userMapper.getUserNameById(userRecord.getrId());
-					if (nameById != null && nameById.size() > 0) {
-						UserBean userBean1 = nameById.get(0);
-						int pLevel = userBean1.getIsChuangke();
 
-						// 查询返回比例
-						Xtcl xtcl1 = xtclMapper.getClsValue("fdj_type", "1"); // 初级获得金额
-						double double1 = Double.parseDouble(xtcl1.getBz_value()); // 0.02
-						Xtcl xtcl2 = xtclMapper.getClsValue("fdj_type", "2"); // 中级获得金额
-						double double2 = Double.parseDouble(xtcl2.getBz_value()); // 0.04
-						Xtcl xtcl3 = xtclMapper.getClsValue("fdj_type", "3"); // 高级获得金额
-						double double3 = Double.parseDouble(xtcl3.getBz_value()); // 0.06
+			//计算辅导奖
+			computeJBonusFdj(uId,amount);
 
-						JBonusFdj bonusFdj = new JBonusFdj();
-						bonusFdj.setuId(uId);
-						bonusFdj.setParentId(userRecord.getrId());
-						bonusFdj.setAmount(amount);
-						bonusFdj.setStatus(1);
-						// bonusFdj.setCreated(sdf.format(new Date()));
-						bonusFdj.setuName(userBean.getRealName());
-						if (pLevel == 4) {
-							bonusFdj.setParentMoney(amount * double3);
-							jBonusFdjMapper.insert(bonusFdj);
-						} else if (pLevel == 3) {
-							bonusFdj.setParentMoney(amount * double2);
-							jBonusFdjMapper.insert(bonusFdj);
-
-							UUserRRecordBExample example1 = new UUserRRecordBExample();
-							Criteria criteria1 = example1.createCriteria();
-							criteria1.andUIdEqualTo(userRecord.getrId());
-							criteria1.andStatusEqualTo(1);
-							List<UUserRRecordB> list1 = userRecordMapper.selectByExample(example1);
-							if (list1 != null && list1.size() > 0) {
-								UUserRRecordB userRecord1 = list1.get(0);
-								JBonusFdj bonusFdj1 = new JBonusFdj();
-								bonusFdj1.setuId(userRecord.getrId());
-								bonusFdj1.setParentId(userRecord1.getrId());
-								bonusFdj1.setAmount(amount);
-								bonusFdj1.setStatus(1);
-								// bonusFdj1.setCreated(sdf.format(new Date()));
-								bonusFdj1.setuName(userBean1.getRealName());
-								bonusFdj1.setParentMoney(amount * double1);
-								jBonusFdjMapper.insert(bonusFdj1);
-							}
-
-						} else if (pLevel == 2) {
-							bonusFdj.setParentMoney(amount * double1);
-							jBonusFdjMapper.insert(bonusFdj);
-
-							UUserRRecordBExample example1 = new UUserRRecordBExample();
-							Criteria criteria1 = example1.createCriteria();
-							criteria1.andUIdEqualTo(userRecord.getrId());
-							criteria1.andStatusEqualTo(1);
-							List<UUserRRecordB> list1 = userRecordMapper.selectByExample(example1);
-							if (list1 != null && list1.size() > 0) {
-								UUserRRecordB userRecord1 = list1.get(0);
-								List<UserBean> nameById1 = userMapper.getUserNameById(userRecord1.getrId());
-								if (nameById1 != null && nameById1.size() > 0) {
-									UserBean userBean2 = nameById1.get(0);
-									int pLevel1 = userBean2.getIsChuangke();
-									if (pLevel1 == 3 || pLevel1 == 4) {
-										JBonusFdj bonusFdj1 = new JBonusFdj();
-										bonusFdj1.setuId(userRecord.getrId());
-										bonusFdj1.setParentId(userRecord1.getrId());
-										bonusFdj1.setAmount(amount);
-										bonusFdj1.setStatus(1);
-										// bonusFdj1.setCreated(sdf.format(new Date()));
-										bonusFdj1.setuName(userBean1.getRealName());
-										bonusFdj1.setParentMoney(amount * double2);
-										jBonusFdjMapper.insert(bonusFdj1);
-									} else if (pLevel1 == 2) {
-										JBonusFdj bonusFdj1 = new JBonusFdj();
-										bonusFdj1.setuId(userRecord.getrId());
-										bonusFdj1.setParentId(userRecord1.getrId());
-										bonusFdj1.setAmount(amount);
-										bonusFdj1.setStatus(1);
-										// bonusFdj1.setCreated(sdf.format(new Date()));
-										bonusFdj1.setuName(userBean1.getRealName());
-										bonusFdj1.setParentMoney(amount * double1);
-										jBonusFdjMapper.insert(bonusFdj1);
-
-										UUserRRecordBExample example2 = new UUserRRecordBExample();
-										Criteria criteria2 = example2.createCriteria();
-										criteria2.andUIdEqualTo(userRecord1.getrId());
-										criteria2.andStatusEqualTo(1);
-										List<UUserRRecordB> list2 = userRecordMapper.selectByExample(example2);
-										if (list2 != null && list2.size() > 0) {
-											UUserRRecordB userRecord2 = list2.get(0);
-											JBonusFdj bonusFdj2 = new JBonusFdj();
-											bonusFdj2.setuId(userRecord1.getrId());
-											bonusFdj2.setParentId(userRecord2.getrId());
-											bonusFdj2.setAmount(amount);
-											bonusFdj2.setStatus(1);
-											// bonusFdj2.setCreated(sdf.format(new Date()));
-											bonusFdj2.setuName(userBean2.getRealName());
-											bonusFdj2.setParentMoney(amount * double1);
-											jBonusFdjMapper.insert(bonusFdj2);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 
 		// 计算现金积分和购物积分
@@ -334,6 +217,177 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		map.put("message", "辅导奖和积分计算完成时间：" + new Date());
 		return map;
 	}
+
+
+	/**
+	 * 计算辅导奖
+	 * @param uId
+	 */
+	private void computeJBonusFdj(int uId,double amount){
+		//查询关系表
+		UUserRRecordBExample example = new UUserRRecordBExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUIdEqualTo(uId);
+		criteria.andStatusEqualTo(1);
+		List<UUserRRecordB> list = userRecordMapper.selectByExample(example);
+		if(list != null && list.size()>0){
+			UUserRRecordB userRecord = list.get(0);
+			Integer pLevel = userRecord.getType();    //父级代理级别
+
+			// 查询返回比例
+			Xtcl xtcl1 = xtclMapper.getClsValue("fdj_type", "1");    // 初级获得金额
+			double double1 = Double.parseDouble(xtcl1.getBz_value());             // 0.02
+			Xtcl xtcl2 = xtclMapper.getClsValue("fdj_type", "2");    // 中级获得金额
+			double double2 = Double.parseDouble(xtcl2.getBz_value());             // 0.04
+			Xtcl xtcl3 = xtclMapper.getClsValue("fdj_type", "3");    // 高级获得金额
+			double double3 = Double.parseDouble(xtcl3.getBz_value());             // 0.06
+			//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			//经理人
+			if(pLevel == 5){
+				computeJBonusFdj(userRecord.getrId(),amount);
+
+			//高级代理人，结束
+			}else if(pLevel == 4){
+				List<UserBean> userList = userMapper.getUserNameById(userRecord.getuId());
+				if(userList != null && userList.size()>0){
+					UserBean userBean = userList.get(0);
+					JBonusFdj bonusFdj = new JBonusFdj();
+					bonusFdj.setuId(userBean.getId());
+					bonusFdj.setParentId(userRecord.getrId());
+					bonusFdj.setAmount(amount);
+					bonusFdj.setStatus(1);
+					// bonusFdj.setCreated(sdf.format(new Date()));
+					bonusFdj.setuName(userBean.getRealName());
+					bonusFdj.setParentMoney(amount * double3);
+					jBonusFdjMapper.insert(bonusFdj);
+				}
+
+			//中级代理人
+			}else if(pLevel == 3){
+				List<UserBean> userList = userMapper.getUserNameById(userRecord.getuId());
+				if(userList != null && userList.size()>0){
+					UserBean userBean = userList.get(0);
+					JBonusFdj bonusFdj = new JBonusFdj();
+					bonusFdj.setuId(userBean.getId());
+					bonusFdj.setParentId(userRecord.getrId());
+					bonusFdj.setAmount(amount);
+					bonusFdj.setStatus(1);
+					bonusFdj.setuName(userBean.getRealName());
+					bonusFdj.setParentMoney(amount * double2);
+					jBonusFdjMapper.insert(bonusFdj);
+					//递归到高级代理人，结束
+					UUserRRecordB userRecord1 = selectGjDlr(userRecord.getrId(), 4);
+					if(userRecord1 != null){
+						List<UserBean> userList1 = userMapper.getUserNameById(userRecord1.getuId());
+						if(userList1 != null && userList1.size()>0){
+							UserBean userBean1 = userList1.get(0);
+							JBonusFdj bonusFdj1 = new JBonusFdj();
+							bonusFdj1.setuId(userBean1.getId());
+							bonusFdj1.setParentId(userRecord1.getrId());
+							bonusFdj1.setAmount(amount);
+							bonusFdj1.setStatus(1);
+							bonusFdj1.setuName(userBean1.getRealName());
+							bonusFdj1.setParentMoney(amount * (double3 - double2));
+							jBonusFdjMapper.insert(bonusFdj1);
+						}
+					}
+				}
+
+			//初级代理人
+			}else if(pLevel == 2){
+				List<UserBean> userList = userMapper.getUserNameById(userRecord.getuId());
+				if(userList != null && userList.size()>0){
+					UserBean userBean = userList.get(0);
+					JBonusFdj bonusFdj = new JBonusFdj();
+					bonusFdj.setuId(userBean.getId());
+					bonusFdj.setParentId(userRecord.getrId());
+					bonusFdj.setAmount(amount);
+					bonusFdj.setStatus(1);
+					bonusFdj.setuName(userBean.getRealName());
+					bonusFdj.setParentMoney(amount * double1);
+					jBonusFdjMapper.insert(bonusFdj);
+
+					UUserRRecordB userRecord1 = selectGjDlr(userRecord.getrId(), 3);
+					if(userRecord1 != null){
+						Integer type = userRecord1.getType();
+						//递归到高级代理人，结束
+						if(type == 4){
+							List<UserBean> userList1 = userMapper.getUserNameById(userRecord1.getuId());
+							if(userList1 != null && userList1.size()>0){
+								UserBean userBean1 = userList1.get(0);
+								JBonusFdj bonusFdj1 = new JBonusFdj();
+								bonusFdj1.setuId(userBean1.getId());
+								bonusFdj1.setParentId(userRecord1.getrId());
+								bonusFdj1.setAmount(amount);
+								bonusFdj1.setStatus(1);
+								bonusFdj1.setuName(userBean1.getRealName());
+								bonusFdj1.setParentMoney(amount * (double3 - double1));
+								jBonusFdjMapper.insert(bonusFdj1);
+							}
+						//递归到中级代理人
+						}else if(type == 3){
+							List<UserBean> userList1 = userMapper.getUserNameById(userRecord1.getuId());
+							if(userList1 != null && userList1.size()>0){
+								UserBean userBean1 = userList1.get(0);
+								JBonusFdj bonusFdj1 = new JBonusFdj();
+								bonusFdj1.setuId(userBean1.getId());
+								bonusFdj1.setParentId(userRecord1.getrId());
+								bonusFdj1.setAmount(amount);
+								bonusFdj1.setStatus(1);
+								bonusFdj1.setuName(userBean1.getRealName());
+								bonusFdj1.setParentMoney(amount * (double2 - double1));
+								jBonusFdjMapper.insert(bonusFdj1);
+								//递归到高级代理人，结束
+								UUserRRecordB userRecord2 = selectGjDlr(userRecord.getrId(), 4);
+								if(userRecord2 != null){
+									List<UserBean> userList2 = userMapper.getUserNameById(userRecord2.getuId());
+									if(userList2 != null && userList2.size()>0){
+										double gjDlr = double3 - (double2 - double1) - double1;
+										UserBean userBean2 = userList2.get(0);
+										JBonusFdj bonusFdj2 = new JBonusFdj();
+										bonusFdj2.setuId(userBean2.getId());
+										bonusFdj2.setParentId(userRecord2.getrId());
+										bonusFdj2.setAmount(amount);
+										bonusFdj2.setStatus(1);
+										bonusFdj2.setuName(userBean2.getRealName());
+										bonusFdj2.setParentMoney(amount * gjDlr);
+										jBonusFdjMapper.insert(bonusFdj2);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * 递归中高级代理
+	 * @param uId
+	 * @param type
+	 * @return
+	 */
+	private UUserRRecordB selectGjDlr(int uId,int type){
+		UUserRRecordBExample example = new UUserRRecordBExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUIdEqualTo(uId);
+		criteria.andStatusEqualTo(1);
+		List<UUserRRecordB> list = userRecordMapper.selectByExample(example);
+		if(list != null && list.size()>0){
+			UUserRRecordB userRecord = list.get(0);
+			Integer type1 = userRecord.getType();
+			if(type <= type1 && type1 < 5){
+				return userRecord;
+			}else{
+				selectGjDlr(userRecord.getrId(),type);
+			}
+		}
+		return null;
+	}
+
 
 	@Override
 	public List<UUserRRecordB> getRecordB(String uId, String rId, String status) {
