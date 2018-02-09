@@ -1,5 +1,6 @@
 package com.jyss.yqy.service.impl;
 
+import java.text.BreakIterator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -379,10 +380,10 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 		if(list != null && list.size()>0){
 			UUserRRecordB userRecord = list.get(0);
 			Integer type1 = userRecord.getType();
-			if(type <= type1 && type1 < 5){
+			if(type <= type1 && type1 < 5 ){
 				return userRecord;
 			}else{
-				selectGjDlr(userRecord.getrId(),type);
+				return selectGjDlr(userRecord.getrId(),type);
 			}
 		}
 		return null;
