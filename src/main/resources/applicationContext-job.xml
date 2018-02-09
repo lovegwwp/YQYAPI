@@ -41,11 +41,11 @@
 	<bean id="cronTriggerFactoryBean1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod1"></property>
 	<!-- 	<property name="cronExpression" value="0/5 * * * * ? "></property> -->
-		<property name="cronExpression" value="0 0 2 * * ?"></property>      <!-- 每天02:00执行 -->
+		<property name="cronExpression" value="0 0 3 * * ?"></property>      <!-- 每天03:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod2"></property>
-		<property name="cronExpression" value="0 0 1 * * ?"></property>      <!-- 每天01:00执行 -->
+		<property name="cronExpression" value="0 0 2 * * ?"></property>      <!-- 每天02:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean3" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod3"></property>
@@ -53,11 +53,11 @@
 	</bean>
 	<bean id="cronTriggerFactoryBean4" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod4"></property>
-		<property name="cronExpression" value="0 0 3 * * ?"></property>      <!-- 每天03:00执行 -->
+		<property name="cronExpression" value="0 0 4 * * ?"></property>      <!-- 每天04:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean5" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod5"></property>
-		<property name="cronExpression" value="0 0 4 * * ?"></property>      <!-- 每天04:00执行 -->
+		<property name="cronExpression" value="0 0 1 * * ?"></property>      <!-- 每天01:00执行 -->
 	</bean>
 	
 	
