@@ -86,6 +86,18 @@
     </select>  
     
     
+     <select id="getOrdersByPay" resultMap="obResultMap">   
+         <!--  DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s' ) cjsj    LIKE CONCAT('%',#{name},'%')  -->
+	     select * ,DATE_FORMAT(created_at, '%Y-%m-%d %H:%i' )  cjsj  from p_orders_b  				
+         <where> 
+              1 = 1 
+              <if test="status != null and status !=''"> and status = #{status} </if> 	
+			  <if test="orderSn != null and orderSn !=''"> and order_sn = #{orderSn} </if>
+			  <if test="gmId != null and gmId !=''"> and gm_id = #{gmId} </if> 		
+		 </where> 
+		 order by status ,created_at desc
+    </select>  
+    
      <!--获取当天代理人的全部收益==已支付或者已完成提货订单-->   
     <select id="getOrdersDlrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">   
          select  sum(total) as amount  from p_orders_b where status !=-1 and dljb is not null and dljb !=0		

@@ -186,11 +186,13 @@ public class AlipayAction {
 	/**
 	 * 代理人支付成功状态修改
 	 */
+	//@RequestMapping(value = "/test", method = RequestMethod.POST)
+	//@ResponseBody
 	public int updateOrderAndUser(String orderNum) {
 		int count = 0;
 		int count1 = 0;
 		// 查询订单存在
-		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		List<OrdersB> obList = ordersBService.getOrdersByPay("-1", orderNum, "");
 		if (obList == null || obList.size() != 1) {
 			count = 0;
 			return count;
@@ -295,7 +297,7 @@ public class AlipayAction {
 	public int updateOrder(String orderNum) {
 		int count = 0;
 		// 查询订单存在
-		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		List<OrdersB> obList = ordersBService.getOrdersByPay("-1", orderNum, "");
 		if (obList == null || obList.size() != 1) {
 			count = 0;
 			return count;

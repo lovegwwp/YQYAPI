@@ -89,4 +89,11 @@ public class OrdersBServiceImpl implements OrdersBService {
 		return obMapper.getRecordDyrSum(kssj, jssj);
 	}
 
+	@Override
+	public List<OrdersB> getOrdersByPay(String status, String orderSn,
+			String gmId) {
+		// TODO Auto-generated method stub
+		return obMapper.getOrdersByPay(status, orderSn, gmId);
+	}
+
 }

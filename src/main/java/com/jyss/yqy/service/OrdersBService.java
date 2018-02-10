@@ -27,6 +27,9 @@ public interface OrdersBService {
 	List<OrdersB> getOrdersBy(@Param("status") String status,
 			@Param("orderSn") String orderSn, @Param("gmId") String gmId);
 	
+	List<OrdersB> getOrdersByPay(@Param("status") String status,
+			@Param("orderSn") String orderSn, @Param("gmId") String gmId);
+	
 	/**
 	 * 查询A端商品总数量 
 	 */

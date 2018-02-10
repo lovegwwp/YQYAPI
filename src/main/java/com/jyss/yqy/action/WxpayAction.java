@@ -342,7 +342,7 @@ public class WxpayAction {
 		int count = 0;
 		int count1 = 0;
 		// 查询订单存在
-		List<OrdersB> obList = ordersBService.getOrdersBy("-1", orderNum, "");
+		List<OrdersB> obList = ordersBService.getOrdersByPay("-1", orderNum, "");
 		if (obList == null || obList.size() != 1) {
 			count = 0;
 			return count;
