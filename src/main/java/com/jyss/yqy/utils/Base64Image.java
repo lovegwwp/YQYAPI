@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-
+import java.nio.charset.Charset;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -98,6 +100,16 @@ public class Base64Image {
 			//
 			e.printStackTrace();
 		}
+	}
+
+	//字符串base64加密
+	public static String encode(String source) {
+		if (!StringUtils.isBlank(source)) {
+			Base64 base64 = new Base64();
+			byte[] bytes = base64.encode(source.getBytes(Charset.forName("UTF-8")));
+			return new String(bytes, Charset.forName("UTF-8"));
+		}
+		return source;
 	}
 
 	public static void main(String[] args) {

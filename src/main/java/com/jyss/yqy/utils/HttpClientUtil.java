@@ -29,6 +29,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 public class HttpClientUtil {
 	private RequestConfig requestConfig = RequestConfig.custom()
@@ -226,7 +227,7 @@ public class HttpClientUtil {
 	/**
 	 * 发送Get请求
 	 * 
-	 * @param httpPost
+	 * @param httpGet
 	 * @return
 	 */
 	private String sendHttpGet(HttpGet httpGet) {
@@ -263,7 +264,7 @@ public class HttpClientUtil {
 	/**
 	 * 发送Get请求Https
 	 * 
-	 * @param httpPost
+	 * @param httpGet
 	 * @return
 	 */
 	private String sendHttpsGet(HttpGet httpGet) {
@@ -356,7 +357,7 @@ public class HttpClientUtil {
 		m.put("MsgID", "");
 		// 个性化信息
 		m.put("Mobile", mobile);
-		m.put("Message", content);
+		m.put("Message", Base64Image.encode(content));
 		String url = "http://www.yescloudtree.cn:28001/?Action=sendsmsbase64";
 		String result = HttpClientUtil.getInstance().sendHttpPost(url, m);
 		System.out.println(result);
