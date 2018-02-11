@@ -1,14 +1,7 @@
 package com.jyss.yqy.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -103,11 +96,16 @@ public class Base64Image {
 	}
 
 	//字符串base64加密
-	public static String encode(String source) {
+	public static String encode(String source)  {
 		if (!StringUtils.isBlank(source)) {
-			Base64 base64 = new Base64();
-			byte[] bytes = base64.encode(source.getBytes(Charset.forName("UTF-8")));
-			return new String(bytes, Charset.forName("UTF-8"));
+			String encode = null;
+			try {
+				encode = URLEncoder.encode(source, "UTF-8");
+				BASE64Encoder base64 = new BASE64Encoder();
+				return base64.encode(encode.getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				return source;
+			}
 		}
 		return source;
 	}

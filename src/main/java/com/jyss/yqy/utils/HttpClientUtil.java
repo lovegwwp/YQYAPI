@@ -350,19 +350,17 @@ public class HttpClientUtil {
 
 		Map<String, String> m = new HashMap<String, String>();
 		m.put("Username", "jsyqy");
-		// m.put("password", PasswordUtil.generate("t6KoNa4s", "JYCS"));
 		m.put("Password", DigestUtils.md5DigestAsHex("jsyqy0207".getBytes()));
-		m.put("ExtCode", "");
-		m.put("IsP2p", "");
-		m.put("MsgID", "");
+		m.put("IsP2p", "0");
 		// 个性化信息
 		m.put("Mobile", mobile);
 		m.put("Message", Base64Image.encode(content));
-		String url = "http://www.yescloudtree.cn:28001/?Action=sendsmsbase64";
+		m.put("Action", "sendsmsbase64");
+		String url = "http://www.yescloudtree.cn:28001/";
 		String result = HttpClientUtil.getInstance().sendHttpPost(url, m);
 		System.out.println(result);
 		String[] arrRe = result.split(":");
-		return arrRe[0];
+		return result;
 
 	}
 

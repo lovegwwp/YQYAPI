@@ -108,6 +108,7 @@ public class UserAction {
 						map.put("status", "true");
 						map.put("message", "操作成功！");
 						m.put("sessionId", m2.get("sessionId"));
+						//m.put("msgDo", m2.get("msgDo"));
 						map.put("data", m);
 						return map;
 					}
