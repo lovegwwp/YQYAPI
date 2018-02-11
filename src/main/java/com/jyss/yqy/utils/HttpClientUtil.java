@@ -372,7 +372,7 @@ public class HttpClientUtil {
 		/*String result = "1,201709061650140124";
 		String[] arrRe = result.split(",");
 		System.out.println(arrRe[0]);*/
-		/*String result = HttpClientUtil.sendMsgDo("18796007689", "测试");
+		/*String result = HttpClientUtil.sendMsgDo("", "测试");
 		System.out.println(result);*/
 
 	}
