@@ -360,7 +360,7 @@ public class HttpClientUtil {
 		String result = HttpClientUtil.getInstance().sendHttpPost(url, m);
 		System.out.println(result);
 		String[] arrRe = result.split(":");
-		return result;
+		return arrRe[0];
 
 	}
 
