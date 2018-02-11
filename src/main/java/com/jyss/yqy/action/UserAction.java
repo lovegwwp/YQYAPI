@@ -104,7 +104,7 @@ public class UserAction {
 				List<UserBean> ulist = userService.getUserBy(tel, "1", "", "","");
 				if (ulist == null || ulist.size() == 0) {
 					m2 = sendCode(tel, request);
-					if (m2.get("msgDo").equals("1")) {
+					if (m2.get("msgDo").equals("0")) {
 						map.put("status", "true");
 						map.put("message", "操作成功！");
 						m.put("sessionId", m2.get("sessionId"));
@@ -127,7 +127,7 @@ public class UserAction {
 		}
 		// //单纯修改密码 ---发送验证码
 		m2 = sendCode(tel, request);
-		if (m2.get("msgDo").equals("1")) {
+		if (m2.get("msgDo").equals("0")) {
 			map.put("status", "true");
 			map.put("message", "操作成功！");
 			m.put("sessionId", m2.get("sessionId"));
@@ -154,7 +154,7 @@ public class UserAction {
 		session.setAttribute("tel", tel);
 		// 设置过期时间(S)
 		session.setMaxInactiveInterval(10 * 60);
-		String msgDo = HttpClientUtil.MsgDo(tel, "您此次操作的验证码为：" + code
+		String msgDo = HttpClientUtil.sendMsgDo(tel, "您此次操作的验证码为：" + code
 				+ ",请尽快在10分钟内完成验证");
 		m.put("sessionId", sessionId);
 		m.put("msgDo", msgDo);

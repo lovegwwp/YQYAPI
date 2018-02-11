@@ -80,11 +80,11 @@ public class ThdAction {
 				// 设置过期时间(S)
 				session.setMaxInactiveInterval(10 * 60);
 
-				String msgDo = HttpClientUtil.MsgDo(tel, "您此次操作的验证码为：" + code
+				String msgDo = HttpClientUtil.sendMsgDo(tel, "您此次操作的验证码为：" + code
 						+ "，请尽快在10分钟内完成验证。");
 				Map<String, String> map2 = new HashMap<String, String>();
 				map2.put("sessionId", sessionId);
-				if (msgDo.equals("1")) {
+				if (msgDo.equals("0")) {
 					map.put("code", "0");
 					map.put("status", "true");
 					map.put("message", "操作成功！");

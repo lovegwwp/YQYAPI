@@ -28,6 +28,7 @@ import org.apache.http.util.EntityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.util.DigestUtils;
 
 public class HttpClientUtil {
 	private RequestConfig requestConfig = RequestConfig.custom()
@@ -301,12 +302,7 @@ public class HttpClientUtil {
 		return responseContent;
 	}
 
-	public static void main(String args[]) {
-		String result = "1,201709061650140124";
-		String[] arrRe = result.split(",");
-		System.out.println(arrRe[0]);
 
-	}
 
 	// 第三方调用--环信
 	public static boolean HuanXinDo(Map<String, String> params) {
@@ -345,6 +341,39 @@ public class HttpClientUtil {
 		System.out.println(result);
 		String[] arrRe = result.split(",");
 		return arrRe[0];
+	}
+
+
+	//云之树短信平台
+	public static String sendMsgDo(String mobile, String content) {
+
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("Username", "jsyqy");
+		// m.put("password", PasswordUtil.generate("t6KoNa4s", "JYCS"));
+		m.put("Password", DigestUtils.md5DigestAsHex("jsyqy0207".getBytes()));
+		m.put("ExtCode", "");
+		m.put("IsP2p", "");
+		m.put("MsgID", "");
+		// 个性化信息
+		m.put("Mobile", mobile);
+		m.put("Message", content);
+		String url = "http://www.yescloudtree.cn:28001/?Action=sendsmsbase64";
+		String result = HttpClientUtil.getInstance().sendHttpPost(url, m);
+		System.out.println(result);
+		String[] arrRe = result.split(":");
+		return arrRe[0];
+
+	}
+
+
+
+	public static void main(String args[]) {
+		/*String result = "1,201709061650140124";
+		String[] arrRe = result.split(",");
+		System.out.println(arrRe[0]);*/
+		/*String result = HttpClientUtil.sendMsgDo("18796007689", "测试");
+		System.out.println(result);*/
+
 	}
 
 }
