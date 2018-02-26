@@ -9,8 +9,8 @@ public class ScoreBack {
 	private int dlType;
 	private int backNum;
 	private int leftNum;
-	private int backScore;
-	private int eachScore;
+	private float backScore;
+	private float eachScore;
 	private Date createdAt;
 	private Date backTime;
 	private int status;
@@ -55,19 +55,19 @@ public class ScoreBack {
 		this.leftNum = leftNum;
 	}
 
-	public int getBackScore() {
+	public float getBackScore() {
 		return backScore;
 	}
 
-	public void setBackScore(int backScore) {
+	public void setBackScore(float backScore) {
 		this.backScore = backScore;
 	}
 
-	public int getEachScore() {
+	public float getEachScore() {
 		return eachScore;
 	}
 
-	public void setEachScore(int eachScore) {
+	public void setEachScore(float eachScore) {
 		this.eachScore = eachScore;
 	}
 

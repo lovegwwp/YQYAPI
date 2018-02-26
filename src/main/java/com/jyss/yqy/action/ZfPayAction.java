@@ -58,6 +58,8 @@ public class ZfPayAction {
 	private UserRecordBService recordBService;
 	@Autowired
 	private XtclService clService;
+	@Autowired
+	private ScoreBalanceService sbService;
 
 	// type///// 支付方式：1=支付宝，2=微信，3=现金支付
 	@RequestMapping(value = "/b/dlrOrderPay", method = RequestMethod.POST)
@@ -303,19 +305,30 @@ public class ZfPayAction {
 		OrdersB ob = new OrdersB(outTradeNo, gmID + "", gmr, ub.getAccount(),
 				goods.getName(), goods.getPics(), gmNum + "", "盒", "1", "1",
 				goods.getPrice(), money, pv, jb, code, "zfId", 3);
-		int count = 0;
-		count = ordersBService.addOrder(ob);
+		int count = 0;		
 		float leftmoney = 0;
+		leftmoney = cashScore - money;
 		// ///现金积分减少
+		count = userService.updateUserBackScore(leftmoney, null, uuid);
+		///生成订单
 		if (count == 1) {
-			count = 0;
-			leftmoney = cashScore - money;
-//			if (leftmoney == 0) {
-//				leftmoney = 0.01f;
-//			}
-			count = userService.updateUserBackScore(leftmoney, null, uuid);
+			count = 0;		
+			count = ordersBService.addOrder(ob);
 		}
-		// 扣完支付的现金积分
+		///现金积分订单明细	
+		if (count == 1) {
+			count = 0;	
+			ScoreBalance sb = null;
+			sb.setuUuid(uuid);
+			sb.setCategory(8);//b端消费
+			sb.setType(2);//支出
+			sb.setScore(money);
+			sb.setJyScore(leftmoney);
+			sb.setOrderSn(outTradeNo);
+			count = sbService.addCashScoreBalance(sb);
+		}
+		
+		// 扣完支付的现金积分,判断是否可以升级
 		if (count == 1) {
 			count = 0;
 			count = updateOrder(uuid, isChuangke, gmNum, gmID + "");
