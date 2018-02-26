@@ -117,7 +117,7 @@ public class UserRecordBAction {
 		logger.info(map.get("message"));
 	}
 
-	// /**积分按照后台设置比例返还***/////
+	// /**积分按照后台设置比例返还===扣额度***/////
 	public void insertBackScore() {
 		int count = 0;
 		int count2 = 0;
@@ -140,6 +140,15 @@ public class UserRecordBAction {
 				shopPercent = Float.parseFloat(cl.getBz_value());
 			}
 			for (ScoreBack scoreBack : sbLIst) {
+				/////判断积分额度，进行相应额度减少
+				List<UserBean> uulist = userService.getUserByUuid(scoreBack.getUuuid());
+				///用户唯一
+				if (uulist!=null&&uulist.size()==1&&uulist.get(0).getTotalPv()>0) {
+					///现有剩余额度和返还额度进行比较
+					if (uulist.get(0).getTotalPv()<scoreBack.getEachScore()) {
+						scoreBack.setEachScore(uulist.get(0).getTotalPv());
+					}
+				
 				if (scoreBack != null && scoreBack.getLeftNum() != 0) {
 					float cashScore = 0;
 					float shopScore = 0;
@@ -151,12 +160,12 @@ public class UserRecordBAction {
 					sb.setCategory(9);// /积分返还
 					sb.setuUuid(scoreBack.getUuuid());
 					sb.setType(1);// 收入
-					List<UserBean> ubList = userService.getUserByUuid(scoreBack
-							.getUuuid());
-					if (ubList != null && ubList.size() == 1) {
-						jyCashScore = ubList.get(0).getCashScore();
-						jyShopScore = ubList.get(0).getShoppingScore();
-					}
+//					List<UserBean> ubList = userService.getUserByUuid(scoreBack
+//							.getUuuid());
+//					if (ubList != null && ubList.size() == 1) {
+						jyCashScore = uulist.get(0).getCashScore();
+						jyShopScore = uulist.get(0).getShoppingScore();
+					//}
 					jyCashScore = jyCashScore + cashScore;
 					jyShopScore = jyShopScore + shopScore;
 					// //现金积分记录
@@ -180,6 +189,11 @@ public class UserRecordBAction {
 								scoreBack.getLeftNum() - 1,
 								CommTool.getAddAfterWeekTimestamp(
 										scoreBack.getBackTime()).toString());
+						//////返还积分 ，增加现金。购物额度，减少totalpv额度
+						if (count3 == 1) {
+						count3 = userService.updateScoreByFHJ(cashScore+"", shopScore+"",
+								(-scoreBack.getEachScore())+"", uulist.get(0).getId() + "", uulist.get(0).getIsChuangke()+"");
+						}
 						if (count3 == 1) {
 							// ///如果返还记录已完成，则判断是否有其他封存记录，按照等级高低来解封，每次解封一条
 							if ((scoreBack.getLeftNum() - 1) == 0) {
@@ -196,6 +210,7 @@ public class UserRecordBAction {
 					}
 				}
 			}
+		  }
 		}
 
 	}
