@@ -236,7 +236,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int updateUserBackScore(float cashScore, float shoppingScore,
+	public int updateUserBackScore(Float cashScore, Float shoppingScore,
 			String uuuid) {
 		// TODO Auto-generated method stub
 		return userMapper.updateUserBackScore(cashScore, shoppingScore, uuuid);

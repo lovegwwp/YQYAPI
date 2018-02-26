@@ -20,17 +20,17 @@ public interface UserService {
 	 * @return
 	 */
 	List<UserBean> getUserBy(@Param("account") String account,
-			@Param("status") String status, @Param("isAuth") String isAuth,
-			@Param("statusAuth") String statusAuth,@Param("statusAuthMoreThan") String statusAuthMoreThan);
+                             @Param("status") String status, @Param("isAuth") String isAuth,
+                             @Param("statusAuth") String statusAuth, @Param("statusAuthMoreThan") String statusAuthMoreThan);
 
 	List<UserBean> getUserById(@Param("id") String id,
-			@Param("status") String status, @Param("isAuth") String isAuth);
+                               @Param("status") String status, @Param("isAuth") String isAuth);
 
 	/**
 	 * 用户登陆
 	 */
 	public Map<String, Object> login(@Param("account") String account,
-			@Param("password") String password);
+                                     @Param("password") String password);
 
 	/**
 	 * 用户退出
@@ -44,10 +44,10 @@ public interface UserService {
 	 * @return
 	 */
 	int upUserMyInfo(@Param("uuid") String uuid, @Param("nick") String nick,
-			@Param("province") String province,
-			@Param("provinceId") String provinceId,
-			@Param("cityId") String cityId, @Param("city") String city,
-			@Param("areaId") String areaId, @Param("area") String area);
+                     @Param("province") String province,
+                     @Param("provinceId") String provinceId,
+                     @Param("cityId") String cityId, @Param("city") String city,
+                     @Param("areaId") String areaId, @Param("area") String area);
 
 	/**
 	 * 修改个人支付密码
@@ -72,15 +72,15 @@ public interface UserService {
 	 * @return
 	 */
 	int upUserAllStatus(@Param("status") String status,
-			@Param("bCode") String bCode, @Param("bIsPay") String bIsPay,
-			@Param("isChuangke") String isChuangke,
-			@Param("isAuth") String isAuth, @Param("id") String id);
+                        @Param("bCode") String bCode, @Param("bIsPay") String bIsPay,
+                        @Param("isChuangke") String isChuangke,
+                        @Param("isAuth") String isAuth, @Param("id") String id);
 
 	
 	int upUserAllStatusByUUid(@Param("status") String status,
-			@Param("bCode") String bCode, @Param("bIsPay") String bIsPay,
-			@Param("isChuangke") String isChuangke,
-			@Param("isAuth") String isAuth, @Param("uuid") String uuid);
+                              @Param("bCode") String bCode, @Param("bIsPay") String bIsPay,
+                              @Param("isChuangke") String isChuangke,
+                              @Param("isAuth") String isAuth, @Param("uuid") String uuid);
 	
 	/**
 	 * 查询个人信息
@@ -95,9 +95,9 @@ public interface UserService {
 	 */
 
 	List<UserBean> getUserInfo(@Param("account") String account,
-			@Param("uuid") String uuid, @Param("id") String id,
-			@Param("status") String status, @Param("isAuth") String isAuth,
-			@Param("statusAuth") String statusAuth);
+                               @Param("uuid") String uuid, @Param("id") String id,
+                               @Param("status") String status, @Param("isAuth") String isAuth,
+                               @Param("statusAuth") String statusAuth);
 
 	/**
 	 * 新增用户
@@ -124,7 +124,7 @@ public interface UserService {
 	 * @return
 	 */
 	int upPwd(@Param("pwd") String pwd, @Param("salt") String salt,
-			@Param("id") String id);
+              @Param("id") String id);
 
 	/**
 	 * 增加token
@@ -143,7 +143,7 @@ public interface UserService {
 	 * @return
 	 */
 	int upToken(@Param("uuid") String uuid, @Param("token") String token,
-			@Param("time") long time);
+                @Param("time") long time);
 
 	/**
 	 * 登录login --token
@@ -151,7 +151,7 @@ public interface UserService {
 	 * @return
 	 */
 	List<UserBean> getToken(@Param("uuid") String uuid,
-			@Param("token") String token);
+                            @Param("token") String token);
 
 	// 添加实名用户信息
 	int insertUserAuth(UserAuth userAuth);
@@ -162,20 +162,20 @@ public interface UserService {
 	List<UserBean> getUserByUuid(@Param("uuid") String uuid);
 
 	// 更新积分
-	int updateUserBackScore(@Param("cashScore") float cashScore,
-			@Param("shoppingScore") float shoppingScore,
-			@Param("uuuid") String uuuid);
+	int updateUserBackScore(@Param("cashScore") Float cashScore,
+                            @Param("shoppingScore") Float shoppingScore,
+                            @Param("uuuid") String uuuid);
 	
 	//////分红奖/////
 	/**
 	 * 通过id查询积分
 	 */
 	List<UserBean> getUserByFHJ(@Param("account") String account,
-			@Param("status") String status, @Param("isAuth") String isAuth,
-			@Param("isChuangke") String isChuangke);
+                                @Param("status") String status, @Param("isAuth") String isAuth,
+                                @Param("isChuangke") String isChuangke);
 
 	// 更新积分
 	int updateScoreByFHJ(@Param("cashScore") String cashScore,
-			@Param("shoppingScore") String shoppingScore,@Param("totalPv") String totalPv,@Param("id") String id,@Param("isChuangke") String isChuangke);
+                         @Param("shoppingScore") String shoppingScore, @Param("totalPv") String totalPv, @Param("id") String id, @Param("isChuangke") String isChuangke);
 
 }

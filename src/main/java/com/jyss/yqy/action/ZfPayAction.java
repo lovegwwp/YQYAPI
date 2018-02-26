@@ -310,12 +310,12 @@ public class ZfPayAction {
 		if (count == 1) {
 			count = 0;
 			leftmoney = cashScore - money;
-			if (leftmoney == 0) {
-				leftmoney = 0.01f;
-			}
-			count = userService.updateUserBackScore(leftmoney, 0, uuid);
+//			if (leftmoney == 0) {
+//				leftmoney = 0.01f;
+//			}
+			count = userService.updateUserBackScore(leftmoney, null, uuid);
 		}
-		// ///判断是否升级以及积分返还
+		// 扣完支付的现金积分
 		if (count == 1) {
 			count = 0;
 			count = updateOrder(uuid, isChuangke, gmNum, gmID + "");
