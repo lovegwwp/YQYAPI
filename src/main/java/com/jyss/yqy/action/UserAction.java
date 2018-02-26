@@ -179,10 +179,10 @@ public class UserAction {
 		HttpSession session = MySessionContext.getSession(sessionId);
 		String SessTo = (String) session.getAttribute("tel");
 		String SessToYzm = (String) session.getAttribute("code");
-		if (SessTo != null && !(SessTo.equals("")) && SessToYzm != null
+		/*if (SessTo != null && !(SessTo.equals("")) && SessToYzm != null
 				&& !(SessToYzm.equals(""))) {
 			if (SessTo.equals(account)) {
-				if (SessToYzm.equals(code)) {
+				if (SessToYzm.equals(code)) {*/
 					// 验证码正确，进行注册表插入
 					List<UserBean> ulist = userService.getUserBy(account, "1",
 							"", "","");
@@ -217,13 +217,13 @@ public class UserAction {
 					m.put("message", "注册失败！");
 					m.put("data", "");
 					return m;
-				}
+				/*}
 			}
 		}
 		m.put("status", "false");
 		m.put("message", "验证码错误！");
 		m.put("data", "");
-		return m;
+		return m;*/
 
 	}
 
