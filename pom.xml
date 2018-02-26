@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.jyss</groupId>
-  <artifactId>SSM</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  
-  
-<!-- 导入的Jar包详细配置及注释 -->
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.jyss</groupId>
+    <artifactId>YQYAPI</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+
+    <!-- 导入的Jar包详细配置及注释 -->
     <!-- 统一导入的SSM框架jar包的版本，避免版本冲突，方便后续jar包导入的版本管理及统一维护修改 -->
     <properties>
         <!-- spring版本号 -->
@@ -16,14 +16,14 @@
         <!-- log4j日志文件管理包版本 -->
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
-        	<!-- shiro -->
+        <!-- shiro -->
         <shiro.version>1.2.3</shiro.version>
-    </properties>	
-		
+    </properties>
+
     <dependencies>
-    	
-	
-		 <!-- junit -->
+
+
+        <!-- junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -126,154 +126,154 @@
             <version>${log4j.version}</version>
         </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-		<dependency>
-		    <groupId>org.apache.httpcomponents</groupId>
-		    <artifactId>httpclient</artifactId>
-		    <version>4.5.2</version>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>fastjson</artifactId>
-		    <version>1.2.37</version>
-		</dependency>
-		
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.37</version>
+        </dependency>
+
         <!--邮箱 -->
-		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
-		<dependency> 
-			<groupId>javax.mail</groupId>
-		    <artifactId>mail</artifactId>
-			<version>1.5.0-b01</version> 
-		</dependency>
-		 <!-- wxpay -->
-		 <dependency> 
-		    <groupId>java.wxpay</groupId>
-		    <artifactId>wxpay</artifactId>
-			<version>0.0.3</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+        <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
+        </dependency>
+        <!-- wxpay -->
+        <!-- <dependency>
+            <groupId>java.wxpay</groupId>
+            <artifactId>wxpay</artifactId>
+            <version>0.0.3</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3.jar</systemPath>
         </dependency>
-        <dependency> 
-		    <groupId>java.wxpay</groupId>
-		    <artifactId>wxpay</artifactId>
-			<version>0.0.3</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+        <dependency>
+            <groupId>java.wxpay</groupId>
+            <artifactId>wxpay</artifactId>
+            <version>0.0.3</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3-javadoc.jar</systemPath>
         </dependency>
-        <dependency> 
-		    <groupId>java.wxpay</groupId>
-		    <artifactId>wxpay</artifactId>
-			<version>0.0.3</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+        <dependency>
+            <groupId>java.wxpay</groupId>
+            <artifactId>wxpay</artifactId>
+            <version>0.0.3</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/wxpay-sdk-0.0.3-sources.jar</systemPath>
         </dependency>
-		 
-		 <!-- alipay -->
-		<dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20180104135026.jar</systemPath>
+
+         &lt;!&ndash; alipay &ndash;&gt;
+        <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952.jar</systemPath>
         </dependency>
-        
-        <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
-            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20180104135026-source.jar</systemPath>
+
+        <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-sdk-java20161213173952-source.jar</systemPath>
         </dependency>
-        
-        <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+        <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215.jar</systemPath>
         </dependency>
-        
-         <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+         <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/alipay-trade-sdk-20161215-source.jar</systemPath>
         </dependency>
-        
-          <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+          <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/commons-codec-1.10.jar</systemPath>
         </dependency>
-        
-         <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+         <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/commons-configuration-1.10.jar</systemPath>
         </dependency>
-        
-        <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+        <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/commons-lang-2.6.jar</systemPath>
         </dependency>
-        
-         <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+         <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/commons-logging-1.1.1.jar</systemPath>
         </dependency>
-        
-         <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+         <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/core-2.1.jar</systemPath>
         </dependency>
-        
-         <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+         <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/gson-2.3.1.jar</systemPath>
         </dependency>
-        
-         <dependency> 
-		    <groupId>java.alipay</groupId>
-		    <artifactId>alipay</artifactId>
-			<version>1.0</version> 
-	        <scope>system</scope>  
-	        <!--本地jar的路径,相对或者绝对都可以-->  
+
+         <dependency>
+            <groupId>java.alipay</groupId>
+            <artifactId>alipay</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>  
+            &lt;!&ndash;本地jar的路径,相对或者绝对都可以&ndash;&gt;  
             <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/hamcrest-core-1.3.jar</systemPath>
-        </dependency>
-        
-        
+        </dependency>-->
+
+
 
         <!-- 格式化对象，方便输出日志 -->
         <dependency>
@@ -294,7 +294,7 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        
+
         <!-- log end -->
         <!-- 映入JSON -->
         <dependency>
@@ -302,8 +302,8 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.13</version>
         </dependency>
-             
-        
+
+
         <!-- 上传组件包 -->
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -319,98 +319,101 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.9</version>
-        </dependency> 
-        <!-- 分页 pagehelper -->      
-		<dependency>
-		    <groupId>com.github.pagehelper</groupId>
-		    <artifactId>pagehelper</artifactId>
-		    <version>4.1.4</version>
-		</dependency>       
-       <!-- tomcat启动 --> 
+        </dependency>
+        <!-- 分页 pagehelper -->
         <dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-		</dependency>
-		
-		   <!-- shiro -->
-        <dependency>  
-            <groupId>org.apache.shiro</groupId>  
-            <artifactId>shiro-spring</artifactId>  
-            <version>${shiro.version}</version>  
-        </dependency>  
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.1.4</version>
+        </dependency>
+        <!-- tomcat启动 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
 
-        <dependency>  
-            <groupId>org.apache.shiro</groupId>  
-            <artifactId>shiro-ehcache</artifactId>  
-            <version>${shiro.version}</version>  
-        </dependency> 
-         
-        <dependency>  
-            <groupId>org.apache.shiro</groupId>  
-            <artifactId>shiro-core</artifactId>  
-            <version>${shiro.version}</version>  
-        </dependency> 
-         
-        <dependency>   
-            <groupId>org.apache.shiro</groupId>  
-            <artifactId>shiro-web</artifactId>  
-            <version>${shiro.version}</version>  
-        </dependency>  
-        
-        <dependency>  
-            <groupId>org.apache.shiro</groupId>  
-            <artifactId>shiro-quartz</artifactId>  
-            <version>${shiro.version}</version>  
-        </dependency>  
-        
-    <dependency>
-  	    <groupId>commons-collections</groupId>
-      	<artifactId>commons-collections</artifactId>
-    	<version>3.2.1</version>
-    </dependency>
-    
-    <dependency >  
-  		<groupId >org.apache.geronimo.bundles</groupId >  
- 	    <artifactId >aspectjweaver</artifactId >  
- 		<version >1.6.8_2</version >  
-	</dependency >
-		
+        <!-- shiro -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-quartz</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <dependency >
+            <groupId >org.apache.geronimo.bundles</groupId >
+            <artifactId >aspectjweaver</artifactId >
+            <version >1.6.8_2</version >
+        </dependency >
+
     </dependencies>
-    
+
     <build>
-  	<plugins>
-  		<plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-war-plugin</artifactId>
-            <configuration>
-                <webResources>
-                    <resource>
-                        <directory>${project.basedir}\</directory>
-                        <targetPath>src/main/webapp/WEB-INF/lib</targetPath>
-                        <filtering>true</filtering>
-                        <includes>
-                            <include>*.jar</include>
-                        </includes>
-                    </resource>
-                </webResources>
-            </configuration>
-        </plugin>
-  		<plugin>
-  			<artifactId>maven-war-plugin</artifactId>
-  			<configuration>
-  				<version>3.1</version>
-  			</configuration>
-  		</plugin> 			
-	    <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
-            </configuration>
-          </plugin>
-    </plugins>
-  </build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${project.basedir}\</directory>
+                            <targetPath>src/main/webapp/WEB-INF/lib</targetPath>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>*.jar</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 </project>
