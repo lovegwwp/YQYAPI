@@ -176,10 +176,10 @@ public class UserAction {
 			@RequestParam("sessionId") String sessionId) {
 		int count = 0;
 		Map<String, Object> m = new HashMap<String, Object>();
-		HttpSession session = MySessionContext.getSession(sessionId);
+		/*HttpSession session = MySessionContext.getSession(sessionId);
 		String SessTo = (String) session.getAttribute("tel");
 		String SessToYzm = (String) session.getAttribute("code");
-		/*if (SessTo != null && !(SessTo.equals("")) && SessToYzm != null
+		if (SessTo != null && !(SessTo.equals("")) && SessToYzm != null
 				&& !(SessToYzm.equals(""))) {
 			if (SessTo.equals(account)) {
 				if (SessToYzm.equals(code)) {*/
@@ -194,7 +194,7 @@ public class UserAction {
 						return m;
 					}
 					User user = new User();
-					user.setAccount(SessTo);
+					user.setAccount(account);
 					user.setSalt(CommTool.getSalt());
 					user.setPwd(PasswordUtil.generate(password, user.getSalt()));
 					count = userService.addUser(user);
