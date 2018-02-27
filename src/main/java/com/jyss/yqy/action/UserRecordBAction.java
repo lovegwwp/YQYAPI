@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jyss.yqy.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jyss.yqy.entity.ScoreBack;
-import com.jyss.yqy.entity.ScoreBalance;
-import com.jyss.yqy.entity.UMobileLogin;
-import com.jyss.yqy.entity.UserTotalAmount;
-import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.JBonusFxjService;
 import com.jyss.yqy.service.JBonusGljService;
@@ -306,6 +302,33 @@ public class UserRecordBAction {
 			}
 		}
 
+	}
+
+
+	/**
+	 * 每天定时更改用户等级////==在所有奖项之后计算
+	 */
+	@RequestMapping("/updateDldjByDay")
+	@ResponseBody
+	public void updateDldj() {
+		////查出u_user所用代理人等级
+		List<UserBean> ueseList = userService.getUserInfo(null,null,null,"1","2",null);
+		////查出u_u_user_r_record_b 已有等级
+		List<UUserRRecordB> uRecordBList = userRecordBService.getRecordBGroupByRid();
+		///两次循环不同等级，如果等级不同，则进行查出u_u_user_r_record_b相应更改
+        for (UUserRRecordB  recordeb:uRecordBList){
+			for (UserBean  ub:ueseList){
+				//同一用户进行等级比较
+				if (recordeb.getrId()==ub.getId()){
+					//等级不同进行更改
+					if(recordeb.getType()!=ub.getIsChuangke()){
+						userRecordBService.updateTypeByUid(ub.getIsChuangke()+"",recordeb.getrId()+"","1");
+					}
+				}
+
+			}
+		}
+		System.out.print("用户初始绑定关系等级更改完毕");
 	}
 
 }

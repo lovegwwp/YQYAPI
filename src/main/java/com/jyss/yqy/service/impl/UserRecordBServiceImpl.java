@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jyss.yqy.entity.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -394,6 +395,16 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	public List<UUserRRecordB> getRecordB(String uId, String rId, String status) {
 		// TODO Auto-generated method stub
 		return userRecordMapper.getRecordB(uId, rId, status);
+	}
+
+	@Override
+	public int updateTypeByUid(@Param("type") String type, @Param("rId") String rId, @Param("status") String status) {
+		return userRecordMapper.updateTypeByUid(type, rId, status);
+	}
+
+	@Override
+	public List<UUserRRecordB> getRecordBGroupByRid() {
+		return userRecordMapper.getRecordBGroupByRid();
 	}
 
 }

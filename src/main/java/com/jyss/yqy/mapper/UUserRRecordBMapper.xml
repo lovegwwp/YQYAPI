@@ -245,7 +245,19 @@
 			   <if test="rId != null and rId !=''"> and r_id = #{rId} </if> 
 			   <if test="status != null and status !=''"> and status = #{status} </if> 			 
 			</where>  
-    </select> 
-    
-  
+    </select>
+
+  <!--等级记录查询-->
+  <select id="getRecordBGroupByRid" resultMap="BaseResultMap" >
+    select t.* from (  select * from u_user_r_record_b where status =1 order by type) t group by t.r_id
+  </select>
+
+  <update id="updateTypeByUid" >
+    update u_user_r_record_b u
+    set  u.type = #{type}
+    where u.r_id = #{rId} and u.status = #{status}
+  </update>
+
+
+
 </mapper>

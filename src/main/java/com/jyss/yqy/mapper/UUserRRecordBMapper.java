@@ -37,4 +37,9 @@ public interface UUserRRecordBMapper {
 	List<UUserRRecordB> getRecordB(@Param("uId") String uId,
 			@Param("rId") String rId, @Param("status") String status);
 
+	//////用户更改等级
+	int updateTypeByUid(@Param("type") String type,@Param("rId") String rId, @Param("status") String status);
+
+	List<UUserRRecordB> getRecordBGroupByRid();
+
 }
