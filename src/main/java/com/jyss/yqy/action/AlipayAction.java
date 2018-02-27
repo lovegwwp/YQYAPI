@@ -320,7 +320,7 @@ public class AlipayAction {
 				int level = dlrLevel;
 				// /最高等级时不进行相应变化
 				// if (dlrLevel != 4) {
-				// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
+				// /查找等级对应亚麻籽油数量，进行比对升级 5,6,7,8对应初中高级,经理人盒数
 				int compareLevel = dlrLevel + 3;
 				// /查找往上一等级对应盒数
 				Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel
