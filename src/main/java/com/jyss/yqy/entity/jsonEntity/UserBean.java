@@ -32,6 +32,7 @@ public class UserBean {
 	private Date createdAt;
 	private Date lastAccessTime;
 
+
 	// private Date createdAt;//
 	// private int lastAccessTime;//
 
