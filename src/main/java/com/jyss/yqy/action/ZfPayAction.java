@@ -318,7 +318,7 @@ public class ZfPayAction {
 		///现金积分订单明细	
 		if (count == 1) {
 			count = 0;	
-			ScoreBalance sb = null;
+			ScoreBalance sb = new ScoreBalance();
 			sb.setuUuid(uuid);
 			sb.setCategory(8);//b端消费
 			sb.setType(2);//支出
