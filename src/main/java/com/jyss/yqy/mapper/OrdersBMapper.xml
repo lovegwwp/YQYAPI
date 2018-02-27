@@ -99,24 +99,32 @@
     </select>  
     
      <!--获取当天代理人的全部收益==已支付或者已完成提货订单-->   
-    <select id="getOrdersDlrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">   
-         select  sum(total) as amount  from p_orders_b where status !=-1 and dljb is not null and dljb !=0		
+    <!--<select id="getOrdersDlrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">
+         select  sum(total) as amount  from p_orders_b where status !=-1 and dljb is not null and dljb !=0
          <where>              
-              <if test="kssj != null and kssj !=''"> and created_at &gt;= #{kssj} </if>  
-			  <if test="jssj != null and jssj !=''"> and created_at &lt; #{jssj} </if>		
+              <if test="kssj != null and kssj !=''"> and last_modify_time &gt;= #{kssj} </if>
+			  <if test="jssj != null and jssj !=''"> and last_modify_time &lt;= #{jssj} </if>
 		 </where> 
-    </select>  
-    
-      <!--获取当天代言人的全部人数-->   
-    <select id="getRecordDyrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">   
+    </select>  -->
+    <select id="getOrdersDlrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">
+        select  ifnull(sum(total),0) as amount  from p_orders_b where status !=-1 and dljb is not null and dljb !=0
+        and  to_days(now()) - to_days(last_modify_time) = 1
+    </select>
+
+    <!--获取当天代言人的全部金额-->
+    <!--<select id="getRecordDyrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">
          select  sum(pay_value)  as amount from  u_user_r_record where status =1
          <where>              
-              <if test="kssj != null and kssj !=''"> and created_at &gt;= #{kssj} </if>  
-			  <if test="jssj != null and jssj !=''"> and created_at &lt; #{jssj} </if>		
+              <if test="kssj != null and kssj !=''"> and created_at &gt;= #{kssj} </if>
+			  <if test="jssj != null and jssj !=''"> and created_at &lt; #{jssj} </if>
 		 </where> 
-    </select>  
-    
-    
+    </select> -->
+    <select id="getRecordDyrSum" resultType="com.jyss.yqy.entity.UserTotalAmount">
+        select  ifnull(sum(pay_value),0)  as amount from  u_user_r_record where status =1
+        and  to_days(now()) - to_days(created_at) = 1
+    </select>
+
+
     <!-- 查询A端商品总数量 -->
     <select id="selectTotalOrderABy" resultMap="obResultMap">
     	select sum(b.good_num) gm_num,c.nick gmr,c.account tel from o_order_good a 
@@ -223,7 +231,7 @@
     <select id="getSuccessOrder" resultMap="utaResultMap">
     	select CONVERT(gm_id,SIGNED) as id,SUM(total) as amount
     	from p_orders_b 
-    	where status = 2 and type =1 and to_days(now()) - to_days(last_modify_time) = 1 GROUP BY gm_id
+    	where status = 1 and type =1 and to_days(now()) - to_days(last_modify_time) = 1 GROUP BY gm_id
     	
     </select>
    
@@ -231,7 +239,7 @@
     <select id="getSuccessOrderPv" resultMap="jrResultMap">
     	select CONVERT(gm_id,SIGNED) as id,CONVERT(sum(pv),DECIMAL) as pv
     	from p_orders_b 
-    	where status = 2 and type =1 and  to_days(now()) - to_days(last_modify_time) = 1 GROUP BY gm_id
+    	where status = 1 and type =1 and  to_days(now()) - to_days(last_modify_time) = 1 GROUP BY gm_id
     	
     </select>
 

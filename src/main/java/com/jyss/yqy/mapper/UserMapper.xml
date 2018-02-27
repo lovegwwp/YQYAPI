@@ -33,7 +33,7 @@
         <result property="shoppingScore" column="shopping_score"  /> 
         <result property="totalPv" column="total_pv"  />
         <result property="createdAt" column="created_at"  />
-        <result property="lastAccessTime" column="last_access_time"  />     
+        <result property="lastAccessTime" column="last_access_time"  />
     </resultMap>              
              
      <!-- B端 -->        
@@ -315,7 +315,7 @@
               <if test="account != null and account !=''"> and u.account = #{account} </if> 	
               <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
 			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
-			  <if test="isChuangke != null and isChuangke !=''"> and a.is_chuangke = #{isChuangke} </if>				  
+			  <if test="isChuangke != null and isChuangke !=''"> and u.is_chuangke = #{isChuangke} </if>
 		 </where> 
     </select>  
     
