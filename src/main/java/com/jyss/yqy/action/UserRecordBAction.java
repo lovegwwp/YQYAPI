@@ -118,7 +118,6 @@ public class UserRecordBAction {
 	}
 
 	// /**积分按照后台设置比例返还===扣额度***/////
-	@RequestMapping("/fxj/computeScore")
 	public void insertBackScore() {
 		int count = 0;
 		int count2 = 0;
