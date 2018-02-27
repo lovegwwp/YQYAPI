@@ -235,7 +235,7 @@ public class UserRecordBAction {
 		}
 		if (cl2 != null && cl2.getBz_value() != null
 				&& !cl2.getBz_value().equals("")) {
-			shopPercent = Float.parseFloat(cl.getBz_value());
+			shopPercent = Float.parseFloat(cl2.getBz_value());
 		}
 
 		cashScore = total * cashPercent;
@@ -273,6 +273,7 @@ public class UserRecordBAction {
 
 	// /**全球分红奖***/////
 	// //2018-2-1==计算当天（截止0点，比如24号定时计算24号0点之前的）代言人+代理人的全部费用===平均分配给当天的高级代理人==user表的积分进行相应改动。2记录表增加数据
+	@RequestMapping("/fxj/computeFHJ")
 	public void CountTotalFh() {
 		String count ="0";
 		// ///代言人的总金额---订单表查询当天记录

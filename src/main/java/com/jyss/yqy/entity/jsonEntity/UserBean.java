@@ -1,5 +1,7 @@
 package com.jyss.yqy.entity.jsonEntity;
 
+import java.util.Date;
+
 public class UserBean {
 	private int id;
 	private String uuid;
@@ -27,6 +29,8 @@ public class UserBean {
 	private String areaId;//
 	private String area;//
 	private Float totalPv;      //剩余返还pv
+	private Date createdAt;
+	private Date lastAccessTime;
 
 	// private Date createdAt;//
 	// private int lastAccessTime;//
@@ -253,5 +257,21 @@ public class UserBean {
 
 	public void setTotalPv(Float totalPv) {
 		this.totalPv = totalPv;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getLastAccessTime() {
+		return lastAccessTime;
+	}
+
+	public void setLastAccessTime(Date lastAccessTime) {
+		this.lastAccessTime = lastAccessTime;
 	}
 }

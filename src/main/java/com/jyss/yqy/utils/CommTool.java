@@ -314,7 +314,8 @@ public class CommTool {
 		// System.out.println(getSalt());
 		//System.out.println(getNowTimestamp());
 		//System.out.println(getAfterWeekTimestamp());
-		System.out.println(getZeroTimestamp());
+		System.out.println(CommTool.getYestodayZeroTimestamp().toString());
+		System.out.println(CommTool.getZeroTimestamp().toString());
 
 	}
 
