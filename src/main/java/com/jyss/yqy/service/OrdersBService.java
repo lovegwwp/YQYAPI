@@ -12,16 +12,14 @@ public interface OrdersBService {
 
 	/**
 	 * 获取B端商品=亚麻籽油
-	 * 
-	 * @param username
+	 *
 	 * @return
 	 */
 	List<Goods> getGoods(@Param("type") String type);
 
 	/**
 	 * 获取B端订单信息
-	 * 
-	 * @param username
+	 *
 	 * @return
 	 */
 	List<OrdersB> getOrdersBy(@Param("status") String status,
@@ -61,6 +59,18 @@ public interface OrdersBService {
 	int upOrderStatus(@Param("status") String status,
 			@Param("statusBefore") String statusBefore,
 			@Param("orderSn") String orderSn);
+
+	/**
+	 * 修改订单代理等级状态
+	 *
+	 * @param dljb
+	 * @param statusBefore
+	 * @param orderSn
+	 * @return
+	 */
+	int upOrderDljb(@Param("dljb") String dljb,
+					@Param("statusBefore") String statusBefore,
+					@Param("orderSn") String orderSn);
 	
 	
 	/**

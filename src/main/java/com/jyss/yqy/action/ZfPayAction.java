@@ -328,10 +328,10 @@ public class ZfPayAction {
 			count = sbService.addCashScoreBalance(sb);
 		}
 		
-		// 扣完支付的现金积分,判断是否可以升级
+		// 扣完支付的现金积分,判断是否可以升级,若可以升级，则订单状态dljb也要跟着相应更改
 		if (count == 1) {
 			count = 0;
-			count = updateOrder(uuid, isChuangke, gmNum, gmID + "");
+			count = updateOrder(uuid, isChuangke, gmNum, gmID + "",outTradeNo);
 		}
 		if (count == 1) {
 			Date sjc = new Date();
@@ -390,15 +390,15 @@ public class ZfPayAction {
 	// /////////////////订单购买/////////////////////
 
 	/**
-	 * 购买支付成功状态修改
+	 * 购买支付成功状态修改==ymz
 	 */
-	public int updateOrder(String uuid, int dlrLevel, int gmNum, String gmID) {
+	public int updateOrder(String uuid, int dlrLevel, int gmNum, String gmID,String orderNo) {
 
 		int count = 0;
 		// /最高等级时user=chuangke不进行相应变化,但是返还要增加
 		// if (dlrLevel != 4) {
 		int level = dlrLevel;
-		// /查找等级对应亚麻籽油数量，进行比对升级 4,5,6对应初中高级盒数
+		// /查找等级对应亚麻籽油数量，进行比对升级 5,6,7,8对应初中高级，经理人盒数
 		int compareLevel = dlrLevel + 3;
 		// /查找往上一等级对应盒数
 		Xtcl dlHs = clService.getClsValue("dyjf_type", compareLevel + "");
@@ -407,14 +407,36 @@ public class ZfPayAction {
 			// //超过数量的购买。直接升级
 			if (dlrLevel == 5) {
 				dlrLevel = 2;// //经理人升级为初级代理人
-			} else {
+			} else if(dlrLevel!= 4){
 				dlrLevel = dlrLevel + 1;
 			}
+			////2018.2.27=修改用户等级，再修改订单dljb
+			String dljb ="0";//订单代理级别==【1=初级代理，2=高级代理，3=高级代理，4=经理人，0=不标识状态】
+			if(dlrLevel==2){
+				dljb ="1";
+			}else if(dlrLevel==3){
+				dljb ="2";
+			}else if(dlrLevel==4){
+				dljb ="3";
+			}else if(dlrLevel==5){
+				dljb ="4";
+			}
 			if (level != 4) {
+				//修改用户等级
 				count = userService.upUserAllStatus("", "", "", dlrLevel + "",
 						"", gmID);
+				//修改订单代理等级
+				if (count==1){
+					count =0;
+					if (!dljb.equals("0")){
+					   count = ordersBService.upOrderDljb(dljb,"1",orderNo);
+					}
+				}
 			} else {
-				count = 1;
+				//修改订单代理等级
+				if (!dljb.equals("0")){
+				   count = ordersBService.upOrderDljb(dljb,"1",orderNo);
+				}
 			}
 			if (count == 1) {
 				count = 0;
@@ -451,40 +473,7 @@ public class ZfPayAction {
 		return 1;
 	}
 
-	// @RequestMapping(value = "/b/ymzCashPayNotify", method =
-	// RequestMethod.POST)
-	// @ResponseBody
-	// public Map<String, Object> ymzCashPayNotify(@RequestParam String
-	// orderNum,
-	// @RequestParam String token) {
-	// Map<String, Object> map = new HashMap<String, Object>();
-	// // //验证token 获取购买人ID===gmID
-	// List<UMobileLogin> loginList = uMobileLoginService
-	// .findUserByToken(token);
-	// if (loginList == null || loginList.size() == 0) {
-	// map.put("status", "false");
-	// map.put("message", "请重新登录");
-	// map.put("code", "-1");
-	// // map.put("data", "");
-	// return map;
-	// }
-	// // ////更改订单状态
-	// int count = 0;
-	// count = updateOrder2(orderNum);
-	// if (count == 1) {
-	// map.put("status", "true");
-	// map.put("message", "购买成功!");
-	// map.put("code", "0");
-	// return map;
-	// // map.put("data", "");
-	// }
-	// map.put("status", "false");
-	// map.put("message", "购买失败!");
-	// map.put("code", "-2");
-	// return map;
-	// }
 
-	// /////////////////成为代理人购买/////////////////////
 
 	/**
 	 * 代理人支付成功状态修改

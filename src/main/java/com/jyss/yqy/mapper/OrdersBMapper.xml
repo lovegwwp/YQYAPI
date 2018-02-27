@@ -166,6 +166,12 @@
         update p_orders_b  set status = #{status}  ,last_modify_time = now()
              where order_sn =#{orderSn} and status = #{statusBefore}
     </update>
+
+    <!--修改订单代理等 -->
+    <update id="upOrderDljb"  >
+        update p_orders_b  set dljb = #{dljb}  ,last_modify_time = now()
+        where order_sn =#{orderSn} and status = #{statusBefore}
+    </update>
     
     <!--修改A端订单状态 --> 
     <update id="updateOrderAStatus"  >

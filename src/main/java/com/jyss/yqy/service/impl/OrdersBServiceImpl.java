@@ -2,6 +2,7 @@ package com.jyss.yqy.service.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,11 @@ public class OrdersBServiceImpl implements OrdersBService {
 	public int upOrderStatus(String status, String statusBefore, String orderSn) {
 		// TODO Auto-generated method stub
 		return obMapper.upOrderStatus(status, statusBefore, orderSn);
+	}
+
+	@Override
+	public int upOrderDljb(@Param("dljb") String dljb, @Param("statusBefore") String statusBefore, @Param("orderSn") String orderSn) {
+		return obMapper.upOrderDljb(dljb, statusBefore, orderSn);
 	}
 
 	@Override

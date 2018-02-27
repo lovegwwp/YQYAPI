@@ -330,14 +330,36 @@ public class AlipayAction {
 					// //超过数量的购买。直接升级
 					if (dlrLevel == 5) {
 						dlrLevel = 2;// //经理人升级为初级代理人
-					} else {
+					}else if(dlrLevel!= 4){
 						dlrLevel = dlrLevel + 1;
 					}
+					////2018.2.27=修改用户等级，再修改订单dljb
+					String dljb ="0";//订单代理级别==【1=初级代理，2=高级代理，3=高级代理，4=经理人，0=不标识状态】
+					if(dlrLevel==2){
+						dljb ="1";
+					}else if(dlrLevel==3){
+						dljb ="2";
+					}else if(dlrLevel==4){
+						dljb ="3";
+					}else if(dlrLevel==5){
+						dljb ="4";
+					}
 					if (level != 4) {
-						count = userService.upUserAllStatus("", "", "",
-								dlrLevel + "", "", gmID);
+						//修改用户等级
+						count = userService.upUserAllStatus("", "", "", dlrLevel + "",
+								"", gmID);
+						//修改订单代理等级
+						if (count==1){
+							count =0;
+							if (!dljb.equals("0")){
+								count = ordersBService.upOrderDljb(dljb,"1",orderNum);
+							}
+						}
 					} else {
-						count = 1;
+						//修改订单代理等级
+						if (!dljb.equals("0")){
+							count = ordersBService.upOrderDljb(dljb,"1",orderNum);
+						}
 					}
 					if (count == 1) {
 						count = 0;

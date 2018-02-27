@@ -70,6 +70,18 @@ public interface OrdersBMapper {
 	int upOrderStatus(@Param("status") String status,
 			@Param("statusBefore") String statusBefore,
 			@Param("orderSn") String orderSn);
+	/**
+	 * 修改订单代理等级状态
+	 *
+	 * @param dljb
+	 * @param statusBefore
+	 * @param orderSn
+	 * @return
+	 */
+	int upOrderDljb(@Param("dljb") String dljb,
+					  @Param("statusBefore") String statusBefore,
+					  @Param("orderSn") String orderSn);
+
 	
 	/**
 	 * 修改A端订单状态
