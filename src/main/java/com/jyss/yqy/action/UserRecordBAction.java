@@ -278,12 +278,20 @@ public class UserRecordBAction {
 		UserTotalAmount uta2 = obService.getOrdersDlrSum(CommTool.getYestodayZeroTimestamp().toString(), CommTool.getZeroTimestamp().toString());
 		// ///所有总金额
         double total =uta.getAmount()+uta2.getAmount();
+		//分红比例
+		Xtcl cl = clService.getClsValue("qqfhj_type", "1");
+		double value = 0.05;
+		if (cl != null && cl.getBz_value() != null
+				&& !cl.getBz_value().equals("")) {
+			value = Double.parseDouble(cl.getBz_value());
+		}
+
 		// //////获取高级代理人4用户列表、///
 		List<UserBean> ublist = userService.getUserByFHJ(null, "1", "2", "4");
 		if (ublist != null && ublist.size() > 0) {
 			int totalNum = ublist.size();// /高级代理人人数
 			// /每个人可以分到的钱/////
-			float eachTotal = (float) (total/ublist.size());
+			float eachTotal = (float) (total * value / ublist.size());
 			for (UserBean userBean : ublist) {
 				if (userBean != null && userBean.getId() != 0) {
 					float totalPv = userBean.getTotalPv();
