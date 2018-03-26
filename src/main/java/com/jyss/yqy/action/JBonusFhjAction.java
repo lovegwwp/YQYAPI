@@ -2,8 +2,10 @@ package com.jyss.yqy.action;
 
 import com.jyss.yqy.entity.JBonusFhjResult;
 import com.jyss.yqy.entity.UMobileLogin;
+import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.JBonusFhjService;
 import com.jyss.yqy.service.UMobileLoginService;
+import com.jyss.yqy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +27,8 @@ public class JBonusFhjAction {
 	private JBonusFhjService jBonusFhjService;
 	@Autowired
 	private UMobileLoginService uMobileLoginService;
-
+	@Autowired
+	private UserService userService;
 	
 	
 	/**
@@ -37,20 +41,23 @@ public class JBonusFhjAction {
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
 			UMobileLogin uMobileLogin = loginList.get(0);
-			String uUuid = uMobileLogin.getuUuid();
-			JBonusFhjResult result = jBonusFhjService.getJBonusFhj(uUuid);
-			if(StringUtils.isEmpty(result)){
-				map.put("status", "false");
-				map.put("code", "-1");
-				map.put("message", "查询失败，请稍后再试！");
-				map.put("data", "");
+			List<UserBean> list = userService.getUserByUuid(uMobileLogin.getuUuid());
+			if(list != null && list.size() == 1){
+				UserBean userBean = list.get(0);
+				JBonusFhjResult result = jBonusFhjService.getJBonusFhj(userBean.getId());
+				if(StringUtils.isEmpty(result)){
+					map.put("status", "false");
+					map.put("code", "-1");
+					map.put("message", "查询失败，请稍后再试！");
+					map.put("data", "");
+					return map;
+				}
+				map.put("status", "true");
+				map.put("code", "0");
+				map.put("message", "查询成功！");
+				map.put("data", result);
 				return map;
 			}
-			map.put("status", "true");
-			map.put("code", "0");
-			map.put("message", "查询成功！");
-			map.put("data", result);
-			return map;
 		}
 		map.put("code", "-2");
 		map.put("status", "false");
@@ -76,20 +83,23 @@ public class JBonusFhjAction {
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
 		if(loginList !=null && loginList.size()>0){
 			UMobileLogin uMobileLogin = loginList.get(0);
-			String uUuid = uMobileLogin.getuUuid();
-			JBonusFhjResult result = jBonusFhjService.selectJBonusFhjByDay(uUuid, page, limit, beginTime, endTime);
-			if(StringUtils.isEmpty(result)){
-				map.put("status", "false");
-				map.put("code", "-1");
-				map.put("message", "查询失败，请稍后再试！");
-				map.put("data", "");
+			List<UserBean> list = userService.getUserByUuid(uMobileLogin.getuUuid());
+			if(list != null && list.size() == 1){
+				UserBean userBean = list.get(0);
+				JBonusFhjResult result = jBonusFhjService.selectJBonusFhjByDay(userBean.getId(), page, limit, beginTime, endTime);
+				if(StringUtils.isEmpty(result)){
+					map.put("status", "false");
+					map.put("code", "-1");
+					map.put("message", "查询失败，请稍后再试！");
+					map.put("data", "");
+					return map;
+				}
+				map.put("status", "true");
+				map.put("code", "0");
+				map.put("message", "查询成功！");
+				map.put("data", result);
 				return map;
 			}
-			map.put("status", "true");
-			map.put("code", "0");
-			map.put("message", "查询成功！");
-			map.put("data", result);
-			return map;
 		}
 		map.put("status", "false");
 		map.put("code", "-2");
@@ -112,22 +122,25 @@ public class JBonusFhjAction {
 												@RequestParam("month")String month){
 		Map<String, Object> map = new HashMap<String,Object>();
 		List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
-		if(loginList !=null && loginList.size()>0){
+		if(loginList != null && loginList.size()>0){
 			UMobileLogin uMobileLogin = loginList.get(0);
-			String uUuid = uMobileLogin.getuUuid();
-			JBonusFhjResult result = jBonusFhjService.selectJBonusFhjByMonth(uUuid, page, limit, month);
-			if(StringUtils.isEmpty(result)){
-				map.put("status", "false");
-				map.put("code", "-1");
-				map.put("message", "查询失败，请稍后再试！");
-				map.put("data", "");
+			List<UserBean> list = userService.getUserByUuid(uMobileLogin.getuUuid());
+			if(list != null && list.size() == 1){
+				UserBean userBean = list.get(0);
+				JBonusFhjResult result = jBonusFhjService.selectJBonusFhjByMonth(userBean.getId(), page, limit, month);
+				if(StringUtils.isEmpty(result)){
+					map.put("status", "false");
+					map.put("code", "-1");
+					map.put("message", "查询失败，请稍后再试！");
+					map.put("data", "");
+					return map;
+				}
+				map.put("status", "true");
+				map.put("code", "0");
+				map.put("message", "查询成功！");
+				map.put("data", result);
 				return map;
 			}
-			map.put("status", "true");
-			map.put("code", "0");
-			map.put("message", "查询成功！");
-			map.put("data", result);
-			return map;
 		}
 		map.put("status", "false");
 		map.put("code", "-2");

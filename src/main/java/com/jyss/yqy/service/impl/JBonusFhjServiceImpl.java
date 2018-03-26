@@ -2,11 +2,9 @@ package com.jyss.yqy.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jyss.yqy.entity.JBonusFhj;
 import com.jyss.yqy.entity.JBonusFhjResult;
-import com.jyss.yqy.entity.ScoreBalance;
-import com.jyss.yqy.entity.Xtcl;
-import com.jyss.yqy.mapper.ScoreBalanceMapper;
-import com.jyss.yqy.mapper.XtclMapper;
+import com.jyss.yqy.mapper.JBonusFhjMapper;
 import com.jyss.yqy.service.JBonusFhjService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +17,9 @@ import java.util.List;
 @Transactional
 public class JBonusFhjServiceImpl implements JBonusFhjService {
 	
+
 	@Autowired
-	private XtclMapper xtclMapper;
-	@Autowired
-	private ScoreBalanceMapper scoreBalanceMapper;
+	private JBonusFhjMapper jBonusFhjMapper;
 	
 	
 
@@ -30,25 +27,14 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	 * 查询本周
 	 */
 	@Override
-	public JBonusFhjResult getJBonusFhj(String uUUid) {
-		Xtcl xtcl = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
-		float float1 = Float.parseFloat(xtcl.getBz_value());                     //0.7
+	public JBonusFhjResult getJBonusFhj(Integer uId) {
+		double earnings = jBonusFhjMapper.selectJBonusFhjToday(uId);
+		double total = jBonusFhjMapper.selectTotal(uId);
+		List<JBonusFhj> list = jBonusFhjMapper.selectJBonusFhjWek(uId);
 
-		float earnings = scoreBalanceMapper.selectEarnings(uUUid, "11");
-		float earnings1 = (float)(Math.round((earnings / float1)*100))/100;       //现金转pv
-
-		float total = scoreBalanceMapper.selectTotal(uUUid, "11");
-		float total1 = (float)(Math.round((total / float1)*100))/100;
-
-		List<ScoreBalance> list = scoreBalanceMapper.selectJBonusFhjWek(uUUid, "11");
-		for (ScoreBalance scoreBalance : list) {
-			float score = (float) (Math.round((scoreBalance.getScore() / float1) * 100)) / 100;
-			scoreBalance.setScore(score);
-			scoreBalance.setOrderSn("分红奖");
-		}
 		JBonusFhjResult result = new JBonusFhjResult();
-		result.setEarnings(earnings1);
-		result.setTotal(total1);
+		result.setEarnings(earnings);
+		result.setTotal(total);
 		result.setData(list);
 		return result;
 	}
@@ -58,25 +44,16 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	 * 两个日期查询
 	 */
 	@Override
-	public JBonusFhjResult selectJBonusFhjByDay(String uUUid, int page, int limit,
+	public JBonusFhjResult selectJBonusFhjByDay(Integer uId, int page, int limit,
 												String beginTime, String endTime) {
-		Xtcl xtcl = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
-		float float1 = Float.parseFloat(xtcl.getBz_value());                     //0.7
-
-		float totalByDay = scoreBalanceMapper.selectFhjTotalByDay(uUUid, "11", beginTime, endTime);
-		float total = (float)(Math.round((totalByDay / float1)*100))/100;        //现金转pv
+		double total = jBonusFhjMapper.selectFhjTotalByDay(uId, beginTime, endTime);
 
 		PageHelper.startPage(page, limit);
-		List<ScoreBalance> list = scoreBalanceMapper.selectJBonusFhjByDay(uUUid, "11", beginTime, endTime);
-		for (ScoreBalance scoreBalance : list) {
-			float score = (float) (Math.round((scoreBalance.getScore() / float1) * 100)) / 100;
-			scoreBalance.setScore(score);
-			scoreBalance.setOrderSn("分红奖");
-		}
+		List<JBonusFhj> list = jBonusFhjMapper.selectJBonusFhjByDay(uId, beginTime, endTime);
+		PageInfo<JBonusFhj> pageInfo = new PageInfo<JBonusFhj>(list);
 
-		PageInfo<ScoreBalance> pageInfo = new PageInfo<ScoreBalance>(list);
 		JBonusFhjResult result = new JBonusFhjResult();
-		result.setEarnings(0f);
+		result.setEarnings(0.0);
 		result.setTotal(total);
 		result.setData(list);
 		return result;
@@ -88,24 +65,15 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	 * 月份查询
 	 */
 	@Override
-	public JBonusFhjResult selectJBonusFhjByMonth(String uUUid, int page, int limit, String month) {
-		Xtcl xtcl = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
-		float float1 = Float.parseFloat(xtcl.getBz_value());                     //0.7
-
-		float totalByMonth = scoreBalanceMapper.selectFhjTotalByMonth(uUUid, "11", month);
-		float total = (float)(Math.round((totalByMonth / float1)*100))/100;        //现金转pv
+	public JBonusFhjResult selectJBonusFhjByMonth(Integer uId, int page, int limit, String month) {
+		double total = jBonusFhjMapper.selectFhjTotalByMonth(uId, month);
 
 		PageHelper.startPage(page, limit);
-		List<ScoreBalance> list = scoreBalanceMapper.selectJBonusFhjByMonth(uUUid, "11", month);
-		for (ScoreBalance scoreBalance : list) {
-			float score = (float) (Math.round((scoreBalance.getScore() / float1) * 100)) / 100;
-			scoreBalance.setScore(score);
-			scoreBalance.setOrderSn("分红奖");
-		}
+		List<JBonusFhj> list = jBonusFhjMapper.selectJBonusFhjByMonth(uId, month);
+		PageInfo<JBonusFhj> pageInfo = new PageInfo<JBonusFhj>(list);
 
-		PageInfo<ScoreBalance> pageInfo = new PageInfo<ScoreBalance>(list);
 		JBonusFhjResult result = new JBonusFhjResult();
-		result.setEarnings(0f);
+		result.setEarnings(0.0);
 		result.setTotal(total);
 		result.setData(list);
 		return result;

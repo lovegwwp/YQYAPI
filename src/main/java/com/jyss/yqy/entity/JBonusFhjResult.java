@@ -1,35 +1,36 @@
 package com.jyss.yqy.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class JBonusFhjResult {
+public class JBonusFhjResult implements Serializable{
 	
-	private Float earnings;           //今日收益
-	private Float total;              //总收益金额
-	private List<ScoreBalance> data;     //分红奖列表
+	private Double earnings;             //今日收益
+	private Double total;                 //总收益金额
+	private List<JBonusFhj> data;     //分红奖列表
 
 
-	public Float getEarnings() {
+	public Double getEarnings() {
 		return earnings;
 	}
 
-	public void setEarnings(Float earnings) {
+	public void setEarnings(Double earnings) {
 		this.earnings = earnings;
 	}
 
-	public Float getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setTotal(Float total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
-	public List<ScoreBalance> getData() {
+	public List<JBonusFhj> getData() {
 		return data;
 	}
 
-	public void setData(List<ScoreBalance> data) {
+	public void setData(List<JBonusFhj> data) {
 		this.data = data;
 	}
 }
