@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.jyss.yqy.mapper.JBonusFhjMapper" >
+	<resultMap id="BaseResultMap" type="com.jyss.yqy.entity.JBonusFhj" >
+	<id column="id" property="id"  />
+	<result column="u_id" property="uId" />
+	<result column="amount" property="amount" />
+	<result column="balance" property="balance" />
+	<result column="status" property="status" />
+	<result column="create_time" property="createTime" />
+	</resultMap>
+
+
+	<!--插入分红奖-->
+	<insert id="insert" parameterType="com.jyss.yqy.entity.JBonusFhj" useGeneratedKeys="true" keyProperty="id">
+		insert into j_bonus_fhj (id, u_id, amount, balance, status, create_time)
+		values (null, #{uId}, #{amount}, #{balance}, #{status}, now())
+	</insert>
+
+
+	<!--查询当日分红-->
+	<select id="selectJBonusFhjToday" parameterType="int" resultType="double">
+		select ifnull(sum(amount),0.00) from j_bonus_fhj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			and status = 1 and to_days(now()) = to_days(create_time)
+		</where>
+	</select>
+
+
+	<!--查询历史总分红-->
+	<select id="selectTotal" parameterType="int" resultType="double">
+		select ifnull(sum(amount),0.00) from j_bonus_fhj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			and status = 1
+		</where>
+	</select>
+
+
+  	<!--查询本周列表-->
+	<select id="selectJBonusFhjWek" parameterType="int" resultMap="BaseResultMap">
+		select '分红奖' as name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_fhj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			and status = 1 and YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now())
+		</where>
+		order by create_time desc
+	</select>
+
+
+	<!-- 按两个日期查询列表 -->
+	<select id="selectJBonusFhjByDay"  resultMap="BaseResultMap">
+		select '分红奖' as name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_fhj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="beginTime != null and beginTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &gt;= #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &lt;= #{endTime}
+			</if>
+			and status = 1
+		</where>
+		order by create_time desc
+	</select>
+
+	
+	<!-- 按两个日期查询总收益 -->
+	<select id="selectFhjTotalByDay"  resultType="double">
+		select ifnull(sum(amount),0.00) from j_bonus_fhj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="beginTime != null and beginTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &gt;= #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &lt;= #{endTime}
+			</if>
+			and status = 1
+		</where>
+	</select>
+
+
+	<!-- 按月查询列表 -->
+	<select id="selectJBonusFhjByMonth"  resultMap="BaseResultMap">
+		select '分红奖' as name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_fhj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="month != null and month != ''">
+				and date_format(create_time, '%Y-%m') = #{month}
+			</if>
+			and status = 1
+		</where>
+		order by create_time desc
+	</select>
+
+	
+	<!-- 按月查询总收益 -->
+	<select id="selectFhjTotalByMonth"  resultType="double">
+		select ifnull(sum(amount),0.00) from j_bonus_fhj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="month != null and month != ''">
+				and date_format(create_time, '%Y-%m') = #{month}
+			</if>
+			and status = 1
+		</where>
+	</select>
+	
+	
+	<!-- 查询所有人今日的总收益 -->
+	<select id="selectEveryDayEarnings" resultMap="BaseResultMap">
+		select u_id,sum(amount) as amount from j_bonus_fhj
+		where status = 1 and to_days(now()) = to_days(create_time)
+		group by u_id
+	</select>
+	
+	
+</mapper>
