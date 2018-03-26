@@ -1,6 +1,6 @@
 package com.jyss.yqy.action;
 
-import com.jyss.yqy.entity.JBonusFhjResult;
+import com.jyss.yqy.entity.JBonusResult;
 import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.JBonusFhjService;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +43,8 @@ public class JBonusFhjAction {
 			List<UserBean> list = userService.getUserByUuid(uMobileLogin.getuUuid());
 			if(list != null && list.size() == 1){
 				UserBean userBean = list.get(0);
-				JBonusFhjResult result = jBonusFhjService.getJBonusFhj(userBean.getId());
-				if(StringUtils.isEmpty(result)){
+				JBonusResult result = jBonusFhjService.getJBonusFhj(userBean.getId());
+				if(result == null){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");
@@ -86,8 +85,8 @@ public class JBonusFhjAction {
 			List<UserBean> list = userService.getUserByUuid(uMobileLogin.getuUuid());
 			if(list != null && list.size() == 1){
 				UserBean userBean = list.get(0);
-				JBonusFhjResult result = jBonusFhjService.selectJBonusFhjByDay(userBean.getId(), page, limit, beginTime, endTime);
-				if(StringUtils.isEmpty(result)){
+				JBonusResult result = jBonusFhjService.selectJBonusFhjByDay(userBean.getId(), page, limit, beginTime, endTime);
+				if(result == null){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");
@@ -127,8 +126,8 @@ public class JBonusFhjAction {
 			List<UserBean> list = userService.getUserByUuid(uMobileLogin.getuUuid());
 			if(list != null && list.size() == 1){
 				UserBean userBean = list.get(0);
-				JBonusFhjResult result = jBonusFhjService.selectJBonusFhjByMonth(userBean.getId(), page, limit, month);
-				if(StringUtils.isEmpty(result)){
+				JBonusResult result = jBonusFhjService.selectJBonusFhjByMonth(userBean.getId(), page, limit, month);
+				if(result == null){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");

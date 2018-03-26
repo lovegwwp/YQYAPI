@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jyss.yqy.mapper.JBonusCjMapper" >
+
+    <resultMap id="BaseResultMap" type="com.jyss.yqy.entity.JBonusCj" >
+        <id column="id" property="id" />
+        <result column="u_id" property="uId" />
+        <result column="name" property="name" />
+        <result column="amount" property="amount" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!--插入层奖-->
+    <insert id="insert" parameterType="com.jyss.yqy.entity.JBonusCj" useGeneratedKeys="true" keyProperty="id">
+        insert into j_bonus_cj (id, u_id, name, amount, status, create_time)
+        values (null, #{uId}, #{name}, #{amount}, #{status}, now())
+    </insert>
+
+
+    <!--查询今日金额-->
+    <select id="selectEarnings" parameterType="int" resultType="float">
+        select ifnull(sum(amount),0.00) from j_bonus_cj
+        <where>
+            <if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+            and status = 1
+            and to_days(now()) = to_days(create_time)
+        </where>
+    </select>
+
+
+    <!--查询历史总金额-->
+    <select id="selectTotal" parameterType="int" resultType="float">
+        select ifnull(sum(amount),0.00) from j_bonus_cj
+        <where>
+            <if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+            and status = 1
+        </where>
+    </select>
+
+
+    <!--查询列表-->
+    <select id="selectJBonusCj" parameterType="int" resultMap="BaseResultMap">
+        select id, u_id, name, amount, status, DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+        from j_bonus_cj
+        <where>
+            <if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+            and status = 1
+        </where>
+        order by create_time
+    </select>
+
+
+</mapper>

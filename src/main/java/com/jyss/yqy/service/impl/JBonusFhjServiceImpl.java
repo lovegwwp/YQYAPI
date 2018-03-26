@@ -3,7 +3,7 @@ package com.jyss.yqy.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jyss.yqy.entity.JBonusFhj;
-import com.jyss.yqy.entity.JBonusFhjResult;
+import com.jyss.yqy.entity.JBonusResult;
 import com.jyss.yqy.mapper.JBonusFhjMapper;
 import com.jyss.yqy.service.JBonusFhjService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,12 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	 * 查询本周
 	 */
 	@Override
-	public JBonusFhjResult getJBonusFhj(Integer uId) {
-		double earnings = jBonusFhjMapper.selectJBonusFhjToday(uId);
-		double total = jBonusFhjMapper.selectTotal(uId);
+	public JBonusResult getJBonusFhj(Integer uId) {
+		float earnings = jBonusFhjMapper.selectJBonusFhjToday(uId);
+		float total = jBonusFhjMapper.selectTotal(uId);
 		List<JBonusFhj> list = jBonusFhjMapper.selectJBonusFhjWek(uId);
 
-		JBonusFhjResult result = new JBonusFhjResult();
+		JBonusResult result = new JBonusResult();
 		result.setEarnings(earnings);
 		result.setTotal(total);
 		result.setData(list);
@@ -44,16 +44,16 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	 * 两个日期查询
 	 */
 	@Override
-	public JBonusFhjResult selectJBonusFhjByDay(Integer uId, int page, int limit,
-												String beginTime, String endTime) {
-		double total = jBonusFhjMapper.selectFhjTotalByDay(uId, beginTime, endTime);
+	public JBonusResult selectJBonusFhjByDay(Integer uId, int page, int limit,
+											 String beginTime, String endTime) {
+		float total = jBonusFhjMapper.selectFhjTotalByDay(uId, beginTime, endTime);
 
 		PageHelper.startPage(page, limit);
 		List<JBonusFhj> list = jBonusFhjMapper.selectJBonusFhjByDay(uId, beginTime, endTime);
 		PageInfo<JBonusFhj> pageInfo = new PageInfo<JBonusFhj>(list);
 
-		JBonusFhjResult result = new JBonusFhjResult();
-		result.setEarnings(0.0);
+		JBonusResult result = new JBonusResult();
+		result.setEarnings(0.0f);
 		result.setTotal(total);
 		result.setData(list);
 		return result;
@@ -65,15 +65,15 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	 * 月份查询
 	 */
 	@Override
-	public JBonusFhjResult selectJBonusFhjByMonth(Integer uId, int page, int limit, String month) {
-		double total = jBonusFhjMapper.selectFhjTotalByMonth(uId, month);
+	public JBonusResult selectJBonusFhjByMonth(Integer uId, int page, int limit, String month) {
+		float total = jBonusFhjMapper.selectFhjTotalByMonth(uId, month);
 
 		PageHelper.startPage(page, limit);
 		List<JBonusFhj> list = jBonusFhjMapper.selectJBonusFhjByMonth(uId, month);
 		PageInfo<JBonusFhj> pageInfo = new PageInfo<JBonusFhj>(list);
 
-		JBonusFhjResult result = new JBonusFhjResult();
-		result.setEarnings(0.0);
+		JBonusResult result = new JBonusResult();
+		result.setEarnings(0.0f);
 		result.setTotal(total);
 		result.setData(list);
 		return result;

@@ -8,7 +8,9 @@ import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.JRecord;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.UserTotalAmount;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface OrdersBMapper {
 
 	/**

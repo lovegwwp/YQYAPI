@@ -28,9 +28,14 @@ public class UserBean {
 	private String city;//
 	private String areaId;//
 	private String area;//
-	private Float totalPv;      //剩余返还pv
+	private Float totalPv;      //分红权
 	private Date createdAt;
 	private Date lastAccessTime;
+
+	private Float totalAmount;  //首次消费额
+	private Float electScore;   //电子券金额
+	private Float bdScore;      //报单券金额
+	private Integer cjStatus;    //层奖
 
 
 	// private Date createdAt;//
@@ -274,5 +279,37 @@ public class UserBean {
 
 	public void setLastAccessTime(Date lastAccessTime) {
 		this.lastAccessTime = lastAccessTime;
+	}
+
+	public Float getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Float totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Float getElectScore() {
+		return electScore;
+	}
+
+	public void setElectScore(Float electScore) {
+		this.electScore = electScore;
+	}
+
+	public Float getBdScore() {
+		return bdScore;
+	}
+
+	public void setBdScore(Float bdScore) {
+		this.bdScore = bdScore;
+	}
+
+	public Integer getCjStatus() {
+		return cjStatus;
+	}
+
+	public void setCjStatus(Integer cjStatus) {
+		this.cjStatus = cjStatus;
 	}
 }

@@ -1,6 +1,5 @@
 package com.jyss.yqy.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jyss.yqy.entity.JBonusFxj;
 import com.jyss.yqy.entity.JBonusScj;
 import com.jyss.yqy.entity.JBonusScjResult;
-import com.jyss.yqy.entity.Xtcl;
-import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.mapper.JBonusScjMapper;
-import com.jyss.yqy.mapper.UserMapper;
-import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.JBonusScjService;
 
 

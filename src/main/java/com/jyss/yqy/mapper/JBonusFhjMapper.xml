@@ -20,7 +20,7 @@
 
 
 	<!--查询当日分红-->
-	<select id="selectJBonusFhjToday" parameterType="int" resultType="double">
+	<select id="selectJBonusFhjToday" parameterType="int" resultType="float">
 		select ifnull(sum(amount),0.00) from j_bonus_fhj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
@@ -30,7 +30,7 @@
 
 
 	<!--查询历史总分红-->
-	<select id="selectTotal" parameterType="int" resultType="double">
+	<select id="selectTotal" parameterType="int" resultType="float">
 		select ifnull(sum(amount),0.00) from j_bonus_fhj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
@@ -70,7 +70,7 @@
 
 	
 	<!-- 按两个日期查询总收益 -->
-	<select id="selectFhjTotalByDay"  resultType="double">
+	<select id="selectFhjTotalByDay"  resultType="float">
 		select ifnull(sum(amount),0.00) from j_bonus_fhj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
@@ -101,7 +101,7 @@
 
 	
 	<!-- 按月查询总收益 -->
-	<select id="selectFhjTotalByMonth"  resultType="double">
+	<select id="selectFhjTotalByMonth"  resultType="float">
 		select ifnull(sum(amount),0.00) from j_bonus_fhj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>

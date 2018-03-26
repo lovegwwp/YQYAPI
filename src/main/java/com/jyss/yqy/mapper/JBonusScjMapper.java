@@ -1,12 +1,13 @@
 package com.jyss.yqy.mapper;
 
-import com.jyss.yqy.entity.JBonusGlj;
 import com.jyss.yqy.entity.JBonusScj;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface JBonusScjMapper {
     
     

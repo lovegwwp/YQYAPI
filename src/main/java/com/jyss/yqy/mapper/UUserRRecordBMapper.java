@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.UUserRRecordB;
 import com.jyss.yqy.entity.UUserRRecordBExample;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UUserRRecordBMapper {
 	int countByExample(UUserRRecordBExample example);
 

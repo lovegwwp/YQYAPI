@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jyss.yqy.entity.jsonEntity.UserBean;
-import com.jyss.yqy.service.JBonusFxjService;
-import com.jyss.yqy.service.JBonusGljService;
 import com.jyss.yqy.service.JRecordService;
 import com.jyss.yqy.service.OrdersBService;
 import com.jyss.yqy.service.ScoreBalanceService;
@@ -36,10 +34,6 @@ public class UserRecordBAction {
 	private UMobileLoginService uMobileLoginService;
 	@Autowired
 	private JRecordService recordService;
-	@Autowired
-	private JBonusGljService bonusGljService;
-	@Autowired
-	private JBonusFxjService bonusFxjService;
 	@Autowired
 	private ScoreBalanceService sBackService;
 	@Autowired
@@ -76,12 +70,12 @@ public class UserRecordBAction {
 	 * 计算辅导奖和积分
 	 */
 
-	@RequestMapping("/fdj/computeFDJ")
+	/*@RequestMapping("/fdj/computeFDJ")
 	@ResponseBody
 	public void insertJBonusFdj() {
 		Map<String, String> map = userRecordBService.insertJBonusFdj();
 		logger.info(map.get("message"));
-	}
+	}*/
 
 	/**
 	 * 计算市场奖和积分
@@ -106,12 +100,12 @@ public class UserRecordBAction {
 	/**
 	 * 计算分销奖和积分
 	 */
-	@RequestMapping("/fxj/computeFXJ")
+	/*@RequestMapping("/fxj/computeFXJ")
 	@ResponseBody
 	public void insertJBonusFxj() {
 		Map<String, String> map = bonusFxjService.insertJBonusFxj();
 		logger.info(map.get("message"));
-	}
+	}*/
 
 	// /**积分按照后台设置比例返还===扣额度***/////
 	@RequestMapping("/score/computeScore")

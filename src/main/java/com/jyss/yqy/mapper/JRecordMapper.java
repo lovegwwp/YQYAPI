@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.JRecord;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface JRecordMapper {
     
     //更新pv值

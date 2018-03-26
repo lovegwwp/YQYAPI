@@ -6,7 +6,9 @@ import java.util.Set;
 import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.AccountUser;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface AccountUserMapper {
 
 	/**

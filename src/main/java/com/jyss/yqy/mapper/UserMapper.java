@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.User;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserMapper {
 
 	/**

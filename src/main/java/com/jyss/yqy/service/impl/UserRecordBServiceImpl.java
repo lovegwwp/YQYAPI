@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jyss.yqy.entity.UUserRRecordBExample.Criteria;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
-import com.jyss.yqy.mapper.JBonusFdjMapper;
 import com.jyss.yqy.mapper.OrdersBMapper;
 import com.jyss.yqy.mapper.ScoreBalanceMapper;
 import com.jyss.yqy.mapper.UUserRRecordBMapper;
@@ -32,8 +31,6 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	private UUserRRecordBMapper userRecordMapper;
 	@Autowired
 	private OrdersBMapper ordersBMapper;
-	@Autowired
-	private JBonusFdjMapper jBonusFdjMapper;
 	@Autowired
 	private XtclMapper xtclMapper;
 	@Autowired
@@ -116,7 +113,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	 * 辅导奖
 	 * @return
 	 */
-	@Override
+	/*@Override
 	public Map<String, String> insertJBonusFdj() {
 		Map<String, String> map = new HashMap<String, String>();
 		List<UserTotalAmount> taList = ordersBMapper.getSuccessOrder();
@@ -221,10 +218,10 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 	}
 
 
-	/**
+	*//**
 	 * 计算辅导奖
 	 * @param uId
-	 */
+	 *//*
 	private void computeJBonusFdj(int uId,double amount){
 		//查询关系表
 		UUserRRecordBExample example = new UUserRRecordBExample();
@@ -363,7 +360,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				}
 			}
 		}
-	}
+	}*/
 
 
 	/**

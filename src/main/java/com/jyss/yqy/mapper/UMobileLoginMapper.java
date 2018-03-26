@@ -4,7 +4,9 @@ import com.jyss.yqy.entity.UMobileLogin;
 import com.jyss.yqy.entity.UMobileLoginExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UMobileLoginMapper {
     int countByExample(UMobileLoginExample example);
 

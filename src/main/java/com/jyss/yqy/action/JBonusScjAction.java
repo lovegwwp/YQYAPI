@@ -46,7 +46,7 @@ public class JBonusScjAction {
 				UserBean userBean = list.get(0);
 				
 				JBonusScjResult result = bonusScjService.selectJBonusScjByUid(userBean.getId());
-				if(StringUtils.isEmpty(result)){
+				if(result == null){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");
@@ -87,7 +87,7 @@ public class JBonusScjAction {
 				UserBean userBean = list.get(0);
 				
 				JBonusScjResult result = bonusScjService.selectJBonusScjByDay(userBean.getId(),page,limit, beginTime, endTime);
-				if(StringUtils.isEmpty(result)){
+				if(result == null){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");
@@ -129,7 +129,7 @@ public class JBonusScjAction {
 				UserBean userBean = list.get(0);
 				
 				JBonusScjResult result = bonusScjService.selectJBonusScjByMonth(userBean.getId(),page,limit, month);
-				if(StringUtils.isEmpty(result)){
+				if(result == null){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");

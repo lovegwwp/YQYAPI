@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.ThOrders;
 import com.jyss.yqy.entity.Thd;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ThdMapper {
 
 	/**

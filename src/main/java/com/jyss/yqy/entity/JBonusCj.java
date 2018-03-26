@@ -1,15 +1,14 @@
 package com.jyss.yqy.entity;
 
-
 import java.io.Serializable;
 
-public class JBonusFhj implements Serializable{
+
+public class JBonusCj implements Serializable{
 
     private Integer id;
-    private Integer uId;         //用户id
+    private Integer uId;
     private String name;
-    private Float amount;       //分红金额
-    private Float balance;       //分红权余额
+    private Float amount;
     private Integer status;
     private String createTime;
 
@@ -44,14 +43,6 @@ public class JBonusFhj implements Serializable{
 
     public void setAmount(Float amount) {
         this.amount = amount;
-    }
-
-    public Float getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Float balance) {
-        this.balance = balance;
     }
 
     public Integer getStatus() {

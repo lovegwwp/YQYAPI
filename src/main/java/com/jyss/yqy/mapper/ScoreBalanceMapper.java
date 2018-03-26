@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jyss.yqy.entity.ScoreBack;
 import com.jyss.yqy.entity.ScoreBalance;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ScoreBalanceMapper {
 	/**
 	 * 现金积分查询

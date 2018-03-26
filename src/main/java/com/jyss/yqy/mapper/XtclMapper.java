@@ -8,7 +8,9 @@ import org.apache.ibatis.annotations.Param;
 import com.jyss.yqy.entity.BaseArea;
 import com.jyss.yqy.entity.BaseConfig;
 import com.jyss.yqy.entity.Xtcl;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface XtclMapper {
 	/**
 	 * 根据标识符取得维护常量

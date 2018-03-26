@@ -8,39 +8,28 @@
    <bean id="schedule2" class="com.jyss.yqy.action.UserRecordBAction"></bean>
    <bean id="schedule3" class="com.jyss.yqy.action.UserRecordBAction"></bean>
    <bean id="schedule4" class="com.jyss.yqy.action.UserRecordBAction"></bean>
-   <bean id="schedule5" class="com.jyss.yqy.action.UserRecordBAction"></bean>
-   <bean id="schedule6" class="com.jyss.yqy.action.UserRecordBAction"></bean>
 
    <bean id="SpringQtzJobMethod1"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule1" />
-		<property name="targetMethod" value="insertJBonusFdj"/>     <!-- 计算辅导奖和积分  -->
+		<property name="targetMethod" value="insertBackScore"/>     <!-- 计算辅导奖和积分  -->
 	</bean>
 	<bean id="SpringQtzJobMethod2"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule2" />
-		<property name="targetMethod" value="insertJBonusScj"/>     <!-- 计算市场奖和积分 -->
+		<property name="targetMethod" value="insertBackScore"/>     <!-- 计算市场奖和积分 -->
 	</bean>
 	<bean id="SpringQtzJobMethod3"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule3" />
-		<property name="targetMethod" value="insertJBonusFxj"/>     <!-- 计算分销奖和积分  -->
+		<property name="targetMethod" value="insertBackScore"/>     <!-- 计算分销奖和积分  -->
 	</bean>
 	<bean id="SpringQtzJobMethod4"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule4" />
 		<property name="targetMethod" value="insertBackScore"/>     <!-- 双倍积分返还  -->
 	</bean>
-	<bean id="SpringQtzJobMethod5"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="schedule5" />
-		<property name="targetMethod" value="CountTotalFh"/>        <!-- 全球分红奖  -->
-	</bean>
-	<bean id="SpringQtzJobMethod6"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="schedule6" />
-		<property name="targetMethod" value="updateDldj"/>          <!-- 修改代理级别 -->
-	</bean>
+
 	
 	
 	<!-- 每天定时执行任务 -->
@@ -61,14 +50,7 @@
 		<property name="jobDetail" ref="SpringQtzJobMethod4"></property>
 		<property name="cronExpression" value="0 0 4 * * ?"></property>      <!-- 每天04:00执行 -->
 	</bean>
-	<bean id="cronTriggerFactoryBean5" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
-		<property name="jobDetail" ref="SpringQtzJobMethod5"></property>
-		<property name="cronExpression" value="0 0 1 * * ?"></property>      <!-- 每天01:00执行 -->
-	</bean>
-	<bean id="cronTriggerFactoryBean6" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
-		<property name="jobDetail" ref="SpringQtzJobMethod6"></property>
-		<property name="cronExpression" value="0 0 7 * * ?"></property>      <!-- 每天07:00执行 -->
-	</bean>
+
 	
 	
 	<bean id="SpringJobSchedulerFactoryBean"
@@ -79,8 +61,6 @@
 				<ref bean="cronTriggerFactoryBean2" />
 				<ref bean="cronTriggerFactoryBean3" />
 				<ref bean="cronTriggerFactoryBean4" />
-				<ref bean="cronTriggerFactoryBean5" />
-				<ref bean="cronTriggerFactoryBean6" />
 			</list>
 		</property>
 	</bean>
