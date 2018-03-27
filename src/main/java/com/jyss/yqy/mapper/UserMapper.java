@@ -162,16 +162,16 @@ public interface UserMapper {
 	 */
 	List<UserBean> getUserScoreById(@Param("id") int id);
 
-	// 更新积分
+	// 更新分红权,电子券,消费券,股券
 	int updateScore(UserBean userBean);
 
 	// 更新积分
 	int updateUserBackScore(@Param("cashScore") Float cashScore,
                             @Param("shoppingScore") Float shoppingScore,
                             @Param("uuuid") String uuuid);
-	
+
+
 	////////分红奖///////
-	
 	/**
 	 * 通过id查询积分
 	 */
@@ -181,8 +181,11 @@ public interface UserMapper {
 
 	// 更新积分
 	int updateScoreByFHJ(@Param("cashScore") String cashScore,
-                         @Param("shoppingScore") String shoppingScore, @Param("totalPv") String totalPv, @Param("id") String id, @Param("isChuangke") String isChuangke);
-	
-	
+                         @Param("shoppingScore") String shoppingScore, @Param("totalPv") String totalPv,
+						 @Param("id") String id, @Param("isChuangke") String isChuangke);
+
+
+	//查询分红奖的用户
+	List<UserBean> selectUserByFHJ();
 
 }

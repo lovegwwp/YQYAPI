@@ -7,16 +7,17 @@ public class ScoreBalance {
 	private int id;
 	private int end;// 1=A端 2=B端'
 	private String uUuid;// 用户uuid
-	private int category;// 积分来源或去向[1=A端取现，2=A端消费，3=A端返佣，4=管理奖，5=辅导奖，6=分销奖，7=市场奖，8=B端消费]
+	private int category;// 来源或去向[1=A端取现，2=A端消费，3=A端返佣，4=分红奖，5=层奖，6=量奖，7=共享奖]
 	private int type;// 1=收入 2=支出
 	private float score;// 积分数额
 	private float jyScore;// 结余数额
 	private Date createdAt;
 	private Date jsTime;   //结算时间
-	private String title;// 用户uuid
+	private String title;//
 	private String orderSn;// 订单号
 	private String cjsj;// /格式化创建时间
 	private int status;// 1=收入 2=支出
+	private int secoCate;//1=税费，2=平台管理费
 
 	public int getId() {
 		return id;
@@ -120,5 +121,13 @@ public class ScoreBalance {
 
 	public void setJsTime(Date jsTime) {
 		this.jsTime = jsTime;
+	}
+
+	public int getSecoCate() {
+		return secoCate;
+	}
+
+	public void setSecoCate(int secoCate) {
+		this.secoCate = secoCate;
 	}
 }

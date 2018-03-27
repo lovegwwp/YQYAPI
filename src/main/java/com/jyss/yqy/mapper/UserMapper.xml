@@ -34,7 +34,11 @@
         <result property="totalPv" column="total_pv"  />
         <result property="createdAt" column="created_at"  />
         <result property="lastAccessTime" column="last_access_time"  />
-    </resultMap>              
+        <result property="totalAmount" column="total_amount"  />
+        <result property="electScore" column="elect_score"  />
+        <result property="bdScore" column="bd_score"  />
+        <result property="cjStatus" column="cj_status"  />
+    </resultMap>
              
      <!-- B端 -->        
      <!-- 登录查询相关用户 -->   
@@ -200,12 +204,10 @@
     
     
    <!-- 插入推广关系，确定上下级 -->
-    <insert id="addRecord" parameterType="com.jyss.yqy.entity.User" 
+    <!--<insert id="addRecord" parameterType="com.jyss.yqy.entity.User"
         useGeneratedKeys="true" keyProperty="id">         
 		insert into u_user_r_record values(null,#{uuid},#{account},#{pwd},#{salt},'0','1',now(),'0','0')
-		
-           
-    </insert>
+    </insert>-->
     
     
     <!-- 登录表token -->
@@ -245,14 +247,14 @@
     </update>
     
     <!--禁用用户 --> 
-    <update id="upThdStatus" parameterType="java.util.List" >
+    <!--<update id="upThdStatus" parameterType="java.util.List" >
         update p_thd  set status = #{status}  where id in
         <foreach collection="ids" item="id" open="(" separator="," close=")">   
 	        #{id}   
 	    </foreach>  
     </update>
     
-    <!-- 删除用户 -->
+    &lt;!&ndash; 删除用户 &ndash;&gt;
      <delete id="deleteThds" parameterType="java.util.List">
         delete from p_thd where id in 
 	    <foreach collection="ids" item="id" open="(" separator="," close=")">   
@@ -260,41 +262,44 @@
 	    </foreach>  
     </delete>
     
-    <!-- 增加提货点用户 -->
+    &lt;!&ndash; 增加提货点用户 &ndash;&gt;
     <insert id="addThd" parameterType="com.jyss.yqy.entity.Thd" 
         useGeneratedKeys="true" keyProperty="id"> 
         insert into p_thd values(null,#{name},#{tel},#{password},#{salt},#{pics},now(),now(),now(),#{status},#{thName},#{provinceId},#{province},#{cityId},#{city},#{areaId},#{area})             
     </insert>
     
-     <!--修改用户 --> 
+     &lt;!&ndash;修改用户 &ndash;&gt;
     <update id="upThd" parameterType="com.jyss.yqy.entity.Thd" >
         update p_thd  set name = #{name} , tel = #{tel} ,th_name = #{thName} ,province_id = #{provinceId} ,province = #{province} ,city_id = #{cityId} ,city = #{city}, 
                       area_id = #{areaId} ,area = #{area} ,last_modify_time = now()
              where id =#{id}
-    </update>
+    </update>-->
     
     <!-- 通过id查询积分 -->
-    <select id="getUserScoreById" resultMap="ubResultMap">           
-	      select uuid,cash_score,shopping_score,is_chuangke,total_pv from u_user
-         <where> 
-              <if test="id != null and id !=''"> and id = #{id}  
-              and status = 1 
-              </if> 			  		
-		 </where> 
-    </select> 
+    <select id="getUserScoreById" resultMap="ubResultMap">
+         select id,uuid,cash_score,shopping_score,is_chuangke,total_pv,total_amount,cj_status,elect_score,bd_score
+         from u_user
+         <where>
+              <if test="id != null and id !=''"> and id = #{id}
+              and status = 1
+              </if>
+         </where>
+    </select>
     
-    <!-- 更新积分 -->
+    <!-- 更新分红权,电子券,消费券,股券 -->
     <update id="updateScore" parameterType="com.jyss.yqy.entity.jsonEntity.UserBean">
     	update u_user
     	<set>
-    		<if test="cashScore != null and cashScore != '' or cashScore == 0">cash_score = #{cashScore} </if>
-    		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">, shopping_score = #{shoppingScore}</if>
-    		<if test="totalPv != null and totalPv != ''or totalPv == 0"> , total_pv = #{totalPv}</if>
+    		<if test="cashScore != null and cashScore != '' or cashScore == 0">cash_score = #{cashScore},</if>
+    		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = #{shoppingScore},</if>
+    		<if test="totalPv != null and totalPv != ''or totalPv == 0">total_pv = #{totalPv},</if>
+    		<if test="electScore != null and electScore != ''or electScore == 0">elect_score = #{electScore},</if>
     	</set>
     	where id = #{id} 
     </update>
-    
-        <!-- 更新积分 -->
+
+
+    <!-- 更新积分 -->
     <update id="updateScoreByFHJ" parameterType="com.jyss.yqy.entity.jsonEntity.UserBean">
     	update u_user
     	<set>
@@ -304,11 +309,10 @@
     	</set>
     	where id = #{id} and is_chuangke = #{isChuangke}
     </update>
-    
-    
-      <!-- 登录查询相关用户 -->   
-     <!-- status  -1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过  statusAuth 0=审核中 1=通过 2=未通过 -->
-    <select id="getUserByFHJ" resultMap="ubResultMap">           
+
+       <!--登录查询相关用户
+      status  -1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过  statusAuth 0=审核中 1=通过 2=未通过-->
+    <select id="getUserByFHJ" resultMap="ubResultMap">
 	      select * from u_user	u
          <where> 
               1 = 1
@@ -317,9 +321,9 @@
 			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
 			  <if test="isChuangke != null and isChuangke !=''"> and u.is_chuangke = #{isChuangke} </if>
 		 </where> 
-    </select>  
+    </select>
     
-        <!-- 更新积分 -->
+    <!-- 更新积分 -->
     <update id="updateUserBackScore" parameterType="com.jyss.yqy.entity.jsonEntity.UserBean">
     	update u_user
     	<set>
@@ -328,6 +332,14 @@
     	</set>
     	where uuid = #{uuuid} 
     </update>
-    
+
+
+    <!--查询分红奖用户-->
+    <select id="selectUserByFHJ" resultMap="ubResultMap">
+        select id,total_pv
+        from u_user
+        where status = 1 and is_auth = 2 and total_pv &gt; 0
+    </select>
+
 
 </mapper>

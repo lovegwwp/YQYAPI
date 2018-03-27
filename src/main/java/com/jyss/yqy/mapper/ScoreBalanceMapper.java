@@ -42,11 +42,20 @@ public interface ScoreBalanceMapper {
 	 */
 	int addShoppingScoreBalance(ScoreBalance sb);
 
+
 	// 现金积分插入(结算时间减12小时)
 	int addCashScore(ScoreBalance sb);
 
 	// 购物积分插入(结算时间减12小时)
 	int addShoppingScore(ScoreBalance sb);
+
+	//电子券插入(结算时间减12小时)
+	int addElecScore(ScoreBalance sb);
+
+	//税费，平台管理费插入(结算时间减12小时)
+	int addScoreDetails(ScoreBalance sb);
+
+
 
 	// /////////积分返还///////////////
 	// 积分记录查询

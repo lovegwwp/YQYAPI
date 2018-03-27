@@ -10,7 +10,7 @@
         <id property="id" column="id"  />
         <result property="end" column="end"  /> <!--1=A端 2=B端  -->
         <result property="uUuid" column="u_uuid"  />
-        <result property="category" column="category"  /><!--积分来源或去向[1=A端取现，2=A端消费，3=A端返佣，4=管理奖，5=辅导奖，6=分销奖，7=市场奖，8=B端消费,9积分返还]  -->
+        <result property="category" column="category"  /><!-- 来源或去向[1=A端取现，2=A端消费，3=A端返佣，4=分红奖，5=层奖，6=量奖，7=共享奖，8=B端消费 ，10=商家端收款] -->
         <result property="type" column="type"  /><!--1=收入 2=支出  -->
         <result property="score" column="score"  />
         <result property="jyScore" column="jy_score"  />
@@ -20,6 +20,7 @@
         <result property="cjsj" column="cjsj"  />
         <result property="status" column="status"  />
         <result property="orderSn" column="order_sn"  />
+        <result property="secoCate" column="seco_cate"  /> <!-- 1=税费，2=平台管理费 -->
 
     </resultMap>    
     
@@ -105,16 +106,18 @@
 			</where>   
 			order by created_at desc
     </select> 
-  
-     <!--现金积分=插入-->     <!-- ordersn -->
+
+
+
+    /////////////////////////奖金分配///////////////////////
+    <!--现金积分=插入-->         <!-- ordersn -->
     <insert id="addCashScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id">
         insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',#{createdAt},now(),#{status})
     </insert>
-   
-   
+
     <!--购物积分=插入-->
     <insert id="addShoppingScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance"
         useGeneratedKeys="true" keyProperty="id">
@@ -122,8 +125,10 @@
         values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',#{createdAt},now(),#{status})
     </insert>
-    
-    <!--现金积分=插入-->     <!-- 结算时间减12小时 -->
+
+
+
+    <!--现金积分=插入-->        <!-- 结算时间减12小时 -->
     <insert id="addCashScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id">
         insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
@@ -131,12 +136,28 @@
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
     </insert>
    
-   
-    <!--购物积分=插入-->     <!-- 结算时间减12小时 -->
+    <!--购物积分=插入-->          <!-- 结算时间减12小时 -->
     <insert id="addShoppingScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
         useGeneratedKeys="true" keyProperty="id"> 
         insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},
+        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+    </insert>
+
+    <!--电子券=插入-->           <!-- 结算时间减12小时 -->
+    <insert id="addElecScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into u_elec_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},
+        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+    </insert>
+
+    <!--税费，平台管理费=插入-->        <!-- 结算时间减12小时 -->
+    <insert id="addScoreDetails" parameterType="com.jyss.yqy.entity.ScoreBalance"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into u_score_details
+        (id,end,u_uuid,category,seco_cate,type,score,jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{secoCate},#{type},#{score},
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
     </insert>
 

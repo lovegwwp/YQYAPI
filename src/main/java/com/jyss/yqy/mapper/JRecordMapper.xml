@@ -20,18 +20,18 @@
   <update id="updateJRecordByUid"  >
 	  update j_record 
 	  <set>
-	  <if test="pv != null and pv != ''">pv = #{pv},</if>
-	  <if test="jyPv != null and jyPv != ''">jy_pv = #{jyPv},</if>
-	  modify_time = now()
+		  <if test="pv != null and pv != ''">pv = #{pv},</if>
+		  <if test="jyPv != null and jyPv != ''">jy_pv = #{jyPv},</if>
+		  modify_time = now()
 	  </set>
 	  where u_id = #{uId}
   </update>
   
   
-  <!-- 查询所有用户id -->
-  <select id="selectJRecord" resultMap="BaseResultMap">
-  	select u_id from j_record where status = 1 order by floor
-  </select>
+	<!-- 查询所有用户id -->
+	<select id="selectJRecord" resultMap="BaseResultMap">
+		select u_id from j_record where status = 1 order by floor
+	</select>
   
   
     <!-- 根据父id查询 -->
