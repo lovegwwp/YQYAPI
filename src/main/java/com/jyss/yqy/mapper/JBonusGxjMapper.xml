@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.jyss.yqy.mapper.JBonusFhjMapper" >
-	<resultMap id="BaseResultMap" type="com.jyss.yqy.entity.JBonusFhj" >
+<mapper namespace="com.jyss.yqy.mapper.JBonusGxjMapper" >
+	<resultMap id="BaseResultMap" type="com.jyss.yqy.entity.JBonusGxj" >
 	<id column="id" property="id"  />
 	<result column="u_id" property="uId" />
+	<result column="s_id" property="sId" />
+	<result column="s_name" property="sName" />
 	<result column="amount" property="amount" />
-	<result column="name" property="name" />
-	<result column="balance" property="balance" />
 	<result column="status" property="status" />
 	<result column="create_time" property="createTime" />
 	</resultMap>
 
 
-	<!--插入分红奖-->
-	<insert id="insert" parameterType="com.jyss.yqy.entity.JBonusFhj" useGeneratedKeys="true" keyProperty="id">
-		insert into j_bonus_fhj (id, u_id, amount, balance, status, create_time)
-		values (null, #{uId}, #{amount}, #{balance}, #{status}, now())
+	<!--插入共享奖-->
+	<insert id="insert" parameterType="com.jyss.yqy.entity.JBonusGxj" useGeneratedKeys="true" keyProperty="id">
+		insert into j_bonus_gxj (id, u_id, s_id, s_name, amount, status, create_time)
+		values (null, #{uId}, #{sId}, #{sName}, #{amount}, #{status}, now())
 	</insert>
 
 
-	<!--查询当日分红-->
-	<select id="selectJBonusFhjToday" parameterType="int" resultType="float">
-		select ifnull(sum(amount),0.00) from j_bonus_fhj
+	<!--查询昨日共享奖-->
+	<select id="selectJBonusGxjDay" parameterType="int" resultType="float">
+		select ifnull(sum(amount),0.00) from j_bonus_gxj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
-			and status = 1 and to_days(now()) = to_days(create_time)
+			and status = 1 and to_days(now()) - to_days(create_time) = 1
 		</where>
 	</select>
 
 
-	<!--查询历史总分红-->
+	<!--查询历史总共享奖-->
 	<select id="selectTotal" parameterType="int" resultType="float">
-		select ifnull(sum(amount),0.00) from j_bonus_fhj
+		select ifnull(sum(amount),0.00) from j_bonus_gxj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
 			and status = 1
@@ -41,9 +41,9 @@
 
 
   	<!--查询本周列表-->
-	<select id="selectJBonusFhjWek" parameterType="int" resultMap="BaseResultMap">
-		select '分红奖' as name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
-		from j_bonus_fhj
+	<select id="selectJBonusGxjWek" parameterType="int" resultMap="BaseResultMap">
+		select s_name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_gxj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
 			and status = 1 and YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now())
@@ -53,9 +53,9 @@
 
 
 	<!-- 按两个日期查询列表 -->
-	<select id="selectJBonusFhjByDay"  resultMap="BaseResultMap">
-		select '分红奖' as name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
-		from j_bonus_fhj
+	<select id="selectJBonusGxjByDay"  resultMap="BaseResultMap">
+		select s_name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_gxj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
 			<if test="beginTime != null and beginTime != ''">
@@ -71,8 +71,8 @@
 
 	
 	<!-- 按两个日期查询总收益 -->
-	<select id="selectFhjTotalByDay"  resultType="float">
-		select ifnull(sum(amount),0.00) from j_bonus_fhj
+	<select id="selectGxjTotalByDay"  resultType="float">
+		select ifnull(sum(amount),0.00) from j_bonus_gxj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
 			<if test="beginTime != null and beginTime != ''">
@@ -87,9 +87,9 @@
 
 
 	<!-- 按月查询列表 -->
-	<select id="selectJBonusFhjByMonth"  resultMap="BaseResultMap">
-		select '分红奖' as name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
-		from j_bonus_fhj
+	<select id="selectJBonusGxjByMonth"  resultMap="BaseResultMap">
+		select s_name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_gxj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
 			<if test="month != null and month != ''">
@@ -102,8 +102,8 @@
 
 	
 	<!-- 按月查询总收益 -->
-	<select id="selectFhjTotalByMonth"  resultType="float">
-		select ifnull(sum(amount),0.00) from j_bonus_fhj
+	<select id="selectGxjTotalByMonth"  resultType="float">
+		select ifnull(sum(amount),0.00) from j_bonus_gxj
 		<where>
 			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
 			<if test="month != null and month != ''">
@@ -114,12 +114,6 @@
 	</select>
 	
 	
-	<!-- 查询所有人今日的总收益 -->
-	<!--<select id="selectEveryDayEarnings" resultMap="BaseResultMap">
-		select u_id,sum(amount) as amount from j_bonus_fhj
-		where status = 1 and to_days(now()) = to_days(create_time)
-		group by u_id
-	</select>-->
-	
+
 	
 </mapper>

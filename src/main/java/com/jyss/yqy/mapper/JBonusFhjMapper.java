@@ -34,8 +34,6 @@ public interface JBonusFhjMapper {
     //按月查询总收益
     float selectFhjTotalByMonth(@Param("uId") Integer uId,@Param("month") String month);
 
-    //查询所有人今日的总收益
-    List<JBonusFhj> selectEveryDayEarnings();
 
 
 }
