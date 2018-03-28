@@ -31,7 +31,7 @@ public class JBonusScjAction {
 	
 	
 	/**
-	 * 市场奖奖展示(本周)
+	 * 市场奖奖展示（昨日）
 	 */
 	
 	@RequestMapping("/showScj")

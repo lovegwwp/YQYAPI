@@ -35,6 +35,5 @@ public interface JBonusScjMapper {
     //添加市场奖
     int insertBonusScj(JBonusScj jbonusScj);
     
-    //查询所有人当日的收益
-    List<JBonusScj> selectEveryDayEarnings();
+
 }

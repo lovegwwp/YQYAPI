@@ -37,7 +37,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	
 
 	/**
-	 * 查询本周
+	 * 查询本周（当日）
 	 */
 	@Override
 	public JBonusResult getJBonusFhj(Integer uId) {
@@ -106,7 +106,18 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 		List<UserBean> userBeans = userMapper.selectUserByFHJ();
 		for (UserBean userBean : userBeans) {
 			Float totalPv = userBean.getTotalPv();
-			jBonusFPService.insertScoreBalance(userBean.getId(),totalPv*float1,4);
+			float money = totalPv * float1;
+			//添加分红奖
+			JBonusFhj bonusFhj = new JBonusFhj();
+			bonusFhj.setuId(userBean.getId());
+			bonusFhj.setAmount(money);
+			bonusFhj.setBalance(totalPv - money);
+			bonusFhj.setStatus(1);
+			int count = jBonusFhjMapper.insert(bonusFhj);
+			if(count == 1){
+				//计算积分
+				jBonusFPService.insertScoreBalance(userBean.getId(),money,4);
+			}
 		}
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("message", "分红奖和积分计算完成时间："+new Date());

@@ -94,8 +94,12 @@ public class JRecordServiceImpl implements JRecordService{
 					}
 					bonusScj.setPv(money);
 					bonusScj.setStatus(1);
-					bonusScjMapper.insertBonusScj(bonusScj);
-					
+					int count = bonusScjMapper.insertBonusScj(bonusScj);
+					//计算积分
+					if(count == 1){
+						jBonusFPService.insertScoreBalance(jRecord.getuId(),money,6);
+					}
+					//更新结余
 					if(total1 >= total2){
 						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record1.getuId());
 						recordMapper.updateJRecordByUid(null, 0.00+"", record2.getuId());
@@ -123,7 +127,11 @@ public class JRecordServiceImpl implements JRecordService{
 					}
 					bonusScj.setPv(money);
 					bonusScj.setStatus(1);
-					bonusScjMapper.insertBonusScj(bonusScj);
+					int count = bonusScjMapper.insertBonusScj(bonusScj);
+					//计算积分
+					if(count == 1){
+						jBonusFPService.insertScoreBalance(jRecord.getuId(),money,6);
+					}
 					
 					if(total1 >= total2){
 						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record2.getuId());
@@ -133,97 +141,6 @@ public class JRecordServiceImpl implements JRecordService{
 						recordMapper.updateJRecordByUid(null, Math.abs(total1-total2)+"", record1.getuId());
 					}
 				}
-			}
-			
-		}
-		
-		//计算现金积分和购物积分
-		List<JBonusScj> bonusScjList = bonusScjMapper.selectEveryDayEarnings();
-		if(bonusScjList != null && bonusScjList.size()>0){
-			for (JBonusScj jBonusScj : bonusScjList) {
-
-				jBonusFPService.insertScoreBalance(jBonusScj.getbId(),jBonusScj.getPv(),6);
-
-				/*List<UserBean> userList = userMapper.getUserScoreById(jBonusScj.getuId());
-				UserBean userBean = userList.get(0);
-				
-				Xtcl xtcl7 = xtclMapper.getClsValue("jjbl_type", "xj");      //现金积分比例
-				float float7 = Float.parseFloat(xtcl7.getBz_value());        			  //0.7
-				Xtcl xtcl8 = xtclMapper.getClsValue("jjbl_type", "gw");      //购物积分比例
-				float float8 = Float.parseFloat(xtcl8.getBz_value());        			  //0.2
-				
-				Float money = jBonusScj.getPv();
-				Float totalPv = userBean.getTotalPv();
-				if(totalPv > 0){
-					if(money <= totalPv){
-
-						//添加现金积分
-						ScoreBalance score1 = new ScoreBalance();
-						score1.setEnd(2);
-						score1.setuUuid(userBean.getUuid());
-						score1.setCategory(7);
-						score1.setType(1);
-						score1.setScore(money * float7);
-						score1.setJyScore(money * float7+ userBean.getCashScore());
-						//score1.setCreatedAt(new Date());
-						score1.setStatus(1);
-						int count1 = scoreBalanceMapper.addCashScore(score1);
-
-						ScoreBalance score2 = new ScoreBalance();
-						score2.setEnd(2);
-						score2.setuUuid(userBean.getUuid());
-						score2.setCategory(7);
-						score2.setType(1);
-						score2.setScore(money * float8);
-						score2.setJyScore(money * float8 + userBean.getShoppingScore());
-						//score2.setCreatedAt(new Date());
-						score2.setStatus(1);
-						int count2 = scoreBalanceMapper.addShoppingScore(score2);
-
-						if(count1 == 1 && count2 == 1){
-							UserBean userBean2 = new UserBean();
-							userBean2.setId(jBonusScj.getuId());
-							userBean2.setCashScore(money * float7+ userBean.getCashScore());
-							userBean2.setShoppingScore(money * float8 + userBean.getShoppingScore());
-							userBean2.setTotalPv(totalPv - money);
-							userMapper.updateScore(userBean2);
-						}
-					}else {
-						//添加现金积分
-						ScoreBalance score1 = new ScoreBalance();
-						score1.setEnd(2);
-						score1.setuUuid(userBean.getUuid());
-						score1.setCategory(7);
-						score1.setType(1);
-						score1.setScore(totalPv * float7);
-						score1.setJyScore(totalPv * float7+ userBean.getCashScore());
-						//score1.setCreatedAt(new Date());
-						score1.setStatus(1);
-						int count1 = scoreBalanceMapper.addCashScore(score1);
-
-						ScoreBalance score2 = new ScoreBalance();
-						score2.setEnd(2);
-						score2.setuUuid(userBean.getUuid());
-						score2.setCategory(7);
-						score2.setType(1);
-						score2.setScore(totalPv * float8);
-						score2.setJyScore(totalPv * float8 + userBean.getShoppingScore());
-						//score2.setCreatedAt(new Date());
-						score2.setStatus(1);
-						int count2 = scoreBalanceMapper.addShoppingScore(score2);
-
-						if(count1 == 1 && count2 == 1){
-							UserBean userBean2 = new UserBean();
-							userBean2.setId(jBonusScj.getuId());
-							userBean2.setCashScore(totalPv * float7+ userBean.getCashScore());
-							userBean2.setShoppingScore(totalPv * float8 + userBean.getShoppingScore());
-							userBean2.setTotalPv(totalPv - totalPv);
-							userMapper.updateScore(userBean2);
-						}
-					}
-				}*/
-
-
 			}
 		}
 		Map<String,String> map = new HashMap<String,String>();
@@ -282,7 +199,6 @@ public class JRecordServiceImpl implements JRecordService{
         		}
         	}
         }
-		
 	}
 	
 	/**

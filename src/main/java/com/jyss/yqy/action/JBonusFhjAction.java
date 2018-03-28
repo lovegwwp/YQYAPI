@@ -31,7 +31,7 @@ public class JBonusFhjAction {
 	
 	
 	/**
-	 * 分红奖展示
+	 * 分红奖展示（当日）
 	 */
 	@RequestMapping("/showFhj")
 	@ResponseBody

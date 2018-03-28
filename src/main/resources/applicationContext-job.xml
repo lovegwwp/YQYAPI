@@ -4,30 +4,31 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-   <bean id="schedule1" class="com.jyss.yqy.action.UserRecordBAction"></bean>
-   <bean id="schedule2" class="com.jyss.yqy.action.UserRecordBAction"></bean>
-   <bean id="schedule3" class="com.jyss.yqy.action.UserRecordBAction"></bean>
-   <bean id="schedule4" class="com.jyss.yqy.action.UserRecordBAction"></bean>
+   <bean id="schedule1" class="com.jyss.yqy.action.JobAction"></bean>
+   <bean id="schedule2" class="com.jyss.yqy.action.JobAction"></bean>
+   <bean id="schedule3" class="com.jyss.yqy.action.JobAction"></bean>
+   <bean id="schedule4" class="com.jyss.yqy.action.JobAction"></bean>
+
 
    <bean id="SpringQtzJobMethod1"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule1" />
-		<property name="targetMethod" value="insertBackScore"/>     <!-- 计算辅导奖和积分  -->
+		<property name="targetMethod" value="insertJBonusCj"/>      <!-- 计算层奖和积分 -->
 	</bean>
 	<bean id="SpringQtzJobMethod2"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule2" />
-		<property name="targetMethod" value="insertBackScore"/>     <!-- 计算市场奖和积分 -->
+		<property name="targetMethod" value="insertJBonusScj"/>     <!-- 计算量奖和积分 -->
 	</bean>
 	<bean id="SpringQtzJobMethod3"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule3" />
-		<property name="targetMethod" value="insertBackScore"/>     <!-- 计算分销奖和积分  -->
+		<property name="targetMethod" value="insertJBonusGxj"/>     <!-- 计算共享奖和积分 -->
 	</bean>
 	<bean id="SpringQtzJobMethod4"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule4" />
-		<property name="targetMethod" value="insertBackScore"/>     <!-- 双倍积分返还  -->
+		<property name="targetMethod" value="insertJBonusFhj"/>     <!-- 计算分红奖和积分 -->
 	</bean>
 
 	
@@ -36,19 +37,19 @@
 	<bean id="cronTriggerFactoryBean1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod1"></property>
 	<!-- 	<property name="cronExpression" value="0/5 * * * * ? "></property> -->
-		<property name="cronExpression" value="0 0 3 * * ?"></property>      <!-- 每天03:00执行 -->
+		<property name="cronExpression" value="0 0 1 * * ?"></property>        <!-- 每天01:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod2"></property>
-		<property name="cronExpression" value="0 0 2 * * ?"></property>      <!-- 每天02:00执行 -->
+		<property name="cronExpression" value="0 0 2 * * ?"></property>        <!-- 每天02:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean3" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod3"></property>
-		<property name="cronExpression" value="0 0 5 * * ?"></property>      <!-- 每天05:00执行 -->
+		<property name="cronExpression" value="0 0 4 * * ?"></property>        <!-- 每天04:00执行 -->
 	</bean>
 	<bean id="cronTriggerFactoryBean4" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
 		<property name="jobDetail" ref="SpringQtzJobMethod4"></property>
-		<property name="cronExpression" value="0 0 4 * * ?"></property>      <!-- 每天04:00执行 -->
+		<property name="cronExpression" value="0 0 6 * * ?"></property>        <!-- 每天06:00执行 -->
 	</bean>
 
 	

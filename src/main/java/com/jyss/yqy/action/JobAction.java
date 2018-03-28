@@ -1,6 +1,8 @@
 package com.jyss.yqy.action;
 
+import com.jyss.yqy.service.JBonusCjService;
 import com.jyss.yqy.service.JBonusFhjService;
+import com.jyss.yqy.service.JBonusGxjService;
 import com.jyss.yqy.service.JRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +22,21 @@ public class JobAction {
     private JRecordService recordService;
     @Autowired
     private JBonusFhjService jBonusFhjService;
+    @Autowired
+    private JBonusCjService jBonusCjService;
+    @Autowired
+    private JBonusGxjService jBonusGxjService;
+
 
 
     /**
      * 计算层奖
      */
-
+    @RequestMapping("/cj/computeCJ")
+    public void insertJBonusCj() {
+        Map<String, String> map = jBonusCjService.insertJBonusCj();
+        logger.info(map.get("message"));
+    }
 
 
     /**
@@ -38,18 +49,21 @@ public class JobAction {
     }
 
 
-
     /**
      * 计算共享奖
      */
-
+    @RequestMapping("/gxj/computeGXJ")
+    public void insertJBonusGxj() {
+        Map<String, String> map = jBonusGxjService.insertJBonusGxj();
+        logger.info(map.get("message"));
+    }
 
 
     /**
      * 计算分红奖
      */
     @RequestMapping("/fhj/computeFHJ")
-    public void insertJBonusFHj() {
+    public void insertJBonusFhj() {
         Map<String, String> map = jBonusFhjService.insertJBonusFhj();
         logger.info(map.get("message"));
     }

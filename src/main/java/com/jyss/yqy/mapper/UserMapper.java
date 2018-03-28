@@ -188,4 +188,8 @@ public interface UserMapper {
 	//查询分红奖的用户
 	List<UserBean> selectUserByFHJ();
 
+
+	//更新层奖层次状态和共享奖余额
+	int updateUserCjStatus(@Param("cjStatus")Integer cjStatus,@Param("amount")Float amount,@Param("id")Integer id);
+
 }

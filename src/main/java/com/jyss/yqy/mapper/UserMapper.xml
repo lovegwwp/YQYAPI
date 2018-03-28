@@ -342,4 +342,14 @@
     </select>
 
 
+    <!--更新层奖层次状态和共享奖余额-->
+    <update id="updateUserCjStatus" >
+        update u_user
+        <set>
+            <if test="cjStatus != null">cj_status = #{cjStatus},</if>
+            <if test="amount != null">total_amount = #{amount},</if>
+        </set>
+        where id = #{id}
+    </update>
+
 </mapper>

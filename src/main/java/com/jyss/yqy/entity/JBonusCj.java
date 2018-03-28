@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class JBonusCj implements Serializable{
 
     private Integer id;
-    private Integer uId;
+    private Integer uId;     //用户id
     private String name;
     private Float amount;
     private Integer status;

@@ -33,7 +33,7 @@ public class JBonusCjAction {
 	
 	
 	/**
-	 * 分红奖展示
+	 * 层奖展示（今日）
 	 */
 	@RequestMapping("/showCj")
 	@ResponseBody
@@ -66,9 +66,7 @@ public class JBonusCjAction {
 		map.put("message", "请重新登陆！");
 		map.put("data", "");
 		return map;
-		
 	}
-	
 	
 
 

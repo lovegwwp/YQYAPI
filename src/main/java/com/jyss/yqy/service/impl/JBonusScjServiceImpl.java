@@ -25,7 +25,7 @@ public class JBonusScjServiceImpl implements JBonusScjService{
 	
 	
 	/**
-	 * 查询用户市场奖
+	 * 查询用户市场奖（昨日）
 	 */
 	@Override
 	public JBonusScjResult selectJBonusScjByUid(int uId) {

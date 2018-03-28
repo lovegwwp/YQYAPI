@@ -26,7 +26,13 @@ public interface JRecordMapper {
 	//将pv值置0
 	int updateJRecord();
 	
-	
-    
+	//查询所有层奖用户
+	List<JRecord> selectUserByCj();
+
+	//根据父id查询代理级别
+	List<JRecord> selectUserByPid(@Param("parentId")int parentId);
+
+	//查询所有共享奖用户
+	List<JRecord> selectUserGxjByUid(@Param("uId")int uId);
   
 }

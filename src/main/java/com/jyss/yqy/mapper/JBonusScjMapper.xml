@@ -130,12 +130,6 @@
 	</insert>  
 
 
-	<!-- 查询所有人昨日的收益 -->
-	<select id="selectEveryDayEarnings" resultMap="BaseResultMap">
-		select u_id,pv from j_bonus_scj  
-		where status = 1 and to_days(now()) - to_days(created) = 1
-	</select>
-  
-	
+
  
 </mapper>

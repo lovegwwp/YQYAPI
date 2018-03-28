@@ -48,7 +48,7 @@
     </resultMap>   
     
     <resultMap type="com.jyss.yqy.entity.JRecord" id="jrResultMap">   
-        <result property="uId" column="id"  />     
+        <result property="uId" column="u_id"  />
         <result property="pv" column="pv"  />             
     </resultMap>      
      
@@ -243,7 +243,7 @@
    
    <!-- 查询已完成的订单pv -->
     <select id="getSuccessOrderPv" resultMap="jrResultMap">
-    	select CONVERT(gm_id,SIGNED) as id,CONVERT(sum(pv),DECIMAL) as pv
+    	select CONVERT(gm_id,SIGNED) as u_id,CONVERT(sum(pv),DECIMAL) as pv
     	from p_orders_b 
     	where status = 1 and type =1 and  to_days(now()) - to_days(last_modify_time) = 1 GROUP BY gm_id
     	
