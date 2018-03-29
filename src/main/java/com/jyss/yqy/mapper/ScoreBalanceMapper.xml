@@ -3,9 +3,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.jyss.yqy.mapper.ScoreBalanceMapper" > 
+<mapper namespace="com.jyss.yqy.mapper.ScoreBalanceMapper" >
 
-<!--现金积分=购物积分=记录表-->
+    <!--现金积分=购物积分=记录表-->
     <resultMap type="com.jyss.yqy.entity.ScoreBalance" id="sblResultMap">   
         <id property="id" column="id"  />
         <result property="end" column="end"  /> <!--1=A端 2=B端  -->
@@ -71,8 +71,8 @@
 	  update u_score_back  set  status =#{status}
             where u_uuid = #{uId}  and status =#{statusBefore};
    </update>
-   
-      <!-- 更新返还数据状态1=正常，-1=数据封存状态，-2=返还完毕', -->
+
+    <!-- 更新返还数据状态1=正常，-1=数据封存状态，-2=返还完毕', -->
    <update id="upBackStatusByID"  >
 	  update u_score_back  set  status =#{status}
             where id = #{id}  and status =#{statusBefore};
@@ -109,10 +109,9 @@
 
 
 
-    /////////////////////////奖金分配///////////////////////
     <!--现金积分=插入-->         <!-- ordersn -->
     <insert id="addCashScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance" 
-        useGeneratedKeys="true" keyProperty="id">
+            useGeneratedKeys="true" keyProperty="id">
         insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',#{createdAt},now(),#{status})
@@ -120,17 +119,17 @@
 
     <!--购物积分=插入-->
     <insert id="addShoppingScoreBalance" parameterType="com.jyss.yqy.entity.ScoreBalance"
-        useGeneratedKeys="true" keyProperty="id">
+            useGeneratedKeys="true" keyProperty="id">
         insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',#{createdAt},now(),#{status})
     </insert>
 
 
-
-    <!--现金积分=插入-->        <!-- 结算时间减12小时 -->
+    <!-- ///////////////////////奖金分配/////////////// -->
+    <!--现金积分=插入-->         <!-- 结算时间减12小时 -->
     <insert id="addCashScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
-        useGeneratedKeys="true" keyProperty="id">
+            useGeneratedKeys="true" keyProperty="id">
         insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
@@ -138,7 +137,7 @@
    
     <!--购物积分=插入-->          <!-- 结算时间减12小时 -->
     <insert id="addShoppingScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
-        useGeneratedKeys="true" keyProperty="id"> 
+            useGeneratedKeys="true" keyProperty="id">
         insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
@@ -161,92 +160,6 @@
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
     </insert>
 
-
-    <!--分红奖现金查询-->
-    <!--今日分红奖现金-->
-    <select id="selectEarnings" resultType="float">
-        select IFNULL(SUM(score),0.00) from u_cash_score_balance where u_uuid = #{uUUid}
-        and category = #{category} and to_days(created_at) = to_days(now())
-        and end = 2 and type = 1 and status = 1
-    </select>
-
-    <!-- 查询分红奖现金总收益 -->
-    <select id="selectTotal" resultType="float">
-        select IFNULL(SUM(score),0.00) from u_cash_score_balance where u_uuid = #{uUUid}
-        and category = #{category} and end = 2 and type = 1 and status = 1
-    </select>
-
-    <!-- 查询本周分红奖现金列表 -->
-    <select id="selectJBonusFhjWek" resultMap="sblResultMap">
-        select score,date_format(created_at,'%Y-%m-%d') cjsj
-        from u_cash_score_balance where u_uuid = #{uUUid}
-        and category = #{category}
-        and YEARWEEK(date_format(created_at,'%Y-%m-%d')) = YEARWEEK(now())
-        and end = 2 and type = 1 and status = 1
-        ORDER BY created_at DESC
-    </select>
-
-    <!--按两个日期查询-->
-    <select id="selectJBonusFhjByDay" resultMap="sblResultMap">
-        select score,date_format(created_at,'%Y-%m-%d') cjsj
-        from u_cash_score_balance
-        <where>
-            <if test="uUUid != null and uUUid != ''">and u_uuid = #{uUUid}</if>
-            <if test="category != null and category != ''">and category = #{category}</if>
-            <if test="beginTime != null and beginTime != ''">
-                and date_format(created_at, '%Y-%m-%d') &gt;= #{beginTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                and date_format(created_at, '%Y-%m-%d') &lt;= #{endTime}
-            </if>
-            and end = 2 and type = 1 and status = 1
-        </where>
-        ORDER BY created_at DESC
-    </select>
-
-    <!--按两个日期查询总收益-->
-    <select id="selectFhjTotalByDay" resultType="float">
-        select IFNULL(SUM(score),0.00) from u_cash_score_balance
-        <where>
-            <if test="uUUid != null and uUUid != ''">and u_uuid = #{uUUid}</if>
-            <if test="category != null and category != ''">and category = #{category}</if>
-            <if test="beginTime != null and beginTime != ''">
-                and date_format(created_at, '%Y-%m-%d') &gt;= #{beginTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                and date_format(created_at, '%Y-%m-%d') &lt;= #{endTime}
-            </if>
-            and end = 2 and type = 1 and status = 1
-        </where>
-    </select>
-
-    <!--按月查询-->
-    <select id="selectJBonusFhjByMonth" resultMap="sblResultMap">
-        select score,date_format(created_at,'%Y-%m-%d') cjsj
-        from u_cash_score_balance
-        <where>
-            <if test="uUUid != null and uUUid != ''">and u_uuid = #{uUUid}</if>
-            <if test="category != null and category != ''">and category = #{category}</if>
-            <if test="month != null and month != ''">
-                and date_format(created_at, '%Y-%m') = #{month}
-            </if>
-            and end = 2 and type = 1 and status = 1
-        </where>
-        ORDER BY created_at DESC
-    </select>
-
-    <!--按月查询总收益-->
-    <select id="selectFhjTotalByMonth" resultType="float">
-        select IFNULL(SUM(score),0.00) from u_cash_score_balance
-        <where>
-            <if test="uUUid != null and uUUid != ''">and u_uuid = #{uUUid}</if>
-            <if test="category != null and category != ''">and category = #{category}</if>
-            <if test="month != null and month != ''">
-                and date_format(created_at, '%Y-%m') = #{month}
-            </if>
-            and end = 2 and type = 1 and status = 1
-        </where>
-    </select>
 
 
 </mapper>

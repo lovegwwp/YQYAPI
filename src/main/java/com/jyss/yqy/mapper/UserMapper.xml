@@ -352,4 +352,12 @@
         where id = #{id}
     </update>
 
+
+    <!--查询总监代理-->
+    <!--<select id="">
+        select * from u_user where is_chuangke = 6 and status = 1
+
+    </select>-->
+
+
 </mapper>

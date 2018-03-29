@@ -80,30 +80,4 @@ public interface ScoreBalanceMapper {
 
 
 
-	////////////////////////分红奖现金查询//////////////////////////
-	//今日分红奖现金
-	float selectEarnings(@Param("uUUid") String uUUid,@Param("category") String category);
-
-	//查询分红奖现金总收益
-	float selectTotal(@Param("uUUid") String uUUid,@Param("category") String category);
-
-	//查询本周分红奖现金列表
-	List<ScoreBalance> selectJBonusFhjWek(@Param("uUUid") String uUUid,@Param("category") String category);
-
-	//按两个日期查询
-	List<ScoreBalance> selectJBonusFhjByDay(@Param("uUUid") String uUUid,@Param("category") String category,
-											@Param("beginTime") String beginTime,@Param("endTime") String endTime);
-
-	//按两个日期查询总收益
-	float selectFhjTotalByDay(@Param("uUUid") String uUUid,@Param("category") String category,
-							  @Param("beginTime") String beginTime,@Param("endTime") String endTime);
-
-	//按月查询
-	List<ScoreBalance> selectJBonusFhjByMonth(@Param("uUUid") String uUUid,@Param("category") String category,
-											  @Param("month") String month);
-
-	//按月查询总收益
-	float selectFhjTotalByMonth(@Param("uUUid") String uUUid,@Param("category") String category,
-								@Param("month") String month);
-
 }

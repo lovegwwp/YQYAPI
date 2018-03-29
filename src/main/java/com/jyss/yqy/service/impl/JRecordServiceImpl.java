@@ -146,7 +146,6 @@ public class JRecordServiceImpl implements JRecordService{
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("message", "量奖和积分计算完成时间："+new Date());
 		return map;
-		
 	}
 	
 	/**

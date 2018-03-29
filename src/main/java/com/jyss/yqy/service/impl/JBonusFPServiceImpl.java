@@ -92,7 +92,10 @@ public class JBonusFPServiceImpl implements JBonusFPService {
                         userBean2.setShoppingScore(money * float4 + userBean.getShoppingScore());
                         userBean2.setElectScore(money * float3 + userBean.getElectScore());
                         userBean2.setTotalPv(totalPv - money);
-                        userMapper.updateScore(userBean2);
+                        int count6 = userMapper.updateScore(userBean2);
+                        if(count6 == 1){
+                            return true;
+                        }
                     }
                 }else{
 
