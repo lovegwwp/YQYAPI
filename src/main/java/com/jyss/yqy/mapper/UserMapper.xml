@@ -153,7 +153,7 @@
     </insert>
     
     <!--生成推荐码 --> 
-    <update id="upBCode"  >
+    <!--<update id="upBCode"  >
         update u_user  set b_code = #{bCode} 
              where id =#{id} 
     </update>
@@ -166,7 +166,7 @@
               <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid} </if> 	
               <if test="bCode != null and bCode !=''"> and u.b_code = #{bCode} </if> 				  		
 		 </where> 
-    </select>    
+    </select> -->
     
     <!-- 通过推荐码查询推荐人信息 -->
     <select id="getUserByBCode" resultMap="ubResultMap">           

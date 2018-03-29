@@ -21,7 +21,8 @@
     
     <!-- 添加实名用户信息 -->
     <insert id="insertUserAuth" parameterType="com.jyss.yqy.entity.UserAuth" useGeneratedKeys="true" keyProperty="id">
-    	insert into u_user_auth (id,u_uuid,real_name,email,id_card,status,card_picture_1,card_picture_2,card_picture_3,validity_date,created_at)
+    	insert into u_user_auth (id,u_uuid,real_name,email,id_card,status,card_picture_1,
+        card_picture_2,card_picture_3,validity_date,created_at)
     	values(null,#{uUuid},#{realName},#{email},#{idCard},#{status},#{cardPicture1},#{cardPicture2},
     	#{cardPicture3},#{validityDate},#{createdAt})
     </insert>       

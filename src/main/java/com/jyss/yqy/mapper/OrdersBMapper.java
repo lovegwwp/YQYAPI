@@ -32,7 +32,6 @@ public interface OrdersBMapper {
 	/**
 	 * 获取B端订单信息
 	 * 
-	 * @param username
 	 * @return
 	 */
 	List<OrdersB> getOrdersBy(@Param("status") String status,

@@ -45,7 +45,6 @@ public interface UserMapper {
 	/**
 	 * 修改个人信息
 	 * 
-	 * @param user
 	 * @return
 	 */
 	int upUserMyInfo(@Param("uuid") String uuid, @Param("nick") String nick,
@@ -57,7 +56,6 @@ public interface UserMapper {
 	/**
 	 * 修改个人支付密码
 	 * 
-	 * @param user
 	 * @return
 	 */
 	int upPayPwd(@Param("uuid") String uuid, @Param("payPwd") String payPwd);
@@ -97,10 +95,6 @@ public interface UserMapper {
 
 	/**
 	 * 修改个人。。。等等。。状态
-	 * 
-	 * @param pwd
-	 * @param salt
-	 * @param salt
 	 * @return
 	 */
 	int upUserAllStatus(@Param("status") String status,

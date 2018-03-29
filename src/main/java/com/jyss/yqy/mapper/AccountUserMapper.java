@@ -22,7 +22,6 @@ public interface AccountUserMapper {
 	/**
 	 * 获取角色列表信息
 	 * 
-	 * @param username
 	 * @return
 	 */
 	List<AccountUser> getRoles();

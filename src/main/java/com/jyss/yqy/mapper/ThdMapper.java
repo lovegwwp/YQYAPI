@@ -15,13 +15,13 @@ public interface ThdMapper {
 	 * 用户登陆
 	 */
 
-	public List<Thd> findThdByTel(@Param("tel") String tel,@Param("id") String id);
+	List<Thd> findThdByTel(@Param("tel") String tel,@Param("id") String id);
 
 	/**
 	 * 修改密码
 	 */
 
-	public void updatePwd(@Param("tel") String tel,
+	void updatePwd(@Param("tel") String tel,
 			@Param("password") String password, @Param("salt") String salt);
 
 	/**

@@ -80,12 +80,12 @@ public class UserRecordBAction {
 	/**
 	 * 计算市场奖和积分
 	 */
-	//@RequestMapping("/scj/computeSCJ")
-	//@ResponseBody
+	/*@RequestMapping("/scj/computeSCJ")
+	@ResponseBody
 	public void insertJBonusScj() {
 		Map<String, String> map = recordService.insertJBonusScj();
 		logger.info(map.get("message"));
-	}
+	}*/
 
 	/**
 	 * 计算管理奖的积分
@@ -108,7 +108,7 @@ public class UserRecordBAction {
 	}*/
 
 	// /**积分按照后台设置比例返还===扣额度***/////
-	@RequestMapping("/score/computeScore")
+	//@RequestMapping("/score/computeScore")
 	public void insertBackScore() {
 		int count = 0;
 		int count2 = 0;
@@ -312,8 +312,8 @@ public class UserRecordBAction {
 	/**
 	 * 每天定时更改用户等级////==在所有奖项之后计算
 	 */
-	@RequestMapping("/updateDldjByDay")
-	@ResponseBody
+	//@RequestMapping("/updateDldjByDay")
+	//@ResponseBody
 	public void updateDldj() {
 		////查出u_user所用代理人等级
 		List<UserBean> ueseList = userService.getUserInfo(null,null,null,"1","2",null);
