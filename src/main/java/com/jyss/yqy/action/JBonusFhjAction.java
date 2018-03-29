@@ -8,6 +8,7 @@ import com.jyss.yqy.service.UMobileLoginService;
 import com.jyss.yqy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,7 +44,7 @@ public class JBonusFhjAction {
 			if(list != null && list.size() == 1){
 				UserBean userBean = list.get(0);
 				JBonusResult result = jBonusFhjService.getJBonusFhj(userBean.getId());
-				if(result == null){
+				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");
@@ -85,7 +86,7 @@ public class JBonusFhjAction {
 			if(list != null && list.size() == 1){
 				UserBean userBean = list.get(0);
 				JBonusResult result = jBonusFhjService.selectJBonusFhjByDay(userBean.getId(), page, limit, beginTime, endTime);
-				if(result == null){
+				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");
@@ -126,7 +127,7 @@ public class JBonusFhjAction {
 			if(list != null && list.size() == 1){
 				UserBean userBean = list.get(0);
 				JBonusResult result = jBonusFhjService.selectJBonusFhjByMonth(userBean.getId(), page, limit, month);
-				if(result == null){
+				if(StringUtils.isEmpty(result)){
 					map.put("status", "false");
 					map.put("code", "-1");
 					map.put("message", "查询失败，请稍后再试！");
