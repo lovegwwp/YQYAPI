@@ -38,6 +38,8 @@
         <result property="electScore" column="elect_score"  />
         <result property="bdScore" column="bd_score"  />
         <result property="cjStatus" column="cj_status"  />
+        <result property="isTransfer" column="is_transfer"  />
+        <result property="borrow" column="borrow"  />
     </resultMap>
              
      <!-- B端 -->        
@@ -79,8 +81,8 @@
    <!--修改个人信息 --> 
     <update id="upUserMyInfo"  >
         update u_user  set nick = #{nick} , province_id = #{provinceId} , province = #{province} ,
-        city_id = #{cityId} , city = #{city} ,area_id = #{areaId} , area = #{area},last_modify_time= now() 
-             where uuid =#{uuid} 
+        city_id = #{cityId} , city = #{city} ,area_id = #{areaId} , area = #{area}, last_modify_time= now()
+            where uuid =#{uuid}
     </update>
      
       
@@ -169,52 +171,50 @@
     </select> -->
     
     <!-- 通过推荐码查询推荐人信息 -->
-    <select id="getUserByBCode" resultMap="ubResultMap">           
-	      select u.id,u.uuid,a.real_name,u.is_chuangke ,u.is_auth,u.total_pv  from u_user u left join u_user_auth a on u.uuid = a.u_uuid
+    <!--<select id="getUserByBCode" resultMap="ubResultMap">
+         select u.id,u.uuid,a.real_name,u.is_chuangke ,u.is_auth,u.total_pv
+         from u_user u left join u_user_auth a on u.uuid = a.u_uuid
          <where> 
               1 = 1
               <if test="bCode != null and bCode !=''"> and u.b_code = #{bCode} 
               and u.status = 1 and u.is_auth = 2
               </if> 			  		
 		 </where> 
-    </select> 
-    
+    </select>-->
+    <select id="getUserByBCode" resultMap="ubResultMap">
+        select * from u_user
+        <where>
+            <if test="bCode != null and bCode !=''"> and b_code = #{bCode}</if>
+            and status = 1 and is_auth = 2
+        </where>
+    </select>
+
+
     <!-- 通过用户的uuid查询用户 -->
-    <select id="getUserByUuid" resultMap="ubResultMap">           
-	      select u.id,a.real_name,u.is_chuangke,u.shopping_score,u.cash_score,u.is_auth,u.total_pv  from u_user u left join u_user_auth a on u.uuid = a.u_uuid
+    <!--<select id="getUserByUuid" resultMap="ubResultMap">
+         select u.id,a.real_name,u.is_chuangke,u.shopping_score,u.cash_score,u.is_auth,u.total_pv
+         from u_user u left join u_user_auth a on u.uuid = a.u_uuid
          <where> 
-              1 = 1
-              <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid}  
+              <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid}
               and u.status = 1 
               </if> 			  		
 		 </where> 
-    </select> 
-    
-    <!-- 通过用户的id查询用户 -->
-    <select id="getUserNameById" resultMap="ubResultMap">           
-	      select u.id,a.real_name,u.is_chuangke,u.is_auth,u.total_pv  from u_user u left join u_user_auth a on u.uuid = a.u_uuid
-         <where> 
-              1 = 1
-              <if test="id != null and id !=''"> and u.id = #{id}  
-              and u.status = 1 
-              </if> 			  		
-		 </where> 
-    </select> 
-    
-    
-    
-   <!-- 插入推广关系，确定上下级 -->
-    <!--<insert id="addRecord" parameterType="com.jyss.yqy.entity.User"
-        useGeneratedKeys="true" keyProperty="id">         
-		insert into u_user_r_record values(null,#{uuid},#{account},#{pwd},#{salt},'0','1',now(),'0','0')
-    </insert>-->
-    
-    
+    </select>-->
+    <select id="getUserByUuid" resultMap="ubResultMap">
+        select id,uuid,is_chuangke,shopping_score,cash_score,is_auth,b_code,total_pv,elect_score,bd_score
+        from u_user
+        <where>
+            <if test="uuid != null and uuid !=''"> and uuid = #{uuid}</if>
+            and status = 1
+        </where>
+    </select>
+
+
     <!-- 登录表token -->
      <!-- useGeneratedKeys="true" keyProperty="id" -->
     <insert id="addLogin" >         
-		insert into u_mobile_login(id, u_uuid, s_uuid, token, 
-      created_at, push_info) values(null,#{uuid},'0',#{token},now(),'0');          
+	    insert into u_mobile_login(id, u_uuid, s_uuid, token,
+        created_at, push_info) values(null,#{uuid},'0',#{token},now(),'0');
     </insert>
     
     <select id="getToken" resultMap="ubResultMap">           
@@ -246,35 +246,7 @@
         update u_user  set pwd = #{pwd},salt = #{salt}  ,last_modify_time = now()  where id = #{id}
     </update>
     
-    <!--禁用用户 --> 
-    <!--<update id="upThdStatus" parameterType="java.util.List" >
-        update p_thd  set status = #{status}  where id in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">   
-	        #{id}   
-	    </foreach>  
-    </update>
-    
-    &lt;!&ndash; 删除用户 &ndash;&gt;
-     <delete id="deleteThds" parameterType="java.util.List">
-        delete from p_thd where id in 
-	    <foreach collection="ids" item="id" open="(" separator="," close=")">   
-	        #{id}   
-	    </foreach>  
-    </delete>
-    
-    &lt;!&ndash; 增加提货点用户 &ndash;&gt;
-    <insert id="addThd" parameterType="com.jyss.yqy.entity.Thd" 
-        useGeneratedKeys="true" keyProperty="id"> 
-        insert into p_thd values(null,#{name},#{tel},#{password},#{salt},#{pics},now(),now(),now(),#{status},#{thName},#{provinceId},#{province},#{cityId},#{city},#{areaId},#{area})             
-    </insert>
-    
-     &lt;!&ndash;修改用户 &ndash;&gt;
-    <update id="upThd" parameterType="com.jyss.yqy.entity.Thd" >
-        update p_thd  set name = #{name} , tel = #{tel} ,th_name = #{thName} ,province_id = #{provinceId} ,province = #{province} ,city_id = #{cityId} ,city = #{city}, 
-                      area_id = #{areaId} ,area = #{area} ,last_modify_time = now()
-             where id =#{id}
-    </update>-->
-    
+
     <!-- 通过id查询积分 -->
     <select id="getUserScoreById" resultMap="ubResultMap">
          select id,uuid,cash_score,shopping_score,is_chuangke,total_pv,total_amount,cj_status,elect_score,bd_score
@@ -286,7 +258,7 @@
          </where>
     </select>
     
-    <!-- 更新分红权,电子券,消费券,股券 -->
+    <!-- 更新分红权,电子券,消费券,股券,报单券 -->
     <update id="updateScore" parameterType="com.jyss.yqy.entity.jsonEntity.UserBean">
     	update u_user
     	<set>
@@ -294,6 +266,7 @@
     		<if test="shoppingScore != null and shoppingScore != ''or shoppingScore == 0">shopping_score = #{shoppingScore},</if>
     		<if test="totalPv != null and totalPv != ''or totalPv == 0">total_pv = #{totalPv},</if>
     		<if test="electScore != null and electScore != ''or electScore == 0">elect_score = #{electScore},</if>
+    		<if test="bdScore != null and bdScore != ''or bdScore == 0">bd_score = #{bdScore},</if>
     	</set>
     	where id = #{id} 
     </update>
@@ -334,6 +307,7 @@
     </update>
 
 
+    <!-- ////////分红奖/////// -->
     <!--查询分红奖用户-->
     <select id="selectUserByFHJ" resultMap="ubResultMap">
         select id,total_pv
@@ -342,6 +316,7 @@
     </select>
 
 
+    <!-- ////////层奖/////// -->
     <!--更新层奖层次状态和共享奖余额-->
     <update id="updateUserCjStatus" >
         update u_user

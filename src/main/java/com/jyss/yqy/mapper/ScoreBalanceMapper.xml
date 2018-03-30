@@ -151,7 +151,7 @@
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
     </insert>
 
-    <!--税费，平台管理费=插入-->        <!-- 结算时间减12小时 -->
+    <!--税费，平台管理费，手续费=插入-->        <!-- 结算时间减12小时 -->
     <insert id="addScoreDetails" parameterType="com.jyss.yqy.entity.ScoreBalance"
             useGeneratedKeys="true" keyProperty="id">
         insert into u_score_details
@@ -160,6 +160,14 @@
         #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
     </insert>
 
+
+    <!--报单券=插入-->           <!-- 结算时间减12小时 -->
+    <insert id="addEntryScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into u_entry_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},
+        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+    </insert>
 
 
 </mapper>

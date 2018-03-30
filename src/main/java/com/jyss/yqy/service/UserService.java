@@ -29,18 +29,17 @@ public interface UserService {
 	/**
 	 * 用户登陆
 	 */
-	public Map<String, Object> login(@Param("account") String account,
+	Map<String, Object> login(@Param("account") String account,
                                      @Param("password") String password);
 
 	/**
 	 * 用户退出
 	 */
-	public int loginOut(@Param("uuid") String uuid, @Param("token") String token);
+	int loginOut(@Param("uuid") String uuid, @Param("token") String token);
 
 	/**
 	 * 修改个人信息
 	 * 
-	 * @param user
 	 * @return
 	 */
 	int upUserMyInfo(@Param("uuid") String uuid, @Param("nick") String nick,
@@ -52,7 +51,6 @@ public interface UserService {
 	/**
 	 * 修改个人支付密码
 	 * 
-	 * @param user
 	 * @return
 	 */
 	int upPayPwd(@Param("uuid") String uuid, @Param("payPwd") String payPwd);
@@ -66,9 +64,6 @@ public interface UserService {
 	/**
 	 * 修改个人。。。等等。。状态
 	 * 
-	 * @param pwd
-	 * @param salt
-	 * @param salt
 	 * @return
 	 */
 	int upUserAllStatus(@Param("status") String status,

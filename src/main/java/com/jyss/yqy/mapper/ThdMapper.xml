@@ -42,15 +42,15 @@
         <result property="createdAt" column="created_at"  />
         <result property="cjsj" column="cjsj"  />
         <result property="tel" column="tel"  />
-         <result property="telShow" column="tel_show"  />
+        <!--<result property="telShow" column="tel_show"  />-->
         <result property="thSp" column="th_sp"  />
         <result property="thNum" column="th_num"  />
         <result property="thDw" column="th_dw"  />
-         <result property="price" column="price"  />
+        <result property="price" column="price"  />
     </resultMap>      
     
     
-    <select id="findThdByTel" parameterType="String" resultMap="thdResultMap">
+    <select id="findThdByTel" parameterType="string" resultMap="thdResultMap">
         select * from p_thd 
         <where>
             status = 1

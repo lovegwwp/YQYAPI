@@ -29,8 +29,7 @@ public class UMobileLoginServiceImpl implements UMobileLoginService {
 	// /方法改造 =拿到token-找到uuid ，去查找最新一条数据token,和当前传入token做比较，不同的话 token过期，list置空
 	@Override
 	public List<UMobileLogin> findUserByToken(String token) {
-		List<UMobileLogin> loginList = uMobileLoginMapper
-				.findUserByToken(token);
+		List<UMobileLogin> loginList = uMobileLoginMapper.findUserByToken(token);
 		if (loginList.size() == 1) {
 			if (!loginList.get(0).getToken().equals(token)) {
 				loginList = new ArrayList<UMobileLogin>();

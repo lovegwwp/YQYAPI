@@ -146,17 +146,14 @@ public interface UserMapper {
 	 */
 	List<UserBean> getUserByUuid(@Param("uuid") String uuid);
 
-	/**
-	 * 通过用户的id查询用户
-	 */
-	List<UserBean> getUserNameById(@Param("id") int id);
 
 	/**
 	 * 通过id查询积分
 	 */
 	List<UserBean> getUserScoreById(@Param("id") int id);
 
-	// 更新分红权,电子券,消费券,股券
+
+	// 更新分红权,电子券,消费券,股券,报单券
 	int updateScore(UserBean userBean);
 
 	// 更新积分

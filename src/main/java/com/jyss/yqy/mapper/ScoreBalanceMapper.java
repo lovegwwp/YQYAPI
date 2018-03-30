@@ -52,9 +52,11 @@ public interface ScoreBalanceMapper {
 	//电子券插入(结算时间减12小时)
 	int addElecScore(ScoreBalance sb);
 
-	//税费，平台管理费插入(结算时间减12小时)
+	//税费，平台管理费，手续费插入(结算时间减12小时)
 	int addScoreDetails(ScoreBalance sb);
 
+	//报单券插入(结算时间减12小时)
+	int addEntryScore(ScoreBalance sb);
 
 
 	// /////////积分返还///////////////

@@ -109,7 +109,7 @@ public class JBonusGxjServiceImpl implements JBonusGxjService {
 
 				List<JRecord> recordList = getJRecordList(jRecord1.getParentId());
 				//获取人均分配值
-				float amount = jRecord.getPv() / recordList.size();
+				float amount = jRecord.getPv() * float1 / recordList.size();
 				for (JRecord record : recordList) {
 					if(amount <= record.getPv()){
 						float jyScore = record.getPv() - amount;

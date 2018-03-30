@@ -37,6 +37,8 @@ public class UserBean {
 	private Float bdScore;      //报单券金额
 	private Integer cjStatus;    //层奖
 
+	private Integer isTransfer;    //1可转，2不可转（账户转账）
+	private Float borrow;  //借贷金额
 
 	// private Date createdAt;//
 	// private int lastAccessTime;//
@@ -311,5 +313,21 @@ public class UserBean {
 
 	public void setCjStatus(Integer cjStatus) {
 		this.cjStatus = cjStatus;
+	}
+
+	public Integer getIsTransfer() {
+		return isTransfer;
+	}
+
+	public void setIsTransfer(Integer isTransfer) {
+		this.isTransfer = isTransfer;
+	}
+
+	public Float getBorrow() {
+		return borrow;
+	}
+
+	public void setBorrow(Float borrow) {
+		this.borrow = borrow;
 	}
 }
