@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jyss.yqy.entity.ScoreBalance;
+import com.jyss.yqy.mapper.*;
 import com.jyss.yqy.service.JBonusFPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,6 @@ import com.jyss.yqy.entity.JBonusScj;
 import com.jyss.yqy.entity.JRecord;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
-import com.jyss.yqy.mapper.JBonusScjMapper;
-import com.jyss.yqy.mapper.JRecordMapper;
-import com.jyss.yqy.mapper.OrdersBMapper;
-import com.jyss.yqy.mapper.UserMapper;
-import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.JRecordService;
 
 @Service
@@ -37,14 +34,21 @@ public class JRecordServiceImpl implements JRecordService{
 	private XtclMapper xtclMapper;
 	@Autowired
 	private JBonusFPService jBonusFPService;
+	@Autowired
+	private ScoreBalanceMapper scoreBalanceMapper;
+
 	
 	/**
 	 * 计算市场奖
 	 */
 	@Override
 	public Map<String,String> insertJBonusScj(){
-		
-		insertJbonusScj();       //修改今日pv
+
+		//修改今日pv
+		insertJbonusScj();
+
+		//计算总监助理
+		updateUserCash();
 		
 		List<JRecord> uIdList = recordMapper.selectJRecord();  //查询用户列表
 		for (int i = 0; i < uIdList.size(); i++) {
@@ -143,6 +147,8 @@ public class JRecordServiceImpl implements JRecordService{
 				}
 			}
 		}
+
+
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("message", "量奖和积分计算完成时间："+new Date());
 		return map;
@@ -213,6 +219,41 @@ public class JRecordServiceImpl implements JRecordService{
 		}
 	}
 
-	
+
+	/**
+	 * 计算总监助理
+	 */
+	private void updateUserCash(){
+
+		//查询比列
+		Xtcl xtcl1 = xtclMapper.getClsValue("zjzl_type", "1");        //总监助理比例
+		float float1 = Float.parseFloat(xtcl1.getBz_value());       			   //0.002
+
+		List<UserBean> userBeans = userMapper.selectUserZL();
+		for (UserBean userBean : userBeans) {
+
+			float total = getTotal(userBean.getAge());      //查询代理市场的总pv
+			float cashScore = total * float1;
+
+			//添加股券
+			ScoreBalance score = new ScoreBalance();
+			score.setEnd(2);
+			score.setuUuid(userBean.getUuid());
+			score.setCategory(12);
+			score.setType(1);
+			score.setScore(cashScore);
+			score.setJyScore(userBean.getCashScore() + cashScore);
+			score.setStatus(1);
+			int count = scoreBalanceMapper.addCashScore(score);
+			if(count == 1){
+				UserBean userBean1 = new UserBean();
+				userBean1.setId(userBean.getId());
+				userBean1.setCashScore(userBean.getCashScore() + cashScore);
+				userMapper.updateScore(userBean1);
+			}
+		}
+	}
+
+
 
 }

@@ -4,13 +4,14 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-   <bean id="schedule1" class="com.jyss.yqy.action.JobAction"></bean>
-   <bean id="schedule2" class="com.jyss.yqy.action.JobAction"></bean>
-   <bean id="schedule3" class="com.jyss.yqy.action.JobAction"></bean>
-   <bean id="schedule4" class="com.jyss.yqy.action.JobAction"></bean>
+    <bean id="schedule1" class="com.jyss.yqy.action.JobAction"></bean>
+    <bean id="schedule2" class="com.jyss.yqy.action.JobAction"></bean>
+    <bean id="schedule3" class="com.jyss.yqy.action.JobAction"></bean>
+    <bean id="schedule4" class="com.jyss.yqy.action.JobAction"></bean>
+	<bean id="schedule5" class="com.jyss.yqy.action.JobAction"></bean>
 
 
-   <bean id="SpringQtzJobMethod1"
+    <bean id="SpringQtzJobMethod1"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule1" />
 		<property name="targetMethod" value="insertJBonusCj"/>      <!-- 计算层奖和积分 -->
@@ -29,6 +30,11 @@
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="schedule4" />
 		<property name="targetMethod" value="insertJBonusFhj"/>     <!-- 计算分红奖和积分 -->
+	</bean>
+	<bean id="SpringQtzJobMethod5"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedule5" />
+		<property name="targetMethod" value="updateUserBorrow"/>     <!-- 扣除借贷金额 -->
 	</bean>
 
 	
@@ -51,6 +57,10 @@
 		<property name="jobDetail" ref="SpringQtzJobMethod4"></property>
 		<property name="cronExpression" value="0 0 6 * * ?"></property>        <!-- 每天06:00执行 -->
 	</bean>
+	<bean id="cronTriggerFactoryBean5" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
+		<property name="jobDetail" ref="SpringQtzJobMethod5"></property>
+		<property name="cronExpression" value="0 0 8 * * ?"></property>        <!-- 每天08:00执行 -->
+	</bean>
 
 	
 	
@@ -62,6 +72,7 @@
 				<ref bean="cronTriggerFactoryBean2" />
 				<ref bean="cronTriggerFactoryBean3" />
 				<ref bean="cronTriggerFactoryBean4" />
+				<ref bean="cronTriggerFactoryBean5" />
 			</list>
 		</property>
 	</bean>

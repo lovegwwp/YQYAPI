@@ -19,4 +19,8 @@ public interface JBonusFhjService {
 	//计算分红奖
 	Map<String,String> insertJBonusFhj();
 
+
+	//扣除借贷金额
+	Map<String,String> updateUserBorrow();
+
 }

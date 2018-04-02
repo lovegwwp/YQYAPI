@@ -68,4 +68,16 @@ public class JobAction {
         logger.info(map.get("message"));
     }
 
+
+    /**
+     * 扣除借贷金额
+     */
+    @RequestMapping("/deduct/computeBorrow")
+    public void updateUserBorrow() {
+        Map<String, String> map = jBonusFhjService.updateUserBorrow();
+        logger.info(map.get("message"));
+    }
+
+
+
 }

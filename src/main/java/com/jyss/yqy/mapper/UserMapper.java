@@ -183,4 +183,12 @@ public interface UserMapper {
 	//更新层奖层次状态和共享奖余额
 	int updateUserCjStatus(@Param("cjStatus")Integer cjStatus,@Param("amount")Float amount,@Param("id")Integer id);
 
+
+	//查询所有借贷用户
+	List<UserBean> selectUserBorrow();
+
+
+	//查询所有总监助理
+	List<UserBean> selectUserZL();
+
 }

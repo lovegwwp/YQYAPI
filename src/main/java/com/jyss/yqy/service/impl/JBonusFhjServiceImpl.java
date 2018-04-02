@@ -4,9 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jyss.yqy.entity.JBonusFhj;
 import com.jyss.yqy.entity.JBonusResult;
+import com.jyss.yqy.entity.ScoreBalance;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.mapper.JBonusFhjMapper;
+import com.jyss.yqy.mapper.ScoreBalanceMapper;
 import com.jyss.yqy.mapper.UserMapper;
 import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.JBonusFPService;
@@ -33,6 +35,8 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	private XtclMapper xtclMapper;
 	@Autowired
 	private JBonusFPService jBonusFPService;
+	@Autowired
+	private ScoreBalanceMapper scoreBalanceMapper;
 
 	
 
@@ -121,6 +125,61 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 		}
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("message", "分红奖和积分计算完成时间："+new Date());
+		return map;
+	}
+
+
+	/**
+	 * 扣除借贷金额
+	 */
+	@Override
+	public Map<String, String> updateUserBorrow() {
+		List<UserBean> userBeans = userMapper.selectUserBorrow();
+		for (UserBean userBean : userBeans) {
+			float cashScore = userBean.getCashScore();
+			Float borrow = userBean.getBorrow();
+			if(cashScore > 0){
+				if(cashScore <= borrow){
+					//添加股券
+					ScoreBalance score = new ScoreBalance();
+					score.setEnd(2);
+					score.setuUuid(userBean.getUuid());
+					score.setCategory(11);
+					score.setType(2);
+					score.setScore(cashScore);
+					score.setJyScore(0f);
+					score.setStatus(1);
+					int count = scoreBalanceMapper.addCashScore(score);
+					if(count == 1){
+						UserBean userBean1 = new UserBean();
+						userBean1.setId(userBean.getId());
+						userBean1.setCashScore(0f);
+						userBean1.setBorrow(borrow - cashScore);
+						userMapper.updateScore(userBean1);
+					}
+				}else{
+					//添加股券
+					ScoreBalance score = new ScoreBalance();
+					score.setEnd(2);
+					score.setuUuid(userBean.getUuid());
+					score.setCategory(11);
+					score.setType(2);
+					score.setScore(borrow);
+					score.setJyScore(cashScore - borrow);
+					score.setStatus(1);
+					int count = scoreBalanceMapper.addCashScore(score);
+					if(count == 1){
+						UserBean userBean1 = new UserBean();
+						userBean1.setId(userBean.getId());
+						userBean1.setCashScore(cashScore - borrow);
+						userBean1.setBorrow(0f);
+						userMapper.updateScore(userBean1);
+					}
+				}
+			}
+		}
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("message", "扣除借贷金额和积分计算完成时间："+new Date());
 		return map;
 	}
 

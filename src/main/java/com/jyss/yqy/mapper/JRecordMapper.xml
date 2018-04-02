@@ -7,6 +7,7 @@
     <result column="u_account" property="uAccount" jdbcType="VARCHAR" />
     <result column="parent_id" property="parentId" jdbcType="INTEGER" />
     <result column="depart" property="depart" jdbcType="TINYINT" />
+    <result column="zj_uid" property="zjUid" jdbcType="INTEGER" />
     <result column="floor" property="floor" jdbcType="INTEGER" />
     <result column="pv" property="pv" jdbcType="FLOAT" />
     <result column="jy_pv" property="jyPv" jdbcType="FLOAT" />
@@ -71,7 +72,7 @@
 
 
 	<!-- ////////////共享奖////////// -->
-	<!--查询所有共享奖用户-->
+	<!--查询共享奖用户-->
 	<select id="selectUserGxjByUid" parameterType="int" resultMap="BaseResultMap">
 		select a.id,a.u_id,a.u_account,a.parent_id, b.total_amount as pv
 		from j_record a left join u_user b on a.u_id = b.id

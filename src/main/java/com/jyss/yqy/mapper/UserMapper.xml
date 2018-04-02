@@ -267,6 +267,7 @@
     		<if test="totalPv != null and totalPv != ''or totalPv == 0">total_pv = #{totalPv},</if>
     		<if test="electScore != null and electScore != ''or electScore == 0">elect_score = #{electScore},</if>
     		<if test="bdScore != null and bdScore != ''or bdScore == 0">bd_score = #{bdScore},</if>
+    		<if test="borrow != null and borrow != ''or borrow == 0">borrow = #{borrow},</if>
     	</set>
     	where id = #{id} 
     </update>
@@ -328,11 +329,21 @@
     </update>
 
 
-    <!--查询总监代理-->
-    <!--<select id="">
-        select * from u_user where is_chuangke = 6 and status = 1
+    <!--查询所有借贷用户-->
+    <select id="selectUserBorrow" resultMap="ubResultMap">
+        select id,uuid,cash_score,shopping_score,is_chuangke,total_pv,
+        total_amount,cj_status,elect_score,bd_score,borrow
+        from u_user
+        where borrow &gt; 0
+    </select>
 
-    </select>-->
+
+    <!--查询所有总监助理-->
+    <select id="selectUserZL" resultMap="ubResultMap">
+        select a.zj_uid as age,b.cash_score,b.id,b.uuid,b.cash_score
+        from j_record_zl a left join u_user b on a.u_id = b.id
+        where a.status = 1 and b.is_chuangke = 6
+    </select>
 
 
 </mapper>

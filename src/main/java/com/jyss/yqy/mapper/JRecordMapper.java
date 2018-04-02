@@ -32,7 +32,7 @@ public interface JRecordMapper {
 	//根据父id查询代理级别
 	List<JRecord> selectUserByPid(@Param("parentId")int parentId);
 
-	//查询所有共享奖用户
+	//查询共享奖用户
 	List<JRecord> selectUserGxjByUid(@Param("uId")int uId);
   
 }

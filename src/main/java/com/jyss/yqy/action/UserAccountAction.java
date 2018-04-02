@@ -29,6 +29,12 @@ public class UserAccountAction {
     private UserAccountService userAccountService;
 
 
+    /**
+     * 充值报单券
+     */
+
+
+
 
 
     /**
@@ -88,6 +94,7 @@ public class UserAccountAction {
     }
 
 
+
     /**
      * 根据推荐码查询用户
      */
@@ -113,10 +120,11 @@ public class UserAccountAction {
     }
 
 
+
     /**
      * 券转账他人   zzType: 1=股券，2=电子券，3=报单券
      */
-    @RequestMapping("/")
+    @RequestMapping("/giving")
     @ResponseBody
     public Map<String,Object> updateUserScore(@RequestParam("token") String token,@RequestParam("amount") Float amount,
                                               @RequestParam("password") String password,@RequestParam("bCode")String bCode,
@@ -151,7 +159,7 @@ public class UserAccountAction {
                     }
                     map.put("code", "-6");
                     map.put("status", "false");
-                    map.put("message", "当前时间段，系统不可转账");
+                    map.put("message", "当前时间段，不可转账");
                     map.put("data", "");
                     return map;
                 }
