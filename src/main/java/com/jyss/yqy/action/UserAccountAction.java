@@ -143,7 +143,7 @@ public class UserAccountAction {
                 List<UserBean> list1 = userAccountService.getUserByBCode(bCode);
                 if(list1 != null && list1.size() == 1){
                     UserBean userBean1 = list1.get(0);
-                    if(userBean1.getIsTransfer() == 2){
+                    if(userBean1.getIsTransfer() == 1){
 
                         if(userBean.getPayPwd().equals(psw)){
 
@@ -159,7 +159,7 @@ public class UserAccountAction {
                     }
                     map.put("code", "-6");
                     map.put("status", "false");
-                    map.put("message", "当前时间段，不可转账");
+                    map.put("message", "当前时间段不可转账");
                     map.put("data", "");
                     return map;
                 }

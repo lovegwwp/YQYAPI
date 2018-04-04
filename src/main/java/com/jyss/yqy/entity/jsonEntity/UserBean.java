@@ -3,7 +3,7 @@ package com.jyss.yqy.entity.jsonEntity;
 import java.util.Date;
 
 public class UserBean {
-	private int id;
+	private Integer id;
 	private String uuid;
 	private String salt;
 	private String pwd;
@@ -11,17 +11,17 @@ public class UserBean {
 	private String nick;// 昵称
 	private String status;// -1删除 2禁用 1正常
 	private String avatar;// 头像
-	private int sex;// 1=男 2=女
-	private int age;
+	private Integer sex;// 1=男 2=女
+	private Integer age;
 	private String realName;// 真实姓名
 	private String idCard;// 身份证号
-	private int isChuangke;// 0普通会员1代言人2初级代理人 3中级代理人4高级代理人
-	private int isAuth;// 1=已提交 2=审核通过3=审核不通过
+	private Integer isChuangke;// 0普通会员1代言人2初级代理人 3中级代理人4高级代理人
+	private Integer isAuth;// 1=已提交 2=审核通过3=审核不通过
 	private String bCode;// 推广码
 	private String token;//
 	private String payPwd;// 支付密码
-	private float cashScore;// 现金积分
-	private float shoppingScore;// 购物积分
+	private Float cashScore;// 现金积分
+	private Float shoppingScore;// 购物积分
 	private String provinceId;//
 	private String province;//
 	private String cityId;//
@@ -43,6 +43,135 @@ public class UserBean {
 	// private Date createdAt;//
 	// private int lastAccessTime;//
 
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public Integer getSex() {
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getIdCard() {
+		return idCard;
+	}
+
+	public void setIdCard(String idCard) {
+		this.idCard = idCard;
+	}
+
+	public Integer getIsChuangke() {
+		return isChuangke;
+	}
+
+	public void setIsChuangke(Integer isChuangke) {
+		this.isChuangke = isChuangke;
+	}
+
+	public Integer getIsAuth() {
+		return isAuth;
+	}
+
+	public void setIsAuth(Integer isAuth) {
+		this.isAuth = isAuth;
+	}
+
+	public String getbCode() {
+		return bCode;
+	}
+
+	public void setbCode(String bCode) {
+		this.bCode = bCode;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public String getPayPwd() {
 		return payPwd;
 	}
@@ -51,11 +180,19 @@ public class UserBean {
 		this.payPwd = payPwd;
 	}
 
-	public float getShoppingScore() {
+	public Float getCashScore() {
+		return cashScore;
+	}
+
+	public void setCashScore(Float cashScore) {
+		this.cashScore = cashScore;
+	}
+
+	public Float getShoppingScore() {
 		return shoppingScore;
 	}
 
-	public void setShoppingScore(float shoppingScore) {
+	public void setShoppingScore(Float shoppingScore) {
 		this.shoppingScore = shoppingScore;
 	}
 
@@ -105,158 +242,6 @@ public class UserBean {
 
 	public void setArea(String area) {
 		this.area = area;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public float getCashScore() {
-		return cashScore;
-	}
-
-	public void setCashScore(float cashScore) {
-		this.cashScore = cashScore;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	// public Date getCreatedAt() {
-	// return createdAt;
-	// }
-	//
-	// public void setCreatedAt(Date createdAt) {
-	// this.createdAt = createdAt;
-	// }
-	//
-	// public int getLastAccessTime() {
-	// return lastAccessTime;
-	// }
-	//
-	// public void setLastAccessTime(int lastAccessTime) {
-	// this.lastAccessTime = lastAccessTime;
-	// }
-
-	public String getUuid() {
-		return uuid;
-	}
-
-	public String getSalt() {
-		return salt;
-	}
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getIdCard() {
-		return idCard;
-	}
-
-	public void setIdCard(String idCard) {
-		this.idCard = idCard;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
-
-	public String getNick() {
-		return nick;
-	}
-
-	public void setNick(String nick) {
-		this.nick = nick;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public int getSex() {
-		return sex;
-	}
-
-	public void setSex(int sex) {
-		this.sex = sex;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public String getRealName() {
-		return realName;
-	}
-
-	public void setRealName(String realName) {
-		this.realName = realName;
-	}
-
-	public int getIsChuangke() {
-		return isChuangke;
-	}
-
-	public void setIsChuangke(int isChuangke) {
-		this.isChuangke = isChuangke;
-	}
-
-	public int getIsAuth() {
-		return isAuth;
-	}
-
-	public void setIsAuth(int isAuth) {
-		this.isAuth = isAuth;
-	}
-
-	public String getbCode() {
-		return bCode;
-	}
-
-	public void setbCode(String bCode) {
-		this.bCode = bCode;
 	}
 
 	public Float getTotalPv() {
