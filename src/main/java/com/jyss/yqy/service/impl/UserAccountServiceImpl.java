@@ -87,7 +87,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         float float1 = Float.parseFloat(xtcl1.getBz_value());       			   //0.03
 
         if(zzType == 1){
-            if(amount > userBean.getCashScore()){
+            if(amount <= userBean.getCashScore()){
 
                 //减股券记录
                 ScoreBalance score = new ScoreBalance();
@@ -142,7 +142,7 @@ public class UserAccountServiceImpl implements UserAccountService {
                 return map;
             }
         }else if(zzType == 2){
-            if(amount > userBean.getElectScore()){
+            if(amount <= userBean.getElectScore()){
 
                 //减电子券记录
                 ScoreBalance score = new ScoreBalance();
@@ -197,7 +197,7 @@ public class UserAccountServiceImpl implements UserAccountService {
                 return map;
             }
         }else if(zzType == 3){
-            if(amount > userBean.getBdScore()){
+            if(amount <= userBean.getBdScore()){
 
                 //减报单券记录
                 ScoreBalance score = new ScoreBalance();

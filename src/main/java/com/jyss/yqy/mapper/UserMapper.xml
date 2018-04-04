@@ -201,7 +201,7 @@
 		 </where> 
     </select>-->
     <select id="getUserByUuid" resultMap="ubResultMap">
-        select id,uuid,is_chuangke,shopping_score,cash_score,is_auth,b_code,total_pv,elect_score,bd_score
+        select id,uuid,pay_pwd,is_chuangke,shopping_score,cash_score,is_auth,b_code,total_pv,elect_score,bd_score
         from u_user
         <where>
             <if test="uuid != null and uuid !=''"> and uuid = #{uuid}</if>

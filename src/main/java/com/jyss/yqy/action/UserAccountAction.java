@@ -54,7 +54,7 @@ public class UserAccountAction {
                 UserBean userBean = list.get(0);
                 String psw = DigestUtils.md5DigestAsHex(password.getBytes());
                 if(userBean.getPayPwd().equals(psw)){
-                    if(amount > userBean.getCashScore()){
+                    if(amount <= userBean.getCashScore()){
                         float cash = userBean.getCashScore() - amount;
                         float bdScore = userBean.getBdScore() + amount;
                         boolean flag = userAccountService.updateBdScore(userBean.getId(),
@@ -62,13 +62,13 @@ public class UserAccountAction {
                         if(flag){
                             map.put("code", "0");
                             map.put("status", "true");
-                            map.put("message", "转账成功");
+                            map.put("message", "操作成功");
                             map.put("data", "");
                             return map;
                         }
                         map.put("code", "-1");
                         map.put("status", "false");
-                        map.put("message", "转账失败");
+                        map.put("message", "操作失败");
                         map.put("data", "");
                         return map;
                     }

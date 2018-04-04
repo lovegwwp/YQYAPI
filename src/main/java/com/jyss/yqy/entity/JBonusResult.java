@@ -7,7 +7,7 @@ public class JBonusResult implements Serializable{
 	
 	private Float earnings;            //今日收益
 	private Float total;               //总收益金额
-	private List data;                  //列表
+	private List data;                 //列表
 
 
 	public Float getEarnings() {

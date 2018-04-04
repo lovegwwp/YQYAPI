@@ -103,8 +103,8 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 	@Override
 	public Map<String, String> insertJBonusFhj() {
 
-		Xtcl xtcl1 = xtclMapper.getClsValue("fhbl_type", "1");      //分红奖比例
-		float float1 = Float.parseFloat(xtcl1.getBz_value());        			 //0.003
+		Xtcl xtcl1 = xtclMapper.getClsValue("fhqbs_type", "5");      //分红奖比例
+		float float1 = Float.parseFloat(xtcl1.getBz_value());        			  //0.003
 
 		//查询所有分红权用户
 		List<UserBean> userBeans = userMapper.selectUserByFHJ();

@@ -63,8 +63,8 @@ public class JRecordServiceImpl implements JRecordService{
 				Integer depart2 = record2.getDepart();
 				
 				//查询返现比列和封顶值
-				Xtcl xtcl1 = xtclMapper.getClsValue("ljbl_type", "1");        //层奖比例
-				float float1 = Float.parseFloat(xtcl1.getBz_value());       			   //0.1
+				Xtcl xtcl1 = xtclMapper.getClsValue("ljfde_type", "4");        //量奖比例
+				float float1 = Float.parseFloat(xtcl1.getBz_value());       			    //0.1
 
 				Xtcl xtcl2 = xtclMapper.getClsValue("ljfde_type", "1");        //初级代理人日封顶金额
 				float float2 = Float.parseFloat(xtcl2.getBz_value());        			    //5000.00
