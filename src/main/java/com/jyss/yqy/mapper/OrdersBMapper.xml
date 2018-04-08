@@ -184,54 +184,7 @@
         delete from p_orders_b  where order_sn =#{orderSn}	    
     </delete>
     
-    
-   
-    <!--修改密码 --> 
-    <update id="upHtpassword" parameterType="String" >
-        update p_thd  set password = #{password},salt = #{salt}   where name = #{name} and  status = 1
-    </update>
-    
-    <!--禁用用户 --> 
-    <update id="upThdStatus" parameterType="java.util.List" >
-        update p_thd  set status = #{status}  where id in
-        <foreach collection="ids" item="id" open="(" separator="," close=")">   
-	        #{id}   
-	    </foreach>  
-    </update>
-    
-    <!-- 删除用户 -->
-     <delete id="deleteThds" parameterType="java.util.List">
-        delete from p_thd where id in 
-	    <foreach collection="ids" item="id" open="(" separator="," close=")">   
-	        #{id}   
-	    </foreach>  
-    </delete>
-    
-    <!-- 增加提货点用户 -->
-    <insert id="addThd" parameterType="com.jyss.yqy.entity.Thd" 
-        useGeneratedKeys="true" keyProperty="id"> 
-        insert into p_thd values(null,#{name},#{tel},#{password},#{salt},#{pics},now(),now(),now(),#{status},#{thName},#{provinceId},#{province},#{cityId},#{city},#{areaId},#{area})             
-    </insert>
-    
-     <!--修改用户 --> 
-    <update id="upThd" parameterType="com.jyss.yqy.entity.Thd" >
-        update p_thd  set name = #{name} , tel = #{tel} ,th_name = #{thName} ,province_id = #{provinceId} ,province = #{province} ,city_id = #{cityId} ,city = #{city}, 
-                      area_id = #{areaId} ,area = #{area} ,last_modify_time = now()
-             where id =#{id}
-    </update>
-    
-    <!--提货点商品详情-->
-     <select id="getThSpBy" resultMap="obResultMap">     
-	    select o.*,DATE_FORMAT(o.created_at, '%Y-%m-%d %H:%i:%s' ) cjsj,t.name,t.th_name from p_thd_orders o
-			left join p_thd t
-			on o.th_id = t.id				
-         <where> 
-              1 = 1
-			  <if test="name != null and name !=''"> and t.th_name   LIKE CONCAT('%',#{name},'%') </if> 		
-		 </where> 
-		order by o.created_at desc
-    </select>    
-    
+
     
     <!-- 查询已完成的订单 -->
     <select id="getSuccessOrder" resultMap="utaResultMap">
