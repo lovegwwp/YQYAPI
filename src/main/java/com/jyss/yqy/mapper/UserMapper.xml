@@ -182,10 +182,12 @@
 		 </where> 
     </select>-->
     <select id="getUserByBCode" resultMap="ubResultMap">
-        select * from u_user
+        select a.id,a.uuid,a.nick,a.avatar,a.is_chuangke,a.b_code,
+        b.real_name as real_name
+        from u_user a left join u_user_auth b on a.uuid = b.u_uuid
         <where>
-            <if test="bCode != null and bCode !=''"> and b_code = #{bCode}</if>
-            and status = 1 and is_auth = 2
+            <if test="bCode != null and bCode !=''"> and a.b_code = #{bCode}</if>
+            and a.status = 1 and a.is_auth = 2
         </where>
     </select>
 
@@ -201,7 +203,8 @@
 		 </where> 
     </select>-->
     <select id="getUserByUuid" resultMap="ubResultMap">
-        select id,uuid,pay_pwd,is_chuangke,shopping_score,cash_score,is_auth,b_code,total_pv,elect_score,bd_score
+        select id,uuid,nick,pay_pwd,is_chuangke,shopping_score,cash_score,
+        is_auth,b_code,total_pv,elect_score,bd_score,is_transfer
         from u_user
         <where>
             <if test="uuid != null and uuid !=''"> and uuid = #{uuid}</if>

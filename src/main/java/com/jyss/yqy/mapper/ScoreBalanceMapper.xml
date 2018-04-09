@@ -21,6 +21,8 @@
         <result property="status" column="status"  />
         <result property="orderSn" column="order_sn"  />
         <result property="secoCate" column="seco_cate"  /> <!-- 1=税费，2=平台管理费 -->
+        <result property="dzScore" column="dz_score"  /> <!--电子券金额(报单券)-->
+        <result property="zzCode" column="zz_code"  />
 
     </resultMap>    
     
@@ -45,7 +47,7 @@
         useGeneratedKeys="true" keyProperty="id">                                                     <!-- ordersn -->
         insert into u_score_back values(null,#{uuuid},#{dlType},#{backNum},#{leftNum},#{backScore},#{eachScore},#{createdAt},#{backTime},#{status})              
     </insert>
-    
+
     <!--记录查询--> 
     <select id="getBackScore" resultMap="sBackResultMap" >  
         select * from u_score_back                           
@@ -130,25 +132,28 @@
     <!--现金积分=插入-->         <!-- 结算时间减12小时 -->
     <insert id="addCashScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
             useGeneratedKeys="true" keyProperty="id">
-        insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
-        values(null,#{end},#{uUuid},#{category},#{type},#{score},
-        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+        insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
+        created_at,js_time,status,zz_code)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
+        date_sub(now(),interval 12 hour),#{status},#{zzCode})
     </insert>
    
     <!--购物积分=插入-->          <!-- 结算时间减12小时 -->
     <insert id="addShoppingScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
             useGeneratedKeys="true" keyProperty="id">
-        insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
-        values(null,#{end},#{uUuid},#{category},#{type},#{score},
-        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+        insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
+        created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
+        date_sub(now(),interval 12 hour),#{status})
     </insert>
 
     <!--电子券=插入-->           <!-- 结算时间减12小时 -->
     <insert id="addElecScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
             useGeneratedKeys="true" keyProperty="id">
-        insert into u_elec_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
-        values(null,#{end},#{uUuid},#{category},#{type},#{score},
-        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+        insert into u_elec_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
+        created_at,js_time,status,zz_code)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
+        date_sub(now(),interval 12 hour),#{status},#{zzCode})
     </insert>
 
     <!--税费，平台管理费，手续费=插入-->        <!-- 结算时间减12小时 -->
@@ -164,10 +169,69 @@
     <!--报单券=插入-->           <!-- 结算时间减12小时 -->
     <insert id="addEntryScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
             useGeneratedKeys="true" keyProperty="id">
-        insert into u_entry_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,created_at,js_time,status)
-        values(null,#{end},#{uUuid},#{category},#{type},#{score},
-        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+        insert into u_entry_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
+        created_at,js_time,status,zz_code)
+        values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
+        date_sub(now(),interval 12 hour),#{status},#{zzCode})
     </insert>
+
+
+
+    <!--//////// 转账查询 ////////-->
+    <!--现金积分查询（转账）-->
+    <select id="getCashScore" parameterType="string" resultMap="sblResultMap">
+        select * from u_cash_score_balance
+        <where>
+            <if test="uuid != null and uuid != ''">and u_uuid = #{uuid}</if>
+            and category = 9 and status = 1 and end = 2
+        </where>
+        order by created_at desc
+    </select>
+
+    <!--电子券积分查询（转账）-->
+    <select id="getElecScore" parameterType="string" resultMap="sblResultMap">
+        select * from u_elec_score_balance
+        <where>
+            <if test="uuid != null and uuid != ''">and u_uuid = #{uuid}</if>
+            and category = 9 and status = 1 and end = 2
+        </where>
+        order by created_at desc
+    </select>
+
+    <!--报单券积分查询（转账）-->
+    <select id="getEntryScore" parameterType="string" resultMap="sblResultMap">
+        select * from u_entry_score_balance
+        <where>
+            <if test="uuid != null and uuid != ''">and u_uuid = #{uuid}</if>
+            and category = 9 and status = 1 and end = 2
+        </where>
+        order by created_at desc
+    </select>
+
+
+
+    <!--插入报单券充值记录-->
+    <insert id="insertEntryScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into u_entry_score_balance(id,end,u_uuid,category,seco_cate,type,score,dz_score,
+        jy_score,order_sn,created_at,js_time,status)
+        values(null,#{end},#{uUuid},#{category},#{secoCate},#{type},#{score},#{dzScore},
+        #{jyScore},#{orderSn},now(),now(),#{status})
+    </insert>
+
+    <!--查询充值记录-->
+    <select id="selectEntryScore" parameterType="string" resultMap="sblResultMap">
+        select * from u_entry_score_balance where order_sn = #{orderSn} and status = 0
+    </select>
+
+    <!--更新报单券充值记录-->
+    <update id="updateEntryScore" parameterType="com.jyss.yqy.entity.ScoreBalance" >
+        update u_entry_score_balance
+        <set>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        where id = #{id}
+    </update>
 
 
 </mapper>

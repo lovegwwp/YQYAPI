@@ -1,5 +1,7 @@
 package com.jyss.yqy.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class ScoreBalance {
@@ -11,6 +13,7 @@ public class ScoreBalance {
 	private Integer type;// 1=收入 2=支出
 	private Float score;// 积分数额
 	private Float jyScore;// 结余数额
+	private Float dzScore;   //电子券金额
 	private Date createdAt;
 	private Date jsTime;   //结算时间
 	private String title;//
@@ -18,6 +21,7 @@ public class ScoreBalance {
 	private String cjsj;// /格式化创建时间
 	private Integer status;// 1=收入 2=支出
 	private Integer secoCate;//1=税费，2=平台管理费
+	private String zzCode;  //
 
 
 	public Integer getId() {
@@ -76,6 +80,7 @@ public class ScoreBalance {
 		this.jyScore = jyScore;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -131,4 +136,22 @@ public class ScoreBalance {
 	public void setSecoCate(Integer secoCate) {
 		this.secoCate = secoCate;
 	}
+
+	public Float getDzScore() {
+		return dzScore;
+	}
+
+	public void setDzScore(Float dzScore) {
+		this.dzScore = dzScore;
+	}
+
+	public String getZzCode() {
+		return zzCode;
+	}
+
+	public void setZzCode(String zzCode) {
+		this.zzCode = zzCode;
+	}
+
+
 }

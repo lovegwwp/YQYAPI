@@ -1,46 +1,34 @@
 package com.jyss.yqy.mapper;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
-
 import com.jyss.yqy.entity.ScoreBack;
 import com.jyss.yqy.entity.ScoreBalance;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ScoreBalanceMapper {
+
 	/**
 	 * 现金积分查询
-	 * 
-	 * @param uUuid
-	 * @return
 	 */
 	List<ScoreBalance> getCashScoreBalance(@Param("uUuid") String uUuid);
 
 	/**
 	 * 购物积分查询
-	 * 
-	 * @param uUuid
-	 * @return
 	 */
 	List<ScoreBalance> getShoppingScoreBalance(@Param("uUuid") String uUuid);
 
 	/**
 	 * 现金积分插入
-	 * 
-	 * @param sb
-	 * @return
 	 */
 	int addCashScoreBalance(ScoreBalance sb);
 
 	/**
 	 * 购物积分插入
-	 * 
-	 * @param sb
-	 * @return
 	 */
 	int addShoppingScoreBalance(ScoreBalance sb);
+
 
 
 	// 现金积分插入(结算时间减12小时)
@@ -57,6 +45,29 @@ public interface ScoreBalanceMapper {
 
 	//报单券插入(结算时间减12小时)
 	int addEntryScore(ScoreBalance sb);
+
+
+
+	//现金积分查询（转账）
+	List<ScoreBalance> getCashScore(@Param("uuid")String uuid);
+
+	//电子券积分查询（转账）
+	List<ScoreBalance> getElecScore(@Param("uuid")String uuid);
+
+	//报单券积分查询（转账）
+	List<ScoreBalance> getEntryScore(@Param("uuid")String uuid);
+
+
+
+	//插入报单券充值记录
+	int insertEntryScore(ScoreBalance sb);
+
+	//查询报单券充值记录
+	List<ScoreBalance> selectEntryScore(@Param("orderSn")String orderSn);
+
+	//更新报单券充值记录
+	int updateEntryScore(ScoreBalance sb);
+
 
 
 	// /////////积分返还///////////////
