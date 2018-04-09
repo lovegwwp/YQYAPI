@@ -168,7 +168,7 @@ public class UserAccountServiceImpl implements UserAccountService {
                     userBean1.setId(userBean.getId());
                     userBean1.setElectScore(userBean.getElectScore() - scoreBalance.getDzScore());
                     userBean1.setBdScore(userBean.getBdScore() + scoreBalance.getScore() + scoreBalance.getDzScore());
-                    userMapper.updateScore(userBean);
+                    userMapper.updateScore(userBean1);
 
                     //记录电子券使用
                     if(scoreBalance.getDzScore() > 0){
