@@ -32,39 +32,6 @@ public class UserAccountAction {
 	private UMobileLoginService uMobileLoginService;
 	@Autowired
     private UserAccountService userAccountService;
-	@Autowired
-    private XtclService xtclService;
-
-
-    /**
-     * 查询电子券复销比例
-     */
-    @RequestMapping("/check")
-    @ResponseBody
-    public Map<String, Object> getBdScore() {
-        Xtcl xtcl1 = xtclService.getClsValue("fxje_type", "1");       //最低复销金额
-        Xtcl xtcl2 = xtclService.getClsValue("dzqbl_type", "1");      //电子券占复销额的最高比例
-
-        Map<String, Object> map = new HashMap<>();
-        if(xtcl1 != null && xtcl2 != null){
-            float float1 = Float.parseFloat(xtcl1.getBz_value());
-            float float2 = Float.parseFloat(xtcl2.getBz_value());
-            Map<String, Object> map1 = new HashMap<>();
-            map1.put("amount",float1);
-            map1.put("ratio",float2);
-
-            map.put("code", "0");
-            map.put("status", "true");
-            map.put("message", "查询成功");
-            map.put("data", map1);
-            return map;
-        }
-        map.put("code", "-1");
-        map.put("status", "false");
-        map.put("message", "查询失败");
-        map.put("data", "");
-        return map;
-    }
 
 
 
@@ -74,17 +41,16 @@ public class UserAccountAction {
     @RequestMapping("/topup")
     @ResponseBody
     public Map<String, Object> insertBdScore(@RequestParam("token") String token,@RequestParam("payAmount") Float payAmount,
-                                             @RequestParam("amount") Float amount,@RequestParam("zfType") Integer zfType) {
+                                             @RequestParam("zfType") Integer zfType) {
         Map<String, Object> map = new HashMap<>();
         List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
         if (loginList != null && loginList.size() == 1) {
             UMobileLogin uMobileLogin = loginList.get(0);
             if(zfType == 1){
-                Map<String, Object> result = userAccountService.getALiPayResult(uMobileLogin.getuUuid(), payAmount, amount);
+                Map<String, Object> result = userAccountService.getALiPayResult(uMobileLogin.getuUuid(), payAmount);
                 return result;
 
             }
-
 
         }
         map.put("code", "-2");
@@ -212,7 +178,7 @@ public class UserAccountAction {
                 List<UserBean> list1 = userService.getUserByUuid(uuid);
                 if(list1 != null && list1.size() == 1){
                     UserBean userBean1 = list1.get(0);
-                    if(userBean1.getIsTransfer() == 1){
+                    if(userBean1.getIsTransfer() == 1 && userBean.getIsTransfer() == 1){
 
                         if(userBean.getPayPwd().equals(psw)){
                             Map<String, Object> map1 = userAccountService.updateUserScore(userBean,

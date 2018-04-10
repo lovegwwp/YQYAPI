@@ -54,8 +54,7 @@ public class UserRecordBAction {
 				.findUserByToken(token);
 		if (loginList != null && loginList.size() > 0) {
 			UMobileLogin uMobileLogin = loginList.get(0);
-			Map<String, String> map = userRecordBService.insertUserRecordB(
-					uMobileLogin.getuUuid(), bCode);
+			Map<String, String> map = userRecordBService.insertUserRecordB(uMobileLogin.getuUuid(), bCode);
 			return map;
 		}
 		Map<String, String> map = new HashMap<String, String>();
@@ -314,7 +313,7 @@ public class UserRecordBAction {
 	 */
 	//@RequestMapping("/updateDldjByDay")
 	//@ResponseBody
-	public void updateDldj() {
+	/*public void updateDldj() {
 		////查出u_user所用代理人等级
 		List<UserBean> ueseList = userService.getUserInfo(null,null,null,"1","2",null);
 		////查出u_u_user_r_record_b 已有等级
@@ -333,6 +332,6 @@ public class UserRecordBAction {
 			}
 		}
 		System.out.print("用户初始绑定关系等级更改完毕");
-	}
+	}*/
 
 }

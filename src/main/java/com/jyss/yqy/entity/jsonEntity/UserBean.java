@@ -32,12 +32,11 @@ public class UserBean {
 	private Date createdAt;
 	private Date lastAccessTime;
 
-	private Float totalAmount;  //首次消费额
+	private Float totalAmount;  //首次消费额（用于共享奖）
 	private Float electScore;   //电子券金额
 	private Float bdScore;      //报单券金额
-	private Integer cjStatus;    //层奖
-
-	private Integer isTransfer;    //1可转，2不可转（账户转账）
+	private Integer cjStatus;    //层奖（用于层奖）
+	private Integer isTransfer;    //1可转，2不可转
 	private Float borrow;  //借贷金额
 
 	// private Date createdAt;//

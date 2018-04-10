@@ -18,11 +18,9 @@ import com.jyss.yqy.mapper.ScoreBalanceMapper;
 import com.jyss.yqy.mapper.UserMapper;
 import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.UserAccountService;
-import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,40 +43,12 @@ public class UserAccountServiceImpl implements UserAccountService {
      * 充值报单券
      */
     @Override
-    public Map<String, Object> getALiPayResult(String uuid, Float payAmount, Float amount){
+    public Map<String, Object> getALiPayResult(String uuid, Float payAmount){
         Map<String, Object> map = new HashMap<String, Object>();
 
-        //查询常量值
-        Xtcl xtcl1 = xtclMapper.getClsValue("fxje_type", "1");        //最低复销金额
-        float float1 = Float.parseFloat(xtcl1.getBz_value());       			   //6000
-        Xtcl xtcl2 = xtclMapper.getClsValue("dzqbl_type", "1");       //电子券占复销额的最高比例
-        float float2 = Float.parseFloat(xtcl2.getBz_value());                      //0.8
-
-        float totalMoney = payAmount + amount;
-        if(totalMoney * float2 < amount){
-            map.put("code", "-3");
-            map.put("status", "false");
-            map.put("message", "电子券不能超过使用比例");
-            map.put("data", "");
-            return map;
-        }
-        if(totalMoney < float1){
-            map.put("code", "-4");
-            map.put("status", "false");
-            map.put("message", "充值金额不能低于最低复销值");
-            map.put("data", "");
-            return map;
-        }
         List<UserBean> userBeans = userMapper.getUserByUuid(uuid);
         if(userBeans != null && userBeans.size() == 1){
             UserBean userBean = userBeans.get(0);
-            if(userBean.getElectScore() < amount){
-                map.put("code", "-5");
-                map.put("status", "false");
-                map.put("message", "电子券余额不足");
-                map.put("data", "");
-                return map;
-            }
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
             String outTradeNo = sdf.format(new Date()) + "O" + userBean.getId()
@@ -122,8 +92,7 @@ public class UserAccountServiceImpl implements UserAccountService {
                 scoreBalance.setSecoCate(1);
                 scoreBalance.setType(1);
                 scoreBalance.setScore(payAmount);
-                scoreBalance.setDzScore(amount);
-                scoreBalance.setJyScore(userBean.getBdScore() + totalMoney);
+                scoreBalance.setJyScore(userBean.getBdScore() + payAmount);
                 scoreBalance.setOrderSn(outTradeNo);
                 scoreBalance.setStatus(0);
                 int count = scoreBalanceMapper.insertEntryScore(scoreBalance);
@@ -163,26 +132,12 @@ public class UserAccountServiceImpl implements UserAccountService {
                 List<UserBean> userBeans = userMapper.getUserByUuid(scoreBalance.getuUuid());
                 if(userBeans != null && userBeans.size() == 1){
                     UserBean userBean = userBeans.get(0);
-
+                    //修改报单券
                     UserBean userBean1 = new UserBean();
                     userBean1.setId(userBean.getId());
-                    userBean1.setElectScore(userBean.getElectScore() - scoreBalance.getDzScore());
-                    userBean1.setBdScore(userBean.getBdScore() + scoreBalance.getScore() + scoreBalance.getDzScore());
+                    userBean1.setBdScore(userBean.getBdScore() + scoreBalance.getScore());
                     userMapper.updateScore(userBean1);
-
-                    //记录电子券使用
-                    if(scoreBalance.getDzScore() > 0){
-                        ScoreBalance scoreBalance1 = new ScoreBalance();
-                        scoreBalance1.setEnd(2);
-                        scoreBalance1.setuUuid(userBean.getUuid());
-                        scoreBalance1.setCategory(11);
-                        scoreBalance1.setType(2);
-                        scoreBalance1.setScore(scoreBalance.getDzScore());
-                        scoreBalance1.setJyScore(userBean.getElectScore() - scoreBalance.getDzScore());
-                        scoreBalance1.setStatus(1);
-                        scoreBalanceMapper.addElecScore(scoreBalance1);
-                    }
-
+                    //修改充值状态
                     ScoreBalance scoreBalance1 = new ScoreBalance();
                     scoreBalance1.setId(scoreBalance.getId());
                     scoreBalance1.setStatus(1);

@@ -9,8 +9,7 @@ import com.jyss.yqy.entity.UUserRRecordB;
 
 public interface UserRecordBService {
 
-	Map<String, String> insertUserRecordB(@Param("uuid") String uuid,
-			@Param("bCode") String bCode);
+	Map<String, String> insertUserRecordB(@Param("uuid") String uuid,@Param("bCode") String bCode);
 
 	//Map<String, String> insertJBonusFdj();
 

@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserBean> getUserByUuid(String uuid) {
-		// TODO Auto-generated method stub
+
 		return userMapper.getUserByUuid(uuid);
 	}
 
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
 	public int upUserMyInfo(String uuid, String nick, String province,
 			String provinceId, String cityId, String city, String areaId,
 			String area) {
-		// TODO Auto-generated method stub
+
 		return userMapper.upUserMyInfo(uuid, nick, province, provinceId,
 				cityId, city, areaId, area);
 	}
@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserBean> getUserInfo(String account, String uuid, String id,
 			String status, String isAuth, String statusAuth) {
-		// TODO Auto-generated method stub
+
 		return userMapper.getUserInfo(account, uuid, id, status, isAuth,
 				statusAuth);
 	}

@@ -21,7 +21,6 @@
         <result property="status" column="status"  />
         <result property="orderSn" column="order_sn"  />
         <result property="secoCate" column="seco_cate"  /> <!-- 1=税费，2=平台管理费 -->
-        <result property="dzScore" column="dz_score"  /> <!--电子券金额(报单券)-->
         <result property="zzCode" column="zz_code"  />
 
     </resultMap>    
@@ -38,8 +37,7 @@
         <result property="createdAt" column="created_at"  />
         <result property="backTime" column="back_time"  />
         <result property="status" column="status"  />
-
-    </resultMap>   
+    </resultMap>
     
     <!-- 积分返还 -->
     <!--返还记录=插入-->
@@ -119,8 +117,7 @@
 
     <!--报单券积分明细=查询-->
     <select id="getEntryScoreBalance" resultMap="sblResultMap" >
-        select m.id,m.end,m.u_uuid,m.category,m.type,(m.score + m.dz_score) score,m.jy_score,m.order_sn,
-        m.created_at,m.js_time,m.status,m.title,DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' ) cjsj  from
+        select m.*, DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' )  cjsj  from
         (select u.*,c.bz_value as title from u_entry_score_balance u
         left join p_xt_cl c on u.category = c.bz_id where c.bz_type='category_type') m
         <where>
@@ -230,13 +227,13 @@
     </select>
 
 
-
+    <!--//////// 充值 ////////-->
     <!--插入报单券充值记录-->
     <insert id="insertEntryScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
             useGeneratedKeys="true" keyProperty="id">
-        insert into u_entry_score_balance(id,end,u_uuid,category,seco_cate,type,score,dz_score,
+        insert into u_entry_score_balance(id,end,u_uuid,category,seco_cate,type,score,
         jy_score,order_sn,created_at,js_time,status)
-        values(null,#{end},#{uUuid},#{category},#{secoCate},#{type},#{score},#{dzScore},
+        values(null,#{end},#{uUuid},#{category},#{secoCate},#{type},#{score},
         #{jyScore},#{orderSn},now(),now(),#{status})
     </insert>
 

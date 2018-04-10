@@ -13,7 +13,6 @@ public class ScoreBalance {
 	private Integer type;// 1=收入 2=支出
 	private Float score;// 积分数额
 	private Float jyScore;// 结余数额
-	private Float dzScore;   //电子券金额
 	private Date createdAt;
 	private Date jsTime;   //结算时间
 	private String title;//
@@ -135,14 +134,6 @@ public class ScoreBalance {
 
 	public void setSecoCate(Integer secoCate) {
 		this.secoCate = secoCate;
-	}
-
-	public Float getDzScore() {
-		return dzScore;
-	}
-
-	public void setDzScore(Float dzScore) {
-		this.dzScore = dzScore;
 	}
 
 	public String getZzCode() {

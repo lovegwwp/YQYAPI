@@ -79,16 +79,7 @@ public interface UserService {
 	
 	/**
 	 * 查询个人信息
-	 * 
-	 * @param account
-	 * @param uuid
-	 * @param id
-	 * @param status
-	 * @param isAuth
-	 * @param statusAuth
-	 * @return
 	 */
-
 	List<UserBean> getUserInfo(@Param("account") String account,
                                @Param("uuid") String uuid, @Param("id") String id,
                                @Param("status") String status, @Param("isAuth") String isAuth,
@@ -96,9 +87,6 @@ public interface UserService {
 
 	/**
 	 * 新增用户
-	 * 
-	 * @param user
-	 * @return
 	 */
 	int addUser(User user);
 
