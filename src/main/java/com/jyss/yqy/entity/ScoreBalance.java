@@ -19,7 +19,7 @@ public class ScoreBalance {
 	private String orderSn;// 订单号
 	private String cjsj;// /格式化创建时间
 	private Integer status;// 1=收入 2=支出
-	private Integer secoCate;//1=税费，2=平台管理费
+	private Integer secoCate;//1=税费，2=平台管理费，3=手续费  或 1支付宝，2微信，3线下充值
 	private String zzCode;  //
 
 

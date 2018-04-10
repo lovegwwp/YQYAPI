@@ -39,6 +39,11 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 	}
 
 	@Override
+	public List<ScoreBalance> getScoreDetails(String uUuid) {
+		return sbMapper.getScoreDetails(uUuid);
+	}
+
+	@Override
 	public int addCashScoreBalance(ScoreBalance sb) {
 		sb.setEnd(2);
 		sb.setStatus(1);

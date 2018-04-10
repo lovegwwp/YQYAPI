@@ -31,6 +31,11 @@ public interface ScoreBalanceMapper {
 
 
 	/**
+	 * 税费，平台管理费，手续费明细
+	 */
+	List<ScoreBalance> getScoreDetails(@Param("uUuid") String uUuid);
+
+	/**
 	 * 现金积分插入
 	 */
 	int addCashScoreBalance(ScoreBalance sb);

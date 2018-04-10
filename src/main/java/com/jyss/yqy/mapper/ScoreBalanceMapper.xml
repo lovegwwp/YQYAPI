@@ -127,6 +127,18 @@
         order by m.created_at desc
     </select>
 
+    <!--税费，平台管理费，手续费明细-->
+    <select id="getScoreDetails" resultMap="sblResultMap" >
+        select m.*, DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' )  cjsj  from
+        (select u.*,c.bz_value as title from u_score_details u
+        left join p_xt_cl c on u.category = c.bz_id where c.bz_type='category_type') m
+        <where>
+            <if test="uUuid != null and uUuid !=''"> and m.u_uuid = #{uUuid} </if>
+            and m.status = 1
+        </where>
+        order by m.created_at desc
+    </select>
+
 
 
     <!--现金积分=插入-->         <!-- ordersn -->
