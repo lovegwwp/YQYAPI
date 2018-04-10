@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 	private UserAuthMapper userAuthMapper;
 
 	/**
-	 * 用户登陆 status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过
+	 * 用户登陆 status=-1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过
 	 * 2=未通过
 	 */
 	@Override
@@ -61,13 +61,13 @@ public class UserServiceImpl implements UserService {
 			m.put("data", "");
 			return m;
 		}
-		int count = userMapper.addLogin(ub.getUuid(), token);
+		int count = userMapper.addLogin(ub.getUuid(), token);///登录token
 		if (count == 1) {
-			// //已有用户，判断身份，是普通会员0还是代言人1，代理人2,3,4 ,5经理人
+			// //已有用户，判断身份，是普通会员0还是代言人1，1=成为代言人 2=一级代理人 3=二级代理人 4=三级代理人 5=经理人（虚拟账号）6=市场总监助理
 			// 普通会员
 			if (ub.getIsChuangke() == 0) {
 				m.put("status", "true");
-				m.put("message", "普通会员登录，去升级为代理人！");
+				m.put("message", "普通会员登录，去升级为合伙人！");
 				m.put("code", "3");
 				m.put("data", ub);
 				return m;
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 					return m;
 				} else if (ub.getIsAuth() == 2) {
 					m.put("status", "true");
-					m.put("message", "代言人登录，去升级为代理人！");
+					m.put("message", "代言人登录，去升级为合伙人！");
 					m.put("code", "4");
 					m.put("data", ub);
 					return m;
@@ -142,11 +142,12 @@ public class UserServiceImpl implements UserService {
 		user.setUuid(CommTool.getMyUUID());
 		// status1删除 1=正常2=禁用
 		// isAuth 1=已提交 2=审核通过3=审核不通过
-		// --is_chuangke0普通会员1代言人2初级代理人 3中级代理人4高级代理人 -->
+		// --is_chuangke是普通会员0还是代言人1，1=成为代言人 2=一级代理人 3=二级代理人 4=三级代理人 5=经理人（虚拟账号）6=市场总监助理
 		user.setIsChuangke(0);
 		user.setStatus("1");
 		user.setIsAuth(1);
 		user.setIsChuangke(0);
+
 		return userMapper.addUser(user);
 	}
 
