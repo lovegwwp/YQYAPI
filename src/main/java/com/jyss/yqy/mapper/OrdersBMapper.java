@@ -100,10 +100,10 @@ public interface OrdersBMapper {
 	 */
 	int delOrder(@Param("orderSn") String orderSn);
 
-	// 查询已完成的订单
-	List<UserTotalAmount> getSuccessOrder();
+	// 查询已完成的订单total
+	List<JRecord> getSuccessOrderTotal();
 	
-	// 查询已完成的订单
+	// 查询已完成的订单pv
 	List<JRecord> getSuccessOrderPv();
 	
 	////分红奖统计///////

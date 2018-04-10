@@ -218,7 +218,7 @@
 
 
     <select id="getUserByUuid" resultMap="ubResultMap">
-        select id,uuid,nick,pay_pwd, ,shopping_score,cash_score,
+        select id,uuid,nick,pay_pwd,is_chuangke,shopping_score,cash_score,
         is_auth,b_code,total_pv,elect_score,bd_score,is_transfer
         from u_user
         <where>

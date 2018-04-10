@@ -101,7 +101,7 @@ public class JBonusGxjServiceImpl implements JBonusGxjService {
 		Xtcl xtcl1 = xtclMapper.getClsValue("gxjbl_type", "1");        //共享奖比例
 		float float1 = Float.parseFloat(xtcl1.getBz_value());       			    //0.1
 
-		List<JRecord> orderPvList = ordersBMapper.getSuccessOrderPv();        //查询昨日新增业绩
+		List<JRecord> orderPvList = ordersBMapper.getSuccessOrderTotal();        //查询昨日新增业绩
 		for (JRecord jRecord : orderPvList) {
 			List<JRecord> jRecords = jRecordMapper.selectUserGxjByUid(jRecord.getuId());
 			if(jRecords != null && jRecords.size() == 1){

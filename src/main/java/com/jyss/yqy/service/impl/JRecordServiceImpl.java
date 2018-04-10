@@ -212,7 +212,7 @@ public class JRecordServiceImpl implements JRecordService{
 	private void insertJbonusScj(){
 		int record = recordMapper.updateJRecord();     //将每日的pv值清0
 		if(record == 1){
-			List<JRecord> orderPvList = ordersBMapper.getSuccessOrderPv();
+			List<JRecord> orderPvList = ordersBMapper.getSuccessOrderTotal();
 			for (JRecord jRecord : orderPvList) {
 				recordMapper.updateJRecordByUid(jRecord.getPv()+"",null,jRecord.getuId());
 			}
