@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,7 +140,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int addUser(User user) {
 		// TODO Auto-generated method stub
-		user.setUuid(CommTool.getMyUUID());
+		String uuidStr = CommTool.getMyUUID();
+		///判断uuid是否重复
+		List<UserBean> lls = userMapper.getUserIsOnlyBy(uuidStr,null);
+		if(lls!=null&&lls.size()!=0){
+			uuidStr = CommTool.getMyUUID();
+		}
+		user.setUuid(uuidStr);
 		// status1删除 1=正常2=禁用
 		// isAuth 1=已提交 2=审核通过3=审核不通过
 		// --is_chuangke是普通会员0还是代言人1，1=成为代言人 2=一级代理人 3=二级代理人 4=三级代理人 5=经理人（虚拟账号）6=市场总监助理
@@ -261,6 +268,35 @@ public class UserServiceImpl implements UserService {
 			String totalPv, String id, String isChuangke) {
 		// TODO Auto-generated method stub
 		return userMapper.updateScoreByFHJ(cashScore, shoppingScore, totalPv, id, isChuangke);
+	}
+
+	/**
+	 * //查询是否重复，根据bcode和uuid
+	 * @param uuid
+	 * @param bCode
+	 * @return
+	 */
+	@Override
+	public List<UserBean> getUserIsOnlyBy(@Param("uuid") String uuid, @Param("bCode") String bCode) {
+		return userMapper.getUserIsOnlyBy(uuid, bCode);
+	}
+
+	/**
+	 * 修改user各种金额
+	 * @param uuid 用户uuid
+	 * @param id 用户id
+	 * @param totalPv 分红权
+	 * @param cashScore 商城消费券
+	 * @param shoppingScore 股券
+	 * @param electScore 电子券
+	 * @param bdScore 报单券
+	 * @param totalAmount 首次消费额
+	 * @param borrow 借贷金额
+	 * @return
+	 */
+	@Override
+	public int upUserMoneyByUUidOrId(@Param("uuid") String uuid, @Param("id") String id, @Param("totalPv") Float totalPv, @Param("cashScore") Float cashScore, @Param("shoppingScore") Float shoppingScore, @Param("electScore") Float electScore, @Param("bdScore") Float bdScore, @Param("totalAmount") Float totalAmount, @Param("borrow") Float borrow) {
+		return userMapper.upUserMoneyByUUidOrId(uuid,  id, totalPv,  cashScore, shoppingScore,  electScore,  bdScore, totalAmount, borrow) ;
 	}
 
 	@Override

@@ -161,4 +161,34 @@ public interface UserService {
 	int updateScoreByFHJ(@Param("cashScore") String cashScore,
                          @Param("shoppingScore") String shoppingScore, @Param("totalPv") String totalPv, @Param("id") String id, @Param("isChuangke") String isChuangke);
 
+	/**
+	 * //查询是否重复，根据bcode和uuid
+	 * @param uuid
+	 * @param bCode
+	 * @return
+	 */
+	List<UserBean> getUserIsOnlyBy(@Param("uuid") String uuid,@Param("bCode") String bCode);
+
+	/**
+	 * 修改user各种金额
+	 * @param uuid 用户uuid
+	 * @param id 用户id
+	 * @param totalPv 分红权
+	 * @param cashScore 商城消费券
+	 * @param shoppingScore 股券
+	 * @param electScore 电子券
+	 * @param bdScore 报单券
+	 * @param totalAmount 首次消费额
+	 * @param borrow 借贷金额
+	 * @return
+	 */
+	int upUserMoneyByUUidOrId(@Param("uuid") String uuid,@Param("id") String id, @Param("totalPv") Float totalPv,
+							  @Param("cashScore") Float cashScore
+			, @Param("shoppingScore") Float shoppingScore
+			, @Param("electScore") Float electScore
+			, @Param("bdScore") Float bdScore
+			, @Param("totalAmount") Float totalAmount
+			, @Param("borrow") Float borrow);
+
+
 }

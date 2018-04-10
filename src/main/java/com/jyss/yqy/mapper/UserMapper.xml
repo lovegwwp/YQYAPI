@@ -73,9 +73,11 @@
           <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if>
           <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>
         </where>
-    </select> 
-    
-   <!--修改个人信息 --> 
+    </select>
+
+
+
+    <!--修改个人信息 -->
     <update id="upUserMyInfo"  >
         update u_user  set nick = #{nick} , province_id = #{provinceId} , province = #{province} ,
         city_id = #{cityId} , city = #{city} ,area_id = #{areaId} , area = #{area}, last_modify_time= now()
@@ -119,8 +121,34 @@
           <if test="isAuth != null and isAuth !=''"> ,is_auth = #{isAuth} </if> 
          where uuid =#{uuid} 
     </update>
-    
-    
+
+
+    <!--查询是否重复，根据bcode和uuid  -->
+    <select id="getUserIsOnlyBy" resultMap="ubResultMap">
+        select * from u_user
+        <where>
+            1 = 1
+            <if test="bCode != null and bCode !=''">and b_code = #{bCode} </if>
+            <if test="uuid != null and uuid !=''"> and uuid = #{uuid} </if>
+        </where>
+    </select>
+
+    <!--修改user各种金额-->
+    <update id="upUserMoneyByUUidOrId"  >
+        update u_user  set last_modify_time =now()
+        <if test="totalPv != null and totalPv !=''"> ,total_pv = total_pv+ #{totalPv} </if>
+        <if test="cashScore != null and cashScore !=''"> ,cash_score = cash_score+ #{cashScore} </if>
+        <if test="shoppingScore != null and shoppingScore !=''"> ,shopping_score = shopping_score + #{shoppingScore} </if>
+        <if test="electScore != null and electScore !=''"> ,elect_score = elect_score + #{electScore} </if>
+        <if test="bdScore != null and bdScore !=''"> ,bd_score = bd_score + #{bdScore} </if>
+        <if test="totalAmount != null and totalAmount !=''"> ,total_amount = total_amount + #{totalAmount} </if>
+        <if test="borrow != null and borrow !=''"> ,borrow = borrow + #{borrow} </if>
+        <where>
+            1 = 1
+            <if test="uuid != null and uuid !=''"> and uuid = #{uuid} </if>
+            <if test="id != null and id !=''"> and id = #{id} </if>
+        </where>
+    </update>
     
 
     <select id="getUserById" resultMap="ubResultMap">           
