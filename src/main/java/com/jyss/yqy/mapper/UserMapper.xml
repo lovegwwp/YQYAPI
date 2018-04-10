@@ -47,7 +47,7 @@
      <!-- status  -1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过  statusAuth 0=审核中 1=通过 2=未通过 -->
     <select id="getUserBy" resultMap="ubResultMap">           
 	    select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,
-        u.cash_score,u.is_auth,u.total_pv,u.b_code,a.real_name,a.id_card,u.elect_score,u.bd_score,u.borrow
+        u.cash_score,u.is_auth,u.total_pv,u.b_code,a.real_name,a.id_card,u.elect_score,u.bd_score,u.borrow,u.is_transfer
 	    from u_user u  left join u_user_auth a on u.uuid = a.u_uuid
         <where>
           <if test="account != null and account !=''"> and u.account = #{account} </if>
@@ -62,7 +62,7 @@
     <select id="getUserInfo" resultMap="ubResultMap">           
 	    select u.id,u.uuid,u.nick,u.account,u.status,u.avatar,u.is_chuangke,u.cash_score,u.shopping_score,
         u.is_auth,u.b_code,u.pay_pwd,u.total_pv,u.province_id,u.province, u.city_id,u.city,u.area_id,
-        u.area,a.real_name,a.id_card ,u.elect_score,u.bd_score,u.borrow
+        u.area,a.real_name,a.id_card ,u.elect_score,u.bd_score,u.borrow ,u.is_transfer
         from u_user u left join u_user_auth a on u.uuid = a.u_uuid
         <where>
           1 = 1 and  u.is_chuangke in(2,3,4,5)
@@ -125,7 +125,7 @@
 
     <select id="getUserById" resultMap="ubResultMap">           
 	    select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,
-        u.is_auth,u.cash_score,u.total_pv,u.b_code,a.real_name,a.id_card
+        u.is_auth,u.cash_score,u.total_pv,u.b_code,a.real_name,a.id_card ,u.is_transfer
 	    from u_user u   left join u_user_auth a on u.uuid = a.u_uuid
         <where>
           <if test="id != null and id !=''"> and u.id = #{id} </if>
