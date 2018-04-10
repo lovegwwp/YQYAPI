@@ -10,14 +10,25 @@ import org.springframework.stereotype.Repository;
 public interface ScoreBalanceMapper {
 
 	/**
-	 * 现金积分查询
+	 * 现金积分明细
 	 */
 	List<ScoreBalance> getCashScoreBalance(@Param("uUuid") String uUuid);
 
 	/**
-	 * 购物积分查询
+	 * 购物积分明细
 	 */
 	List<ScoreBalance> getShoppingScoreBalance(@Param("uUuid") String uUuid);
+
+	/**
+	 * 电子券积分明细
+	 */
+	List<ScoreBalance> getElecScoreBalance(@Param("uUuid") String uUuid);
+
+	/**
+	 * 报单券积分明细
+	 */
+	List<ScoreBalance> getEntryScoreBalance(@Param("uUuid") String uUuid);
+
 
 	/**
 	 * 现金积分插入

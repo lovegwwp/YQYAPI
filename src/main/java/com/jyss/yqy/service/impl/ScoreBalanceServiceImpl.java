@@ -20,19 +20,26 @@ public class ScoreBalanceServiceImpl implements ScoreBalanceService {
 
 	@Override
 	public List<ScoreBalance> getCashScoreBalance(String uUuid) {
-		// TODO Auto-generated method stub
 		return sbMapper.getCashScoreBalance(uUuid);
 	}
 
 	@Override
 	public List<ScoreBalance> getShoppingScoreBalance(String uUuid) {
-		// TODO Auto-generated method stub
 		return sbMapper.getShoppingScoreBalance(uUuid);
 	}
 
 	@Override
+	public List<ScoreBalance> getElecScoreBalance(String uUuid) {
+		return sbMapper.getElecScoreBalance(uUuid);
+	}
+
+	@Override
+	public List<ScoreBalance> getEntryScoreBalance(String uUuid) {
+		return sbMapper.getEntryScoreBalance(uUuid);
+	}
+
+	@Override
 	public int addCashScoreBalance(ScoreBalance sb) {
-		// TODO Auto-generated method stub
 		sb.setEnd(2);
 		sb.setStatus(1);
 		sb.setCreatedAt(CommTool.getNowTimestamp());

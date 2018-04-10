@@ -144,7 +144,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 					ScoreBalance score = new ScoreBalance();
 					score.setEnd(2);
 					score.setuUuid(userBean.getUuid());
-					score.setCategory(11);
+					score.setCategory(13);
 					score.setType(2);
 					score.setScore(cashScore);
 					score.setJyScore(0f);
@@ -162,7 +162,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 					ScoreBalance score = new ScoreBalance();
 					score.setEnd(2);
 					score.setuUuid(userBean.getUuid());
-					score.setCategory(11);
+					score.setCategory(13);
 					score.setType(2);
 					score.setScore(borrow);
 					score.setJyScore(cashScore - borrow);

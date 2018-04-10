@@ -9,20 +9,27 @@ import com.jyss.yqy.entity.ScoreBalance;
 
 public interface ScoreBalanceService {
 	/**
-	 * 现金积分查询
-	 * 
-	 * @param uUuid
-	 * @return
+	 * 现金积分明细
 	 */
 	List<ScoreBalance> getCashScoreBalance(@Param("uUuid") String uUuid);
 
 	/**
-	 * 购物积分查询
-	 * 
-	 * @param uUuid
-	 * @return
+	 * 购物积分明细
 	 */
 	List<ScoreBalance> getShoppingScoreBalance(@Param("uUuid") String uUuid);
+
+
+	/**
+	 * 电子券积分明细
+	 */
+	List<ScoreBalance> getElecScoreBalance(@Param("uUuid") String uUuid);
+
+
+	/**
+	 * 报单券积分明细
+	 */
+	List<ScoreBalance> getEntryScoreBalance(@Param("uUuid") String uUuid);
+
 
 	/**
 	 * 现金积分插入

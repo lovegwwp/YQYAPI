@@ -79,35 +79,56 @@
 	  update u_score_back  set  status =#{status}
             where id = #{id}  and status =#{statusBefore};
    </update>
-  
-         
-     
-    <!--购物积分=查询--> 
-    <select id="getShoppingScoreBalance" resultMap="sblResultMap" >  
-        select t.*,DATE_FORMAT(t.created_at, '%Y-%m-%d %H:%i' )  cjsj from (select u.*,c.bz_value as title from u_shopping_score_balance u 
-                           left join p_xt_cl c 
-                           on u.category = c.bz_id 
-                           where c.bz_type='category_type') t
-            <where> 
-                 1 = 1
-			   <if test="uUuid != null and uUuid !=''"> and t.u_uuid = #{uUuid} </if>  
-			</where>  
-			order by created_at desc 
-    </select> 
-    
-   <!--现金积分=查询--> 
-    <select id="getCashScoreBalance" resultMap="sblResultMap" >  
-        <!-- select * from u_cash_score_balance  -->
-         select m.*, DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' )  cjsj  from (select u.*,c.bz_value as title from u_cash_score_balance u 
-                           left join p_xt_cl c 
-                           on u.category = c.bz_id 
-                           where c.bz_type='category_type') m
-            <where> 
-                 1 = 1
-			   <if test="uUuid != null and uUuid !=''"> and m.u_uuid = #{uUuid} </if>  
-			</where>   
-			order by created_at desc
-    </select> 
+
+
+    <!--现金积分明细=查询-->
+    <select id="getCashScoreBalance" resultMap="sblResultMap" >
+        select m.*, DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' )  cjsj  from
+        (select u.*,c.bz_value as title from u_cash_score_balance u
+        left join p_xt_cl c on u.category = c.bz_id where c.bz_type='category_type') m
+        <where>
+            <if test="uUuid != null and uUuid !=''"> and m.u_uuid = #{uUuid} </if>
+            and m.status = 1
+        </where>
+        order by m.created_at desc
+    </select>
+
+    <!--购物积分明细=查询-->
+    <select id="getShoppingScoreBalance" resultMap="sblResultMap" >
+        select t.*,DATE_FORMAT(t.created_at, '%Y-%m-%d %H:%i' )  cjsj from
+        (select u.*,c.bz_value as title from u_shopping_score_balance u
+        left join p_xt_cl c  on u.category = c.bz_id where c.bz_type='category_type') t
+        <where>
+            <if test="uUuid != null and uUuid !=''"> and t.u_uuid = #{uUuid} </if>
+            and t.status = 1
+        </where>
+        order by t.created_at desc
+    </select>
+
+    <!--电子券积分明细=查询-->
+    <select id="getElecScoreBalance" resultMap="sblResultMap" >
+        select m.*, DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' )  cjsj  from
+        (select u.*,c.bz_value as title from u_elec_score_balance u
+        left join p_xt_cl c on u.category = c.bz_id where c.bz_type='category_type') m
+        <where>
+            <if test="uUuid != null and uUuid !=''"> and m.u_uuid = #{uUuid} </if>
+            and m.status = 1
+        </where>
+        order by m.created_at desc
+    </select>
+
+    <!--报单券积分明细=查询-->
+    <select id="getEntryScoreBalance" resultMap="sblResultMap" >
+        select m.id,m.end,m.u_uuid,m.category,m.type,(m.score + m.dz_score) score,m.jy_score,m.order_sn,
+        m.created_at,m.js_time,m.status,m.title,DATE_FORMAT(m.created_at, '%Y-%m-%d %H:%i' ) cjsj  from
+        (select u.*,c.bz_value as title from u_entry_score_balance u
+        left join p_xt_cl c on u.category = c.bz_id where c.bz_type='category_type') m
+        <where>
+            <if test="uUuid != null and uUuid !=''"> and m.u_uuid = #{uUuid} </if>
+            and m.status = 1
+        </where>
+        order by m.created_at desc
+    </select>
 
 
 

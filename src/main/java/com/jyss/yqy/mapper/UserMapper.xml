@@ -46,36 +46,33 @@
      <!-- 登录查询相关用户 -->   
      <!-- status  -1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过  statusAuth 0=审核中 1=通过 2=未通过 -->
     <select id="getUserBy" resultMap="ubResultMap">           
-	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,u.cash_score,u.is_auth,u.total_pv,u.b_code,a.real_name,a.id_card 
-	    <!--   , m.token,m.created_at,m.last_access_time -->
-	           from u_user u 
-				  left join u_user_auth a on u.uuid = a.u_uuid	 	
-				 <!--  left join u_mobile_login m on u.uuid = m.u_uuid	 --> 			
-         <where> 
-              1 = 1
-              <if test="account != null and account !=''"> and u.account = #{account} </if> 	
-              <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
-			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
-			  <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>	
-			  <if test="statusAuth != null and statusAuth !=''"> and a.status &gt;= #{statusAuthMoreThan} </if>	
-		 </where> 
+	    select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,
+        u.cash_score,u.is_auth,u.total_pv,u.b_code,a.real_name,a.id_card,u.elect_score,u.bd_score,u.borrow
+	    from u_user u  left join u_user_auth a on u.uuid = a.u_uuid
+        <where>
+          <if test="account != null and account !=''"> and u.account = #{account} </if>
+          <if test="status != null and status !=''"> and u.status = #{status} </if>
+          <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if>
+          <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>
+          <if test="statusAuth != null and statusAuth !=''"> and a.status &gt;= #{statusAuthMoreThan} </if>
+        </where>
     </select>  
     
     <!--查询个人信息  -->
     <select id="getUserInfo" resultMap="ubResultMap">           
-	      select u.id,u.uuid,u.nick,u.account,u.status,u.avatar,u.is_chuangke,u.cash_score,u.shopping_score,u.is_auth,u.b_code,u.pay_pwd,u.total_pv,
-	         u.province_id,u.province, u.city_id,u.city,u.area_id,u.area,a.real_name,a.id_card 
-	           from u_user u 
-				  left join u_user_auth a on u.uuid = a.u_uuid	 						
-         <where> 
-              1 = 1 and  u.is_chuangke in(2,3,4,5)
-              <if test="account != null and account !=''"> and u.account = #{account} </if> 
-              <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid} </if> 
-              <if test="id != null and id !=''"> and u.id = #{id} </if> 	
-              <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
-			  <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if> 	
-			  <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>	
-		 </where> 
+	    select u.id,u.uuid,u.nick,u.account,u.status,u.avatar,u.is_chuangke,u.cash_score,u.shopping_score,
+        u.is_auth,u.b_code,u.pay_pwd,u.total_pv,u.province_id,u.province, u.city_id,u.city,u.area_id,
+        u.area,a.real_name,a.id_card ,u.elect_score,u.bd_score,u.borrow
+        from u_user u left join u_user_auth a on u.uuid = a.u_uuid
+        <where>
+          1 = 1 and  u.is_chuangke in(2,3,4,5)
+          <if test="account != null and account !=''"> and u.account = #{account} </if>
+          <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid} </if>
+          <if test="id != null and id !=''"> and u.id = #{id} </if>
+          <if test="status != null and status !=''"> and u.status = #{status} </if>
+          <if test="isAuth != null and isAuth !=''"> and u.is_auth = #{isAuth} </if>
+          <if test="statusAuth != null and statusAuth !=''"> and a.status = #{statusAuth} </if>
+        </where>
     </select> 
     
    <!--修改个人信息 --> 
@@ -127,14 +124,14 @@
     
 
     <select id="getUserById" resultMap="ubResultMap">           
-	      select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,u.is_auth,u.cash_score,u.total_pv,u.b_code,a.real_name,a.id_card  
-	           from u_user u   left join u_user_auth a on u.uuid = a.u_uuid							
-         <where> 
-              1 = 1
-              <if test="id != null and id !=''"> and u.id = #{id} </if> 	
-              <if test="status != null and status !=''"> and u.status = #{status} </if> 				  
-			  <if test="isAuth != null and isAuth !=''"> and u.is_auth &gt;= #{isAuth} </if> 				  
-		 </where> 
+	    select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,
+        u.is_auth,u.cash_score,u.total_pv,u.b_code,a.real_name,a.id_card
+	    from u_user u   left join u_user_auth a on u.uuid = a.u_uuid
+        <where>
+          <if test="id != null and id !=''"> and u.id = #{id} </if>
+          <if test="status != null and status !=''"> and u.status = #{status} </if>
+          <if test="isAuth != null and isAuth !=''"> and u.is_auth &gt;= #{isAuth} </if>
+        </where>
     </select>  
     
    <!-- 用户注册 -->
@@ -192,16 +189,6 @@
     </select>
 
 
-    <!-- 通过用户的uuid查询用户 -->
-    <!--<select id="getUserByUuid" resultMap="ubResultMap">
-         select u.id,a.real_name,u.is_chuangke,u.shopping_score,u.cash_score,u.is_auth,u.total_pv
-         from u_user u left join u_user_auth a on u.uuid = a.u_uuid
-         <where> 
-              <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid}
-              and u.status = 1 
-              </if> 			  		
-		 </where> 
-    </select>-->
     <select id="getUserByUuid" resultMap="ubResultMap">
         select id,uuid,nick,pay_pwd,is_chuangke,shopping_score,cash_score,
         is_auth,b_code,total_pv,elect_score,bd_score,is_transfer
@@ -260,6 +247,7 @@
               </if>
          </where>
     </select>
+
     
     <!-- 更新分红权,电子券,消费券,股券,报单券 -->
     <update id="updateScore" parameterType="com.jyss.yqy.entity.jsonEntity.UserBean">
