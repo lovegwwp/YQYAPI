@@ -12,8 +12,7 @@ import java.util.Map;
 
 public interface UserAccountService {
 
-    Map<String,Object> getALiPayResult(@Param("zzType")String uuid,@Param("payAmount")Float payAmount,
-                                     @Param("amount")Float amount);
+    Map<String,Object> getALiPayResult(@Param("zzType")String uuid,@Param("payAmount")Float payAmount);
 
     boolean updateUserBdBalance(@Param("totalAmount")String totalAmount,@Param("outTradeNo")String outTradeNo);
 

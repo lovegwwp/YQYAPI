@@ -179,7 +179,7 @@
 		 </where> 
     </select>-->
     <select id="getUserByBCode" resultMap="ubResultMap">
-        select a.id,a.uuid,a.nick,a.avatar,a.is_chuangke,a.b_code,
+        select a.id,a.uuid,a.nick,a.avatar,a.is_chuangke,a.b_code,a.is_transfer
         b.real_name as real_name
         from u_user a left join u_user_auth b on a.uuid = b.u_uuid
         <where>
@@ -190,7 +190,7 @@
 
 
     <select id="getUserByUuid" resultMap="ubResultMap">
-        select id,uuid,nick,pay_pwd,is_chuangke,shopping_score,cash_score,
+        select id,uuid,nick,pay_pwd, ,shopping_score,cash_score,
         is_auth,b_code,total_pv,elect_score,bd_score,is_transfer
         from u_user
         <where>

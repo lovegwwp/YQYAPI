@@ -449,8 +449,7 @@ public class UserAction {
 		// /获取最新token ===uuid
 		UMobileLogin uMobileLogin = loginList.get(0);
 		String uuuid = uMobileLogin.getuUuid();
-		int count = userService.upUserMyInfo(uuuid, nick, province, provinceId,
-				cityId, city, areaId, area);
+		int count = userService.upUserMyInfo(uuuid, nick, province, provinceId, cityId, city, areaId, area);
 		if (count == 1) {
 			map.put("status", "true");
 			map.put("message", "修改成功！");
