@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.jyss.yqy.utils.PasswordUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -375,7 +376,172 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		mm.put("hs", hs);
 		return mm;
 	}
-	
+
+	//userElec/1=使用电子抵扣
+	@Override
+	public Map<String, Object> getHhrOrderString(
+			@RequestParam("filePath") String filePath,@RequestParam("userElec") int userElec,
+			@RequestParam("gmID") int gmID, @RequestParam("gmNum") int gmNum,
+			@RequestParam("spID") int spID,@RequestParam("type") int type,@RequestParam("payPwd") String payPwd) {
+		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, String> mm = new HashMap<String, String>();
+		Map<String, Object> dlReMap = new HashMap<String, Object>();
+		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
+		mm.put("outtradeno", "");
+		mm.put("responseBody", "");
+		mm.put("money", "");
+		mm.put("bdscore", "");///报单券
+		mm.put("elecscore", "");//电子券
+		mm.put("zfCode", zfCode);
+		mm.put("zfPwd", "");
+		mm.put("zxingpng", "");// 订单二维码
+		mm.put("type", "1");// 判断是否初次购买=type=[1=初始合伙人购买。2=之后复销]
+
+		Goods goods = null;
+		goods = obMapper.getGoodsByid(spID + "");
+		if (goods == null) {
+			m.put("status", "false");
+			m.put("message", "商品信息错误！");
+			m.put("code", "-3");
+			m.put("data", mm);
+			return m;
+		}
+
+		// //// 验证当前用户是否合法///////////
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
+		if (ublist == null || ublist.size() == 0) {
+			m.put("status", "false");
+			m.put("message", "用户信息错误！");
+			m.put("code", "-2");
+			m.put("data", mm);
+			return m;
+		}
+		UserBean ub = ublist.get(0);
+		if (ub.getIsChuangke() < 2) {
+			m.put("status", "false");
+			m.put("message", "用户信息错误！");
+			m.put("code", "-2");
+			m.put("data", mm);
+			return m;
+		}
+
+		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")
+				|| ub.getPayPwd().equals("0")) {
+			zfCode = "0";
+			m.put("status", "false");
+			m.put("message", "支付密码错误！");
+			m.put("code", "-6");
+			m.put("data", mm);
+			return m;
+		} else {
+			zfCode = "1";
+			if (!(PasswordUtil.generatePayPwd(payPwd).equals(ub.getPayPwd()))) {
+				m.put("status", "false");
+				m.put("message", "支付密码错误！");
+				m.put("code", "-6");
+				m.put("data", mm);
+				return m;
+			}
+		}
+		float bdMoney =ub.getBdScore();
+		float elecMoney =ub.getElectScore();
+		mm.put("zfCode", zfCode);
+		mm.put("bdscore", bdMoney+ "");
+		mm.put("elecscore", elecMoney+ "");
+        ///////////订单业务///////////////////////////
+		String outTradeNo = System.currentTimeMillis() / 1000 + "O" + gmID
+				+ "r" + (long) (Math.random() * 1000L);
+
+		float price = 0;
+		float money = 0;
+		float useElecMoney = 0;////最后使用的电子券数额
+		float useBdMoney = 0;////最后使用的报单券数额
+		try {
+			//////判断金额购买比例//====如果是复销的话type==2，判断金额是否符合平台规范。电子券最多商品价格的80%（动态值）//
+			if(type==2){
+				price = goods.getPrice();
+				money = (float) (gmNum * price);
+				useBdMoney = money;
+				////userElec/1=使用电子抵扣===相应要有电子券抵扣记录
+				if(userElec==1) {
+					if(elecMoney!=0){
+						Xtcl dlhs = clMapper.getClsValue("dzqbl_type", "1");
+						String pencent = "0.8";
+						if (dlhs != null && dlhs.getBz_value() != null) {
+							pencent = dlhs.getBz_value();
+						}
+						float p = Float.parseFloat(pencent);
+						float elecMoneyMax = p * money;////电子券最多可抵扣此商品这些钱
+						if(elecMoney>elecMoneyMax){
+							useElecMoney = elecMoneyMax;
+						}else{
+							useElecMoney = elecMoney;
+						}
+						useBdMoney = money - useElecMoney;////报单券最后使用金额
+					}else{
+						userElec =0;///无法使用电子券
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			m.put("status", "false");
+			m.put("message", "商品信息错误！");
+			m.put("code", "-5");
+			m.put("data", mm);
+			return m;
+		}
+		if(useBdMoney<bdMoney){
+			m.put("status", "false");
+			m.put("message", "报单券余额不足！！");
+			m.put("code", "-1");
+			m.put("data", mm);
+			return m;
+		}
+		String gmr = "";
+		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
+			gmr = "XXX";
+		} else {
+			gmr = ub.getRealName();
+		}
+		// //商品二维码
+		String outPutPath = filePath + outTradeNo + ".png";
+		String code = "orderCodePng/" + outTradeNo + ".png";
+		mm.put("zxingpng", Constant.httpUrl + code);// 订单二维码
+		ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
+		/////进行商品购买，扣除相应金额，增加订单记录，以及报单券或者电子券记录///////////
+		int count = 0;
+		////扣用户积分
+		///报单券消费记录
+		//电子券消费记录[userElec==1,使用电子券]
+		if(userElec==1){
+
+		}
+		mm.put("bdscore", (bdMoney-useBdMoney)+ "");
+		mm.put("elecscore", (elecMoney-useElecMoney)+ "");
+		//生成最终订单
+		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
+				ub.getAccount(), goods.getName(), goods.getPics(), gmNum
+				+ "", "盒", "1", "1", goods.getPrice(), money, 0,
+				"0", code, "zfId", 3);
+		count = obMapper.addOrder(orderb);
+		if (count == 1) {
+			m.put("status", "true");
+			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
+			m.put("message", "提交订单成功！");
+			mm.put("outtradeno", outTradeNo);
+			mm.put("money", money + "");
+			mm.put("responseBody", "");
+			m.put("code", "0");
+			m.put("data", mm);
+			}
+		m.put("code", "-4");
+		m.put("data", mm);
+		return m;
+
+	}
+
+
 	@Override
 	public Map<String, Object> getYmzOrderString(
 			@RequestParam("filePath") String filePath,
@@ -425,7 +591,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		// (必填) 订单总金额，单位为元，不能超过1亿元
 		// 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
 		String totalAmount = money + "";
-	
+
 		// 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
 		String body = "易起云商品消费 " + money + "元";
 
@@ -481,7 +647,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		} else {
 			gmr = ub.getRealName();
 		}
-		
+
 		String notifyUrl = "http://121.40.29.64:8081/YQYAPI/YmzAliNotify.action";
 		////////支付组件初始化////////////////////
 
@@ -510,11 +676,11 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		try {
 			// 这里和普通的接口调用不同，使用的是sdkExecute
 			AlipayTradeAppPayResponse response = alipayClient
-					.sdkExecute(request);			 
-			System.out.println(response.getBody());	
+					.sdkExecute(request);
+			System.out.println(response.getBody());
 			////////////自我订单业务/////////
 			if (response.isSuccess()) {
-			// 自我业务处理
+				// 自我业务处理
 				// //商品二维码
 				String outPutPath = filePath + outTradeNo + ".png";
 				String code = "orderCodePng/" + outTradeNo + ".png";
@@ -523,7 +689,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
 				OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
 						ub.getAccount(), goods.getName(), goods.getPics(), gmNum
-								+ "", "盒", "-1", "1", goods.getPrice(), money, pv,
+						+ "", "盒", "-1", "1", goods.getPrice(), money, pv,
 						"0", code, "zfId", 1);
 				int count = 0;
 				count = obMapper.addOrder(orderb);
@@ -546,7 +712,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				m.put("status", "false");
 				m.put("message", "下单失败！");
 			}
-					
+
 		} catch (AlipayApiException e) {
 			e.printStackTrace();
 			m.put("status", "false");
@@ -554,4 +720,5 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		}
 		return m;
 	}
+
 }

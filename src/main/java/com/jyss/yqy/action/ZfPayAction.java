@@ -124,7 +124,7 @@ public class ZfPayAction {
 		Map<String, Object> mmap = new HashMap<String, Object>();
 		String filePath = request.getSession().getServletContext()
 				.getRealPath("/");
-		int index = filePath.indexOf("YQYAPI");
+		int index = filePath.lastIndexOf("YQYAPI");
 		filePath = filePath.substring(0, index) + "orderCodePng/";
 		File f = new File(filePath);
 		CommTool.judeDirExists(f);
@@ -672,4 +672,49 @@ public class ZfPayAction {
 		return count;
 	}
 
+
+/////////////type=[1=初始合伙人购买。2=之后复销]//////////////userElec/1=使用电子抵扣////
+	@RequestMapping(value = "/b/yqyOrderPay", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> yqyOrderPay(@RequestParam int type,@RequestParam String payPwd,@RequestParam("userElec") int userElec,
+										   @RequestParam String token, @RequestParam int spId,
+										@RequestParam int num, HttpServletRequest request) {
+		Map<String, Object> mmap = new HashMap<String, Object>();
+		String filePath = request.getSession().getServletContext()
+				.getRealPath("/");
+		int index = filePath.lastIndexOf("YQYAPI");
+		filePath = filePath.substring(0, index) + "orderCodePng/";
+		File f = new File(filePath);
+		CommTool.judeDirExists(f);
+		// //验证token 获取购买人ID===gmID
+		List<UMobileLogin> loginList = uMobileLoginService
+				.findUserByToken(token);
+		if (loginList == null || loginList.size() == 0) {
+			mmap.put("status", "false");
+			mmap.put("message", "请重新登录");
+			mmap.put("code", "-1");
+			mmap.put("data", "");
+			return mmap;
+		}
+		// /获取最新token ===uuid
+		UMobileLogin uMobileLogin = loginList.get(0);
+		String uuid = uMobileLogin.getuUuid();
+		List<UserBean> ubList = userService.getUserByUuid(uuid);
+		if (ubList == null || ubList.size() == 0) {
+
+			mmap.put("status", "false");
+			mmap.put("message", "用户信息错误！");
+			mmap.put("code", "-2");
+			mmap.put("data", "");
+			return mmap;
+
+		}
+
+		UserBean ub = ubList.get(0);
+		int gmID = ub.getId();
+		// ///判断是否初次购买
+		mmap = aliAppService.getHhrOrderString(filePath,userElec, gmID, num, spId,type,payPwd);
+		return mmap;
+
+	}
 }
