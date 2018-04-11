@@ -49,8 +49,7 @@
     </select> 
     
     <select id="getClsBy" resultMap="clResultMap">  
-       <!--  select *, '&lt;a href="javascript:;" onclick="editFzWin()"&gt;编辑&lt;/a&gt;' as hrefStr from p_xt_cl  -->
-         select * from p_xt_cl 
+         select * from p_xt_cl
          <where> 
               status = 1
 			  <if test="bz_type != null and bz_type !=''"> and bz_type = #{bz_type} </if> 
@@ -67,8 +66,9 @@
 			  <if test="bz_id != null and bz_id !=''"> and  bz_id = #{bz_id} </if> 
 		 </where> 
 		limit 0,1
-    </select> 
-    
+    </select>
+
+
     <select id="getClsCombox" resultMap="clResultMap">  
         select * from p_xt_area 
          <where> 

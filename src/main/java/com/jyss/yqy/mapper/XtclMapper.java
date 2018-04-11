@@ -21,10 +21,6 @@ public interface XtclMapper {
 
 	/**
 	 * 根据标识符搜索
-	 * 
-	 * @param bz_type
-	 * @param bz_value
-	 * @return
 	 */
 	List<Xtcl> getClsBy(@Param("bz_type") String bz_type,@Param("bz_value") String bz_value);
 
@@ -41,6 +37,7 @@ public interface XtclMapper {
 
 	//根据标识符取得标志对应常量值
 	Xtcl getClsValue(@Param("bz_type") String bz_type,@Param("bz_id") String bz_id);
+
 
 	/**
 	 * 新增

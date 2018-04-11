@@ -43,12 +43,22 @@ public class UserAccountServiceImpl implements UserAccountService {
      * 充值报单券
      */
     @Override
-    public Map<String, Object> getALiPayResult(String uuid, Float payAmount){
+    public Map<String, Object> getALiPayResult(String uuid, String bzType, String bzId){
         Map<String, Object> map = new HashMap<String, Object>();
 
         //后台报单券总池余额
         Xtcl xtcl1 = xtclMapper.getClsValue("bdqzc_type", "1");        //后台报单券总池余额
         double double1 = Double.parseDouble(xtcl1.getBz_value());                   //20000000
+        Xtcl xtcl2 = xtclMapper.getClsValue(bzType, bzId);                          //报单券充值套餐
+        if(xtcl1 == null || xtcl2 == null){
+            map.put("code", "-1");
+            map.put("status", "false");
+            map.put("message", "支付异常");
+            map.put("data", "");
+            return map;
+        }
+        double payAmount = Double.parseDouble(xtcl2.getBz_value());                 //
+
         if(payAmount < double1){
 
             List<UserBean> userBeans = userMapper.getUserByUuid(uuid);
@@ -96,8 +106,8 @@ public class UserAccountServiceImpl implements UserAccountService {
                     scoreBalance.setCategory(11);
                     scoreBalance.setSecoCate(1);
                     scoreBalance.setType(1);
-                    scoreBalance.setScore(payAmount);
-                    scoreBalance.setJyScore(userBean.getBdScore() + payAmount);
+                    scoreBalance.setScore((float) payAmount);
+                    scoreBalance.setJyScore((float)(userBean.getBdScore() + payAmount));
                     scoreBalance.setOrderSn(outTradeNo);
                     scoreBalance.setStatus(0);
                     int count = scoreBalanceMapper.insertEntryScore(scoreBalance);

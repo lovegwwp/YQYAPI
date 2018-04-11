@@ -13,10 +13,6 @@ public interface XtclService {
 
 	/**
 	 * 根据标识符取得维护常量
-	 * 
-	 * @param bz_type
-	 * @param bz_value
-	 * @return
 	 */
 	List<Xtcl> getCls();
 
@@ -27,8 +23,7 @@ public interface XtclService {
 	 * @param bz_value
 	 * @return
 	 */
-	List<Xtcl> getClsBy(@Param("bz_type") String bz_type,
-			@Param("bz_value") String bz_value);
+	List<Xtcl> getClsBy(@Param("bz_type") String bz_type,@Param("bz_value") String bz_value);
 
 	/**
 	 * 获取常量下拉
