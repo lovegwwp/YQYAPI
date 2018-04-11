@@ -127,7 +127,7 @@ public class XtclAction {
 /*	@RequestMapping("/b/getDlrInfo")
 	@ResponseBody
 	public Map<String, Object> getDlrInfo() {
-		// TODO Auto-generated method stub
+
 		Map<String, Object> m = new HashMap<String, Object>();
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		String info = "";
@@ -169,19 +169,19 @@ public class XtclAction {
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		String info = "";
 		// 初级
-		info = (String) getDlcsInfo2("2", "2","1","4").get("info");
+		info = (String) getDlcsInfo2("2", "2","1","5").get("info");
 		reMap.put("jb1", info);
-		reMap.put("jb1Money", getDlcsInfo2("2", "2","1","4").get("money"));
+		reMap.put("jb1Money", getDlcsInfo2("2", "2","1","5").get("money"));
 		// 中级
 		info = "";
-		info = (String) getDlcsInfo2("3", "3","2","5").get("info");
+		info = (String) getDlcsInfo2("3", "3","2","6").get("info");
 		reMap.put("jb2", info);
-		reMap.put("jb2Money", getDlcsInfo2("3", "3","2","5").get("money"));
+		reMap.put("jb2Money", getDlcsInfo2("3", "3","2","6").get("money"));
 		// 高级
 		info = "";
-		info = (String) getDlcsInfo2("4", "4","3","6").get("info");
+		info = (String) getDlcsInfo2("4", "4","3","7").get("info");
 		reMap.put("jb3", info);
-		reMap.put("jb3Money", getDlcsInfo2("4", "4","3","6").get("money"));
+		reMap.put("jb3Money", getDlcsInfo2("4", "4","3","7").get("money"));
 		m.put("data", reMap);
 		return m;
 	}
@@ -206,7 +206,7 @@ public class XtclAction {
 			dlfy = Double.parseDouble(dlf.getBz_value());
 		}
 		info = info + dlfy + "元、";
-		// 代理分红权倍数 dyfId 1 2 3
+		// 代理分红权倍数 bsId 1 2 3
 		Xtcl bscl = clService.getClsValue("fhqbs_type", bsId);
 		float bs = 3;
 		if (bscl != null && bscl.getBz_value() != null
