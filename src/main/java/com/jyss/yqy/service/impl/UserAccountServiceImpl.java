@@ -46,76 +46,88 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Map<String, Object> getALiPayResult(String uuid, Float payAmount){
         Map<String, Object> map = new HashMap<String, Object>();
 
-        List<UserBean> userBeans = userMapper.getUserByUuid(uuid);
-        if(userBeans != null && userBeans.size() == 1){
-            UserBean userBean = userBeans.get(0);
+        //后台报单券总池余额
+        Xtcl xtcl1 = xtclMapper.getClsValue("bdqzc_type", "1");        //后台报单券总池余额
+        double double1 = Double.parseDouble(xtcl1.getBz_value());                   //20000000
+        if(payAmount < double1){
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-            String outTradeNo = sdf.format(new Date()) + "O" + userBean.getId()
-                    + "r" + (long) (Math.random() * 1000L);
-            String subject = "易起云报单券充值";
-            String totalAmount = payAmount + "";
-            // 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
-            String body = "报单券充值" + payAmount + "元";
+            List<UserBean> userBeans = userMapper.getUserByUuid(uuid);
+            if(userBeans != null && userBeans.size() == 1){
+                UserBean userBean = userBeans.get(0);
 
-            String timeoutExpress = "30m";   // 支付超时，定义为30分钟
-            String notifyUrl = Constant.httpUrl + "YQYAPI/AliNotify.action";
+                SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+                String outTradeNo = sdf.format(new Date()) + "O" + userBean.getId()
+                        + "r" + (long) (Math.random() * 1000L);
+                String subject = "易起云报单券充值";
+                String totalAmount = payAmount + "";
+                // 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
+                String body = "报单券充值" + payAmount + "元";
 
-            AliConfig config = new AliConfig();
+                String timeoutExpress = "30m";   // 支付超时，定义为30分钟
+                String notifyUrl = Constant.httpUrl + "YQYAPI/AliNotify.action";
 
-            //实例化客户端
-            AlipayClient alipayClient = new DefaultAlipayClient(config.getURL(), config.getAPP_ID() , config.getAPP_PRIVATE_KEY(),
-                    "json", "UTF-8", config.getALIPAY_PUBLIC_KEY(), config.getSIGN_TYPE());
+                AliConfig config = new AliConfig();
 
-            //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
-            AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
-            //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
-            AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-            model.setBody(body);
-            model.setSubject(subject);
-            model.setOutTradeNo(outTradeNo);
-            model.setTimeoutExpress(timeoutExpress);
-            model.setTotalAmount(totalAmount);
-            model.setProductCode("QUICK_MSECURITY_PAY");
-            request.setBizModel(model);
-            request.setNotifyUrl(notifyUrl);
-            try {
-                //这里和普通的接口调用不同，使用的是sdkExecute
-                AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
-                //System.out.println(response.getBody());//就是orderString 可以直接给客户端请求，无需再做处理。
+                //实例化客户端
+                AlipayClient alipayClient = new DefaultAlipayClient(config.getURL(), config.getAPP_ID() , config.getAPP_PRIVATE_KEY(),
+                        "json", "UTF-8", config.getALIPAY_PUBLIC_KEY(), config.getSIGN_TYPE());
 
-                //创建订单
-                ScoreBalance scoreBalance = new ScoreBalance();
-                scoreBalance.setEnd(2);
-                scoreBalance.setuUuid(uuid);
-                scoreBalance.setCategory(11);
-                scoreBalance.setSecoCate(1);
-                scoreBalance.setType(1);
-                scoreBalance.setScore(payAmount);
-                scoreBalance.setJyScore(userBean.getBdScore() + payAmount);
-                scoreBalance.setOrderSn(outTradeNo);
-                scoreBalance.setStatus(0);
-                int count = scoreBalanceMapper.insertEntryScore(scoreBalance);
-                if(count == 1){
-                    map.put("code", "0");
-                    map.put("status", "true");
-                    map.put("message", "支付成功");
-                    map.put("data", response.getBody());
+                //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
+                AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+                //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+                AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+                model.setBody(body);
+                model.setSubject(subject);
+                model.setOutTradeNo(outTradeNo);
+                model.setTimeoutExpress(timeoutExpress);
+                model.setTotalAmount(totalAmount);
+                model.setProductCode("QUICK_MSECURITY_PAY");
+                request.setBizModel(model);
+                request.setNotifyUrl(notifyUrl);
+                try {
+                    //这里和普通的接口调用不同，使用的是sdkExecute
+                    AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+                    //System.out.println(response.getBody());//就是orderString 可以直接给客户端请求，无需再做处理。
+
+                    //创建订单
+                    ScoreBalance scoreBalance = new ScoreBalance();
+                    scoreBalance.setEnd(2);
+                    scoreBalance.setuUuid(uuid);
+                    scoreBalance.setCategory(11);
+                    scoreBalance.setSecoCate(1);
+                    scoreBalance.setType(1);
+                    scoreBalance.setScore(payAmount);
+                    scoreBalance.setJyScore(userBean.getBdScore() + payAmount);
+                    scoreBalance.setOrderSn(outTradeNo);
+                    scoreBalance.setStatus(0);
+                    int count = scoreBalanceMapper.insertEntryScore(scoreBalance);
+                    if(count == 1){
+                        map.put("code", "0");
+                        map.put("status", "true");
+                        map.put("message", "支付成功");
+                        map.put("data", response.getBody());
+                        return map;
+                    }
+                } catch (AlipayApiException e) {
+                    map.put("code", "-1");
+                    map.put("status", "false");
+                    map.put("message", "支付异常");
+                    map.put("data", "");
                     return map;
                 }
-            } catch (AlipayApiException e) {
-                map.put("code", "-1");
-                map.put("status", "false");
-                map.put("message", "支付异常");
-                map.put("data", "");
-                return map;
             }
+            map.put("code", "-2");
+            map.put("status", "false");
+            map.put("message", "请重新登陆");
+            map.put("data", "");
+            return map;
         }
-        map.put("code", "-2");
+        map.put("code", "-3");
         map.put("status", "false");
-        map.put("message", "请重新登陆");
+        map.put("message", "无剩余报单券可购买");
         map.put("data", "");
         return map;
+
     }
 
 
@@ -124,6 +136,10 @@ public class UserAccountServiceImpl implements UserAccountService {
      */
     @Override
     public boolean updateUserBdBalance(String totalAmount, String outTradeNo) {
+        //后台报单券总池余额
+        Xtcl xtcl1 = xtclMapper.getClsValue("bdqzc_type", "1");        //后台报单券总池余额
+        double double1 = Double.parseDouble(xtcl1.getBz_value());                   //20000000
+
         List<ScoreBalance> balanceList = scoreBalanceMapper.selectEntryScore(outTradeNo);
         if(balanceList != null && balanceList.size() == 1){
             ScoreBalance scoreBalance = balanceList.get(0);
@@ -143,6 +159,13 @@ public class UserAccountServiceImpl implements UserAccountService {
                     scoreBalance1.setStatus(1);
                     int count = scoreBalanceMapper.updateEntryScore(scoreBalance1);
                     if(count == 1){
+                        //减总池
+                        double syMoney = double1 - scoreBalance.getScore();
+                        Xtcl xtcl = new Xtcl();
+                        xtcl.setId(xtcl1.getId());
+                        xtcl.setBz_type(syMoney + "");
+                        xtclMapper.updateCl(xtcl);
+
                         return true;
                     }
                 }
