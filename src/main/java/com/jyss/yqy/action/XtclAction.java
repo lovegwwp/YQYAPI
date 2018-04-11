@@ -127,7 +127,7 @@ public class XtclAction {
 	@RequestMapping("/b/getDlrInfo")
 	@ResponseBody
 	public Map<String, Object> getDlrInfo() {
-		// TODO Auto-generated method stub
+
 		Map<String, Object> m = new HashMap<String, Object>();
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		String info = "";
