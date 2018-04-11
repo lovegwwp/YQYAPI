@@ -295,8 +295,8 @@ public class UserServiceImpl implements UserService {
 	 * @return
 	 */
 	@Override
-	public int upUserMoneyByUUidOrId(@Param("uuid") String uuid, @Param("id") String id, @Param("totalPv") Float totalPv, @Param("cashScore") Float cashScore, @Param("shoppingScore") Float shoppingScore, @Param("electScore") Float electScore, @Param("bdScore") Float bdScore, @Param("totalAmount") Float totalAmount, @Param("borrow") Float borrow) {
-		return userMapper.upUserMoneyByUUidOrId(uuid,  id, totalPv,  cashScore, shoppingScore,  electScore,  bdScore, totalAmount, borrow) ;
+	public int upUserMoneyByUUidOrId(@Param("uuid") String uuid, @Param("id") String id, @Param("totalPv") Float totalPv, @Param("cashScore") Float cashScore, @Param("shoppingScore") Float shoppingScore, @Param("electScore") Float electScore, @Param("bdScore") Float bdScore, @Param("totalAmount") Float totalAmount, @Param("borrow") Float borrow, @Param("isChuangke") Integer isChuangke) {
+		return userMapper.upUserMoneyByUUidOrId(uuid,  id, totalPv,  cashScore, shoppingScore,  electScore,  bdScore, totalAmount, borrow, isChuangke) ;
 	}
 
 	@Override
