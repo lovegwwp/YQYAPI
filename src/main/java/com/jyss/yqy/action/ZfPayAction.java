@@ -677,7 +677,7 @@ public class ZfPayAction {
 	@RequestMapping(value = "/b/yqyOrderPay", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> yqyOrderPay(@RequestParam int type,@RequestParam String payPwd,@RequestParam("userElec") int userElec,
-										   @RequestParam String token, @RequestParam int spId,
+										   @RequestParam String token, @RequestParam int spId,@RequestParam("hhrmoney") float hhrmoney,
 										@RequestParam int num, HttpServletRequest request) {
 		Map<String, Object> mmap = new HashMap<String, Object>();
 		String filePath = request.getSession().getServletContext()
@@ -712,8 +712,7 @@ public class ZfPayAction {
 
 		UserBean ub = ubList.get(0);
 		int gmID = ub.getId();
-		// ///判断是否初次购买
-		mmap = aliAppService.getHhrOrderString(filePath,userElec, gmID, num, spId,type,payPwd);
+		mmap = aliAppService.getHhrOrderString(filePath,userElec, gmID, num, hhrmoney, spId,type,payPwd);
 		return mmap;
 
 	}

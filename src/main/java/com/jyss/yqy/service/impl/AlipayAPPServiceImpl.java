@@ -380,7 +380,8 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 	// 获取代理参数
 	public Map<String, Object> getHhrchuangke(float money) {
 		Map<String, Object> mm = new HashMap<String, Object>();
-		Integer jb = 2;
+		Integer jb = 0;
+		Integer hs = 1;
 		Float bs = 3F;
 		List<Xtcl> fylist = new ArrayList<Xtcl>();
 		// //查询充值人对应等级
@@ -396,15 +397,53 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		if (dlbs != null && !dlbs.getBz_value().equals("")) {
 			bs = Float.parseFloat(dlbs.getBz_value());
 		}
+		mm.put("bs", bs);
+		Xtcl dlhs = clMapper.getClsValue("cjhhr_type", (jb+3)+"");
+		if (dlhs != null && !dlhs.getBz_value().equals("")) {
+			hs = Integer.parseInt(dlhs.getBz_value());
+		}
+		mm.put("hs", hs);
+		return mm;
+	}
+
+	// 获取代理参数
+	public Map<String, Object> getHhrchuangke2(Integer jbnow,float money) {
+		Map<String, Object> mm = new HashMap<String, Object>();
+		Integer jb = 0;
+		Float bs = 3F;
+		float mmobney4 = 0 ;
+		float mmobney2 = 0 ;
+		float mmobney3 = 0 ;
+		List<Xtcl> fylist = new ArrayList<Xtcl>();
+		//查询目前等级下一级别对应金钱
+		jb = jbnow;
+		Xtcl dlm3 = clMapper.getClsValue("cjhhr_type", "3");
+		if (dlm3 != null && !dlm3.getBz_value().equals("")) {
+			mmobney3 = Float.parseFloat(dlm3.getBz_value());
+		}
+		Xtcl dlm4 = clMapper.getClsValue("cjhhr_type", "4");
+		if (dlm4 != null && !dlm4.getBz_value().equals("")) {
+			mmobney4 = Float.parseFloat(dlm4.getBz_value());
+		}
+		if(money>=mmobney4){
+			jb=4;
+		}else if(money >= mmobney3){
+			jb=3;
+		}
+
+		mm.put("jb",jb);
+		Xtcl dlbs = clMapper.getClsValue("fhqbs_type", (jb-1)+"");
+		if (dlbs != null && !dlbs.getBz_value().equals("")) {
+			bs = Float.parseFloat(dlbs.getBz_value());
+		}
 		mm.put("hs", bs);
 		return mm;
 	}
 
-	//userElec/1=使用电子抵扣
 	@Override
 	public Map<String, Object> getHhrOrderString(
 			@RequestParam("filePath") String filePath,@RequestParam("userElec") int userElec,
-			@RequestParam("gmID") int gmID, @RequestParam("gmNum") int gmNum,
+			@RequestParam("gmID") int gmID, @RequestParam("gmNum") int gmNum,@RequestParam("hhrmoney") float hhrmoney,
 			@RequestParam("spID") int spID,@RequestParam("type") int type,@RequestParam("payPwd") String payPwd) {
 		Map<String, Object> m = new HashMap<String, Object>();
 		Map<String, String> mm = new HashMap<String, String>();
@@ -429,7 +468,169 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			m.put("data", mm);
 			return m;
 		}
+		///判断初始购买用户金额是否错误
+		float fhqbs = 3;
+		Integer hs = 1;
+		float totalPv = 0;
+		Integer isChunke = null;
+			Map<String, Object> mre = getHhrchuangke(hhrmoney);
+			int jb = (Integer) mre.get("jb");
+			if (jb == 0) {
+				m.put("status", "false");
+				m.put("message", "合伙人信息错误！");
+				m.put("code", "-3");
+				m.put("data", mm);
+				return m;
+			}
+		    hs = (Integer) mre.get("hs");
+			fhqbs = (float) mre.get("bs");
+			totalPv = fhqbs *hhrmoney;
+		// //// 验证当前用户是否合法///////////
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
+		if (ublist == null || ublist.size() == 0) {
+			m.put("status", "false");
+			m.put("message", "用户信息错误！");
+			m.put("code", "-2");
+			m.put("data", mm);
+			return m;
+		}
+		UserBean ub = ublist.get(0);
 
+		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")
+				|| ub.getPayPwd().equals("0")) {
+			zfCode = "0";
+			m.put("status", "false");
+			m.put("message", "支付密码错误！");
+			m.put("code", "-6");
+			m.put("data", mm);
+			return m;
+		} else {
+			zfCode = "1";
+			if (!(PasswordUtil.generatePayPwd(payPwd).equals(ub.getPayPwd()))) {
+				m.put("status", "false");
+				m.put("message", "支付密码错误！");
+				m.put("code", "-6");
+				m.put("data", mm);
+				return m;
+			}
+		}
+		float bdMoney =ub.getBdScore();
+		float elecMoney =ub.getElectScore();
+		mm.put("zfCode", zfCode);
+		mm.put("bdscore", bdMoney+ "");
+		mm.put("elecscore", elecMoney+ "");
+		///////////订单业务///////////////////////////
+		String outTradeNo = System.currentTimeMillis() / 1000 + "O" + gmID
+				+ "r" + (long) (Math.random() * 1000L);
+
+		float money = hhrmoney;
+		float useBdMoney = 0;////最后使用的报单券数额
+		String gmr = "";
+		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
+			gmr = "XXX";
+		} else {
+			gmr = ub.getRealName();
+		}
+		// //商品二维码
+		String outPutPath = filePath + outTradeNo + ".png";
+		String code = "orderCodePng/" + outTradeNo + ".png";
+		mm.put("zxingpng", Constant.httpUrl + code);// 订单二维码
+		ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
+		/////进行商品购买，扣除相应金额，增加订单记录，以及报单券或者电子券记录///////////
+		int count = 0;
+		////扣用户积分,分红权额度增加（预判断50W额度），并进行判断是否升级
+		float totamout = 0;
+			////首次消费额(的2倍)
+			Xtcl xfe = clMapper.getClsValue("gxjbl_type", "2");
+			String bs = "2";
+			if (xfe != null && xfe.getBz_value() != null) {
+				bs = xfe.getBz_value();
+			}
+			float b = Float.parseFloat(bs);
+			totamout = hhrmoney*b;
+			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,null,useBdMoney,totamout,null,isChunke);
+
+		///报单券消费记录\
+		ScoreBalance scoreB = new ScoreBalance();
+		scoreB.setType(2);//1=收入 2=支出\
+		scoreB.setEnd(2);//1=A端 2=B端
+		scoreB.setCategory(8);//8=B端消费，
+		scoreB.setuUuid(ub.getUuid());
+		scoreB.setStatus(1);
+		scoreB.setZzCode("YQYB");
+		scoreB.setScore(useBdMoney);//使用
+		scoreB.setJyScore(bdMoney-useBdMoney);//结余
+		sbMapper.addEntryScore(scoreB);
+		mm.put("bdscore", (bdMoney-useBdMoney)+ "");
+		mm.put("elecscore", (elecMoney)+ "");
+		//生成最终订单
+		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
+				ub.getAccount(), goods.getName(), goods.getPics(), gmNum
+				+ "", "套餐", "1", "1", goods.getPrice(), money, 0,
+				"0", code, "zfId", 3);
+		count = obMapper.addOrder(orderb);
+		if (count == 1) {
+			m.put("status", "true");
+			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
+			m.put("message", "提交订单成功！");
+			mm.put("outtradeno", outTradeNo);
+			mm.put("money", money + "");
+			mm.put("responseBody", "");
+			m.put("code", "0");
+			m.put("data", mm);
+		}
+		m.put("code", "-4");
+		m.put("data", mm);
+		return m;
+
+	}
+
+	//userElec/1=使用电子抵扣
+	@Override
+	public Map<String, Object> getGoodOrderString(
+			@RequestParam("filePath") String filePath,@RequestParam("userElec") int userElec,
+			@RequestParam("gmID") int gmID, @RequestParam("gmNum") int gmNum,@RequestParam("hhrmoney") float hhrmoney,
+			@RequestParam("spID") int spID,@RequestParam("type") int type,@RequestParam("payPwd") String payPwd) {
+		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, String> mm = new HashMap<String, String>();
+		Map<String, Object> dlReMap = new HashMap<String, Object>();
+		String zfCode = "-1";// zfCode='-1=其他，0=无支付密码，1=有支付密码，'///
+		mm.put("outtradeno", "");
+		mm.put("responseBody", "");
+		mm.put("money", "");
+		mm.put("bdscore", "");///报单券
+		mm.put("elecscore", "");//电子券
+		mm.put("zfCode", zfCode);
+		mm.put("zfPwd", "");
+		mm.put("zxingpng", "");// 订单二维码
+		mm.put("type", "1");// 判断是否初次购买=type=[1=初始合伙人购买。2=之后复销]
+
+		Goods goods = null;
+		goods = obMapper.getGoodsByid(spID + "");
+		if (goods == null) {
+			m.put("status", "false");
+			m.put("message", "商品信息错误！");
+			m.put("code", "-3");
+			m.put("data", mm);
+			return m;
+		}
+		///判断初始购买用户金额是否错误
+		float fhqbs = 3;
+		float totalPv = 0;
+		Integer isChunke = null;
+		if(type==1) {
+			Map<String, Object> mre = getHhrchuangke(hhrmoney);
+			int jb = (Integer) mre.get("jb");
+			if (jb == 0) {
+				m.put("status", "false");
+				m.put("message", "合伙人信息错误！");
+				m.put("code", "-3");
+				m.put("data", mm);
+				return m;
+			}
+			fhqbs = (float) mre.get("bs");
+			totalPv = fhqbs *hhrmoney;
+		}
 		// //// 验证当前用户是否合法///////////
 		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
@@ -507,6 +708,13 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 						userElec =0;///无法使用电子券
 					}
 				}
+				if(useBdMoney>bdMoney){
+					m.put("status", "false");
+					m.put("message", "报单券余额不足！！");
+					m.put("code", "-1");
+					m.put("data", mm);
+					return m;
+				}
 			}
 
 		} catch (Exception e) {
@@ -516,13 +724,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			m.put("data", mm);
 			return m;
 		}
-		if(useBdMoney<bdMoney){
-			m.put("status", "false");
-			m.put("message", "报单券余额不足！！");
-			m.put("code", "-1");
-			m.put("data", mm);
-			return m;
-		}
+
 		String gmr = "";
 		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
 			gmr = "XXX";
@@ -537,14 +739,13 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		/////进行商品购买，扣除相应金额，增加订单记录，以及报单券或者电子券记录///////////
 		int count = 0;
 		////扣用户积分,分红权额度增加（预判断50W额度），并进行判断是否升级
-		float totalPv = 0;
 		float totamout = 0;
-		float fhqbs = 3;
+		//float fhqbs = 3;
 		Integer isLevel = null;
-		Integer isChunke = null;
+		//Integer isChunke = null;
 		if (type==2){
 			isChunke = ub.getIsChuangke();//当前等级
-			Map<String,Object> mre = getHhrchuangke(money);
+			Map<String,Object> mre = getHhrchuangke2(isChunke,money);
 			isLevel = (Integer)mre.get("jb");
 			if(isChunke<isLevel){
 				isChunke = isLevel;
@@ -574,7 +775,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				bs = xfe.getBz_value();
 			}
 			float b = Float.parseFloat(bs);
-			totamout = money*b;
+			totamout = hhrmoney*b;
 			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,totamout,null,isChunke);
 		}
 
