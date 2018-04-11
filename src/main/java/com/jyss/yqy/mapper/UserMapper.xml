@@ -143,6 +143,7 @@
         <if test="bdScore != null and bdScore !=''"> ,bd_score = bd_score + #{bdScore} </if>
         <if test="totalAmount != null and totalAmount !=''"> ,total_amount = total_amount + #{totalAmount} </if>
         <if test="borrow != null and borrow !=''"> ,borrow = borrow + #{borrow} </if>
+        <if test="isChuangke != null and isChuangke !=''"> ,is_chuangke =  #{isChuangke} </if>
         <where>
             1 = 1
             <if test="uuid != null and uuid !=''"> and uuid = #{uuid} </if>

@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.jyss.yqy.entity.ScoreBalance;
+import com.jyss.yqy.mapper.*;
 import com.jyss.yqy.utils.PasswordUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,6 @@ import com.jyss.yqy.entity.Goods;
 import com.jyss.yqy.entity.OrdersB;
 import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
-import com.jyss.yqy.mapper.OrdersBMapper;
-import com.jyss.yqy.mapper.UMobileLoginMapper;
-import com.jyss.yqy.mapper.UserMapper;
-import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.AlipayAppService;
 import com.jyss.yqy.utils.FirstLetterUtil;
 import com.jyss.yqy.utils.ZxingCodeUtil;
@@ -43,6 +41,8 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 	private XtclMapper clMapper;
 	@Autowired
 	private UserMapper userMapper;
+	@Autowired
+	private ScoreBalanceMapper sbMapper;
 	@Autowired
 	private UMobileLoginMapper uMobileLoginMapper;
 
@@ -377,6 +377,29 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		return mm;
 	}
 
+	// 获取代理参数
+	public Map<String, Object> getHhrchuangke(float money) {
+		Map<String, Object> mm = new HashMap<String, Object>();
+		Integer jb = 2;
+		Float bs = 3F;
+		List<Xtcl> fylist = new ArrayList<Xtcl>();
+		// //查询充值人对应等级
+		fylist = clMapper.getClsBy("cjhhr_type", money + "");
+		if (fylist != null && fylist.size() == 1) {
+			jb = Integer.parseInt(fylist.get(0).getBz_id());
+		}
+		if(jb>4){
+			jb=4;
+		}
+		mm.put("jb",jb);
+		Xtcl dlbs = clMapper.getClsValue("fhqbs_type", (jb-1)+"");
+		if (dlbs != null && !dlbs.getBz_value().equals("")) {
+			bs = Float.parseFloat(dlbs.getBz_value());
+		}
+		mm.put("hs", bs);
+		return mm;
+	}
+
 	//userElec/1=使用电子抵扣
 	@Override
 	public Map<String, Object> getHhrOrderString(
@@ -417,12 +440,14 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			return m;
 		}
 		UserBean ub = ublist.get(0);
-		if (ub.getIsChuangke() < 2) {
-			m.put("status", "false");
-			m.put("message", "用户信息错误！");
-			m.put("code", "-2");
-			m.put("data", mm);
-			return m;
+		if(type==2){
+			if (ub.getIsChuangke() < 2) {
+				m.put("status", "false");
+				m.put("message", "用户信息错误！");
+				m.put("code", "-2");
+				m.put("data", mm);
+				return m;
+			}
 		}
 
 		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")
@@ -511,11 +536,61 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		ZxingCodeUtil.zxingCodeCreate(outTradeNo, outPutPath, "2");// /2=代表B端订单
 		/////进行商品购买，扣除相应金额，增加订单记录，以及报单券或者电子券记录///////////
 		int count = 0;
-		////扣用户积分
-		///报单券消费记录
+		////扣用户积分,分红权额度增加（预判断50W额度），并进行判断是否升级
+		float totalPv = 0;
+		float totamout = 0;
+		float fhqbs = 3;
+		Integer isLevel = null;
+		Integer isChunke = null;
+		if (type==2){
+			isChunke = ub.getIsChuangke();//当前等级
+			Map<String,Object> mre = getHhrchuangke(money);
+			isLevel = (Integer)mre.get("jb");
+			if(isChunke<isLevel){
+				isChunke = isLevel;
+			}else{
+				isChunke =null;////没升级就不操作；
+			}
+			fhqbs = (float)mre.get("bs");
+			totalPv = fhqbs * money;////此次消费新增分红权，判断是否超过临界值；
+			Xtcl pvcl = clMapper.getClsValue("fhqbs_type", "4");
+			float edPv =0;
+			if (pvcl != null && pvcl.getBz_value() != null) {
+				edPv = Float.parseFloat(pvcl.getBz_value());
+			}
+			if((ub.getTotalPv()+totalPv)>edPv){
+				totalPv =edPv-(ub.getTotalPv()+totalPv);///最多50W
+			}
+			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,null,null,isChunke);
+		}else if(type==1){
+			////首次消费额(的2倍)
+			Xtcl xfe = clMapper.getClsValue("gxjbl_type", "2");
+			String bs = "2";
+			if (xfe != null && xfe.getBz_value() != null) {
+				bs = xfe.getBz_value();
+			}
+			float b = Float.parseFloat(bs);
+			totamout = money*b;
+			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,totamout,null,isChunke);
+		}
+
+
+		///报单券消费记录\
+		ScoreBalance scoreB = new ScoreBalance();
+		scoreB.setType(2);//1=收入 2=支出\
+		scoreB.setEnd(2);//1=A端 2=B端
+		scoreB.setCategory(8);//8=B端消费，
+		scoreB.setuUuid(ub.getUuid());
+		scoreB.setStatus(1);
+		scoreB.setZzCode("YQYB");
+		scoreB.setScore(useBdMoney);//使用
+		scoreB.setJyScore(bdMoney-useBdMoney);//结余
+		sbMapper.addEntryScore(scoreB);
 		//电子券消费记录[userElec==1,使用电子券]
 		if(userElec==1){
-
+			scoreB.setScore(useElecMoney);//使用
+			scoreB.setJyScore(elecMoney-useElecMoney);//结余
+			sbMapper.addElecScore(scoreB);
 		}
 		mm.put("bdscore", (bdMoney-useBdMoney)+ "");
 		mm.put("elecscore", (elecMoney-useElecMoney)+ "");
