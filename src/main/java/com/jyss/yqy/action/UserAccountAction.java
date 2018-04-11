@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 @Controller
@@ -40,14 +37,14 @@ public class UserAccountAction {
      */
     @RequestMapping("/topup")
     @ResponseBody
-    public Map<String, Object> insertBdScore(@RequestParam("token") String token,@RequestParam("payAmount") Float payAmount,
-                                             @RequestParam("zfType") Integer zfType) {
+    public Map<String, Object> insertBdScore(@RequestParam("token") String token,@RequestParam("bzType") String bzType,
+                                             @RequestParam("bzId") String bzId,@RequestParam("zfType") Integer zfType) {
         Map<String, Object> map = new HashMap<>();
         List<UMobileLogin> loginList = uMobileLoginService.findUserByToken(token);
         if (loginList != null && loginList.size() == 1) {
             UMobileLogin uMobileLogin = loginList.get(0);
             if(zfType == 1){
-                Map<String, Object> result = userAccountService.getALiPayResult(uMobileLogin.getuUuid(), payAmount);
+                Map<String, Object> result = userAccountService.getALiPayResult(uMobileLogin.getuUuid(), bzType, bzId);
                 return result;
 
             }

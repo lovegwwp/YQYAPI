@@ -309,7 +309,26 @@ public class XtclAction {
 	}
 
 
-
-
+	/**
+	 * 充值套餐查询
+	 */
+	@RequestMapping("/b/recharge")
+	@ResponseBody
+	public Map<String, Object> selectXtclBy() {
+		Map<String, Object> m = new HashMap<String, Object>();
+		List<Xtcl> list = clService.getClsBy("bdqcz_type", null);
+		if(list != null && list.size()>0){
+			m.put("status", "true");
+			m.put("message", "查询成功！");
+			m.put("data", list);
+			m.put("code", "0");
+			return m;
+		}
+		m.put("status", "false");
+		m.put("message", "查询失败！");
+		m.put("data", "");
+		m.put("code", "-2");
+		return m;
+	}
 
 }

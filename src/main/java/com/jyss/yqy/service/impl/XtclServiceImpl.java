@@ -28,7 +28,7 @@ public class XtclServiceImpl implements XtclService {
 
 	@Override
 	public List<Xtcl> getClsBy(String bz_type, String bz_value) {
-		// TODO Auto-generated method stub
+
 		return xtclMapper.getClsBy(bz_type, bz_value);
 	}
 
