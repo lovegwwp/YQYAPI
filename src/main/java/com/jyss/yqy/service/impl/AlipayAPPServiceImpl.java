@@ -559,7 +559,11 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				edPv = Float.parseFloat(pvcl.getBz_value());
 			}
 			if((ub.getTotalPv()+totalPv)>edPv){
-				totalPv =edPv-(ub.getTotalPv()+totalPv);///最多50W
+				m.put("status", "false");
+				m.put("message", "超过今日分红权额度，不可购买！！");
+				m.put("code", "-7");
+				m.put("data", mm);
+				return m;
 			}
 			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,null,null,isChunke);
 		}else if(type==1){
