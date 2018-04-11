@@ -124,7 +124,7 @@ public class XtclAction {
 		return m;
 	}
 
-	@RequestMapping("/b/getDlrInfo")
+/*	@RequestMapping("/b/getDlrInfo")
 	@ResponseBody
 	public Map<String, Object> getDlrInfo() {
 		// TODO Auto-generated method stub
@@ -159,7 +159,75 @@ public class XtclAction {
 		reMap.put("jb4Money", getDlcsInfo("4", pvsz, "4", "8").get("money"));
 		m.put("data", reMap);
 		return m;
+	}*/
+
+	@RequestMapping("/b/getDlrInfo")
+	@ResponseBody
+	public Map<String, Object> getDlrInfo() {
+		// TODO Auto-generated method stub
+		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, Object> reMap = new HashMap<String, Object>();
+		String info = "";
+		// 初级
+		info = (String) getDlcsInfo2("2", "2","1","4").get("info");
+		reMap.put("jb1", info);
+		reMap.put("jb1Money", getDlcsInfo2("2", "2","1","4").get("money"));
+		// 中级
+		info = "";
+		info = (String) getDlcsInfo2("3", "3","2","5").get("info");
+		reMap.put("jb2", info);
+		reMap.put("jb2Money", getDlcsInfo2("3", "3","2","5").get("money"));
+		// 高级
+		info = "";
+		info = (String) getDlcsInfo2("4", "4","3","6").get("info");
+		reMap.put("jb3", info);
+		reMap.put("jb3Money", getDlcsInfo2("4", "4","3","6").get("money"));
+		m.put("data", reMap);
+		return m;
 	}
+
+	// //获取代理参数
+	public Map<String, Object> getDlcsInfo2(String jbId, String dyfId,String bsId,
+										   String dyhsId) {
+		Map<String, Object> mm = new HashMap<String, Object>();
+		String info = "";
+		if (jbId.equals("2")) {
+			info = "初级合伙人：投资金额";
+		} else if (jbId.equals("3")) {
+			info = "中级合伙人：投资金额";
+		} else if (jbId.equals("4")) {
+			info = "高级合伙人：投资金额";
+		}
+		// 代理对应钱 dyfId 2 3 4
+		Xtcl dlf = clService.getClsValue("cjhhr_type", dyfId);
+		double dlfy = 6000;
+		if (dlf != null && dlf.getBz_value() != null
+				&& !dlf.getBz_value().equals("")) {
+			dlfy = Double.parseDouble(dlf.getBz_value());
+		}
+		info = info + dlfy + "元、";
+		// 代理分红权倍数 dyfId 1 2 3
+		Xtcl bscl = clService.getClsValue("fhqbs_type", bsId);
+		float bs = 3;
+		if (bscl != null && bscl.getBz_value() != null
+				&& !bscl.getBz_value().equals("")) {
+			bs = Float.parseFloat(bscl.getBz_value());
+		}
+		info = info + "对应分红权"+(bs*dlfy)+"元(消费额"+bs+"倍)及";
+		// 代理对应套餐 dyhsId 4 5 6
+		Xtcl dlhs = clService.getClsValue("cjhhr_type", dyhsId);
+		int hs = 1;
+		if (dlhs != null && dlhs.getBz_value() != null
+				&& !dlhs.getBz_value().equals("")) {
+			hs = Integer.parseInt(dlhs.getBz_value());
+		}
+		info = info + hs +"个等价商品套餐"  ;
+		mm.put("money", dlfy);
+		mm.put("info", info);
+		return mm;
+	}
+
+
 
 	// //获取代理参数
 	public Map<String, Object> getDlcsInfo(String jbId, int pv, String dyfId,
