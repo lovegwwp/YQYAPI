@@ -173,7 +173,7 @@ public class UserAccountServiceImpl implements UserAccountService {
                         double syMoney = double1 - scoreBalance.getScore();
                         Xtcl xtcl = new Xtcl();
                         xtcl.setId(xtcl1.getId());
-                        xtcl.setBz_type(syMoney + "");
+                        xtcl.setBz_value(syMoney + "");
                         xtclMapper.updateCl(xtcl);
 
                         return true;
