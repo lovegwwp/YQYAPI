@@ -673,7 +673,7 @@ public class ZfPayAction {
 	}
 
 
-/////////////type=[1=初始合伙人购买。2=之后复销]//////////////userElec/1=使用电子抵扣////
+/////////////type=[1=初始合伙人购买。2=之后复销]//////////////userElec/1=使用电子抵扣////0不使用
 	@RequestMapping(value = "/b/yqyOrderPay", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> yqyOrderPay(@RequestParam int type,@RequestParam String payPwd,@RequestParam("userElec") int userElec,
@@ -712,7 +712,13 @@ public class ZfPayAction {
 
 		UserBean ub = ubList.get(0);
 		int gmID = ub.getId();
-		mmap = aliAppService.getHhrOrderString(filePath,userElec, gmID, num, hhrmoney, spId,type,payPwd);
+		////type=[1=初始合伙人购买。2=之后复销]
+		if(type==1){
+			mmap = aliAppService.getHhrOrderString(filePath,gmID, hhrmoney, spId,payPwd);
+		}else if(type==2){
+			mmap = aliAppService.getGoodOrderString(filePath,userElec, gmID, num, spId,payPwd);
+		}
+
 		return mmap;
 
 	}

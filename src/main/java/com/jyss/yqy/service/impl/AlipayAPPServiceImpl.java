@@ -432,19 +432,14 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		}
 
 		mm.put("jb",jb);
-		Xtcl dlbs = clMapper.getClsValue("fhqbs_type", (jb-1)+"");
-		if (dlbs != null && !dlbs.getBz_value().equals("")) {
-			bs = Float.parseFloat(dlbs.getBz_value());
-		}
-		mm.put("hs", bs);
 		return mm;
 	}
 
 	@Override
 	public Map<String, Object> getHhrOrderString(
-			@RequestParam("filePath") String filePath,@RequestParam("userElec") int userElec,
-			@RequestParam("gmID") int gmID, @RequestParam("gmNum") int gmNum,@RequestParam("hhrmoney") float hhrmoney,
-			@RequestParam("spID") int spID,@RequestParam("type") int type,@RequestParam("payPwd") String payPwd) {
+			@RequestParam("filePath") String filePath,
+			@RequestParam("gmID") int gmID, @RequestParam("hhrmoney") float hhrmoney,
+			@RequestParam("spID") int spID,@RequestParam("payPwd") String payPwd) {
 		Map<String, Object> m = new HashMap<String, Object>();
 		Map<String, String> mm = new HashMap<String, String>();
 		Map<String, Object> dlReMap = new HashMap<String, Object>();
@@ -524,12 +519,14 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				+ "r" + (long) (Math.random() * 1000L);
 
 		float money = hhrmoney;
-		float useBdMoney = 0;////最后使用的报单券数额
-		String gmr = "";
-		if (ub.getRealName() == null || ub.getRealName().isEmpty()) {
-			gmr = "XXX";
-		} else {
-			gmr = ub.getRealName();
+		float useBdMoney = hhrmoney;////最后使用的报单券数额
+		String gmr = "初始购买";
+		if(useBdMoney>bdMoney){
+			m.put("status", "false");
+			m.put("message", "报单券余额不足！！");
+			m.put("code", "-1");
+			m.put("data", mm);
+			return m;
 		}
 		// //商品二维码
 		String outPutPath = filePath + outTradeNo + ".png";
@@ -540,35 +537,40 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		int count = 0;
 		////扣用户积分,分红权额度增加（预判断50W额度），并进行判断是否升级
 		float totamout = 0;
-			////首次消费额(的2倍)
-			Xtcl xfe = clMapper.getClsValue("gxjbl_type", "2");
-			String bs = "2";
-			if (xfe != null && xfe.getBz_value() != null) {
-				bs = xfe.getBz_value();
-			}
-			float b = Float.parseFloat(bs);
-			totamout = hhrmoney*b;
-			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,null,useBdMoney,totamout,null,isChunke);
-
-		///报单券消费记录\
-		ScoreBalance scoreB = new ScoreBalance();
-		scoreB.setType(2);//1=收入 2=支出\
-		scoreB.setEnd(2);//1=A端 2=B端
-		scoreB.setCategory(8);//8=B端消费，
-		scoreB.setuUuid(ub.getUuid());
-		scoreB.setStatus(1);
-		scoreB.setZzCode("YQYB");
-		scoreB.setScore(useBdMoney);//使用
-		scoreB.setJyScore(bdMoney-useBdMoney);//结余
-		sbMapper.addEntryScore(scoreB);
+		////首次消费额(的2倍)
+		Xtcl xfe = clMapper.getClsValue("gxjbl_type", "2");
+		String bs = "2";
+		if (xfe != null && xfe.getBz_value() != null) {
+			bs = xfe.getBz_value();
+		}
+		float b = Float.parseFloat(bs);
+		totamout = hhrmoney*b;
+		count =	userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,null,useBdMoney,totamout,null,jb);
+		if(count==1){
+			    count =0;
+				///报单券消费记录\
+				ScoreBalance scoreB = new ScoreBalance();
+				scoreB.setType(2);//1=收入 2=支出\
+				scoreB.setEnd(2);//1=A端 2=B端
+				scoreB.setCategory(8);//8=B端消费，
+				scoreB.setuUuid(ub.getUuid());
+				scoreB.setStatus(1);
+				scoreB.setZzCode("YQYB");
+				scoreB.setScore(useBdMoney);//使用
+				scoreB.setJyScore(bdMoney-useBdMoney);//结余
+			    count = sbMapper.addEntryScore(scoreB);
+		}
 		mm.put("bdscore", (bdMoney-useBdMoney)+ "");
 		mm.put("elecscore", (elecMoney)+ "");
 		//生成最终订单
-		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
-				ub.getAccount(), goods.getName(), goods.getPics(), gmNum
-				+ "", "套餐", "1", "1", goods.getPrice(), money, 0,
-				"0", code, "zfId", 3);
-		count = obMapper.addOrder(orderb);
+		if(count==1){
+			count =0;
+			OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
+					ub.getAccount(), goods.getName(), goods.getPics(), hs
+					+ "", "套餐", "1", "1", goods.getPrice(), money, 0,
+					"0", code, "zfId", 3);
+			count = obMapper.addOrder(orderb);
+		}
 		if (count == 1) {
 			m.put("status", "true");
 			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
@@ -589,8 +591,8 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 	@Override
 	public Map<String, Object> getGoodOrderString(
 			@RequestParam("filePath") String filePath,@RequestParam("userElec") int userElec,
-			@RequestParam("gmID") int gmID, @RequestParam("gmNum") int gmNum,@RequestParam("hhrmoney") float hhrmoney,
-			@RequestParam("spID") int spID,@RequestParam("type") int type,@RequestParam("payPwd") String payPwd) {
+			@RequestParam("gmID") int gmID, @RequestParam("gmNum") int gmNum,
+			@RequestParam("spID") int spID,@RequestParam("payPwd") String payPwd) {
 		Map<String, Object> m = new HashMap<String, Object>();
 		Map<String, String> mm = new HashMap<String, String>();
 		Map<String, Object> dlReMap = new HashMap<String, Object>();
@@ -614,23 +616,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			m.put("data", mm);
 			return m;
 		}
-		///判断初始购买用户金额是否错误
-		float fhqbs = 3;
-		float totalPv = 0;
-		Integer isChunke = null;
-		if(type==1) {
-			Map<String, Object> mre = getHhrchuangke(hhrmoney);
-			int jb = (Integer) mre.get("jb");
-			if (jb == 0) {
-				m.put("status", "false");
-				m.put("message", "合伙人信息错误！");
-				m.put("code", "-3");
-				m.put("data", mm);
-				return m;
-			}
-			fhqbs = (float) mre.get("bs");
-			totalPv = fhqbs *hhrmoney;
-		}
+
 		// //// 验证当前用户是否合法///////////
 		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
 		if (ublist == null || ublist.size() == 0) {
@@ -641,14 +627,12 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			return m;
 		}
 		UserBean ub = ublist.get(0);
-		if(type==2){
-			if (ub.getIsChuangke() < 2) {
-				m.put("status", "false");
-				m.put("message", "用户信息错误！");
-				m.put("code", "-2");
-				m.put("data", mm);
-				return m;
-			}
+		if (ub.getIsChuangke() < 2) {
+			m.put("status", "false");
+			m.put("message", "用户信息错误！");
+			m.put("code", "-2");
+			m.put("data", mm);
+			return m;
 		}
 
 		if (ub.getPayPwd() == null || ub.getPayPwd().equals("")
@@ -684,7 +668,6 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		float useBdMoney = 0;////最后使用的报单券数额
 		try {
 			//////判断金额购买比例//====如果是复销的话type==2，判断金额是否符合平台规范。电子券最多商品价格的80%（动态值）//
-			if(type==2){
 				price = goods.getPrice();
 				money = (float) (gmNum * price);
 				useBdMoney = money;
@@ -715,7 +698,6 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 					m.put("data", mm);
 					return m;
 				}
-			}
 
 		} catch (Exception e) {
 			m.put("status", "false");
@@ -739,46 +721,33 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		/////进行商品购买，扣除相应金额，增加订单记录，以及报单券或者电子券记录///////////
 		int count = 0;
 		////扣用户积分,分红权额度增加（预判断50W额度），并进行判断是否升级
-		float totamout = 0;
-		//float fhqbs = 3;
 		Integer isLevel = null;
-		//Integer isChunke = null;
-		if (type==2){
-			isChunke = ub.getIsChuangke();//当前等级
-			Map<String,Object> mre = getHhrchuangke2(isChunke,money);
-			isLevel = (Integer)mre.get("jb");
-			if(isChunke<isLevel){
-				isChunke = isLevel;
-			}else{
-				isChunke =null;////没升级就不操作；
-			}
-			fhqbs = (float)mre.get("bs");
-			totalPv = fhqbs * money;////此次消费新增分红权，判断是否超过临界值；
-			Xtcl pvcl = clMapper.getClsValue("fhqbs_type", "4");
-			float edPv =0;
-			if (pvcl != null && pvcl.getBz_value() != null) {
-				edPv = Float.parseFloat(pvcl.getBz_value());
-			}
-			if((ub.getTotalPv()+totalPv)>edPv){
-				m.put("status", "false");
-				m.put("message", "超过今日分红权额度，不可购买！！");
-				m.put("code", "-7");
-				m.put("data", mm);
-				return m;
-			}
-			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,null,null,isChunke);
-		}else if(type==1){
-			////首次消费额(的2倍)
-			Xtcl xfe = clMapper.getClsValue("gxjbl_type", "2");
-			String bs = "2";
-			if (xfe != null && xfe.getBz_value() != null) {
-				bs = xfe.getBz_value();
-			}
-			float b = Float.parseFloat(bs);
-			totamout = hhrmoney*b;
-			userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,totamout,null,isChunke);
+		float fhqbs = 3;
+		float totalPv = 0;
+		Integer isChunke = null;
+		isChunke = ub.getIsChuangke();//当前等级
+		Map<String,Object> mre = getHhrchuangke2(isChunke,money);
+		isLevel = (Integer)mre.get("jb");
+		if(isChunke<isLevel){
+			isChunke = isLevel;
+		}else{
+			isChunke =null;////没升级就不操作；
 		}
-
+		fhqbs = (float)mre.get("bs");
+		totalPv = fhqbs * money;////此次消费新增分红权，判断是否超过临界值；
+		Xtcl pvcl = clMapper.getClsValue("fhqbs_type", "4");
+		float edPv =0;
+		if (pvcl != null && pvcl.getBz_value() != null) {
+			edPv = Float.parseFloat(pvcl.getBz_value());
+		}
+		if((ub.getTotalPv()+totalPv)>edPv){
+			m.put("status", "false");
+			m.put("message", "超过今日分红权额度，不可购买！！");
+			m.put("code", "-7");
+			m.put("data", mm);
+			return m;
+		}
+		count = userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,null,null,isChunke);
 
 		///报单券消费记录\
 		ScoreBalance scoreB = new ScoreBalance();
@@ -790,21 +759,30 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		scoreB.setZzCode("YQYB");
 		scoreB.setScore(useBdMoney);//使用
 		scoreB.setJyScore(bdMoney-useBdMoney);//结余
-		sbMapper.addEntryScore(scoreB);
+		if(count==1){
+			count =-0;
+				sbMapper.addEntryScore(scoreB);
+		}
 		//电子券消费记录[userElec==1,使用电子券]
 		if(userElec==1){
-			scoreB.setScore(useElecMoney);//使用
-			scoreB.setJyScore(elecMoney-useElecMoney);//结余
-			sbMapper.addElecScore(scoreB);
+			if(count==1){
+				count =0;
+				scoreB.setScore(useElecMoney);//使用
+				scoreB.setJyScore(elecMoney-useElecMoney);//结余
+				count = sbMapper.addElecScore(scoreB);
+			}
 		}
 		mm.put("bdscore", (bdMoney-useBdMoney)+ "");
 		mm.put("elecscore", (elecMoney-useElecMoney)+ "");
 		//生成最终订单
-		OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
-				ub.getAccount(), goods.getName(), goods.getPics(), gmNum
-				+ "", "盒", "1", "1", goods.getPrice(), money, 0,
-				"0", code, "zfId", 3);
-		count = obMapper.addOrder(orderb);
+		if(count==1){
+			count =0;
+			OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
+					ub.getAccount(), goods.getName(), goods.getPics(), gmNum
+					+ "", "盒", "1", "1", goods.getPrice(), money, 0,
+					"0", code, "zfId", 3);
+			count = obMapper.addOrder(orderb);
+		}
 		if (count == 1) {
 			m.put("status", "true");
 			// m.put("qrcode", response.getQrCode()); // 返回给客户端二维码
