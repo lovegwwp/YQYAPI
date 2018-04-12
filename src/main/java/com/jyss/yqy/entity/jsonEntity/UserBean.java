@@ -38,10 +38,19 @@ public class UserBean {
 	private Integer cjStatus;    //层奖（用于层奖）
 	private Integer isTransfer;    //1可转，2不可转
 	private Float borrow;  //借贷金额
+	private Integer bIsPay;//1=B端已支付
 
 	// private Date createdAt;//
 	// private int lastAccessTime;//
 
+
+	public Integer getbIsPay() {
+		return bIsPay;
+	}
+
+	public void setbIsPay(Integer bIsPay) {
+		this.bIsPay = bIsPay;
+	}
 
 	public Integer getId() {
 		return id;

@@ -628,29 +628,7 @@ public class UserAction {
 		return map;
 	}
 
-	/**
-	 * 填写推广码。
-	 */
-	// status1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过 statusAuth 0=审核中 1=通过 2=未通过
-	@RequestMapping("/upCodeRecord")
-	@ResponseBody
-	public Map<String, String> upCodeRecord(@RequestParam("uuid") String uuid,
-			@RequestParam("code") String code) {
-		int count = 0;
 
-		Map<String, String> m = new HashMap<String, String>();
-		// m.put("status", "true");
-		// m.put("message", "已经实名认证");
-		// m.put("code", "0");
-		m.put("status", "true");
-		m.put("message", "推广码认证通过！");
-		m.put("code", "0");
-		// if (count == 1) {
-		// return new ResponseEntity("true", "修改成功！");
-		// }
-		return m;
-
-	}
 
 	@InitBinder
 	protected void init(HttpServletRequest request,

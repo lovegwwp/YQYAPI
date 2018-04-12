@@ -545,7 +545,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		}
 		float b = Float.parseFloat(bs);
 		totamout = hhrmoney*b;
-		count =	userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,null,useBdMoney,totamout,null,jb);
+		count =	userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,null,useBdMoney,totamout,null,jb,1);
 		if(count==1){
 			    count =0;
 				///报单券消费记录\
@@ -747,7 +747,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			m.put("data", mm);
 			return m;
 		}
-		count = userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,null,null,isChunke);
+		count = userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,null,null,isChunke,null);
 
 		///报单券消费记录\
 		ScoreBalance scoreB = new ScoreBalance();

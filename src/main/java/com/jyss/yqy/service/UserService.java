@@ -169,6 +169,7 @@ public interface UserService {
 	 */
 	List<UserBean> getUserIsOnlyBy(@Param("uuid") String uuid,@Param("bCode") String bCode);
 
+
 	/**
 	 * 修改user各种金额
 	 * @param uuid 用户uuid
@@ -181,6 +182,7 @@ public interface UserService {
 	 * @param totalAmount 首次消费额
 	 * @param borrow 借贷金额
 	 * @param isChuangke 1=成为代言人 2=一级代理人 3=二级代理人 4=三级代理人 5=经理人（虚拟）6=市场总监助理
+	 * @param bIsPay b端是否支付 1支付 0未支付
 	 * @return
 	 */
 	int upUserMoneyByUUidOrId(@Param("uuid") String uuid,@Param("id") String id, @Param("totalPv") Float totalPv,
@@ -190,6 +192,7 @@ public interface UserService {
 			, @Param("bdScore") Float bdScore
 			, @Param("totalAmount") Float totalAmount
 			, @Param("borrow") Float borrow
-			, @Param("isChuangke") Integer isChuangke);
+			, @Param("isChuangke") Integer isChuangke
+			, @Param("bIsPay") Integer bIsPay);
 
 }

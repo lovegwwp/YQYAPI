@@ -26,7 +26,8 @@
         <result property="area" column="area"/>
         <result property="isChuangke" column="is_chuangke"  /><!--is_chuangke0普通会员1代言人2初级代理人 3中级代理人4高级代理人  -->
         <result property="isAuth" column="is_auth"  /><!--isAuth 1=已提交 2=审核通过3=审核不通过  -->
-        <result property="bCode" column="b_code"  /> 
+        <result property="bCode" column="b_code"  />
+        <result property="bIsPay" column="b_is_pay"  />
         <result property="token" column="token"  />
         <result property="payPwd" column="pay_pwd"  /> 
         <result property="cashScore" column="cash_score"  /> 
@@ -47,7 +48,7 @@
      <!-- status  -1删除 1=正常2=禁用 isAuth 1=已提交 2=审核通过3=审核不通过  statusAuth 0=审核中 1=通过 2=未通过 -->
     <select id="getUserBy" resultMap="ubResultMap">           
 	    select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,
-        u.cash_score,u.is_auth,u.total_pv,u.b_code,a.real_name,a.id_card,u.elect_score,u.bd_score,u.borrow,u.is_transfer
+        u.cash_score,u.is_auth,u.total_pv,u.b_code,u.b_is_pay,a.real_name,a.id_card,u.elect_score,u.bd_score,u.borrow,u.is_transfer
 	    from u_user u  left join u_user_auth a on u.uuid = a.u_uuid
         <where>
           <if test="account != null and account !=''"> and u.account = #{account} </if>
@@ -144,6 +145,7 @@
         <if test="totalAmount != null and totalAmount !=''"> ,total_amount = total_amount + #{totalAmount} </if>
         <if test="borrow != null and borrow !=''"> ,borrow = borrow + #{borrow} </if>
         <if test="isChuangke != null and isChuangke !=''"> ,is_chuangke =  #{isChuangke} </if>
+        <if test="bIsPay != null and bIsPay !=''"> ,b_is_pay = #{bIsPay} </if>
         <where>
             1 = 1
             <if test="uuid != null and uuid !=''"> and uuid = #{uuid} </if>
