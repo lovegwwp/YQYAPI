@@ -568,7 +568,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			OrdersB orderb = new OrdersB(outTradeNo, gmID + "", gmr,
 					ub.getAccount(), goods.getName(), goods.getPics(), hs
 					+ "", "套餐", "1", "1", goods.getPrice(), money, 0,
-					"0", code, "zfId", 3);
+					jb+"", code, "zfId", 3);
 			count = obMapper.addOrder(orderb);
 		}
 		if (count == 1) {
