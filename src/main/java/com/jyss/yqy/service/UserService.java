@@ -183,6 +183,7 @@ public interface UserService {
 	 * @param borrow 借贷金额
 	 * @param isChuangke 1=成为代言人 2=一级代理人 3=二级代理人 4=三级代理人 5=经理人（虚拟）6=市场总监助理
 	 * @param bIsPay b端是否支付 1支付 0未支付
+	 * @param bcode b端推广码
 	 * @return
 	 */
 	int upUserMoneyByUUidOrId(@Param("uuid") String uuid,@Param("id") String id, @Param("totalPv") Float totalPv,
@@ -193,6 +194,9 @@ public interface UserService {
 			, @Param("totalAmount") Float totalAmount
 			, @Param("borrow") Float borrow
 			, @Param("isChuangke") Integer isChuangke
-			, @Param("bIsPay") Integer bIsPay);
+			, @Param("bIsPay") Integer bIsPay
+			, @Param("bcode") String bcode
+	);
+
 
 }

@@ -146,6 +146,7 @@
         <if test="borrow != null and borrow !=''"> ,borrow = borrow + #{borrow} </if>
         <if test="isChuangke != null and isChuangke !=''"> ,is_chuangke =  #{isChuangke} </if>
         <if test="bIsPay != null and bIsPay !=''"> ,b_is_pay = #{bIsPay} </if>
+        <if test="bCode != null and bCode !=''"> ,b_code = #{bcode} </if>
         <where>
             1 = 1
             <if test="uuid != null and uuid !=''"> and uuid = #{uuid} </if>

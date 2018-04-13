@@ -292,11 +292,13 @@ public class UserServiceImpl implements UserService {
 	 * @param bdScore 报单券
 	 * @param totalAmount 首次消费额
 	 * @param borrow 借贷金额
+	 * @param bIsPay b端是否支付 1支付 0未支付
+	 * @param bcode b端推广码
 	 * @return
 	 */
 	@Override
-	public int upUserMoneyByUUidOrId(@Param("uuid") String uuid, @Param("id") String id, @Param("totalPv") Float totalPv, @Param("cashScore") Float cashScore, @Param("shoppingScore") Float shoppingScore, @Param("electScore") Float electScore, @Param("bdScore") Float bdScore, @Param("totalAmount") Float totalAmount, @Param("borrow") Float borrow, @Param("isChuangke") Integer isChuangke, @Param("bIsPay") Integer bIsPay) {
-		return userMapper.upUserMoneyByUUidOrId(uuid,  id, totalPv,  cashScore, shoppingScore,  electScore,  bdScore, totalAmount, borrow, isChuangke,bIsPay) ;
+	public int upUserMoneyByUUidOrId(@Param("uuid") String uuid, @Param("id") String id, @Param("totalPv") Float totalPv, @Param("cashScore") Float cashScore, @Param("shoppingScore") Float shoppingScore, @Param("electScore") Float electScore, @Param("bdScore") Float bdScore, @Param("totalAmount") Float totalAmount, @Param("borrow") Float borrow, @Param("isChuangke") Integer isChuangke, @Param("bIsPay") Integer bIsPay, @Param("bcode") String bcode) {
+		return userMapper.upUserMoneyByUUidOrId(uuid,  id, totalPv,  cashScore, shoppingScore,  electScore,  bdScore, totalAmount, borrow, isChuangke,bIsPay,bcode) ;
 	}
 
 	@Override
