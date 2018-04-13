@@ -384,10 +384,18 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		Integer hs = 1;
 		Float bs = 3F;
 		List<Xtcl> fylist = new ArrayList<Xtcl>();
-		// //查询充值人对应等级
-		fylist = clMapper.getClsBy("cjhhr_type", money + "");
-		if (fylist != null && fylist.size() == 1) {
-			jb = Integer.parseInt(fylist.get(0).getBz_id());
+		// //查询充值人对应等级|
+
+		fylist = clMapper.getClsBy("cjhhr_type", null);
+		if (fylist != null && fylist.size() > 0) {
+			for (Xtcl xtcl : fylist) {
+				String bz_value = xtcl.getBz_value();
+				float value = Float.parseFloat(bz_value);
+				if(money == value){
+					jb = Integer.parseInt(xtcl.getBz_id());
+					break;
+				}
+			}
 		}
 		if(jb>4){
 			jb=4;
@@ -425,12 +433,16 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		if (dlm4 != null && !dlm4.getBz_value().equals("")) {
 			mmobney4 = Float.parseFloat(dlm4.getBz_value());
 		}
-		if(money>=mmobney4){
+		if(money >= mmobney4){
 			jb=4;
 		}else if(money >= mmobney3){
 			jb=3;
 		}
-
+		Xtcl dlbs = clMapper.getClsValue("fhqbs_type", (jb-1)+"");
+		if (dlbs != null && !dlbs.getBz_value().equals("")) {
+			bs = Float.parseFloat(dlbs.getBz_value());
+		}
+		mm.put("bs", bs);
 		mm.put("jb",jb);
 		return mm;
 	}
@@ -481,10 +493,10 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			fhqbs = (float) mre.get("bs");
 			totalPv = fhqbs *hhrmoney;
 		// //// 验证当前用户是否合法///////////
-		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "2");
+		List<UserBean> ublist = userMapper.getUserById(gmID + "", "1", "1");
 		if (ublist == null || ublist.size() == 0) {
 			m.put("status", "false");
-			m.put("message", "用户信息错误！");
+			m.put("message", "您还没提交身份信息！");
 			m.put("code", "-2");
 			m.put("data", mm);
 			return m;
@@ -508,6 +520,13 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				m.put("data", mm);
 				return m;
 			}
+		}
+		if(ub.getbIsPay() == 1){
+			m.put("status", "false");
+			m.put("message", "不可重复购买套餐！");
+			m.put("code", "-7");
+			m.put("data", mm);
+			return m;
 		}
 		float bdMoney =ub.getBdScore();
 		float elecMoney =ub.getElectScore();
@@ -545,7 +564,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		}
 		float b = Float.parseFloat(bs);
 		totamout = hhrmoney*b;
-		count =	userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,null,useBdMoney,totamout,null,jb,1);
+		count =	userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,null,-useBdMoney,totamout,null,jb,1);
 		if(count==1){
 			    count =0;
 				///报单券消费记录\
@@ -581,7 +600,6 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			m.put("code", "0");
 			m.put("data", mm);
 		}
-		m.put("code", "-4");
 		m.put("data", mm);
 		return m;
 
@@ -673,7 +691,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 				useBdMoney = money;
 				////userElec/1=使用电子抵扣===相应要有电子券抵扣记录
 				if(userElec==1) {
-					if(elecMoney!=0){
+					if(elecMoney > 0){
 						Xtcl dlhs = clMapper.getClsValue("dzqbl_type", "1");
 						String pencent = "0.8";
 						if (dlhs != null && dlhs.getBz_value() != null) {
@@ -681,7 +699,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 						}
 						float p = Float.parseFloat(pencent);
 						float elecMoneyMax = p * money;////电子券最多可抵扣此商品这些钱
-						if(elecMoney>elecMoneyMax){
+						if(elecMoney > elecMoneyMax){
 							useElecMoney = elecMoneyMax;
 						}else{
 							useElecMoney = elecMoney;
@@ -691,10 +709,10 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 						userElec =0;///无法使用电子券
 					}
 				}
-				if(useBdMoney>bdMoney){
+				if(useBdMoney > bdMoney){
 					m.put("status", "false");
 					m.put("message", "报单券余额不足！！");
-					m.put("code", "-1");
+					m.put("code", "-5");
 					m.put("data", mm);
 					return m;
 				}
@@ -702,7 +720,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		} catch (Exception e) {
 			m.put("status", "false");
 			m.put("message", "商品信息错误！");
-			m.put("code", "-5");
+			m.put("code", "-3");
 			m.put("data", mm);
 			return m;
 		}
@@ -726,12 +744,13 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		float totalPv = 0;
 		Integer isChunke = null;
 		isChunke = ub.getIsChuangke();//当前等级
+		///////注意级别升级
 		Map<String,Object> mre = getHhrchuangke2(isChunke,money);
 		isLevel = (Integer)mre.get("jb");
-		if(isChunke<isLevel){
+		if(isChunke < isLevel){
 			isChunke = isLevel;
 		}else{
-			isChunke =null;////没升级就不操作；
+			isChunke = null;////没升级就不操作；
 		}
 		fhqbs = (float)mre.get("bs");
 		totalPv = fhqbs * money;////此次消费新增分红权，判断是否超过临界值；
@@ -742,38 +761,40 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 		}
 		if((ub.getTotalPv()+totalPv)>edPv){
 			m.put("status", "false");
-			m.put("message", "超过今日分红权额度，不可购买！！");
+			m.put("message", "超过今日分红权额度，不可购买！");
 			m.put("code", "-7");
 			m.put("data", mm);
 			return m;
 		}
-		count = userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,null,useElecMoney,useBdMoney,null,null,isChunke,null);
+		count = userMapper.upUserMoneyByUUidOrId(null,gmID+"",totalPv,null,
+				null,-useElecMoney,-useBdMoney,null,null,isChunke,null);
 
 		///报单券消费记录\
 		ScoreBalance scoreB = new ScoreBalance();
-		scoreB.setType(2);//1=收入 2=支出\
+		scoreB.setType(2);//1=收入 2=支出
 		scoreB.setEnd(2);//1=A端 2=B端
-		scoreB.setCategory(8);//8=B端消费，
+		scoreB.setCategory(8);//8=B端消费
 		scoreB.setuUuid(ub.getUuid());
 		scoreB.setStatus(1);
 		scoreB.setZzCode("YQYB");
 		scoreB.setScore(useBdMoney);//使用
 		scoreB.setJyScore(bdMoney-useBdMoney);//结余
-		if(count==1){
-			count =-0;
-				sbMapper.addEntryScore(scoreB);
+
+		if(count == 1){
+			count = 0;
+			count = sbMapper.addEntryScore(scoreB);
 		}
 		//电子券消费记录[userElec==1,使用电子券]
-		if(userElec==1){
+		if(userElec == 1){
 			if(count==1){
-				count =0;
+				count = 0;
 				scoreB.setScore(useElecMoney);//使用
 				scoreB.setJyScore(elecMoney-useElecMoney);//结余
 				count = sbMapper.addElecScore(scoreB);
 			}
 		}
-		mm.put("bdscore", (bdMoney-useBdMoney)+ "");
-		mm.put("elecscore", (elecMoney-useElecMoney)+ "");
+		mm.put("bdscore", (float)(Math.round((bdMoney-useBdMoney)*100))/100+ "");     // (float)(Math.round(a*100))/100
+		mm.put("elecscore", (float)(Math.round(((elecMoney-useElecMoney))*100))/100 + "");
 		//生成最终订单
 		if(count==1){
 			count =0;
@@ -792,8 +813,7 @@ public class AlipayAPPServiceImpl implements AlipayAppService {
 			mm.put("responseBody", "");
 			m.put("code", "0");
 			m.put("data", mm);
-			}
-		m.put("code", "-4");
+		}
 		m.put("data", mm);
 		return m;
 

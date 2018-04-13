@@ -155,9 +155,10 @@
     
 
     <select id="getUserById" resultMap="ubResultMap">           
-	    select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,u.is_chuangke,u.pay_pwd,
-        u.is_auth,u.cash_score,u.total_pv,u.b_code,a.real_name,a.id_card ,u.is_transfer
-	    from u_user u   left join u_user_auth a on u.uuid = a.u_uuid
+	    select u.id,u.uuid,u.nick,u.salt,u.pwd,u.account,u.status,u.avatar,u.sex,u.age,
+        u.is_chuangke,u.pay_pwd,u.b_is_pay,u.is_auth,u.cash_score,u.total_pv,u.b_code,
+        a.real_name,a.id_card ,u.is_transfer,u.elect_score,u.bd_score,u.borrow
+        from u_user u left join u_user_auth a on u.uuid = a.u_uuid
         <where>
           <if test="id != null and id !=''"> and u.id = #{id} </if>
           <if test="status != null and status !=''"> and u.status = #{status} </if>

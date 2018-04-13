@@ -676,12 +676,11 @@ public class ZfPayAction {
 /////////////type=[1=初始合伙人购买。2=之后复销]//////////////userElec/1=使用电子抵扣////0不使用
 	@RequestMapping(value = "/b/yqyOrderPay", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> yqyOrderPay(@RequestParam int type,@RequestParam String payPwd,@RequestParam("userElec") int userElec,
-										   @RequestParam String token, @RequestParam int spId,@RequestParam("hhrmoney") float hhrmoney,
-										@RequestParam int num, HttpServletRequest request) {
+	public Map<String, Object> yqyOrderPay(@RequestParam Integer type,@RequestParam String payPwd,@RequestParam("userElec") Integer userElec,
+										   @RequestParam String token, @RequestParam Integer spId,@RequestParam("hhrmoney") Float hhrmoney,
+										   @RequestParam Integer num, HttpServletRequest request) {
 		Map<String, Object> mmap = new HashMap<String, Object>();
-		String filePath = request.getSession().getServletContext()
-				.getRealPath("/");
+		String filePath = request.getSession().getServletContext().getRealPath("/");
 		int index = filePath.lastIndexOf("YQYAPI");
 		filePath = filePath.substring(0, index) + "orderCodePng/";
 		File f = new File(filePath);
