@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -148,7 +149,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     public boolean updateUserBdBalance(String totalAmount, String outTradeNo) {
         //后台报单券总池余额
         Xtcl xtcl1 = xtclMapper.getClsValue("bdqzc_type", "1");        //后台报单券总池余额
-        double double1 = Double.parseDouble(xtcl1.getBz_value());                   //20000000
+        //double double1 = Double.parseDouble(xtcl1.getBz_value());                   //20000000
+
+        BigDecimal bigDecimal1 = new BigDecimal(xtcl1.getBz_value());
+        BigDecimal bigDecimal2 = new BigDecimal(totalAmount);
 
         List<ScoreBalance> balanceList = scoreBalanceMapper.selectEntryScore(outTradeNo);
         if(balanceList != null && balanceList.size() == 1){
@@ -170,10 +174,12 @@ public class UserAccountServiceImpl implements UserAccountService {
                     int count = scoreBalanceMapper.updateEntryScore(scoreBalance1);
                     if(count == 1){
                         //减总池
-                        double syMoney = double1 - scoreBalance.getScore();
+                        BigDecimal bigDecimal3 = bigDecimal1.subtract(bigDecimal2);
+                        String syMoney = bigDecimal3.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+
                         Xtcl xtcl = new Xtcl();
                         xtcl.setId(xtcl1.getId());
-                        xtcl.setBz_value(syMoney + "");
+                        xtcl.setBz_value(syMoney);
                         xtclMapper.updateCl(xtcl);
 
                         return true;
