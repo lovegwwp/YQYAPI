@@ -101,7 +101,9 @@ public class JRecordServiceImpl implements JRecordService{
 					int count = bonusScjMapper.insertBonusScj(bonusScj);
 					//计算积分
 					if(count == 1){
-						jBonusFPService.insertScoreBalance(jRecord.getuId(),money,6);
+						if(money > 0){
+							jBonusFPService.insertScoreBalance(jRecord.getuId(),money,6);
+						}
 					}
 					//更新结余
 					if(total1 >= total2){
@@ -134,7 +136,9 @@ public class JRecordServiceImpl implements JRecordService{
 					int count = bonusScjMapper.insertBonusScj(bonusScj);
 					//计算积分
 					if(count == 1){
-						jBonusFPService.insertScoreBalance(jRecord.getuId(),money,6);
+						if(money > 0){
+							jBonusFPService.insertScoreBalance(jRecord.getuId(),money,6);
+						}
 					}
 					
 					if(total1 >= total2){
