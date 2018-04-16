@@ -126,7 +126,7 @@
 	<!-- 添加市场奖 -->
 	<insert id="insertBonusScj" parameterType="com.jyss.yqy.entity.JBonusScj" useGeneratedKeys="true" keyProperty="id">
 		insert into j_bonus_scj (id,u_id,a_id,a_pv,b_id,b_pv,pv,status,created) values
-		(null,#{uId},#{aId},#{aPv},#{bId},#{bPv},#{pv},#{status},date_sub(now(),interval 12 hour))
+		(null,#{uId},#{aId},#{aPv},#{bId},#{bPv},#{pv},#{status},date_sub(now(),interval 18 hour))
 	</insert>  
 
 

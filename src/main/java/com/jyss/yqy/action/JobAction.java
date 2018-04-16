@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
@@ -33,6 +34,7 @@ public class JobAction {
      * 计算层奖
      */
     @RequestMapping("/cj/computeCJ")
+    @ResponseBody
     public void insertJBonusCj() {
         Map<String, String> map = jBonusCjService.insertJBonusCj();
         logger.info(map.get("message"));
@@ -43,6 +45,7 @@ public class JobAction {
      * 计算量奖
      */
     @RequestMapping("/scj/computeSCJ")
+    @ResponseBody
     public void insertJBonusScj() {
         Map<String, String> map = recordService.insertJBonusScj();
         logger.info(map.get("message"));
@@ -53,6 +56,7 @@ public class JobAction {
      * 计算共享奖
      */
     @RequestMapping("/gxj/computeGXJ")
+    @ResponseBody
     public void insertJBonusGxj() {
         Map<String, String> map = jBonusGxjService.insertJBonusGxj();
         logger.info(map.get("message"));
@@ -63,6 +67,7 @@ public class JobAction {
      * 计算分红奖
      */
     @RequestMapping("/fhj/computeFHJ")
+    @ResponseBody
     public void insertJBonusFhj() {
         Map<String, String> map = jBonusFhjService.insertJBonusFhj();
         logger.info(map.get("message"));
@@ -73,6 +78,7 @@ public class JobAction {
      * 扣除借贷金额
      */
     @RequestMapping("/deduct/computeBorrow")
+    @ResponseBody
     public void updateUserBorrow() {
         Map<String, String> map = jBonusFhjService.updateUserBorrow();
         logger.info(map.get("message"));

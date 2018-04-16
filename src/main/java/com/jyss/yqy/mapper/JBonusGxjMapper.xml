@@ -16,7 +16,7 @@
 	<!--插入共享奖-->
 	<insert id="insert" parameterType="com.jyss.yqy.entity.JBonusGxj" useGeneratedKeys="true" keyProperty="id">
 		insert into j_bonus_gxj (id, u_id, s_id, s_name, amount, status, create_time)
-		values (null, #{uId}, #{sId}, #{sName}, #{amount}, #{status}, now())
+		values (null, #{uId}, #{sId}, #{sName}, #{amount}, #{status}, date_sub(now(),interval 18 hour))
 	</insert>
 
 

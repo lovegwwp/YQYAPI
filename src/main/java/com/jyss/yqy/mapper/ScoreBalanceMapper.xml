@@ -159,50 +159,50 @@
 
 
     <!-- ///////////////////////奖金分配/////////////// -->
-    <!--现金积分=插入-->         <!-- 结算时间减12小时 -->
+    <!--现金积分=插入-->         <!-- 结算时间减18小时 -->
     <insert id="addCashScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
             useGeneratedKeys="true" keyProperty="id">
         insert into u_cash_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
         created_at,js_time,status,zz_code)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
-        date_sub(now(),interval 12 hour),#{status},#{zzCode})
+        date_sub(now(),interval 18 hour),#{status},#{zzCode})
     </insert>
    
-    <!--购物积分=插入-->          <!-- 结算时间减12小时 -->
+    <!--购物积分=插入-->          <!-- 结算时间减18小时 -->
     <insert id="addShoppingScore" parameterType="com.jyss.yqy.entity.ScoreBalance" 
             useGeneratedKeys="true" keyProperty="id">
         insert into u_shopping_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
         created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
-        date_sub(now(),interval 12 hour),#{status})
+        date_sub(now(),interval 18 hour),#{status})
     </insert>
 
-    <!--电子券=插入-->           <!-- 结算时间减12小时 -->
+    <!--电子券=插入-->           <!-- 结算时间减18小时 -->
     <insert id="addElecScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
             useGeneratedKeys="true" keyProperty="id">
         insert into u_elec_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
         created_at,js_time,status,zz_code)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
-        date_sub(now(),interval 12 hour),#{status},#{zzCode})
+        date_sub(now(),interval 18 hour),#{status},#{zzCode})
     </insert>
 
-    <!--税费，平台管理费，手续费=插入-->        <!-- 结算时间减12小时 -->
+    <!--税费，平台管理费，手续费=插入-->        <!-- 结算时间减18小时 -->
     <insert id="addScoreDetails" parameterType="com.jyss.yqy.entity.ScoreBalance"
             useGeneratedKeys="true" keyProperty="id">
         insert into u_score_details
         (id,end,u_uuid,category,seco_cate,type,score,jy_score,order_sn,created_at,js_time,status)
         values(null,#{end},#{uUuid},#{category},#{secoCate},#{type},#{score},
-        #{jyScore},'B',now(),date_sub(now(),interval 12 hour),#{status})
+        #{jyScore},'B',now(),date_sub(now(),interval 18 hour),#{status})
     </insert>
 
 
-    <!--报单券=插入-->           <!-- 结算时间减12小时 -->
+    <!--报单券=插入-->           <!-- 结算时间减18小时 -->
     <insert id="addEntryScore" parameterType="com.jyss.yqy.entity.ScoreBalance"
             useGeneratedKeys="true" keyProperty="id">
         insert into u_entry_score_balance(id,end,u_uuid,category,type,score,jy_score,order_sn,
         created_at,js_time,status,zz_code)
         values(null,#{end},#{uUuid},#{category},#{type},#{score},#{jyScore},'B',now(),
-        date_sub(now(),interval 12 hour),#{status},#{zzCode})
+        date_sub(now(),interval 18 hour),#{status},#{zzCode})
     </insert>
 
 
