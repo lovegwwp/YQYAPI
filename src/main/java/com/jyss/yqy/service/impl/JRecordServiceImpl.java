@@ -225,31 +225,34 @@ public class JRecordServiceImpl implements JRecordService{
 	 */
 	private void updateUserCash(){
 
+		float float1 = 0.002f;
 		//查询比列
 		Xtcl xtcl1 = xtclMapper.getClsValue("zjzl_type", "1");        //总监助理比例
-		float float1 = Float.parseFloat(xtcl1.getBz_value());       			   //0.002
+		float1 = Float.parseFloat(xtcl1.getBz_value());       			           //0.002
 
 		List<UserBean> userBeans = userMapper.selectUserZL();
-		for (UserBean userBean : userBeans) {
+		if(userBeans != null && userBeans.size()>0){
+			for (UserBean userBean : userBeans) {
 
-			float total = getTotal(userBean.getAge());      //查询代理市场的总pv
-			float cashScore = total * float1;
+				float total = getTotal(userBean.getAge());           //查询总监市场的总pv
+				float cashScore = total * float1;
 
-			//添加股券
-			ScoreBalance score = new ScoreBalance();
-			score.setEnd(2);
-			score.setuUuid(userBean.getUuid());
-			score.setCategory(12);
-			score.setType(1);
-			score.setScore(cashScore);
-			score.setJyScore(userBean.getCashScore() + cashScore);
-			score.setStatus(1);
-			int count = scoreBalanceMapper.addCashScore(score);
-			if(count == 1){
-				UserBean userBean1 = new UserBean();
-				userBean1.setId(userBean.getId());
-				userBean1.setCashScore(userBean.getCashScore() + cashScore);
-				userMapper.updateScore(userBean1);
+				//添加股券
+				ScoreBalance score = new ScoreBalance();
+				score.setEnd(2);
+				score.setuUuid(userBean.getUuid());
+				score.setCategory(12);
+				score.setType(1);
+				score.setScore(cashScore);
+				score.setJyScore(userBean.getCashScore() + cashScore);
+				score.setStatus(1);
+				int count = scoreBalanceMapper.addCashScore(score);
+				if(count == 1){
+					UserBean userBean1 = new UserBean();
+					userBean1.setId(userBean.getId());
+					userBean1.setCashScore(userBean.getCashScore() + cashScore);
+					userMapper.updateScore(userBean1);
+				}
 			}
 		}
 	}

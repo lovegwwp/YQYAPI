@@ -184,7 +184,6 @@
            
     </insert>
     
-    <!--生成推荐码 --> 
     <!--<update id="upBCode"  >
         update u_user  set b_code = #{bCode} 
              where id =#{id} 
@@ -364,9 +363,10 @@
 
     <!--查询所有总监助理-->
     <select id="selectUserZL" resultMap="ubResultMap">
-        select a.zj_uid as age,b.cash_score,b.id,b.uuid,b.cash_score
-        from j_record_zl a left join u_user b on a.u_id = b.id
-        where a.status = 1 and b.is_chuangke = 6
+        select a.zj_uid as age,c.cash_score,c.id,c.uuid
+        from j_record_zl a left join p_account_users_b b on a.u_id = b.id
+        left join u_user c on b.user_id = c.id
+        where a.status = 1 and c.is_chuangke = 6
     </select>
 
 
