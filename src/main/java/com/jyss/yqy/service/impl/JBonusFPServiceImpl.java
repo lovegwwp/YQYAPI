@@ -47,7 +47,7 @@ public class JBonusFPServiceImpl implements JBonusFPService {
         if(userList != null && userList.size()>0){
             UserBean userBean = userList.get(0);
             Float totalPv = userBean.getTotalPv();
-            if(category == 7){     //共享奖不扣分红权
+            if(category == 7){     //共享奖不扣分红权,不用考虑totalPv >0
 
                 //添加股券
                 ScoreBalance score1 = new ScoreBalance();
@@ -96,105 +96,54 @@ public class JBonusFPServiceImpl implements JBonusFPService {
                     }
                 }
             }
-
             if(totalPv > 0){
-                if(money <= totalPv){
+                float money1 = money <= totalPv ? money : totalPv;     //判断是否大于totalPv
 
-                    //添加股券
-                    ScoreBalance score1 = new ScoreBalance();
-                    score1.setEnd(2);
-                    score1.setuUuid(userBean.getUuid());
-                    score1.setCategory(category);
-                    score1.setType(1);
-                    score1.setScore(money * float5);
-                    score1.setJyScore(money * float5 + userBean.getCashScore());
-                    score1.setStatus(1);
-                    int count1 = scoreBalanceMapper.addCashScore(score1);
+                //添加股券
+                ScoreBalance score1 = new ScoreBalance();
+                score1.setEnd(2);
+                score1.setuUuid(userBean.getUuid());
+                score1.setCategory(category);
+                score1.setType(1);
+                score1.setScore(money1 * float5);
+                score1.setJyScore(money1 * float5 + userBean.getCashScore());
+                score1.setStatus(1);
+                int count1 = scoreBalanceMapper.addCashScore(score1);
 
-                    //添加消费券
-                    score1.setScore(money * float4);
-                    score1.setJyScore(money * float4 + userBean.getShoppingScore());
-                    int count2 = scoreBalanceMapper.addShoppingScore(score1);
+                //添加消费券
+                score1.setScore(money1 * float4);
+                score1.setJyScore(money1 * float4 + userBean.getShoppingScore());
+                int count2 = scoreBalanceMapper.addShoppingScore(score1);
 
-                    //添加电子券
-                    score1.setScore(money * float3);
-                    score1.setJyScore(money * float3 + userBean.getElectScore());
-                    int count3 = scoreBalanceMapper.addElecScore(score1);
+                //添加电子券
+                score1.setScore(money1 * float3);
+                score1.setJyScore(money1 * float3 + userBean.getElectScore());
+                int count3 = scoreBalanceMapper.addElecScore(score1);
 
-                    //添加税
-                    score1.setType(2);     //支出税
-                    score1.setScore(money * float1);
-                    score1.setJyScore(0.0f);
-                    score1.setSecoCate(1);
-                    int count4 = scoreBalanceMapper.addScoreDetails(score1);
+                //添加税
+                score1.setType(2);     //支出税
+                score1.setScore(money1 * float1);
+                score1.setJyScore(0.0f);
+                score1.setSecoCate(1);
+                int count4 = scoreBalanceMapper.addScoreDetails(score1);
 
-                    //添加平台管理费
-                    score1.setType(2);      //支出平台管理费
-                    score1.setScore(money * float2);
-                    score1.setJyScore(0.0f);
-                    score1.setSecoCate(2);
-                    int count5 = scoreBalanceMapper.addScoreDetails(score1);
+                //添加平台管理费
+                score1.setType(2);      //支出平台管理费
+                score1.setScore(money1 * float2);
+                score1.setJyScore(0.0f);
+                score1.setSecoCate(2);
+                int count5 = scoreBalanceMapper.addScoreDetails(score1);
 
-                    if(count1 == 1 && count2 == 1 && count3 == 1 && count4 == 1 && count5 == 1){
-                        UserBean userBean2 = new UserBean();
-                        userBean2.setId(id);
-                        userBean2.setCashScore(money * float5 + userBean.getCashScore());
-                        userBean2.setShoppingScore(money * float4 + userBean.getShoppingScore());
-                        userBean2.setElectScore(money * float3 + userBean.getElectScore());
-                        userBean2.setTotalPv(totalPv - money);
-                        int count6 = userMapper.updateScore(userBean2);
-                        if(count6 == 1){
-                            return true;
-                        }
-                    }
-                }else{
-
-                    //添加股券
-                    ScoreBalance score1 = new ScoreBalance();
-                    score1.setEnd(2);
-                    score1.setuUuid(userBean.getUuid());
-                    score1.setCategory(category);
-                    score1.setType(1);
-                    score1.setScore(totalPv * float5);
-                    score1.setJyScore(totalPv * float5 + userBean.getCashScore());
-                    score1.setStatus(1);
-                    int count1 = scoreBalanceMapper.addCashScore(score1);
-
-                    //添加消费券
-                    score1.setScore(totalPv * float4);
-                    score1.setJyScore(totalPv * float4 + userBean.getShoppingScore());
-                    int count2 = scoreBalanceMapper.addShoppingScore(score1);
-
-                    //添加电子券
-                    score1.setScore(totalPv * float3);
-                    score1.setJyScore(totalPv * float3 + userBean.getElectScore());
-                    int count3 = scoreBalanceMapper.addElecScore(score1);
-
-                    //添加税
-                    score1.setType(2);     //支出税
-                    score1.setScore(totalPv * float1);
-                    score1.setJyScore(0.0f);
-                    score1.setSecoCate(1);
-                    int count4 = scoreBalanceMapper.addScoreDetails(score1);
-
-                    //添加平台管理费
-                    score1.setType(2);      //支出平台管理费
-                    score1.setScore(totalPv * float2);
-                    score1.setJyScore(0.0f);
-                    score1.setSecoCate(2);
-                    int count5 = scoreBalanceMapper.addScoreDetails(score1);
-
-                    if(count1 == 1 && count2 == 1 && count3 == 1 && count4 == 1 && count5 == 1){
-                        UserBean userBean2 = new UserBean();
-                        userBean2.setId(id);
-                        userBean2.setCashScore(totalPv * float5 + userBean.getCashScore());
-                        userBean2.setShoppingScore(totalPv * float4 + userBean.getShoppingScore());
-                        userBean2.setElectScore(totalPv * float3 + userBean.getElectScore());
-                        userBean2.setTotalPv(totalPv - totalPv);
-                        int count6 = userMapper.updateScore(userBean2);
-                        if(count6 == 1){
-                            return true;
-                        }
+                if(count1 == 1 && count2 == 1 && count3 == 1 && count4 == 1 && count5 == 1){
+                    UserBean userBean2 = new UserBean();
+                    userBean2.setId(id);
+                    userBean2.setCashScore(money1 * float5 + userBean.getCashScore());
+                    userBean2.setShoppingScore(money1 * float4 + userBean.getShoppingScore());
+                    userBean2.setElectScore(money1 * float3 + userBean.getElectScore());
+                    userBean2.setTotalPv(totalPv - money1);
+                    int count6 = userMapper.updateScore(userBean2);
+                    if(count6 == 1){
+                        return true;
                     }
                 }
             }

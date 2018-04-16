@@ -111,36 +111,21 @@ public class JBonusGxjServiceImpl implements JBonusGxjService {
 				//获取人均分配值
 				float amount = jRecord.getPv() * float1 / recordList.size();
 				for (JRecord record : recordList) {
-					if(amount <= record.getPv()){
-						float jyScore = record.getPv() - amount;
-						//添加共享奖
-						JBonusGxj bonusGxj = new JBonusGxj();
-						bonusGxj.setuId(record.getuId());
-						bonusGxj.setsId(jRecord1.getuId());
-						bonusGxj.setsName(jRecord1.getuAccount());
-						bonusGxj.setAmount(amount);
-						bonusGxj.setStatus(1);
-						int count = jBonusGxjMapper.insert(bonusGxj);
-						if(count == 1){
-							boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), amount, 7);
-							if(flag){
-								userMapper.updateUserCjStatus(null,jyScore,record.getuId());
-							}
-						}
-					}else{
-						//添加共享奖
-						JBonusGxj bonusGxj = new JBonusGxj();
-						bonusGxj.setuId(record.getuId());
-						bonusGxj.setsId(jRecord1.getuId());
-						bonusGxj.setsName(jRecord1.getuAccount());
-						bonusGxj.setAmount(record.getPv());
-						bonusGxj.setStatus(1);
-						int count = jBonusGxjMapper.insert(bonusGxj);
-						if(count == 1){
-							boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), record.getPv(), 7);
-							if(flag){
-								userMapper.updateUserCjStatus(null,0.00f,record.getuId());
-							}
+
+					float amount1 = amount <= record.getPv() ? amount : record.getPv();    //判断是否大于totalAmount
+					float jyScore = record.getPv() - amount1;
+					//添加共享奖
+					JBonusGxj bonusGxj = new JBonusGxj();
+					bonusGxj.setuId(record.getuId());
+					bonusGxj.setsId(jRecord1.getuId());
+					bonusGxj.setsName(jRecord1.getuAccount());
+					bonusGxj.setAmount(amount1);
+					bonusGxj.setStatus(1);
+					int count = jBonusGxjMapper.insert(bonusGxj);
+					if(count == 1){
+						boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), amount1, 7);
+						if(flag){
+							userMapper.updateUserCjStatus(null,jyScore,record.getuId());
 						}
 					}
 				}
