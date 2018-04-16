@@ -39,7 +39,7 @@ public class JRecordServiceImpl implements JRecordService{
 
 	
 	/**
-	 * 计算市场奖
+	 * 计算市场奖（量奖）
 	 */
 	@Override
 	public Map<String,String> insertJBonusScj(){
@@ -211,7 +211,7 @@ public class JRecordServiceImpl implements JRecordService{
 	 */
 	private void insertJbonusScj(){
 		int record = recordMapper.updateJRecord();     //将每日的pv值清0
-		if(record == 1){
+		if(record > 0){
 			List<JRecord> orderPvList = ordersBMapper.getSuccessOrderTotal();
 			for (JRecord jRecord : orderPvList) {
 				recordMapper.updateJRecordByUid(jRecord.getPv()+"",null,jRecord.getuId());

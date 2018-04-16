@@ -42,7 +42,7 @@ public class JobAction {
 
 
     /**
-     * 计算量奖
+     * 计算量奖（市场奖）
      */
     @RequestMapping("/scj/computeSCJ")
     @ResponseBody
