@@ -66,7 +66,6 @@
         u.area,a.real_name,a.id_card ,u.elect_score,u.bd_score,u.borrow ,u.is_transfer
         from u_user u left join u_user_auth a on u.uuid = a.u_uuid
         <where>
-          1 = 1 and  u.is_chuangke in(2,3,4,5)
           <if test="account != null and account !=''"> and u.account = #{account} </if>
           <if test="uuid != null and uuid !=''"> and u.uuid = #{uuid} </if>
           <if test="id != null and id !=''"> and u.id = #{id} </if>
@@ -211,7 +210,7 @@
 		 </where> 
     </select>-->
     <select id="getUserByBCode" resultMap="ubResultMap">
-        select a.id,a.uuid,a.nick,a.avatar,a.is_chuangke,a.b_code,a.is_transfer
+        select a.id,a.uuid,a.nick,a.avatar,a.is_chuangke,a.b_code,a.is_transfer,
         b.real_name as real_name
         from u_user a left join u_user_auth b on a.uuid = b.u_uuid
         <where>
@@ -362,8 +361,9 @@
 
 
     <!--查询所有总监助理-->
+    <!-- age=总监id，nick=总监code -->
     <select id="selectUserZL" resultMap="ubResultMap">
-        select a.zj_uid as age,c.cash_score,c.id,c.uuid
+        select a.zj_uid as age,c.cash_score,c.id,c.uuid,a.zj_code as b_code
         from j_record_zl a left join p_account_users_b b on a.u_id = b.id
         left join u_user c on b.user_id = c.id
         where a.status = 1 and c.is_chuangke = 6

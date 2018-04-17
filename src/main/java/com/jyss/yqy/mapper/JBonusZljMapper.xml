@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.jyss.yqy.mapper.JBonusZljMapper" >
+	<resultMap id="BaseResultMap" type="com.jyss.yqy.entity.JBonusGxj" >
+	<id column="id" property="id"  />
+	<result column="u_id" property="uId" />
+	<result column="s_id" property="sId" />
+	<result column="s_name" property="sName" />
+	<result column="amount" property="amount" />
+	<result column="status" property="status" />
+	<result column="create_time" property="createTime" />
+	</resultMap>
+
+	<resultMap id="zlResultMap" type="com.jyss.yqy.entity.JRecordZl" >
+		<id column="id" property="id" />
+		<result column="u_id" property="uId" />
+		<result column="zj_uid" property="zjUid" />
+		<result column="zj_code" property="zjCode" />
+		<result column="zj_name" property="zjName" />
+		<result column="status" property="status" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+	<!--插入总监助理奖-->
+	<insert id="insert" parameterType="com.jyss.yqy.entity.JBonusGxj" useGeneratedKeys="true" keyProperty="id">
+		insert into j_bonus_zlj (id, u_id, s_id, s_name, amount, status, create_time)
+		values (null, #{uId}, #{sId}, #{sName}, #{amount}, #{status}, date_sub(now(),interval 18 hour))
+	</insert>
+
+
+	<!--查询代理的市场-->
+	<select id="selectZlByUId" parameterType="int" resultMap="zlResultMap">
+		select a.zj_uid,a.zj_code as b_code,a.zj_name
+		from j_record_zl a left join p_account_users_b b on a.u_id = b.id
+		<where>
+			<if test="uId != null and uId != ''">and b.user_id = #{uId}</if>
+			and a.status = 1
+		</where>
+	</select>
+
+
+	<!--查询昨日助理奖-->
+	<select id="selectJBonusZljDay" parameterType="int" resultType="float">
+		select ifnull(sum(amount),0.00) from j_bonus_zlj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="sId != null and sId != ''"> and s_id = #{sId} </if>
+			and status = 1 and to_days(now()) - to_days(create_time) = 1
+		</where>
+	</select>
+
+
+	<!--查询历史总助理奖-->
+	<select id="selectTotal" parameterType="int" resultType="float">
+		select ifnull(sum(amount),0.00) from j_bonus_zlj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="sId != null and sId != ''"> and s_id = #{sId} </if>
+			and status = 1
+		</where>
+	</select>
+
+
+  	<!--查询本周列表-->
+	<select id="selectJBonusZljWek" parameterType="int" resultMap="BaseResultMap">
+		select s_name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_zlj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="sId != null and sId != ''"> and s_id = #{sId} </if>
+			and status = 1 and YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now())
+		</where>
+		order by create_time desc
+	</select>
+
+
+	<!-- 按两个日期查询列表 -->
+	<select id="selectJBonusZljByDay"  resultMap="BaseResultMap">
+		select s_name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_zlj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="sId != null and sId != ''"> and s_id = #{sId} </if>
+			<if test="beginTime != null and beginTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &gt;= #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &lt;= #{endTime}
+			</if>
+			and status = 1
+		</where>
+		order by create_time desc
+	</select>
+
+	
+	<!-- 按两个日期查询总收益 -->
+	<select id="selectZljTotalByDay"  resultType="float">
+		select ifnull(sum(amount),0.00) from j_bonus_zlj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="sId != null and sId != ''"> and s_id = #{sId} </if>
+			<if test="beginTime != null and beginTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &gt;= #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and date_format(create_time, '%Y-%m-%d') &lt;= #{endTime}
+			</if>
+			and status = 1
+		</where>
+	</select>
+
+
+	<!-- 按月查询列表 -->
+	<select id="selectJBonusZljByMonth"  resultMap="BaseResultMap">
+		select s_name,amount,DATE_FORMAT(create_time, '%Y-%m-%d') create_time
+		from j_bonus_zlj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="sId != null and sId != ''"> and s_id = #{sId} </if>
+			<if test="month != null and month != ''">
+				and date_format(create_time, '%Y-%m') = #{month}
+			</if>
+			and status = 1
+		</where>
+		order by create_time desc
+	</select>
+
+	
+	<!-- 按月查询总收益 -->
+	<select id="selectZljTotalByMonth"  resultType="float">
+		select ifnull(sum(amount),0.00) from j_bonus_zlj
+		<where>
+			<if test="uId != null and uId != ''"> and u_id = #{uId} </if>
+			<if test="sId != null and sId != ''"> and s_id = #{sId} </if>
+			<if test="month != null and month != ''">
+				and date_format(create_time, '%Y-%m') = #{month}
+			</if>
+			and status = 1
+		</where>
+	</select>
+	
+	
+
+	
+</mapper>

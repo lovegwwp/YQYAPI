@@ -1,6 +1,5 @@
 package com.jyss.yqy.service.impl;
 
-import java.text.BreakIterator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +82,7 @@ public class UserRecordBServiceImpl implements UserRecordBService {
 				UUserRRecordB userRRecordB = new UUserRRecordB();
 				userRRecordB.setuId(userBean.getId());
 				userRRecordB.setrId(parentUser.getId());
-				userRRecordB.setStatus(0); // 设置初始值为0
+				userRRecordB.setStatus(1); // 设置初始值为0
 				userRRecordB.setType(pLevel);
 				userRRecordB.setCreatedAt(new Date());
 				int idNum = userRecordMapper.insert(userRRecordB);

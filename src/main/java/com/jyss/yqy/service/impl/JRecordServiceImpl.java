@@ -6,15 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jyss.yqy.entity.ScoreBalance;
+import com.jyss.yqy.entity.*;
 import com.jyss.yqy.mapper.*;
 import com.jyss.yqy.service.JBonusFPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.jyss.yqy.entity.JBonusScj;
-import com.jyss.yqy.entity.JRecord;
-import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.entity.jsonEntity.UserBean;
 import com.jyss.yqy.service.JRecordService;
 
@@ -36,6 +33,8 @@ public class JRecordServiceImpl implements JRecordService{
 	private JBonusFPService jBonusFPService;
 	@Autowired
 	private ScoreBalanceMapper scoreBalanceMapper;
+	@Autowired
+	private JBonusZljMapper jBonusZljMapper;
 
 	
 	/**
@@ -240,6 +239,14 @@ public class JRecordServiceImpl implements JRecordService{
 
 				float total = getTotal(userBean.getAge());           //查询总监市场的总pv
 				float cashScore = total * float1;
+
+				JBonusGxj jBonusGxj = new JBonusGxj();
+				jBonusGxj.setuId(userBean.getId());
+				jBonusGxj.setsId(userBean.getAge());
+				jBonusGxj.setsName(userBean.getbCode());
+				jBonusGxj.setAmount(cashScore);
+				jBonusGxj.setStatus(1);
+				jBonusZljMapper.insert(jBonusGxj);
 
 				//添加股券
 				ScoreBalance score = new ScoreBalance();
