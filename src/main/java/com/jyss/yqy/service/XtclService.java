@@ -37,13 +37,8 @@ public interface XtclService {
 
 	/**
 	 * 根据标识符取得标志对应常量值
-	 * 
-	 * @param bz_type
-	 * @param bz_id
-	 * @return
 	 */
-	Xtcl getClsValue(@Param("bz_type") String bz_type,
-			@Param("bz_id") String bz_id);
+	Xtcl getClsValue(@Param("bz_type") String bz_type,@Param("bz_id") String bz_id);
 
 	/**
 	 * 新增

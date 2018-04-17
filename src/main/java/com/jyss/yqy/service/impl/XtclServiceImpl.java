@@ -58,7 +58,7 @@ public class XtclServiceImpl implements XtclService {
 
 	@Override
 	public Xtcl getClsValue(String bz_type, String bz_id) {
-		// TODO Auto-generated method stub
+
 		return xtclMapper.getClsValue(bz_type, bz_id);
 	}
 

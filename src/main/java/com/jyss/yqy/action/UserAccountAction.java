@@ -29,7 +29,28 @@ public class UserAccountAction {
 	private UMobileLoginService uMobileLoginService;
 	@Autowired
     private UserAccountService userAccountService;
+	@Autowired
+    private XtclService xtclService;
 
+
+    /**
+     * 查询比例
+     */
+    @RequestMapping("/proportion")
+    @ResponseBody
+    public Map<String, Object> getXtclBy() {
+        Map<String, Object> map = new HashMap<>();
+        float ratio = 0.8f;
+        Xtcl xtcl = xtclService.getClsValue("dzqbl_type","1");        //电子券占复销额的最高比例
+        ratio = Float.parseFloat(xtcl.getBz_value());       			           //0.8
+
+        map.put("code", "0");
+        map.put("status", "true");
+        map.put("message", "查询成功！");
+        map.put("data", ratio);
+        return map;
+
+    }
 
 
     /**
