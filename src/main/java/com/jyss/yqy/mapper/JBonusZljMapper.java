@@ -41,4 +41,5 @@ public interface JBonusZljMapper {
     float selectZljTotalByMonth(@Param("uId") Integer uId, @Param("sId") Integer sId, @Param("month") String month);
 
 
+
 }

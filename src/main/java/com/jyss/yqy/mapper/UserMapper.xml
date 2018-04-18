@@ -273,9 +273,8 @@
          select id,uuid,cash_score,shopping_score,is_chuangke,total_pv,total_amount,cj_status,elect_score,bd_score
          from u_user
          <where>
-              <if test="id != null and id !=''"> and id = #{id}
+              <if test="id != null and id !=''"> and id = #{id}</if>
               and status = 1
-              </if>
          </where>
     </select>
 
@@ -360,14 +359,6 @@
     </select>
 
 
-    <!--查询所有总监助理-->
-    <!-- age=总监id，nick=总监code -->
-    <select id="selectUserZL" resultMap="ubResultMap">
-        select a.zj_uid as age,c.cash_score,c.id,c.uuid,a.zj_code as b_code
-        from j_record_zl a left join p_account_users_b b on a.u_id = b.id
-        left join u_user c on b.user_id = c.id
-        where a.status = 1 and c.is_chuangke = 6
-    </select>
 
 
 </mapper>

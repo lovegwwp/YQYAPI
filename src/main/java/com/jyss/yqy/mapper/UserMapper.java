@@ -188,8 +188,6 @@ public interface UserMapper {
 	List<UserBean> selectUserBorrow();
 
 
-	//查询所有总监助理
-	List<UserBean> selectUserZL();
 
 	/**
 	 * //查询是否重复，根据bcode和uuid

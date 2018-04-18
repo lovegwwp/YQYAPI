@@ -233,20 +233,23 @@ public class JRecordServiceImpl implements JRecordService{
 		Xtcl xtcl1 = xtclMapper.getClsValue("zjzl_type", "1");        //总监助理比例
 		float1 = Float.parseFloat(xtcl1.getBz_value());       			           //0.002
 
-		List<UserBean> userBeans = userMapper.selectUserZL();
-		if(userBeans != null && userBeans.size()>0){
-			for (UserBean userBean : userBeans) {
+		List<JRecordZl> recordZls = jBonusZljMapper.selectZlByUId(null);
+		if(recordZls != null && recordZls.size()>0){
+			for (JRecordZl recordZl : recordZls){
 
-				float total = getTotal(userBean.getAge());           //查询总监市场的总pv
+				float total = getTotal(recordZl.getZjUid());           //查询总监市场的总pv
 				float cashScore = total * float1;
 
 				JBonusGxj jBonusGxj = new JBonusGxj();
-				jBonusGxj.setuId(userBean.getId());
-				jBonusGxj.setsId(userBean.getAge());
-				jBonusGxj.setsName(userBean.getbCode());
+				jBonusGxj.setuId(recordZl.getuId());
+				jBonusGxj.setsId(recordZl.getZjUid());
+				jBonusGxj.setsName(recordZl.getZjCode());
 				jBonusGxj.setAmount(cashScore);
 				jBonusGxj.setStatus(1);
 				jBonusZljMapper.insert(jBonusGxj);
+
+				List<UserBean> userBeans = userMapper.getUserScoreById(recordZl.getuId());
+				UserBean userBean = userBeans.get(0);
 
 				//添加股券
 				ScoreBalance score = new ScoreBalance();

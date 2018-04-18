@@ -31,11 +31,11 @@
 
 	<!--查询代理的市场-->
 	<select id="selectZlByUId" parameterType="int" resultMap="zlResultMap">
-		select a.zj_uid,a.zj_code,a.zj_name
+		select a.zj_uid,a.zj_code,a.zj_name,b.user_id as u_id
 		from j_record_zl a left join p_account_users_b b on a.u_id = b.id
 		<where>
 			<if test="uId != null and uId != ''">and b.user_id = #{uId}</if>
-			and a.status = 1
+			and a.status = 1 and b.role_id = 22
 		</where>
 	</select>
 
@@ -139,8 +139,7 @@
 			and status = 1
 		</where>
 	</select>
-	
-	
+
 
 	
 </mapper>
