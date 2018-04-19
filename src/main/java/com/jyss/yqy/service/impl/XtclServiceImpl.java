@@ -2,14 +2,11 @@ package com.jyss.yqy.service.impl;
 
 import java.util.List;
 
-import com.jyss.yqy.entity.BaseShare;
+import com.jyss.yqy.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jyss.yqy.entity.BaseArea;
-import com.jyss.yqy.entity.BaseConfig;
-import com.jyss.yqy.entity.Xtcl;
 import com.jyss.yqy.mapper.XtclMapper;
 import com.jyss.yqy.service.XtclService;
 
@@ -94,5 +91,13 @@ public class XtclServiceImpl implements XtclService {
 	@Override
 	public List<BaseShare> getBaseShare(String shareKey) {
 		return xtclMapper.getBaseShare(shareKey);
+	}
+
+	/**
+	 * 安卓版本更新
+	 */
+	@Override
+	public List<Xtgx> selectXtgx(Integer type) {
+		return xtclMapper.selectXtgx(type);
 	}
 }

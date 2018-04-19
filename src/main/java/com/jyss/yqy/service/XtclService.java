@@ -2,12 +2,8 @@ package com.jyss.yqy.service;
 
 import java.util.List;
 
-import com.jyss.yqy.entity.BaseShare;
+import com.jyss.yqy.entity.*;
 import org.apache.ibatis.annotations.Param;
-
-import com.jyss.yqy.entity.BaseArea;
-import com.jyss.yqy.entity.BaseConfig;
-import com.jyss.yqy.entity.Xtcl;
 
 public interface XtclService {
 
@@ -84,4 +80,8 @@ public interface XtclService {
 
 	//查询分享
 	List<BaseShare> getBaseShare(@Param("shareKey") String shareKey);
+
+	//安卓版本更新
+	List<Xtgx> selectXtgx(@Param("type") Integer type);
+
 }

@@ -292,12 +292,16 @@ public class XtclAction {
 	public Map<String, Object> selectBaseConfig() {
 		Map<String, Object> m = new HashMap<String, Object>();
 		List<BaseShare> shares = clService.getBaseShare("chunagke.sign");
-		if(shares != null && shares.size() == 1){
-			BaseShare baseShare = shares.get(0);
-			baseShare.setLinkPic(Constant.httpUrl+baseShare.getLinkPic());
+		if(shares != null && shares.size() > 0){
+			BaseShare baseShare1 = shares.get(0);
+			BaseShare baseShare2 = shares.get(1);
+			Map<String, Object> map = new HashMap<>();
+			map.put("webShare",baseShare1);
+			map.put("aShare",baseShare2);
+
 			m.put("status", "true");
 			m.put("message", "查询成功！");
-			m.put("data", baseShare);
+			m.put("data", map);
 			m.put("code", "-1");
 			return m;
 		}
@@ -330,5 +334,31 @@ public class XtclAction {
 		m.put("code", "-2");
 		return m;
 	}
+
+
+	/**
+	 * 安卓版本更新
+	 */
+	@RequestMapping("/b/version")
+	@ResponseBody
+	public Map<String, Object> selectXtgx(){
+		Map<String, Object> m = new HashMap<String, Object>();
+		List<Xtgx> xtgxList = clService.selectXtgx(3);
+		if(xtgxList != null && xtgxList.size()>0){
+			Xtgx xtgx = xtgxList.get(0);
+			m.put("status", "true");
+			m.put("message", "查询成功！");
+			m.put("data", xtgx);
+			m.put("code", "0");
+			return m;
+		}
+		m.put("status", "false");
+		m.put("message", "查询失败！");
+		m.put("data", "");
+		m.put("code", "-2");
+		return m;
+	}
+
+
 
 }

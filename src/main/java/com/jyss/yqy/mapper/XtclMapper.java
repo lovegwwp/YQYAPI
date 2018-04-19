@@ -2,12 +2,9 @@ package com.jyss.yqy.mapper;
 
 import java.util.List;
 
-import com.jyss.yqy.entity.BaseShare;
+import com.jyss.yqy.entity.*;
 import org.apache.ibatis.annotations.Param;
 
-import com.jyss.yqy.entity.BaseArea;
-import com.jyss.yqy.entity.BaseConfig;
-import com.jyss.yqy.entity.Xtcl;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -82,5 +79,8 @@ public interface XtclMapper {
 
 	//查询分享
 	List<BaseShare> getBaseShare(@Param("shareKey") String shareKey);
+
+	//安卓版本更新
+	List<Xtgx> selectXtgx(@Param("type") Integer type);
 
 }

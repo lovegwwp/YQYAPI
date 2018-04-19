@@ -32,6 +32,7 @@
         <result property="fid" column="fid"  />      
     </resultMap>
 
+    <!--分享-->
     <resultMap id="bsBaseResultMap" type="com.jyss.yqy.entity.BaseShare" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="title" property="title" jdbcType="VARCHAR" />
@@ -41,6 +42,17 @@
         <result column="share_key" property="shareKey" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="TINYINT" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="vsBaseResultMap" type="com.jyss.yqy.entity.Xtgx" >
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="force" property="force" />
+        <result column="url" property="url" />
+        <result column="intro" property="intro" />
+        <result column="status" property="status" />
+        <result column="type" property="type" />
+        <result column="created_at" property="createdAt" />
     </resultMap>
      
     <!-- 查询对应常量-->  
@@ -124,7 +136,12 @@
     <!--查询分享-->
     <select id="getBaseShare" resultMap="bsBaseResultMap">
         select id,title,content,link_url,link_pic,status,create_time
-        from p_base_share where share_key = #{shareKey} and status = 1 limit 0,1
+        from p_base_share where share_key = #{shareKey} and status = 1 order by id
+    </select>
+
+    <!--安卓版本更新-->
+    <select id="selectXtgx" parameterType="int" resultMap="vsBaseResultMap">
+        select * from p_app_version where type = #{type}
     </select>
     
 </mapper>
