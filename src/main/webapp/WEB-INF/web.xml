@@ -8,13 +8,15 @@
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
+  <!-- 加载spring容器 -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring.xml</param-value>
+    <param-value>classpath:applicationContext-*.xml</param-value>
   </context-param>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+
   <listener>
     <listener-class>com.jyss.yqy.filter.MySessionListener</listener-class>
   </listener>
@@ -59,6 +61,8 @@
     <filter-name>AuthFilter</filter-name>
     <url-pattern>*.jsp</url-pattern>
   </filter-mapping>
+
+  <!-- springmvc前端控制器 -->
   <servlet>
     <servlet-name>SpringMVC</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -71,12 +75,5 @@
     <servlet-name>SpringMVC</servlet-name>
     <url-pattern>*.action</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>CodeImg</servlet-name>
-    <servlet-class>com.jyss.yqy.action.CodeImg</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CodeImg</servlet-name>
-    <url-pattern>/codeImg</url-pattern>
-  </servlet-mapping>
+
 </web-app>

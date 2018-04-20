@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -85,5 +87,15 @@ public class JobAction {
     }
 
 
+    /**
+     * 扣除借贷金额
+     */
+    @RequestMapping("/deduct/test")
+    @ResponseBody
+    public void test() {
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("message", "测试时间："+new Date());
+        logger.info(map.get("message"));
+    }
 
 }

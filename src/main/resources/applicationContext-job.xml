@@ -9,6 +9,7 @@
     <bean id="schedule3" class="com.jyss.yqy.action.JobAction"></bean>
     <bean id="schedule4" class="com.jyss.yqy.action.JobAction"></bean>
 	<bean id="schedule5" class="com.jyss.yqy.action.JobAction"></bean>
+	<bean id="schedule6" class="com.jyss.yqy.action.JobAction"></bean>
 
 
     <bean id="SpringQtzJobMethod1"
@@ -36,6 +37,11 @@
 		<property name="targetObject" ref="schedule5" />
 		<property name="targetMethod" value="updateUserBorrow"/>     <!-- 扣除借贷金额 -->
 	</bean>
+	<bean id="SpringQtzJobMethod6"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedule5" />
+		<property name="targetMethod" value="test"/>
+	</bean>
 
 	
 	
@@ -61,6 +67,10 @@
 		<property name="jobDetail" ref="SpringQtzJobMethod5"></property>
 		<property name="cronExpression" value="0 0 8 * * ?"></property>        <!-- 每天08:00执行 -->
 	</bean>
+	<bean id="cronTriggerFactoryBean6" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean ">
+		<property name="jobDetail" ref="SpringQtzJobMethod6"></property>
+		<property name="cronExpression" value="0/5 * * * * ? "></property>        <!-- 每天08:00执行 -->
+	</bean>
 
 	
 	
@@ -73,6 +83,7 @@
 				<ref bean="cronTriggerFactoryBean3" />
 				<ref bean="cronTriggerFactoryBean4" />
 				<ref bean="cronTriggerFactoryBean5" />
+				<ref bean="cronTriggerFactoryBean6" />
 			</list>
 		</property>
 	</bean>
