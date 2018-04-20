@@ -14,6 +14,8 @@ public interface UserAccountService {
 
     Map<String,Object> getALiPayResult(@Param("zzType")String uuid,@Param("bzType")String bzType,@Param("bzId")String bzId);
 
+    Map<String,Object> geWxPayResult(@Param("zzType")String uuid,@Param("bzType")String bzType,@Param("bzId")String bzId);
+
     boolean updateUserBdBalance(@Param("totalAmount")String totalAmount,@Param("outTradeNo")String outTradeNo);
 
     boolean updateBdScore(@Param("uId")Integer uId,@Param("uuid")String uuid,@Param("amount")Float amount,

@@ -3,7 +3,11 @@ package com.jyss.yqy.action;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.jyss.yqy.config.AliConfig;
+import com.jyss.yqy.config.ConfigUtil;
+import com.jyss.yqy.config.PayCommonUtil;
+import com.jyss.yqy.config.XMLUtil;
 import com.jyss.yqy.service.UserAccountService;
+import org.jdom.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.*;
 
 @Controller
 public class PayAction {
@@ -89,5 +93,95 @@ public class PayAction {
         return "false";
 
     }*/
+
+    /**
+     * 微信异步通知
+
+     */
+    @RequestMapping(value ="/WxNotify",method = RequestMethod.POST)
+    public void wxNotify(HttpServletRequest request,HttpServletResponse response) throws IOException, JDOMException {
+        //读取参数
+        InputStream inputStream ;
+        StringBuffer sb = new StringBuffer();
+        inputStream = request.getInputStream();
+        String s ;
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+        while ((s = in.readLine()) != null){
+            sb.append(s);
+        }
+        in.close();
+        inputStream.close();
+        //解析xml成map
+        Map<String, String> m = new HashMap<String, String>();
+        m = XMLUtil.doXMLParse(sb.toString());
+        for(Object keyValue : m.keySet()){
+            System.out.println(keyValue+"="+m.get(keyValue));
+        }
+        //过滤空 设置 TreeMap
+        SortedMap<Object,Object> packageParams = new TreeMap<Object,Object>();
+        Iterator it = m.keySet().iterator();
+        while (it.hasNext()) {
+            String parameter = (String) it.next();
+            String parameterValue = m.get(parameter);
+
+            String v = "";
+            if(null != parameterValue) {
+                v = parameterValue.trim();
+            }
+            packageParams.put(parameter, v);
+        }
+
+        //判断签名是否正确
+        String resXml = "";
+        if(PayCommonUtil.isTenpaySign("UTF-8", packageParams)) {
+            if("SUCCESS".equals((String)packageParams.get("result_code"))){
+                // 这里是支付成功
+                //////////执行自己的业务逻辑////////////////
+                String mch_id = (String)packageParams.get("mch_id"); //商户号
+                String openid = (String)packageParams.get("openid");  //用户标识
+                String out_trade_no = (String)packageParams.get("out_trade_no"); //商户订单号
+                String total_fee = (String)packageParams.get("total_fee");
+                String transaction_id = (String)packageParams.get("transaction_id"); //微信支付订单号
+
+                if(!ConfigUtil.MCH_ID.equals(mch_id)){
+                    logger.info("支付失败,错误信息：" + "参数错误");
+                    resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
+                            + "<return_msg><![CDATA[参数错误]]></return_msg>" + "</xml> ";
+                }else{
+                        //订单状态的修改。根据实际业务逻辑执行
+                        //自己业务处理
+                        Boolean balance = userAccountService.updateUserBdBalance(total_fee, out_trade_no);
+                        if(balance){
+                            logger.info("微信服务端验证异步通知信息成功！");
+                        }else{
+                            logger.info("微信服务端验证异步通知信息失败！");
+                        }
+
+                        resXml = "<xml>" + "<return_code><![CDATA[SUCCESS]]></return_code>"
+                                + "<return_msg><![CDATA[OK]]></return_msg>" + "</xml> ";
+                    }
+
+            }else {
+                logger.info("支付失败,错误信息：" + packageParams.get("err_code"));
+                resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
+                        + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
+            }
+
+
+        } else{
+            resXml = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>"
+                    + "<return_msg><![CDATA[通知签名验证失败]]></return_msg>" + "</xml> ";
+            logger.info("通知签名验证失败");
+        }
+        //------------------------------
+        //处理业务完毕
+        //------------------------------
+        BufferedOutputStream out = new BufferedOutputStream(
+                response.getOutputStream());
+        out.write(resXml.getBytes());
+        out.flush();
+        out.close();
+
+    }
 
 }
