@@ -100,11 +100,10 @@ public class JBonusCjServiceImpl implements JBonusCjService {
 						int count = jBonusCjMapper.insert(bonusCj);
 						if(count == 1){
 							//计算积分
-							boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
+							jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
 							//升层级
-							if(flag){
-								userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
-							}
+							userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
+
 						}
 					}
 				}else if(status == 2){
@@ -118,11 +117,10 @@ public class JBonusCjServiceImpl implements JBonusCjService {
 						bonusCj.setAmount(money);
 						int count = jBonusCjMapper.insert(bonusCj);
 						if(count == 1){
-							boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
+							jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
 							//升层级
-							if(flag){
-								userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
-							}
+							userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
+
 						}
 					}
 				}else if(status == 3){
@@ -136,11 +134,10 @@ public class JBonusCjServiceImpl implements JBonusCjService {
 						bonusCj.setAmount(money);
 						int count = jBonusCjMapper.insert(bonusCj);
 						if(count == 1){
-							boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
+							jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
 							//升层级
-							if(flag){
-								userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
-							}
+							userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
+
 						}
 					}
 				}else if(status == 4){
@@ -154,11 +151,10 @@ public class JBonusCjServiceImpl implements JBonusCjService {
 						bonusCj.setAmount(money);
 						int count = jBonusCjMapper.insert(bonusCj);
 						if(count == 1){
-							boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
+							jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
 							//升层级
-							if(flag){
-								userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
-							}
+							userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
+
 						}
 					}
 				}else if(status == 5){
@@ -172,11 +168,10 @@ public class JBonusCjServiceImpl implements JBonusCjService {
 						bonusCj.setAmount(money);
 						int count = jBonusCjMapper.insert(bonusCj);
 						if(count == 1){
-							boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
+							jBonusFPService.insertScoreBalance(record.getuId(), money, 5);
 							//升层级
-							if(flag){
-								userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
-							}
+							userMapper.updateUserCjStatus(record.getStatus()+1,null,record.getuId());
+
 						}
 					}
 				}

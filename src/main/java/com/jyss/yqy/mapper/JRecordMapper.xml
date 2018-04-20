@@ -60,7 +60,7 @@
 	<select id="selectUserByCj" resultMap="BaseResultMap">
 		select a.u_id,a.floor,b.cj_status as status
 		from j_record a left join u_user b on a.u_id = b.id
-		where b.cj_status in (1,2,3,4,5) and a.status = 1
+		where b.cj_status in (1,2,3,4,5) and a.status = 1  and b.is_chuangke in (2,3,4)
 	</select>
 
 	<!-- 根据父id查询代理级别 -->

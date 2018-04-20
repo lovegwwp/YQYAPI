@@ -30,7 +30,7 @@ public class JBonusFPServiceImpl implements JBonusFPService {
      * 奖金分配接口
      */
     @Override
-    public boolean insertScoreBalance(int id,float money,int category){
+    public void insertScoreBalance(int id,float money,int category){
 
         Xtcl xtcl1 = xtclMapper.getClsValue("dtjjbl_type", "1");      //奖金税费比例
         float float1 = Float.parseFloat(xtcl1.getBz_value());        			   //0.05
@@ -90,10 +90,7 @@ public class JBonusFPServiceImpl implements JBonusFPService {
                     userBean2.setCashScore(money * float5 + userBean.getCashScore());
                     userBean2.setShoppingScore(money * float4 + userBean.getShoppingScore());
                     userBean2.setElectScore(money * float3 + userBean.getElectScore());
-                    int count6 = userMapper.updateScore(userBean2);
-                    if(count6 == 1){
-                        return true;
-                    }
+                    userMapper.updateScore(userBean2);
                 }
             }
             if(totalPv > 0){
@@ -141,14 +138,10 @@ public class JBonusFPServiceImpl implements JBonusFPService {
                     userBean2.setShoppingScore(money1 * float4 + userBean.getShoppingScore());
                     userBean2.setElectScore(money1 * float3 + userBean.getElectScore());
                     userBean2.setTotalPv(totalPv - money1);
-                    int count6 = userMapper.updateScore(userBean2);
-                    if(count6 == 1){
-                        return true;
-                    }
+                    userMapper.updateScore(userBean2);
                 }
             }
         }
-        return false;
     }
 
 

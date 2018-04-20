@@ -123,10 +123,9 @@ public class JBonusGxjServiceImpl implements JBonusGxjService {
 					bonusGxj.setStatus(1);
 					int count = jBonusGxjMapper.insert(bonusGxj);
 					if(count == 1){
-						boolean flag = jBonusFPService.insertScoreBalance(record.getuId(), amount1, 7);
-						if(flag){
-							userMapper.updateUserCjStatus(null,jyScore,record.getuId());
-						}
+						jBonusFPService.insertScoreBalance(record.getuId(), amount1, 7);
+						userMapper.updateUserCjStatus(null,jyScore,record.getuId());
+
 					}
 				}
 			}
