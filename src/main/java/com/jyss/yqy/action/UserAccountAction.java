@@ -68,6 +68,9 @@ public class UserAccountAction {
                 Map<String, Object> result = userAccountService.getALiPayResult(uMobileLogin.getuUuid(), bzType, bzId);
                 return result;
 
+            }else if(zfType == 2){
+                Map<String, Object> result = userAccountService.geWxPayResult(uMobileLogin.getuUuid(), bzType, bzId);
+                return result;
             }
 
         }
