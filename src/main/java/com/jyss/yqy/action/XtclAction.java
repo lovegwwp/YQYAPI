@@ -213,7 +213,7 @@ public class XtclAction {
 				&& !bscl.getBz_value().equals("")) {
 			bs = Float.parseFloat(bscl.getBz_value());
 		}
-		info = info + "对应分红权"+(bs*dlfy)+"元(消费额"+bs+"倍)及";
+		info = info + "对应分红权"+(double)Math.round((bs*dlfy)*100)/100+"元(消费额"+bs+"倍)及";   //(double)Math.round((bs*dlfy)*100)/100
 		// 代理对应套餐 dyhsId 4 5 6
 		Xtcl dlhs = clService.getClsValue("cjhhr_type", dyhsId);
 		int hs = 1;
@@ -221,7 +221,7 @@ public class XtclAction {
 				&& !dlhs.getBz_value().equals("")) {
 			hs = Integer.parseInt(dlhs.getBz_value());
 		}
-		info = info + hs +"个等价商品套餐"  ;
+		info = info + hs +"个等价商品套餐";
 		mm.put("money", dlfy);
 		mm.put("info", info);
 		return mm;
