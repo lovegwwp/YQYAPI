@@ -139,25 +139,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 			float cashScore = userBean.getCashScore();
 			Float borrow = userBean.getBorrow();
 			if(cashScore > 0){
-				if(cashScore <= borrow){
-					//添加股券
-					ScoreBalance score = new ScoreBalance();
-					score.setEnd(2);
-					score.setuUuid(userBean.getUuid());
-					score.setCategory(13);
-					score.setType(2);
-					score.setScore(cashScore);
-					score.setJyScore(0f);
-					score.setStatus(1);
-					int count = scoreBalanceMapper.addCashScore(score);
-					if(count == 1){
-						UserBean userBean1 = new UserBean();
-						userBean1.setId(userBean.getId());
-						userBean1.setCashScore(0f);
-						userBean1.setBorrow(borrow - cashScore);
-						userMapper.updateScore(userBean1);
-					}
-				}else{
+				if(cashScore > borrow){           //报单券大于借贷
 					//添加股券
 					ScoreBalance score = new ScoreBalance();
 					score.setEnd(2);

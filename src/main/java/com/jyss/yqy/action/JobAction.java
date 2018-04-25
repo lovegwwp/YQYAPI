@@ -87,15 +87,6 @@ public class JobAction {
     }
 
 
-    /**
-     * 扣除借贷金额
-     */
-    @RequestMapping("/deduct/test")
-    @ResponseBody
-    public void test() {
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("message", "测试时间："+new Date());
-        logger.info(map.get("message"));
-    }
+
 
 }
