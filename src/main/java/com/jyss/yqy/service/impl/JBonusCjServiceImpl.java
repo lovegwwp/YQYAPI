@@ -192,7 +192,7 @@ public class JBonusCjServiceImpl implements JBonusCjService {
 			Integer b = Collections.max(result2);
 			return Math.min(a,b);
 		}
-		return 8;
+		return 10;
 	}
 
 	//递归查询
