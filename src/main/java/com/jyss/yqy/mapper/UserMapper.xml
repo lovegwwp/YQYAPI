@@ -289,8 +289,9 @@
     		<if test="electScore != null and electScore != ''or electScore == 0">elect_score = #{electScore},</if>
     		<if test="bdScore != null and bdScore != ''or bdScore == 0">bd_score = #{bdScore},</if>
     		<if test="borrow != null and borrow != ''or borrow == 0">borrow = #{borrow},</if>
+    		<if test="isTransfer != null and isTransfer != ''or isTransfer == 0">is_transfer = #{isTransfer},</if>
     	</set>
-    	where id = #{id} 
+    	where id = #{id}
     </update>
 
 

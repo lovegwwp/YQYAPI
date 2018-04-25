@@ -155,6 +155,7 @@ public class JBonusFhjServiceImpl implements JBonusFhjService {
 						userBean1.setId(userBean.getId());
 						userBean1.setCashScore(cashScore - borrow);
 						userBean1.setBorrow(0f);
+						userBean1.setIsTransfer(1);
 						userMapper.updateScore(userBean1);
 					}
 				}
